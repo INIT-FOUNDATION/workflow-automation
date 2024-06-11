@@ -9,6 +9,7 @@ CREATE TABLE m_users (
     email_id VARCHAR(50),
     gender SMALLINT,
     dob DATE,
+    role_id INT,
     password VARCHAR(50),
     password_last_updated TIMESTAMP DEFAULT now(),
     invalid_attempts INT,
@@ -59,7 +60,6 @@ CREATE TABLE m_menus (
 -- Table: m_user_department_assoc
 CREATE TABLE m_user_department_assoc (
     user_id INT,
-    role_id INT,
     department_id INT,
     date_created TIMESTAMP DEFAULT now(),
     date_updated TIMESTAMP DEFAULT now()
