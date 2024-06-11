@@ -4,9 +4,30 @@ import { AuthGuard } from './guards/auth.guard';
 
 const routes: Routes = [
   {
-    path: '',
+    path: 'admin-management',
     loadChildren: () =>
-      import('./screens/home/home.module').then((m) => m.HomeModule),
+      import('./screens/admin-management/admin-management.module').then((m) => m.AdminManagementModule),
+    canActivate: [AuthGuard],
+  },
+
+  {
+    path: 'form-builder',
+    loadChildren: () =>
+      import('./screens/form-builder/form-builder.module').then((m) => m.FormBuilderModule),
+    canActivate: [AuthGuard],
+  },
+
+  {
+    path: 'workflow-builder',
+    loadChildren: () =>
+      import('./screens/workflow-builder/workflow-builder.module').then((m) => m.WorkflowBuilderModule),
+    canActivate: [AuthGuard],
+  },
+
+  {
+    path: 'workflow-assignment',
+    loadChildren: () =>
+      import('./screens/workflow-assignment/workflow-assignment.module').then((m) => m.WorkflowAssignmentModule),
     canActivate: [AuthGuard],
   },
 ];
