@@ -18,7 +18,13 @@ import { WorkflowAssignmentComponent } from './screens/workflow-assignment/workf
 import { WorkflowBuilderComponent } from './screens/workflow-builder/workflow-builder.component';
 
 @NgModule({
-  declarations: [AppComponent, AdminManagementComponent, FormBuilderComponent, WorkflowAssignmentComponent, WorkflowBuilderComponent,],
+  declarations: [
+    AppComponent,
+    AdminManagementComponent,
+    FormBuilderComponent,
+    WorkflowAssignmentComponent,
+    WorkflowBuilderComponent,
+  ],
   imports: [
     BrowserModule,
     AppRoutingModule,

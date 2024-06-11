@@ -16,6 +16,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatTabsModule } from '@angular/material/tabs';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 /*------------------- MATERIAL COMPONENTS ------------------------*/
 
 /*------------------- DIRECTIVES ------------------------*/
@@ -33,6 +34,7 @@ import { DndDirective } from './directives/dnd.directive';
 import { OtpNumberDirective } from './directives/otp-number.directive';
 import { IntegerInputDirective } from './directives/input-integer.directive';
 import { LoaderComponent } from './components/loader/loader.component';
+import { HeaderComponent } from './components/header/header.component';
 /*------------------- DIRECTIVES ------------------------*/
 
 const MY_FORMATS = {
@@ -47,7 +49,7 @@ const MY_FORMATS = {
   },
 };
 
-const export_components = [LoaderComponent];
+const export_components = [LoaderComponent, HeaderComponent];
 const export_directives = [
   RangeDirective,
   RangeLengthDirective,
@@ -74,6 +76,7 @@ const export_material_modules = [
   NgxSpinnerModule,
   MatExpansionModule,
   MatTabsModule,
+  DragDropModule,
 ];
 
 @NgModule({

@@ -1,10 +1,73 @@
+import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-add-form-builder',
   templateUrl: './add-form-builder.component.html',
-  styleUrls: ['./add-form-builder.component.scss']
+  styleUrls: ['./add-form-builder.component.scss',]
 })
 export class AddFormBuilderComponent {
+  chooseFromArray = [
+    { id: 1, acceptOnly: 'string', label: 'Name', img: 'nameIcon' },
+    { id: 2, acceptOnly: 'string', label: 'Address', img: 'addressIcon' },
+    { id: 3, acceptOnly: 'number', label: 'Number', img: 'numberIcon' },
+    { id: 4, acceptOnly: 'number', label: 'Phone', img: 'phoneIcon' },
+    { id: 5, acceptOnly: 'string', label: 'Email', img: 'emailIcon' },
+    { id: 6, acceptOnly: 'date', label: 'Date', img: 'dateIcon' },
+    { id: 7, acceptOnly: 'time', label: 'Time', img: 'timeIcon' },
+    {
+      id: 8,
+      acceptOnly: 'dateTime',
+      label: 'Date - Time',
+      img: 'dateTimeIcon',
+    },
+    {
+      id: 9,
+      acceptOnly: 'string',
+      label: 'Decision Box',
+      img: 'decisionBoxIcon',
+    },
+    { id: 10, acceptOnly: 'dropdown', label: 'Dropdown', img: 'dropdownIcon' },
+    { id: 11, acceptOnly: 'radio', label: 'Radio', img: 'radioButtonIcon' },
+    { id: 12, acceptOnly: 'checkbox', label: 'Checkbox', img: 'checkboxIcon' },
+    { id: 13, acceptOnly: 'url', label: 'Website', img: 'websiteIcon' },
+    {
+      id: 14,
+      acceptOnly: 'fileUpload',
+      label: 'File Upload',
+      img: 'fileUploaderIcon',
+    },
+    {
+      id: 15,
+      acceptOnly: 'imgUpload',
+      label: 'Image Upload',
+      img: 'imageUploadIcon',
+    },
+    { id: 16, acceptOnly: 'section', label: 'Section', img: 'sectionIcon' },
+    { id: 17, acceptOnly: 'break', label: 'Page Break', img: 'breakPageIcon' },
+    { id: 18, acceptOnly: 'rating', label: 'Ratings', img: 'ratingsIcon' },
+    {
+      id: 19,
+      acceptOnly: 'string',
+      label: 'Description',
+      img: 'descriptionIcon',
+    },
+    {
+      id: 20,
+      acceptOnly: 'multiline',
+      label: 'Multi Line',
+      img: 'multilineIcon',
+    },
+  ];
 
+  chosenFields: any = [];
+
+  drop(event: CdkDragDrop<any[]>) {
+    const selectedItem = event.previousContainer.data[event.previousIndex];
+
+    if (!this.chosenFields.some((item) => item.id === selectedItem.id)) {
+      this.chosenFields.push(selectedItem);
+      console.log(this.chosenFields);
+    }
+  }
 }
