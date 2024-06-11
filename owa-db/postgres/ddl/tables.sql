@@ -56,8 +56,8 @@ CREATE TABLE m_menus (
     date_updated TIMESTAMP DEFAULT now()
 );
 
--- Table: m_user_mapping
-CREATE TABLE m_user_mapping (
+-- Table: m_user_department_assoc
+CREATE TABLE m_user_department_assoc (
     user_id INT,
     role_id INT,
     department_id INT,
@@ -104,6 +104,8 @@ CREATE TABLE app_version (
     app_version VARCHAR(10),
     apk_version VARCHAR(10),
     apk_link VARCHAR(100),
+    ios_version VARCHAR(10),
+    ios_link VARCHAR(100),
     force_update SMALLINT,
     remarks VARCHAR(100),
     release_date TIMESTAMP DEFAULT now(),
