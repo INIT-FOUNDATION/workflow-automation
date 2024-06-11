@@ -1,0 +1,33 @@
+::ng-deep .toast-info {
+  background-color: #0c9e9b !important;
+}
+
+::ng-deep .toast-info {
+  background-color: #0c9e9b !important;
+}
+
+::ng-deep .contactSectionSidebar {
+  .p-sidebar-right {
+    width: 32rem;
+    background: #1a1a1a !important;
+    border-left-width: 20px;
+    border-style: solid;
+    border-image: linear-gradient(
+        to bottom,
+        #004a86 0%,
+        rgba(77, 154, 216, 0.39) 66.15%,
+        rgba(46, 75, 99, 0)
+      )
+      1 100%;
+
+    @media screen and (max-width: 510px) {
+      width: 22rem;
+    }
+  }
+
+  .p-sidebar .p-sidebar-header .p-sidebar-close,
+  .p-sidebar .p-sidebar-header .p-sidebar-icon {
+    color: #fff;
+    background: #6463638f;
+  }
+}
