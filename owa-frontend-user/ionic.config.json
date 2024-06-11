@@ -1,7 +1,0 @@
-{
-  "name": "owa-frontend-user",
-  "integrations": {
-    "capacitor": {}
-  },
-  "type": "react-vite"
-}
