@@ -6,12 +6,10 @@ describe('FormAdminManagementComponent', () => {
   let component: FormAdminManagementComponent;
   let fixture: ComponentFixture<FormAdminManagementComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [FormAdminManagementComponent]
-    })
-    .compileComponents();
-    
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      declarations: [FormAdminManagementComponent]
+    });
     fixture = TestBed.createComponent(FormAdminManagementComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

@@ -12,9 +12,12 @@ import { LoaderInterceptor } from './interceptor/loader.interceptor';
 import { ThemeModule } from './modules/shared/theme/theme.module';
 import { NgxGoogleAnalyticsModule } from 'ngx-google-analytics';
 import { environment } from 'src/environments/environment';
+import { FormBuilderComponent } from './screens/form-builder/form-builder.component';
+import { WorkflowAssignmentComponent } from './screens/workflow-assignment/workflow-assignment.component';
+import { WorkflowBuilderComponent } from './screens/workflow-builder/workflow-builder.component';
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, FormBuilderComponent, WorkflowAssignmentComponent, WorkflowBuilderComponent,],
   imports: [
     BrowserModule,
     AppRoutingModule,

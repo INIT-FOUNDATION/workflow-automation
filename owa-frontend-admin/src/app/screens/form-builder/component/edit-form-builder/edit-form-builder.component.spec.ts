@@ -6,12 +6,10 @@ describe('EditFormBuilderComponent', () => {
   let component: EditFormBuilderComponent;
   let fixture: ComponentFixture<EditFormBuilderComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [EditFormBuilderComponent]
-    })
-    .compileComponents();
-    
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      declarations: [EditFormBuilderComponent]
+    });
     fixture = TestBed.createComponent(EditFormBuilderComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
