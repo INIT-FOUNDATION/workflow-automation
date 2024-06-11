@@ -1,5 +1,7 @@
 {
-  "name": "ionic-app-base",
-  "integrations": {},
+  "name": "owa-frontend-user",
+  "integrations": {
+    "capacitor": {}
+  },
   "type": "react-vite"
 }
