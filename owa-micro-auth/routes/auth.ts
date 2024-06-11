@@ -1,6 +1,6 @@
 import express, { Request, Response } from "express";
 import { SupportSystemUser, ValidateSSRole, ValidateSSuser, ValidateSSuserLogin, ValidateUpdateSSUser } from "../model/ssUsers";
-import { STATUS, redis, generateToken, mongoDBRead, mongoDB, logger, kafka, auditLog, auditLogModel } from "lss-micro-common";
+import { STATUS, redis, generateToken, mongoDBRead, mongoDB, logger, kafka, auditLog, auditLogModel } from "owa-micro-common";
 import { ERRORCODE } from "../constants/ERRORCODE";
 import { AUTH } from "../constants/AUTH";
 import { } from "../services/authService";

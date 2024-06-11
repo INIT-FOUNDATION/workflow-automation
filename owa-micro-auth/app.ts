@@ -11,7 +11,7 @@ import dotenv from "dotenv";
 import routes from "./startup/routes";
 import { AUTH } from "./constants/AUTH";
 
-import { SECURITY, logger } from "lss-micro-common";
+import { SECURITY, logger } from "owa-micro-common";
 
 declare global {
   namespace Express {

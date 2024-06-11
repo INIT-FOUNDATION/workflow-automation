@@ -1,5 +1,5 @@
 import { CACHE_TTL } from "../constants/CONST";
-import { redis, mongoDB, mongoDBRead, logger, auditLog, auditLogModel } from "lss-micro-common";
+import { redis, mongoDB, mongoDBRead, logger, auditLog, auditLogModel } from "owa-micro-common";
 import axios from "axios";
 import { MONGO_COLLECTIONS } from "../constants/MONGO_COLLECTIONS";
 import moment from "moment";
