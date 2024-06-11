@@ -12,7 +12,7 @@ CREATE TABLE m_users (
     password VARCHAR(50),
     password_last_updated TIMESTAMP DEFAULT now(),
     invalid_attempts INT,
-    status SMALLINT DEFAULT 1,
+    status USER_STATUS DEFAULT 1,
     profile_pic_url VARCHAR(100),
     last_logged_in TIMESTAMP DEFAULT now(),
     date_created TIMESTAMP DEFAULT now(),
@@ -26,7 +26,7 @@ CREATE TABLE m_roles (
     role_id serial PRIMARY KEY,
     role_name VARCHAR(30),
     role_description VARCHAR(50),
-    is_active SMALLINT DEFAULT 1,
+    status ROLE_STATUS DEFAULT 1,
     date_created TIMESTAMP DEFAULT now(),
     date_updated TIMESTAMP DEFAULT now(),
     created_by INT,
@@ -37,7 +37,7 @@ CREATE TABLE m_roles (
 CREATE TABLE m_department (
     department_id serial PRIMARY KEY,
     department_name VARCHAR(50),
-    status INT DEFAULT 1,
+    status DEPARTMENT_STATUS DEFAULT 1,
     date_created TIMESTAMP DEFAULT now(),
     date_updated TIMESTAMP DEFAULT now()
 );
@@ -47,7 +47,7 @@ CREATE TABLE m_menus (
     menu_id serial PRIMARY KEY,
     menu_name VARCHAR(30),
     menu_description VARCHAR(50),
-    is_active SMALLINT DEFAULT 1,
+    status MENU_STATUS DEFAULT 1,
     parent_menu_id INT,
     menu_order INT,
     route_url VARCHAR(30),
@@ -108,6 +108,7 @@ CREATE TABLE app_version (
     ios_link VARCHAR(100),
     force_update SMALLINT,
     remarks VARCHAR(100),
+    status APP_STATUS DEFAULT 1,
     release_date TIMESTAMP DEFAULT now(),
     date_created TIMESTAMP DEFAULT now(),
     date_updated TIMESTAMP DEFAULT now()
