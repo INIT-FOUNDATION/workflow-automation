@@ -36,7 +36,7 @@
     ],
     "delay": "2000",
     "env": {
-      "PORT": 9006,
+      "PORT": 9005,
       "HOST": "localhost",
       "MODULE": "owa-micro-forms",
       "INIT_COMMON_NOSQL_DB_REQUIRED": true,

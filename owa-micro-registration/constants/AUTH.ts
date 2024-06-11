@@ -1,9 +1,0 @@
-export const AUTH = {
-    SECRET_KEY: "OWA_2024",
-    ENFORCE_ONLY_ONE_SESSION: process.env.INIT_COMMON_ENFORCE_ONLY_ONE_SESSION,
-    API: {
-       PUBLIC: [
-         "/api/v1/auth/health",
-       ]
-    }
-}

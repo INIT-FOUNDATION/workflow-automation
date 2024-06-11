@@ -36,7 +36,7 @@
     ],
     "delay": "2000",
     "env": {
-      "PORT": 9005,
+      "PORT": 9004,
       "HOST": "localhost",
       "MODULE": "owa-micro-workflows",
       "INIT_COMMON_NOSQL_DB_REQUIRED": true,
