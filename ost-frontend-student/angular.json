@@ -6,7 +6,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "ost-frontend-student": {
+    "owa-frontend-admin": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -23,7 +23,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/ost-frontend-student",
+            "outputPath": "dist/owa-frontend-admin",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -112,16 +112,16 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "ost-frontend-student:build:production"
+              "browserTarget": "owa-frontend-admin:build:production"
             },
             "production_beta": {
-              "browserTarget": "ost-frontend-student:build:production_beta"
+              "browserTarget": "owa-frontend-admin:build:production_beta"
             },
             "dev": {
-              "browserTarget": "ost-frontend-student:build:dev"
+              "browserTarget": "owa-frontend-admin:build:dev"
             },
             "development": {
-              "browserTarget": "ost-frontend-student:build:development"
+              "browserTarget": "owa-frontend-admin:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -129,7 +129,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "ost-frontend-student:build"
+            "browserTarget": "owa-frontend-admin:build"
           }
         },
         "test": {
@@ -151,5 +151,5 @@
       }
     }
   },
-  "defaultProject": "ost-frontend-student"
+  "defaultProject": "owa-frontend-admin"
 }
