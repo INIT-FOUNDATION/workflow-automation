@@ -12,7 +12,7 @@ userRouter.get("/health", async (req: Request, res: Response) => {
   try {
     return res.status(STATUS.OK).send("User Service is Healthy");
   } catch (error) {
-    logger.error("User :: healthCheck :: ", error);
+    logger.error("user :: health :: ", error);
     return res.status(STATUS.INTERNAL_SERVER_ERROR).send({ errorCode: error, error });
   }
 });

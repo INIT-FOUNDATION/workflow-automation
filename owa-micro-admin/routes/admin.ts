@@ -12,7 +12,7 @@ adminRouter.get("/health", async (req: Request, res: Response) => {
   try {
     return res.status(STATUS.OK).send("Admin Service is Healthy");
   } catch (error) {
-    logger.error("Admin :: healthCheck :: ", error);
+    logger.error("admin :: health :: ", error);
     return res
       .status(STATUS.INTERNAL_SERVER_ERROR)
       .send({ errorCode: error, error });
