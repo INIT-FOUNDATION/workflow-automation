@@ -13,20 +13,6 @@ import { AUTH } from "./constants/AUTH";
 
 import { SECURITY, logger } from "owa-micro-common";
 
-declare global {
-  namespace Express {
-    interface Request {
-      plainToken?: PlainToken;
-    }
-  }
-}
-interface PlainToken {
-  emailId: string;
-  user_name: string;
-  user_id: string;
-  role_id: string;
-}
-
 dotenv.config();
 
 const app: Express = express();

@@ -7,3 +7,9 @@
     PAYMENT_LINK: 2 * 60 * 30,
     LONG: 24 * 60 * 60,
   };
+
+  export const ROLES_STATUS = {
+    INACTIVE: 0,
+    ACTIVE: 1,
+    DELETED: 2
+  }
