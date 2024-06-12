@@ -1,1 +1,139 @@
-<p>admin-management works!</p>
+<div class="container mx-auto p-4">
+    <div class="flex justify-between items-center mb-4">
+        <div>
+      <h1 class="text-xl font-bold">All Users <span class="text-gray-600 border-l-2 border-l-gray-400 ps-1">137</span></h1>
+      <div class="border-4 rounded-xl w-10 border-red-600 mt-1"></div>
+    </div>
+      <button class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded">+ Add New User</button>
+    </div>
+    <div class="mb-4 relative">
+      <input type="text" placeholder="Search for an existing user" class="w-80 p-2 border rounded-full px-4" />
+      <i class="fa-solid fa-magnifying-glass absolute top-3.5 left-72 cursor-pointer" style="color: #a6a6a6;"></i>
+    </div>
+
+    <div class="border rounded-lg border-red-500 flex p-4">
+        <mat-tab-group class="mt-4 flex-1">
+            <mat-tab *ngFor="let tab of tabData" [label]="tab.label">
+                <div class="overflow-x-auto mt-4">
+        <table class="min-w-full bg-white border">
+          <thead>
+            <tr>
+              <th class="p-2 border-b"><input type="checkbox"></th>
+              <th class="p-2 border-b text-left">Name</th>
+              <th class="p-2 border-b text-left">Role</th>
+              <th class="p-2 border-b text-left">Mobile Number</th>
+              <th class="p-2 border-b text-left">Actions</th>
+            </tr>
+          </thead>
+          <tbody *ngFor="let data of users">
+            <tr>
+              <td class="p-2 border-b"><input type="checkbox"></td>
+              <td class="p-2 border-b flex items-center">
+                <img [src]="" alt="" class="w-8 h-8 rounded-full mr-2">
+                <div>
+                  <p>{{data.name}}</p>
+                  <p class="text-gray-600 text-sm"></p>
+                </div>
+              </td>
+              <td class="p-2 border-b">
+                <span class="px-3 py-1 rounded border bg-sky-800 rounded-full text-white">{{data.role}}</span>
+              </td>
+              <td class="p-2 border-b">{{data.mobile}}</td>
+              <td class="p-2 border-b flex">
+                <div class="flex me-6">
+                    <img src="./assets/images/adminManagement/key_vertical.svg" class="me-2">
+                    <button class="mr-2">Reset Password</button>
+                </div>
+                <div class="flex">
+                    <img src="./assets/images/adminManagement/delete.svg" class="me-2">
+                    <button class="">Delete</button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="flex justify-between items-center mt-4">
+        <div>
+          <button class="px-4 py-2">1</button>
+          <button class="px-4 py-2">2</button>
+          <button class="px-4 py-2">...</button>
+          <button class="px-4 py-2">10</button>
+        </div>
+        <div>
+          <button class="px-4 py-2">&lt;</button>
+          <button class="px-4 py-2">&gt;</button>
+        </div>
+      </div>
+            </mat-tab>
+          </mat-tab-group>
+    </div>
+
+    <!-- <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <app-common-data-view
+        #userDetails
+        [colModel]="cols"
+        gridId=""
+        sField="name"
+        sOrder="asc"
+        [lazyLoad]="true"
+        selectType="none"
+        [localData]=""
+        idColumn="email"
+        [rowsPerPage]="5"
+        paginationpos="bottom"
+        [actionColumnTemplate]="actionTemplate">
+    </app-common-data-view>
+
+    <ng-template #actionTemplate let-data>
+        <button class="text-blue-600 hover:text-blue-900 mr-4">Reset Password</button>
+        <button class="text-red-600 hover:text-red-900">Delete</button>
+    </ng-template>
+    </div> -->
+
+    <!-- <div class="overflow-x-auto">
+        <table class="min-w-full bg-white border">
+          <thead>
+            <tr>
+              <th class="p-2 border-b"><input type="checkbox"></th>
+              <th class="p-2 border-b text-left">Name</th>
+              <th class="p-2 border-b text-left">Role</th>
+              <th class="p-2 border-b text-left">Mobile Number</th>
+              <th class="p-2 border-b text-left">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="p-2 border-b"><input type="checkbox"></td>
+              <td class="p-2 border-b flex items-center">
+                <img [src]="" alt="" class="w-8 h-8 rounded-full mr-2">
+                <div>
+                  <p></p>
+                  <p class="text-gray-600 text-sm"></p>
+                </div>
+              </td>
+              <td class="p-2 border-b">
+                <span class="px-2 py-1 rounded text-white"></span>
+              </td>
+              <td class="p-2 border-b"></td>
+              <td class="p-2 border-b">
+                <button class="text-blue-500 mr-2">Reset Password</button>
+                <button class="text-red-500">Delete</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="flex justify-between items-center mt-4">
+        <div>
+          <button class="px-4 py-2">1</button>
+          <button class="px-4 py-2">2</button>
+          <button class="px-4 py-2">...</button>
+          <button class="px-4 py-2">10</button>
+        </div>
+        <div>
+          <button class="px-4 py-2">&lt;</button>
+          <button class="px-4 py-2">&gt;</button>
+        </div>
+      </div> -->
+  </div>
