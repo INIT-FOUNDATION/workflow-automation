@@ -35,6 +35,7 @@ import { OtpNumberDirective } from './directives/otp-number.directive';
 import { IntegerInputDirective } from './directives/input-integer.directive';
 import { LoaderComponent } from './components/loader/loader.component';
 import { HeaderComponent } from './components/header/header.component';
+
 /*------------------- DIRECTIVES ------------------------*/
 
 const MY_FORMATS = {
