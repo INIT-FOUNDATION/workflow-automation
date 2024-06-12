@@ -39,16 +39,17 @@
       "PORT": 9002,
       "HOST": "localhost",
       "MODULE": "owa-micro-admin",
-      "INIT_COMMON_NOSQL_DB_REQUIRED": true,
-      "INIT_COMMON_NOSQL_HOST": "localhost",
-      "INIT_COMMON_NOSQL_PORT": 27017,
-      "INIT_COMMON_NOSQL_AUTH_DATABASE": "admin",
-      "INIT_COMMON_NOSQL_DATABASE": "owa",
-      "INIT_COMMON_NOSQL_USER": "dev",
-      "INIT_COMMON_NOSQL_PASSWORD": "VfcqYLH43iXLuNK7",
+      "INIT_COMMON_NOSQL_DB_REQUIRED": false,
       "INIT_COMMON_REDIS_REQUIRED": true,
-      "INIT_COMMON_REDIS_HOST": "localhost",
-      "INIT_COMMON_REDIS_PORT": 6379
+      "INIT_COMMON_REDIS_HOST": "dev.orrizonte.in",
+      "INIT_COMMON_REDIS_PORT": 6379,
+      "INIT_COMMON_REDIS_KEY_PREFIX": "DEV|OWA|",
+      "INIT_COMMON_PG_DB_REQUIRED": true,
+      "INIT_COMMON_MASTER_HOST": "dev.orrizonte.in",
+      "INIT_COMMON_MASTER_USER": "dev",
+      "INIT_COMMON_MASTER_DATABASE": "owa",
+      "INIT_COMMON_MASTER_PASSWORD": "zQrBoxTNZffPZLak",
+      "INIT_COMMON_MASTER_PORT": 5432
     }
   }
 }
