@@ -3,7 +3,7 @@ import { usersController } from "../controllers/usersController";
 
 const usersRouter = express.Router();
 
-usersRouter.get("/create", usersController.listRoles);
+usersRouter.get("/create", usersController.createUser);
 
 usersRouter.post("/update", usersController.addRole);
 

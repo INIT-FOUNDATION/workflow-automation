@@ -82,3 +82,18 @@ export const DEPARTMENTS = {
     errorMessage: "Department with Requested Name already exists!",
   },
 };
+
+export const PASSWORDPOLICIES = {
+  PASSWORDPOLICIES000: {
+    errorCode: "PASSWORDPOLICIES000",
+    errorMessage: "Internal Server Error",
+  },
+  PASSWORDPOLICIES001:  {
+    errorCode: "PASSWORDPOLICIES001",
+    errorMessage: "Requested Password Policy does not exists!",
+  },
+  PASSWORDPOLICIES002:  {
+    errorCode: "PASSWORDPOLICIES002",
+    errorMessage: "Password Policy Id Required!",
+  },
+};

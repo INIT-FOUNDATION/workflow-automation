@@ -65,8 +65,8 @@ CREATE TABLE m_user_department_assoc (
     date_updated TIMESTAMP DEFAULT now()
 );
 
--- Table: password_complexity
-CREATE TABLE password_complexity (
+-- Table: password_policies
+CREATE TABLE password_policies (
     id serial PRIMARY KEY,
     password_expiry SMALLINT,
     password_history SMALLINT,

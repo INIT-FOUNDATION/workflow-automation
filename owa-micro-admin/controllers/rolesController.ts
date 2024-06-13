@@ -15,7 +15,8 @@ export const rolesController = {
                 message: "Roles Fetched Successfully",
               });
         } catch (error) {
-            logger.error(`rolesController :: listRoles :: ${error.message} :: ${error}`)
+            logger.error(`rolesController :: listRoles :: ${error.message} :: ${error}`);
+            return res.status(STATUS.OK).send(ROLES.ROLE00000);
         }
     },
     addRole: async(req: Request, res: Response): Promise<Response> => {
@@ -43,7 +44,8 @@ export const rolesController = {
                 message: "Role Added Successfully",
               });
         } catch (error) {
-            logger.error(`rolesController :: addRole :: ${error.message} :: ${error}`)
+            logger.error(`rolesController :: addRole :: ${error.message} :: ${error}`);
+            return res.status(STATUS.OK).send(ROLES.ROLE00000);
         }
     },
     updateRole: async(req: Request, res: Response): Promise<Response> => {
@@ -73,7 +75,8 @@ export const rolesController = {
                 message: "Role Updated Successfully",
               });
         } catch (error) {
-            logger.error(`rolesController :: updateRole :: ${error.message} :: ${error}`)
+            logger.error(`rolesController :: updateRole :: ${error.message} :: ${error}`);
+            return res.status(STATUS.OK).send(ROLES.ROLE00000);
         }
     },
     getRoleById: async(req: Request, res: Response): Promise<Response> => {
@@ -91,7 +94,8 @@ export const rolesController = {
                 message: "Role Fetched Successfully",
               });
         } catch (error) {
-            logger.error(`rolesController :: getRoleById :: ${error.message} :: ${error}`)
+            logger.error(`rolesController :: getRoleById :: ${error.message} :: ${error}`);
+            return res.status(STATUS.OK).send(ROLES.ROLE00000);
         }
     },
     updateRoleStatus: async(req: Request, res: Response): Promise<Response> => {
@@ -116,7 +120,8 @@ export const rolesController = {
                 message: "Role Status Updated Successfully",
               });
         } catch (error) {
-            logger.error(`rolesController :: updateRoleStatus :: ${error.message} :: ${error}`)
+            logger.error(`rolesController :: updateRoleStatus :: ${error.message} :: ${error}`);
+            return res.status(STATUS.OK).send(ROLES.ROLE00000);
         }
     },
     getAccessListByRoleId: async(req: Request, res: Response): Promise<Response> => {
@@ -134,7 +139,8 @@ export const rolesController = {
                 message: "Access List Fetched Successfully",
               });
         } catch (error) {
-            logger.error(`rolesController :: getAccessListByRoleId :: ${error.message} :: ${error}`)
+            logger.error(`rolesController :: getAccessListByRoleId :: ${error.message} :: ${error}`);
+            return res.status(STATUS.OK).send(ROLES.ROLE00000);
         }
     },
     getMenusListByRoleId: async(req: Request, res: Response): Promise<Response> => {
@@ -149,7 +155,8 @@ export const rolesController = {
                 message: "Menus List Fetched Successfully",
               });
         } catch (error) {
-            logger.error(`rolesController :: getMenusListByRoleId :: ${error.message} :: ${error}`)
+            logger.error(`rolesController :: getMenusListByRoleId :: ${error.message} :: ${error}`);
+            return res.status(STATUS.OK).send(ROLES.ROLE00000);
         }
     },
     getCombinedAccessListByRoleId: async(req: Request, res: Response): Promise<Response> => {
@@ -172,7 +179,8 @@ export const rolesController = {
                 message: "Combined Access List Fetched Successfully",
               });
         } catch (error) {
-            logger.error(`rolesController :: getCombinedAccessListByRoleId :: ${error.message} :: ${error}`)
+            logger.error(`rolesController :: getCombinedAccessListByRoleId :: ${error.message} :: ${error}`);
+            return res.status(STATUS.OK).send(ROLES.ROLE00000);
         }
     },
     getDefaultAccessList: async(req: Request, res: Response): Promise<Response> => {
@@ -183,7 +191,8 @@ export const rolesController = {
                 message: "Default Access List Fetched Successfully",
               });
         } catch (error) {
-            logger.error(`rolesController :: getCombinedAccessListByRoleId :: ${error.message} :: ${error}`)
+            logger.error(`rolesController :: getCombinedAccessListByRoleId :: ${error.message} :: ${error}`);
+            return res.status(STATUS.OK).send(ROLES.ROLE00000);
         }
     },
 }

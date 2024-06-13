@@ -4,6 +4,7 @@ import * as CONSTANT from '../constants/CONST';
 import {adminRouter} from '../routes/adminRouter';
 import { rolesRouter } from '../routes/rolesRouter';
 import { departmentRouter } from '../routes/departmentRouter';
+import { passwordPolicyRouter } from '../routes/passwordPolicyRouter';
 
 export default function (app: Express): void {
   app.use(express.json());
@@ -33,5 +34,6 @@ export default function (app: Express): void {
   app.use(bodyParser.urlencoded({ extended: false }));
   app.use("/api/v1/admin/roles", rolesRouter);
   app.use("/api/v1/admin/departments", departmentRouter);
+  app.use("/api/v1/admin/passwordPolicies", passwordPolicyRouter);
   app.use('/api/v1/admin', adminRouter);
 }

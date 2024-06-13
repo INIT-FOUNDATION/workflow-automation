@@ -30,10 +30,25 @@ export interface IUser {
     created_by: number | undefined;
     updated_by: number | undefined;
 }
-
 export interface IDepartment {
     department_id: number;
     department_name: string;
     status: number | undefined; 
     date_created: string | undefined;
+    date_updated: string | undefined;
+}
+
+export interface IPasswordPolicy {
+    id: number;
+    password_expiry: number;
+    password_history: number;
+    minimum_password_length: number;
+    complexity: number;
+    alphabetical: number;
+    numeric: number;
+    special_characters: number;
+    allowed_special_characters: string;
+    maximum_invalid_attempts: string;
+    date_created: string | undefined;
+    date_updated: string | undefined;
 }

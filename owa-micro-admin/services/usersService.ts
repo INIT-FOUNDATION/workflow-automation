@@ -4,16 +4,8 @@ import { IRole } from "../types/custom";
 import { CACHE_TTL } from "../constants/CONST";
 
 export const usersService = {
-  role: async (): Promise<IRole[]> => {
+  createUser: async (): Promise<IRole[]> => {
     try {
-      const key = `ROLES`;
-      const cachedResult = await redis.GetKeyRedis(key);
-
-      if (cachedResult) {
-        logger.debug(`rolesService :: listRoles :: cached result :: ${cachedResult}`)
-        return JSON.parse(cachedResult)
-      }
-
       const _query = {
         text: ROLES.listRoles
       };

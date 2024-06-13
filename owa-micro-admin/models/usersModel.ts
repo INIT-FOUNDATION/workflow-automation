@@ -2,7 +2,7 @@ import Joi from "joi";
 import { IUser } from "../types/custom";
 import { USERS } from "../constants/ERRORCODE";
 import { GENDER } from "../constants/CONST";
-class User {
+class User implements IUser {
   user_id: number;
   user_name: string;
   display_name: string;
@@ -23,27 +23,7 @@ class User {
   created_by: number;
   updated_by: number;
 
-  constructor(user: {
-    user_id: number;
-    user_name: string;
-    display_name: string;
-    first_name: string;
-    last_name: string;
-    mobile_number: number;
-    email_id: string;
-    gender: number;
-    dob: string;
-    role_id: number;
-    password: string;
-    invalid_attempts: string;
-    status: number;
-    profile_pic_url: string;
-    last_logged_in: string;
-    date_created: string;
-    date_updated: string;
-    created_by: number;
-    updated_by: number;
-  }) {
+  constructor(user: IUser) {
     this.user_id = user.user_id;
     this.user_name = user.user_name;
     this.display_name = user.display_name;

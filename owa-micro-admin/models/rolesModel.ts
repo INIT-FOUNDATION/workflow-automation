@@ -3,7 +3,7 @@ import { ROLES } from "../constants/ERRORCODE";
 import { IRole } from "../types/custom";
 import Joi from "joi";
 
-class Role {
+class Role implements IRole {
   role_id: number;
   role_name: string;
   role_description: string;
@@ -13,16 +13,7 @@ class Role {
   created_by: number;
   updated_by: number;
 
-  constructor(role: {
-    role_id: number;
-    role_name: string;
-    role_description: string;
-    status: number;
-    date_created: string;
-    date_updated: string;
-    created_by: number;
-    updated_by: number;
-  }) {
+  constructor(role: IRole) {
     this.role_id = role.role_id;
     this.role_name = role.role_name;
     this.role_description = role.role_description;
