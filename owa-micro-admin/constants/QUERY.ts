@@ -71,14 +71,14 @@ export const DEPARTMENTS = {
 }
 
 export const PASSWORD_POLICY = {
-    addPasswordPolicy: `INSERT INTO password_policies(password_expiry, password_history, min_password_length, complexity, alphabetical, "numeric", special_characters, allowed_special_characters, max_invalid_attempts)
+    addPasswordPolicy: `INSERT INTO password_policies(password_expiry, password_history, minimum_password_length, complexity, alphabetical, "numeric", special_characters, allowed_special_characters, maximum_invalid_attempts)
 	                                VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`,
-    listPasswordPolicies: `SELECT id, password_expiry, password_history, min_password_length, complexity, alphabetical, numeric, special_characters, allowed_special_characters, max_invalid_attempts FROM password_policies`,
-    updatePasswordPolicy: `UPDATE password_policies SET password_expiry = $2, password_history = $3, min_password_length = $4, complexity = $5, alphabetical = $6, numeric = $7, special_characters = $8, allowed_special_characters = $9, max_invalid_attempts = $10 WHERE id = $1`,
+    listPasswordPolicies: `SELECT id, password_expiry, password_history, minimum_password_length, complexity, alphabetical, numeric, special_characters, allowed_special_characters, maximum_invalid_attempts FROM password_policies`,
+    updatePasswordPolicy: `UPDATE password_policies SET password_expiry = $2, password_history = $3, minimum_password_length = $4, complexity = $5, alphabetical = $6, numeric = $7, special_characters = $8, allowed_special_characters = $9, maximum_invalid_attempts = $10, date_updated = NOW() WHERE id = $1`,
     existsByPasswordPolicyId: `SELECT EXISTS (
         SELECT 1
             FROM password_policies
             WHERE id = $1
     )`,
-    getPasswordPolicyById: `SELECT password_expiry, password_history, min_password_length, complexity, alphabetical, numeric, special_characters, allowed_special_characters, max_invalid_attempts FROM password_policy WHERE id = $1`
+    getPasswordPolicyById: `SELECT password_expiry, password_history, minimum_password_length, complexity, alphabetical, numeric, special_characters, allowed_special_characters, maximum_invalid_attempts FROM password_policies WHERE id = $1`
 }

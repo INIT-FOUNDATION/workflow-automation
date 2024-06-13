@@ -66,7 +66,7 @@ export const passwordPoliciesService = {
             const result = await pg.executeQueryPromise(_query);
             logger.debug(`passwordPoliciesService :: listPasswordPolicies :: db result :: ${JSON.stringify(result)}`)
 
-            redis.SetRedis(key, result, CACHE_TTL.LONG);
+            if (result && result.length > 0) redis.SetRedis(key, result, CACHE_TTL.LONG);
         } catch (error) {
             logger.error(`passwordPoliciesService :: listPasswordPolicies :: ${error.message} :: ${error}`)
             throw new Error(error.message);

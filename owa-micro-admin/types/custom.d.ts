@@ -30,6 +30,7 @@ export interface IUser {
     created_by: number | undefined;
     updated_by: number | undefined;
 }
+
 export interface IDepartment {
     department_id: number;
     department_name: string;
@@ -48,7 +49,7 @@ export interface IPasswordPolicy {
     numeric: number;
     special_characters: number;
     allowed_special_characters: string;
-    maximum_invalid_attempts: string;
+    maximum_invalid_attempts: number;
     date_created: string | undefined;
     date_updated: string | undefined;
 }

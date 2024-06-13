@@ -11,7 +11,7 @@ class PasswordPolicy implements IPasswordPolicy {
     numeric: number;
     special_characters: number;
     allowed_special_characters: string;
-    maximum_invalid_attempts: string;
+    maximum_invalid_attempts: number;
     date_created: string | undefined;
     date_updated: string | undefined;
 
@@ -42,7 +42,7 @@ const validateCreatePasswordPolicy = (PasswordPolicy: IPasswordPolicy): Joi.Vali
         numeric: Joi.number().required(),
         special_characters: Joi.number().required(),
         allowed_special_characters: Joi.string().required(),
-        maximum_invalid_attempts: Joi.string().required(),
+        maximum_invalid_attempts: Joi.number().required(),
         date_created: Joi.string().allow("", null),
         date_updated: Joi.string().allow("", null)
     });
@@ -60,7 +60,7 @@ const validateUpdatePasswordPolicy = (PasswordPolicy: IPasswordPolicy): Joi.Vali
         numeric: Joi.number().required(),
         special_characters: Joi.number().required(),
         allowed_special_characters: Joi.string().required(),
-        maximum_invalid_attempts: Joi.string().required(),
+        maximum_invalid_attempts: Joi.number().required(),
         date_created: Joi.string().allow("", null),
         date_updated: Joi.string().allow("", null)
     });
