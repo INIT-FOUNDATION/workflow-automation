@@ -3,7 +3,6 @@ import express, {
   Request,
   Response,
   NextFunction,
-  Application,
 } from "express";
 import helmet from "helmet";
 import fileUpload from "express-fileupload";
