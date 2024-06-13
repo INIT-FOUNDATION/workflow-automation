@@ -36,5 +36,10 @@ export const ROLES = {
         ORDER BY MD.module_order, M.menu_order ASC
             ) T WHERE (write_permission =1 OR read_permission = 1 OR display_permission = 1)`,
     getDefaultAccessList: "SELECT menu_id, menu_name, route_url,icon_class, per_id, per_name FROM m_menus CROSS JOIN m_permissions WHERE is_active = 1 ORDER BY parent_menu_id, menu_id, per_id",
+    existsByRoleId: `SELECT EXISTS (
+                        SELECT 1
+                            FROM m_roles
+                            WHERE role_id = $1 AND status = 1
+                    )`
 
 }

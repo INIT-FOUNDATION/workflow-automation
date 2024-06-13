@@ -22,5 +22,9 @@ export const ROLES = {
   ROLE00005:  {
     errorCode: "ROLE00005",
     errorMessage: "User Id Required!",
+  },
+  ROLE00006:  {
+    errorCode: "ROLE00006",
+    errorMessage: "Requested Role does not exists!",
   }
 };

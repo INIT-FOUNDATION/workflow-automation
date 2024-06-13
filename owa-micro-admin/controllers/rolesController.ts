@@ -54,6 +54,9 @@ export const rolesController = {
                 return res.status(STATUS.BAD_REQUEST).send(error.details[0].message);
               else return res.status(STATUS.BAD_REQUEST).send(error.message);
             } 
+
+            const roleExists = await rolesService.existsByRoleId(role.role_id);
+            if (!roleExists) return res.status(STATUS.BAD_REQUEST).send(ROLES.ROLE00006);
             
             role.updated_by = plainToken.user_id;
 
@@ -71,6 +74,9 @@ export const rolesController = {
         try {
             const roleId = req.params.roleId;
             if (!roleId) return res.status(STATUS.BAD_REQUEST).send(ROLES.ROLE00003)
+            
+            const roleExists = await rolesService.existsByRoleId(parseInt(roleId));
+            if (!roleExists) return res.status(STATUS.BAD_REQUEST).send(ROLES.ROLE00006);
             
             const role = await rolesService.getRoleById(parseInt(roleId));
 
@@ -93,6 +99,9 @@ export const rolesController = {
                 return res.status(STATUS.BAD_REQUEST).send(error.details[0].message);
               else return res.status(STATUS.BAD_REQUEST).send(error.message);
             } 
+
+            const roleExists = await rolesService.existsByRoleId(role.role_id);
+            if (!roleExists) return res.status(STATUS.BAD_REQUEST).send(ROLES.ROLE00006);
             
             await rolesService.updateRoleStatus(role.role_id, role.status, plainToken.user_id);
 
@@ -108,6 +117,9 @@ export const rolesController = {
         try {
             const roleId = req.params.roleId;
             if (!roleId) return res.status(STATUS.BAD_REQUEST).send(ROLES.ROLE00003);
+
+            const roleExists = await rolesService.existsByRoleId(parseInt(roleId));
+            if (!roleExists) return res.status(STATUS.BAD_REQUEST).send(ROLES.ROLE00006);
 
             const accessList = await rolesService.getAccessListByRoleId(parseInt(roleId));
 
@@ -142,6 +154,11 @@ export const rolesController = {
             if (!roleId) return res.status(STATUS.BAD_REQUEST).send(ROLES.ROLE00003);
             if (!userId) return res.status(STATUS.BAD_REQUEST).send(ROLES.ROLE00005);
 
+            const roleExists = await rolesService.existsByRoleId(parseInt(roleId));
+            if (!roleExists) return res.status(STATUS.BAD_REQUEST).send(ROLES.ROLE00006);
+            
+            // TODO User exists check
+            
             const combinedAccessList = await rolesService.getCombinedAccessListByRoleId(parseInt(roleId), parseInt(userId));
 
             return res.status(STATUS.OK).send({

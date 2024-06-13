@@ -22,7 +22,7 @@ export const rolesService = {
       const result = await pg.executeQueryPromise(_query);
       logger.debug(`rolesService :: listRoles :: db result :: ${JSON.stringify(result)}`)
 
-      if (result.length > 0) redis.SetRedis(key, result, CACHE_TTL.LONG);
+      if (result && result.length > 0) redis.SetRedis(key, result, CACHE_TTL.LONG);
       return result;
     } catch (error) {
       logger.error(`rolesService :: listRoles :: ${error.message} :: ${error}`)
@@ -81,8 +81,8 @@ export const rolesService = {
       const result = await pg.executeQueryPromise(_query);
       logger.debug(`rolesService :: getRoleById :: db result :: ${JSON.stringify(result)}`)
 
-      if (result.length > 0) redis.SetRedis(key, result[0], CACHE_TTL.LONG);
-      return result.length > 0 ? result[0] : [];
+      if (result && result.length > 0) redis.SetRedis(key, result[0], CACHE_TTL.LONG);
+      return result && result.length > 0 ? result[0] : [];
     } catch (error) {
       logger.error(`rolesService :: getRoleById :: roleId :: ${roleId} :: ${error.message} :: ${error}`)
       throw new Error(error.message);
@@ -180,6 +180,23 @@ export const rolesService = {
 
     } catch (error) {
       logger.error(`rolesService :: getDefaultAccessList :: ${error.message} :: ${error}`)
+      throw new Error(error.message);
+    }
+  },
+  existsByRoleId: async (roleId: number): Promise<boolean> => {
+    try {
+      const _query = {
+        text: ROLES.existsByRoleId,
+        values: [roleId]
+      };
+      logger.debug(`rolesService :: existsByRoleId :: query :: ${JSON.stringify(_query)}`)
+
+      const result = await pg.executeQueryPromise(_query);
+      logger.debug(`rolesService :: existsByRoleId :: db result :: ${JSON.stringify(result)}`)
+
+      return (result && result.length > 0) ? result[0] : false;
+    } catch (error) {
+      logger.error(`rolesService :: existsByRoleId :: ${error.message} :: ${error}`)
       throw new Error(error.message);
     }
   },
