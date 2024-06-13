@@ -29,7 +29,7 @@ export const departmentsController = {
               else return res.status(STATUS.BAD_REQUEST).send(error.message);
             } 
 
-            const departmentExistsByName = await departmentsService.existsByDepartmentName(department.department_name);
+            const departmentExistsByName = await departmentsService.existsByDepartmentName(department.department_name, null);
             if (departmentExistsByName) return res.status(STATUS.BAD_REQUEST).send(DEPARTMENTS.DEPARTMENT005);
 
             await departmentsService.addDepartment(department);
@@ -56,7 +56,7 @@ export const departmentsController = {
             const departmentExistsById = await departmentsService.existsByDepartmentId(department.department_id);
             if (!departmentExistsById) return res.status(STATUS.BAD_REQUEST).send(DEPARTMENTS.DEPARTMENT003);
             
-            const departmentExistsByName = await departmentsService.existsByDepartmentName(department.department_name);
+            const departmentExistsByName = await departmentsService.existsByDepartmentName(department.department_name, department.department_id);
             if (departmentExistsByName) return res.status(STATUS.BAD_REQUEST).send(DEPARTMENTS.DEPARTMENT005);
 
             await departmentsService.updateDepartment(department);

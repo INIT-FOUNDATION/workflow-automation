@@ -124,12 +124,13 @@ export const departmentsService = {
       throw new Error(error.message);
     }
   },
-  existsByDepartmentName: async (departmentName: string): Promise<boolean> => {
+  existsByDepartmentName: async (departmentName: string, departmentId: number | undefined): Promise<boolean> => {
     try {
       const _query = {
         text: DEPARTMENTS.existsByDepartmentName,
         values: [departmentName]
       };
+      if (departmentId) _query.text = _query.text.replace('status = 1', `status = 1 AND department_id <> ${departmentId}`)
       logger.debug(`departmentsService :: existsByDepartmentName :: query :: ${JSON.stringify(_query)}`)
 
       const result = await pg.executeQueryPromise(_query);
