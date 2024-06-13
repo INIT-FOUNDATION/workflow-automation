@@ -1,7 +1,6 @@
 DROP VIEW IF EXISTS vw_m_users;
 
-CREATE
-OR REPLACE VIEW public.vw_m_users AS
+CREATE OR REPLACE VIEW public.vw_m_users AS
 SELECT
     u.user_id,
     u.user_name,
@@ -17,14 +16,14 @@ SELECT
     u.status,
     u.display_name,
     TO_CHAR(
-        u.last_logged_in + '05:30:00' :: interval,
-        'DD-MON-YYYY HH12:MIPM' :: text
+        u.last_logged_in + INTERVAL '5 hours 30 minutes',
+        'DD-MON-YYYY HH12:MI PM'
     ) AS last_logged_in_out,
     r.role_name,
     u.profile_pic_url,
     d.department_name
 FROM
     m_users u
-    LEFT OUTER JOIN m_roles r ON u.role_id = r.role_id
-    LEFT OUTER JOIN m_user_department_assoc uda ON u.user_id = uda.user_id
-    LEFT OUTER JOIN m_departments d ON uda.department_id = d.department_id;
+    LEFT JOIN m_roles r ON u.role_id = r.role_id
+    LEFT JOIN m_user_department_assoc uda ON u.user_id = uda.user_id
+    LEFT JOIN m_departments d ON uda.department_id = d.department_id;
