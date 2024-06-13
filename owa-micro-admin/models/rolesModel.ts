@@ -45,7 +45,9 @@ const validateCreateRole = (role: IRole): Joi.ValidationResult => {
     ),
     status: Joi.number().valid(...Object.values(ROLES_STATUS)),
     date_created: Joi.string().allow("", null),
-    date_updated: Joi.string().allow("", null)
+    date_updated: Joi.string().allow("", null),
+    created_by: Joi.number(),
+    updated_by: Joi.number()
   });
   return roleSchema.validate(role);
 };
