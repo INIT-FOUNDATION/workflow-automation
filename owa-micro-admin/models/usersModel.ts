@@ -13,6 +13,7 @@ class User implements IUser {
   gender: number;
   dob: string;
   role_id: number;
+  department_id: number;
   password: string;
   invalid_attempts: string;
   status: number;
@@ -34,6 +35,7 @@ class User implements IUser {
     this.gender = user.gender;
     this.dob = user.dob;
     this.role_id = user.role_id;
+    this.department_id = user.department_id;
     this.password = user.password;
     this.invalid_attempts = user.invalid_attempts;
     this.status = user.status;
@@ -64,7 +66,17 @@ const validateCreateUser = (user: IUser): Joi.ValidationResult => {
     mobile_number: validateMobileNumber.string().mobile().required(),
     email_id: Joi.string().email().required(),
     gender: Joi.number().allow(Object.values(GENDER)).required(),
-    role_id: Joi.number().required()
+    role_id: Joi.number().required(),
+    department_id: Joi.number().required(),
+    password: Joi.string().allow("", null),
+    invalid_attempts: Joi.number(),
+    status: Joi.number(),
+    profile_pic_url: Joi.string().allow("", null),
+    last_logged_in: Joi.string().allow("", null),
+    date_created: Joi.string().allow("", null),
+    date_updated: Joi.string().allow("", null),
+    created_by: Joi.number(),
+    updated_by: Joi.number()
   });
   return userSchema.validate(user);
 };

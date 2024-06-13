@@ -30,7 +30,11 @@ export const ROLES = {
   ROLE00007:  {
     errorCode: "ROLE00007",
     errorMessage: "Role with Requested Name already exists!",
-  }
+  },
+  ROLE00008:  {
+    errorCode: "ROLE00008",
+    errorMessage: "Requested User does not exists!",
+  },
 };
 
 export const USERS = {
@@ -53,6 +57,30 @@ export const USERS = {
   USER00004:  {
     errorCode: "USER00004",
     errorMessage: "Invalid Last Name length, It must be within 3 and 20",
+  },
+  USER00005:  {
+    errorCode: "USER00005",
+    errorMessage: "User with Requested Mobile number already exists!",
+  },
+  USER00006:  {
+    errorCode: "USER00006",
+    errorMessage: "User Id Required!",
+  },
+  USER00007:  {
+    errorCode: "USER00007",
+    errorMessage: "Role Id Required!",
+  },
+  USER00008:  {
+    errorCode: "USER00008",
+    errorMessage: "Profile Picture Required!",
+  },
+  USER00009:  {
+    errorCode: "USER00009",
+    errorMessage: "Invalid Profile Picture Format, Use File format of either JPEG or PNG!",
+  },
+  USER00010:  {
+    errorCode: "USER00010",
+    errorMessage: "Maximum Upload Size Limit Exceeded for Profile Picture, Please upload it of size less than equal to 5MB!",
   },
 };
 

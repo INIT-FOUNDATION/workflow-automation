@@ -5,6 +5,7 @@ import { Request } from "../types/express";
 import { validateCreateRole, validateUpdateRole, Role, validateUpdateRoleStatus } from "../models/rolesModel";
 import { IRole } from "../types/custom";
 import { ROLES } from "../constants/ERRORCODE";
+import { usersService } from "../services/usersService";
 
 export const rolesController = {
     listRoles: async(req: Request, res: Response): Promise<Response> => {
@@ -170,10 +171,11 @@ export const rolesController = {
             const roleExists = await rolesService.existsByRoleId(parseInt(roleId));
             if (!roleExists) return res.status(STATUS.BAD_REQUEST).send(ROLES.ROLE00006);
             
-            // TODO User exists check
+            const userExists = await usersService.existsByUserId(parseInt(userId));
+            if (!userExists) return res.status(STATUS.BAD_REQUEST).send(ROLES.ROLE00008);
             
             const combinedAccessList = await rolesService.getCombinedAccessListByRoleId(parseInt(roleId), parseInt(userId));
-
+            
             return res.status(STATUS.OK).send({
                 data: combinedAccessList,
                 message: "Combined Access List Fetched Successfully",

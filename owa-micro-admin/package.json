@@ -27,6 +27,7 @@
     "multer": "^1.4.5-lts.1",
     "nodemon": "^3.0.3",
     "owa-micro-common": "git+https://letslinkai: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@github.com/TechknowkraftAI/init-micro-commons.git#v1.0.12",
+    "randexp": "^0.5.3",
     "ts-node": "^10.9.2",
     "uuid": "^9.0.1"
   },
@@ -50,7 +51,13 @@
       "INIT_COMMON_MASTER_USER": "dev",
       "INIT_COMMON_MASTER_DATABASE": "owa",
       "INIT_COMMON_MASTER_PASSWORD": "zQrBoxTNZffPZLak",
-      "INIT_COMMON_MASTER_PORT": 5432
+      "INIT_COMMON_MASTER_PORT": 5432,
+      "INIT_COMMON_USE_MINIO": true,
+      "INIT_COMMON_MINIO_ENDPOINT": "apiminio.dev.orrizonte.in",
+      "INIT_COMMON_MINIO_ENABLE_SSL": true,
+      "INIT_COMMON_MINIO_ACCESS_KEY": "dev",
+      "INIT_COMMON_MINIO_SECRET_KEY": "by20Kife3vceCIJ",
+      "OWA_OBJECT_STORAGE_BUCKET": "owa-dev"
     }
   }
 }

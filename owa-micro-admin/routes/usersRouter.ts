@@ -1,25 +1,29 @@
 import express from "express";
 import { usersController } from "../controllers/usersController";
+import fileUpload from "express-fileupload";
+import { envUtils } from "owa-micro-common";
 
 const usersRouter = express.Router();
 
+usersRouter.use(fileUpload({
+    limits: { 
+        fileSize: envUtils.getNumberEnvVariableOrDefault("OWA_UPLOAD_FILE_SIZE_LIMIT", 5 * 1024 * 1024 )
+    }
+}));
+
 usersRouter.get("/create", usersController.createUser);
 
-usersRouter.post("/update", usersController.addRole);
+usersRouter.post("/update", usersController.updateUser);
 
-usersRouter.get("/:userId", usersController.getRoleById);
+usersRouter.get("/:userId", usersController.getUserById);
 
-usersRouter.post("/list", usersController.updateRoleStatus);
+usersRouter.post("/list", usersController.listUsers);
 
-usersRouter.get("/passwordPolicy", usersController.getAccessListByRoleId);
+usersRouter.post("/uploadProfilePicture", usersController.updateProfilePic);
 
-usersRouter.post("/passwordPolicy", usersController.getAccessListByRoleId);
+usersRouter.get("/list/:roleId", usersController.listUsersByRoleId);
 
-usersRouter.post("/uploadProfilePicture", usersController.getCombinedAccessListByRoleId);
-
-usersRouter.get("/downloadProfilePicture", usersController.getDefaultAccessList);
-
-usersRouter.post("/listByRole/:roleId", usersController.updateRoleStatus);
+usersRouter.post("/resetPassword/:userId", usersController.resetPasswordForUserId);
 
 export {
     usersRouter

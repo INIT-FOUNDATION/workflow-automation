@@ -1,178 +1,293 @@
-import { pg, logger, redis } from "owa-micro-common";
-import { ROLES } from "../constants/QUERY";
-import { IRole } from "../types/custom";
-import { CACHE_TTL } from "../constants/CONST";
+import { pg, logger, redis, JSONUTIL, objectStorageUtility, envUtils } from "owa-micro-common";
+import { ROLES, USERS, USER_DEPARTMENT_MAPPING } from "../constants/QUERY";
+import { IPasswordPolicy, IRole, IUser } from "../types/custom";
+import { CACHE_TTL, DEFAULT_PASSWORD } from "../constants/CONST";
+import { PlainToken } from "../types/express";
+import { passwordPoliciesService } from "./passwordPoliciesService";
+import bcrypt from "bcryptjs";
+import RandExp from "randexp";
 
 export const usersService = {
-  createUser: async (): Promise<IRole[]> => {
+  listUsers: async (plainToken: PlainToken, pageSize: number, currentPage: number, searchQuery: string): Promise<IUser[]> => {
     try {
       const _query = {
         text: ROLES.listRoles
       };
-      logger.debug(`rolesService :: listRoles :: query :: ${JSON.stringify(_query)}`)
+      logger.debug(`usersService :: listUsers :: query :: ${JSON.stringify(_query)}`)
 
       const result = await pg.executeQueryPromise(_query);
-      logger.debug(`rolesService :: listRoles :: db result :: ${JSON.stringify(result)}`)
-
-      if (result.length > 0) redis.SetRedis(key, result, CACHE_TTL.LONG);
+      logger.debug(`usersService :: listUsers :: db result :: ${JSON.stringify(result)}`)
       return result;
     } catch (error) {
-      logger.error(`rolesService :: listRoles :: ${error.message} :: ${error}`)
+      logger.error(`usersService :: listUsers :: ${error.message} :: ${error}`)
       throw new Error(error.message);
     }
   },
-  addRole: async (role: IRole) => {
+  listUsersCount: async (plainToken: PlainToken, pageSize: number, currentPage: number, searchQuery: string): Promise<number> => {
     try {
       const _query = {
-        text: ROLES.addRole,
-        values: [role.role_name, role.role_description, role.created_by, role.updated_by]
+        text: ROLES.listRoles
       };
-      logger.debug(`rolesService :: addRole :: query :: ${JSON.stringify(_query)}`)
+      logger.debug(`usersService :: listUsersCount :: query :: ${JSON.stringify(_query)}`)
 
       const result = await pg.executeQueryPromise(_query);
-      logger.debug(`rolesService :: addRole :: db result :: ${JSON.stringify(result)}`)
+      logger.debug(`usersService :: listUsersCount :: db result :: ${JSON.stringify(result)}`)
+
+      if (result.length > 0) redis.SetRedis("", result, CACHE_TTL.LONG);
+      return result;
+    } catch (error) {
+      logger.error(`usersService :: listRoles :: ${error.message} :: ${error}`)
+      throw new Error(error.message);
+    }
+  },
+  createUser: async (user: IUser) => {
+    try {
+      const passwordPolicies = await passwordPoliciesService.listPasswordPolicies();
+      const passwordPolicy = passwordPolicies[0];
+
+      user.password = await usersService.generatePasswordFromPasswordPolicy(passwordPolicy);
+      user.display_name = JSONUTIL.capitalize(user.display_name.trim());
+
+      const _query = {
+        text: USERS.createUser,
+        values: [user.user_name,
+        user.first_name,
+        user.last_name,
+        user.display_name,
+        user.mobile_number,
+        user.password,
+        user.role_id,
+        user.email_id,
+        user.created_by,
+        user.updated_by
+        ]
+      };
+      logger.debug(`usersService :: createUser :: query :: ${JSON.stringify(_query)}`)
+
+      const result = await pg.executeQueryPromise(_query);
+      logger.debug(`usersService :: createUser :: db result :: ${JSON.stringify(result)}`)
+
+      const createdUserId = result[0].user_id;
+      await usersService.createUserDepartmentMapping(createdUserId, user.department_id);
 
       redis.deleteRedis(`ROLES`)
     } catch (error) {
-      logger.error(`rolesService :: addRole :: ${error.message} :: ${error}`)
+      logger.error(`usersService :: createUser :: ${error.message} :: ${error}`)
       throw new Error(error.message);
     }
   },
-  updateRole: async (role: IRole) => {
+  updateUser: async (user: IUser) => {
     try {
       const _query = {
-        text: ROLES.updateRole,
-        values: [role.role_id, role.role_name, role.role_description, role.updated_by]
+        text: USERS.updateUser,
+        values: [user.user_id, user.first_name, user.last_name, user.display_name,
+        user.email_id, user.updated_by, user.role_id
+        ]
       };
-      logger.debug(`rolesService :: updateRole :: query :: ${JSON.stringify(_query)}`)
+      logger.debug(`usersService :: updateUser :: query :: ${JSON.stringify(_query)}`)
 
       const result = await pg.executeQueryPromise(_query);
-      logger.debug(`rolesService :: updateRole :: db result :: ${JSON.stringify(result)}`)
+      logger.debug(`usersService :: updateUser :: db result :: ${JSON.stringify(result)}`)
 
-      redis.deleteRedis(`ROLE:${role.role_id}`)
+      await usersService.updateUserDepartmentMapping(user.user_id, user.department_id);
+      
+      redis.deleteRedis(`ROLES`)
     } catch (error) {
-      logger.error(`rolesService :: updateRole :: ${error.message} :: ${error}`)
+      logger.error(`usersService :: updateUser :: ${error.message} :: ${error}`)
       throw new Error(error.message);
     }
   },
-  getRoleById: async (roleId: number): Promise<IRole> => {
+  getUserById: async (userId: number): Promise<IUser> => {
     try {
-      const key = `ROLE:${roleId}`
+      const key = `USER:${userId}`
       const cachedResult = await redis.GetKeyRedis(key);
       if (cachedResult) {
-        logger.debug(`rolesService :: getRoleById :: roleId :: ${roleId} :: cached result :: ${cachedResult}`)
+        logger.debug(`usersService :: getUserById :: userId :: ${userId} :: cached result :: ${cachedResult}`)
         return JSON.parse(cachedResult)
       }
 
       const _query = {
-        text: ROLES.getRole,
-        values: [roleId]
+        text: USERS.getUser,
+        values: [userId]
       };
-      logger.debug(`rolesService :: getRoleById :: query :: ${JSON.stringify(_query)}`)
+      logger.debug(`usersService :: getUserById :: query :: ${JSON.stringify(_query)}`)
 
       const result = await pg.executeQueryPromise(_query);
-      logger.debug(`rolesService :: getRoleById :: db result :: ${JSON.stringify(result)}`)
+      logger.debug(`usersService :: getUserById :: db result :: ${JSON.stringify(result)}`)
 
-      if (result.length > 0) redis.SetRedis(key, result[0], CACHE_TTL.LONG);
-      return result.length > 0 ? result[0] : [];
+      if (result.length > 0) {
+        const bucketName = envUtils.getStringEnvVariableOrDefault("OWA_OBJECT_STORAGE_BUCKET", "owa-dev");
+        result[0].profile_pic_url = await objectStorageUtility.presignedGetObject(bucketName, new URL(result[0].profile_pic_url).pathname.substring(1))
+        redis.SetRedis(key, result[0], CACHE_TTL.LONG)
+        return result[0]
+      }
     } catch (error) {
-      logger.error(`rolesService :: getRoleById :: roleId :: ${roleId} :: ${error.message} :: ${error}`)
+      logger.error(`usersService :: getUserById :: userId :: ${userId} :: ${error.message} :: ${error}`)
       throw new Error(error.message);
     }
   },
-  updateRoleStatus: async (roleId: number, status: number, updatedBy: number) => {
+  existsByMobileNumber: async (mobileNumber: number): Promise<boolean> => {
     try {
       const _query = {
-        text: ROLES.updateRoleStatus,
-        values: [roleId, status, updatedBy]
+        text: USERS.existsByMobileNumber,
+        values: [mobileNumber]
       };
-      logger.debug(`rolesService :: updateRoleStatus :: query :: ${JSON.stringify(_query)}`)
+      logger.debug(`usersService :: existsByMobileNumber :: query :: ${JSON.stringify(_query)}`)
 
       const result = await pg.executeQueryPromise(_query);
-      logger.debug(`rolesService :: updateRoleStatus :: db result :: ${JSON.stringify(result)}`)
+      logger.debug(`usersService :: existsByMobileNumber :: db result :: ${JSON.stringify(result)}`)
 
-      redis.deleteRedis(`ROLE:${roleId}`)
+      return (result && result.length > 0) ? result[0].exists : false;
     } catch (error) {
-      logger.error(`rolesService :: updateRoleStatus :: ${error.message} :: ${error}`)
+      logger.error(`usersService :: existsByMobileNumber :: ${error.message} :: ${error}`)
       throw new Error(error.message);
     }
   },
-  getAccessListByRoleId: async (roleId: number): Promise<any> => {
+  existsByUserId: async (userId: number): Promise<boolean> => {
     try {
-      const key = `ACCESS_LIST|ROLE:${roleId}`
+      const _query = {
+        text: USERS.existsByUserId,
+        values: [userId]
+      };
+      logger.debug(`usersService :: existsByUserId :: query :: ${JSON.stringify(_query)}`)
+
+      const result = await pg.executeQueryPromise(_query);
+      logger.debug(`usersService :: existsByUserId :: db result :: ${JSON.stringify(result)}`)
+
+      return (result && result.length > 0) ? result[0].exists : false;
+    } catch (error) {
+      logger.error(`usersService :: existsByUserId :: ${error.message} :: ${error}`)
+      throw new Error(error.message);
+    }
+  },
+  generatePasswordFromPasswordPolicy: async (passwordPolicy: IPasswordPolicy): Promise<string> => {
+    try {
+      let pattern = "", tempStr = "";
+      const alphabetical = /[A-Z][a-z]/;
+      const numeric = /[0-9]/;
+      const special = /[!@#$&*]/;
+
+      const passwordLength = passwordPolicy.minimum_password_length;
+      tempStr += (passwordPolicy.complexity && passwordPolicy.alphabetical) ? alphabetical.source : '';
+      tempStr += numeric.source;
+
+      if (passwordPolicy.complexity && passwordPolicy.numeric) {
+        tempStr += numeric.source;
+      }
+
+      if (passwordPolicy.complexity && passwordPolicy.special_characters) {
+        tempStr += special.source;
+      }
+
+      if (tempStr) {
+        tempStr += `{${passwordLength}}`;
+        pattern = tempStr;
+      } else {
+        pattern = '[1-9]{' + length + '}';
+      }
+
+      const regexPattern = new RegExp(pattern);
+      const randomExpression = new RandExp(regexPattern).gen();
+      const salt = await bcrypt.genSalt(10);
+      const password = await bcrypt.hash(randomExpression, salt);
+      return password;
+    } catch (error) {
+      logger.error(`usersService :: generatePasswordFromPasswordPolicy :: ${error.message} :: ${error}`)
+      throw new Error(error.message);
+    }
+  },
+  createUserDepartmentMapping: async (userId: number, departmentId: number) => {
+    try {
+      const _query = {
+        text: USER_DEPARTMENT_MAPPING.createUserMapping,
+        values: [userId, departmentId]
+      };
+      logger.debug(`usersService :: createUserDepartmentMapping :: query :: ${JSON.stringify(_query)}`);
+
+      const result = await pg.executeQueryPromise(_query);
+      logger.debug(`usersService :: createUserDepartmentMapping :: db result :: ${JSON.stringify(result)}`);
+
+    } catch (error) {
+      logger.error(`usersService :: createUserDepartmentMapping :: ${error.message} :: ${error}`)
+      throw new Error(error.message);
+    }
+  },
+  updateUserDepartmentMapping: async (userId: number, departmentId: number) => {
+    try {
+      const _query = {
+        text: USER_DEPARTMENT_MAPPING.updateUserMapping,
+        values: [userId, departmentId]
+      };
+      logger.debug(`usersService :: updateUserDepartmentMapping :: query :: ${JSON.stringify(_query)}`);
+
+      const result = await pg.executeQueryPromise(_query);
+      logger.debug(`usersService :: updateUserDepartmentMapping :: db result :: ${JSON.stringify(result)}`);
+
+    } catch (error) {
+      logger.error(`usersService :: updateUserDepartmentMapping :: ${error.message} :: ${error}`)
+      throw new Error(error.message);
+    }
+  },
+  updateProfilePic: async (profilePicture: File, userId: number) => {
+    try {
+      const objectStoragePath = `profile-pictures/PROFILE_PICTURE_${userId}.${profilePicture.type}`;
+      const bucketName = envUtils.getStringEnvVariableOrDefault("OWA_OBJECT_STORAGE_BUCKET", "owa-dev");
+      const objectStorageUploadLocation = await objectStorageUtility.putObject(bucketName, objectStoragePath, profilePicture);
+      
+      const _query = {
+        text: USERS.updateProfilePic,
+        values: [userId, objectStorageUploadLocation]
+      };
+      logger.debug(`usersService :: updateProfilePic :: query :: ${JSON.stringify(_query)}`);
+
+      const result = await pg.executeQueryPromise(_query);
+      logger.debug(`usersService :: updateProfilePic :: db result :: ${JSON.stringify(result)}`);
+    } catch (error) {
+      logger.error(`usersService :: updateProfilePic :: ${error.message} :: ${error}`)
+      throw new Error(error.message);
+    }
+  },
+  getUsersByRoleId: async (roleId: number): Promise<IUser[]> => {
+    try {
+      const key = `USERS|ROLE:${roleId}`;
       const cachedResult = await redis.GetKeyRedis(key);
       if (cachedResult) {
-        logger.debug(`rolesService :: getAccessListByRoleId :: roleId :: ${roleId} :: cached result :: ${cachedResult}`)
+        logger.debug(`usersService :: getUsersByRoleId :: roleId :: ${roleId} :: cached result :: ${cachedResult}`)
         return JSON.parse(cachedResult)
       }
 
       const _query = {
-        text: ROLES.getAccessListByRoleId,
+        text: USERS.getUsersByRoleId,
         values: [roleId]
       };
-      logger.debug(`rolesService :: getAccessListByRoleId :: query :: ${JSON.stringify(_query)}`)
+      logger.debug(`usersService :: getUsersByRoleId :: query :: ${JSON.stringify(_query)}`);
 
       const result = await pg.executeQueryPromise(_query);
-      logger.debug(`rolesService :: getAccessListByRoleId :: db result :: ${JSON.stringify(result)}`)
+      logger.debug(`usersService :: getUsersByRoleId :: db result :: ${JSON.stringify(result)}`);
 
-      redis.SetRedis(key, result, CACHE_TTL.LONG);
+      if (result && result.length > 0) redis.SetRedis(key, result, CACHE_TTL.LONG);
+      return result; 
     } catch (error) {
-      logger.error(`rolesService :: getAccessListByRoleId :: ${error.message} :: ${error}`)
+      logger.error(`usersService :: getUsersByRoleId :: ${error.message} :: ${error}`)
       throw new Error(error.message);
     }
   },
-  getMenusListByRoleId: async (roleId: number): Promise<any> => {
+  resetPasswordForUserId: async (userId: number) => {
     try {
+      const salt = await bcrypt.genSalt(10);
+      const password = await bcrypt.hash(DEFAULT_PASSWORD, salt);
+      
       const _query = {
-        text: ROLES.getMenusListByRoleId,
-        values: [roleId]
+        text: USERS.resetPasswordForUserId,
+        values: [userId, password]
       };
-      logger.debug(`rolesService :: getMenusListByRoleId :: query :: ${JSON.stringify(_query)}`)
+      logger.debug(`usersService :: resetPasswordForUserId :: query :: ${JSON.stringify(_query)}`);
 
       const result = await pg.executeQueryPromise(_query);
-      logger.debug(`rolesService :: getMenusListByRoleId :: db result :: ${JSON.stringify(result)}`)
+      logger.debug(`usersService :: resetPasswordForUserId :: db result :: ${JSON.stringify(result)}`);
     } catch (error) {
-      logger.error(`rolesService :: getMenusListByRoleId :: ${error.message} :: ${error}`)
+      logger.error(`usersService :: resetPasswordForUserId :: ${error.message} :: ${error}`)
       throw new Error(error.message);
     }
-  },
-  getCombinedAccessListByRoleId: async (roleId: number, userId: number): Promise<any> => {
-    try {
-      const key = `COMBINED_ACCESS_LIST|USER:${userId}`
-      const cachedResult = await redis.GetKeyRedis(key);
-      if (cachedResult) {
-        logger.debug(`rolesService :: getCombinedAccessListByRoleId :: roleId :: ${roleId} :: userId :: ${userId} :: cached result :: ${cachedResult}`)
-        return JSON.parse(cachedResult)
-      }
-
-      const _query = {
-        text: ROLES.getCombinedAccessListByRoleId,
-        values: [roleId, userId]
-      };
-      logger.debug(`rolesService :: getCombinedAccessListByRoleId :: query :: ${JSON.stringify(_query)}`)
-
-      const result = await pg.executeQueryPromise(_query);
-      logger.debug(`rolesService :: getCombinedAccessListByRoleId :: db result :: ${JSON.stringify(result)}`)
-
-      redis.SetRedis(key, result, CACHE_TTL.LONG);
-    } catch (error) {
-      logger.error(`rolesService :: getCombinedAccessListByRoleId :: ${error.message} :: ${error}`)
-      throw new Error(error.message);
-    }
-  },
-  getDefaultAccessList: async (): Promise<any> => {
-    try {
-      const _query = {
-        text: ROLES.getDefaultAccessList
-      };
-      logger.debug(`rolesService :: getDefaultAccessList :: query :: ${JSON.stringify(_query)}`)
-
-      const result = await pg.executeQueryPromise(_query);
-      logger.debug(`rolesService :: getDefaultAccessList :: db result :: ${JSON.stringify(result)}`)
-
-    } catch (error) {
-      logger.error(`rolesService :: getDefaultAccessList :: ${error.message} :: ${error}`)
-      throw new Error(error.message);
-    }
-  },
+  }
 }
