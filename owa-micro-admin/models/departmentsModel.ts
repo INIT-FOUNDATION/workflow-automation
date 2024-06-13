@@ -33,7 +33,7 @@ class Department {
       department_name: Joi.string().min(3).max(20).required().error(
         new Error(JSON.stringify(DEPARTMENTS.DEPARTMENT001))
       ),
-      status: Joi.number().allow(new Set(Object.values(DEPARTMENTS_STATUS))),
+      status: Joi.number().valid(...Object.values(DEPARTMENTS_STATUS)),
       date_created: Joi.string().allow("", null),
       date_updated: Joi.string().allow("", null)
     });

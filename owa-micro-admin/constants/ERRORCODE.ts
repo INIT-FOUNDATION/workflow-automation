@@ -73,4 +73,8 @@ export const DEPARTMENTS = {
     errorCode: "DEPARTMENT004",
     errorMessage: "Invalid Department Status!",
   },
+  DEPARTMENT005:  {
+    errorCode: "DEPARTMENT005",
+    errorMessage: "Requested Department Name already exists!",
+  },
 };

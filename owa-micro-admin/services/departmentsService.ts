@@ -124,4 +124,21 @@ export const departmentsService = {
       throw new Error(error.message);
     }
   },
+  existsByDepartmentName: async (departmentName: string): Promise<boolean> => {
+    try {
+      const _query = {
+        text: DEPARTMENTS.existsByDepartmentName,
+        values: [departmentName]
+      };
+      logger.debug(`departmentsService :: existsByDepartmentName :: query :: ${JSON.stringify(_query)}`)
+
+      const result = await pg.executeQueryPromise(_query);
+      logger.debug(`departmentsService :: existsByDepartmentName :: db result :: ${JSON.stringify(result)}`)
+
+      return (result && result.length > 0) ? result[0].exists : false;
+    } catch (error) {
+      logger.error(`departmentsService :: existsByDepartmentName :: ${error.message} :: ${error}`)
+      throw new Error(error.message);
+    }
+  },
 }

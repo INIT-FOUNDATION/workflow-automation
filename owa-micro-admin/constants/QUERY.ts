@@ -57,5 +57,10 @@ export const DEPARTMENTS = {
         SELECT 1
             FROM m_departments
             WHERE department_id = $1 AND status = 1
+    )`,
+    existsByDepartmentName: `SELECT EXISTS (
+        SELECT 1
+            FROM m_departments
+            WHERE department_name = $1 AND status = 1
     )`
 }
