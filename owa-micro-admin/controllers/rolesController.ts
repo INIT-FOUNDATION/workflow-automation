@@ -30,7 +30,7 @@ export const rolesController = {
               else return res.status(STATUS.BAD_REQUEST).send(error.message);
             } 
             
-            const roleExistsByName = await rolesService.existsByRoleName(role.role_name);
+            const roleExistsByName = await rolesService.existsByRoleName(role.role_name, null);
             if (roleExistsByName) return res.status(STATUS.BAD_REQUEST).send(ROLES.ROLE00007);
 
             role.created_by = plainToken.user_id;
@@ -61,7 +61,7 @@ export const rolesController = {
             const roleExistsById = await rolesService.existsByRoleId(role.role_id);
             if (!roleExistsById) return res.status(STATUS.BAD_REQUEST).send(ROLES.ROLE00006);
 
-            const roleExistsByName = await rolesService.existsByRoleName(role.role_name);
+            const roleExistsByName = await rolesService.existsByRoleName(role.role_name, role.role_id);
             if (roleExistsByName) return res.status(STATUS.BAD_REQUEST).send(ROLES.ROLE00007);
             
             role.updated_by = plainToken.user_id;

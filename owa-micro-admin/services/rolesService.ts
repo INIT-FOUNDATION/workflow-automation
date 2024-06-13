@@ -202,12 +202,13 @@ export const rolesService = {
       throw new Error(error.message);
     }
   },
-  existsByRoleName: async (roleName: string): Promise<boolean> => {
+  existsByRoleName: async (roleName: string, roleId: number | undefined): Promise<boolean> => {
     try {
       const _query = {
         text: ROLES.existsByRoleName,
         values: [roleName]
       };
+      if (roleId) _query.text = _query.text.replace(`status = 1`, `status = 1 AND role_id <> ${roleId}`);
       logger.debug(`rolesService :: existsByRoleName :: query :: ${JSON.stringify(_query)}`)
 
       const result = await pg.executeQueryPromise(_query);
