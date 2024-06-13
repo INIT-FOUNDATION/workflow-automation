@@ -7,7 +7,7 @@ import { IRole } from "../types/custom";
 import { ROLES } from "../constants/ERRORCODE";
 
 export const usersController = {
-    listRoles: async(req: Request, res: Response): Promise<Response> => {
+    createUser: async(req: Request, res: Response): Promise<Response> => {
         try {
             const roles = await rolesService.listRoles();
             return res.status(STATUS.OK).send({

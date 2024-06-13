@@ -40,7 +40,7 @@ export const rolesService = {
       const result = await pg.executeQueryPromise(_query);
       logger.debug(`rolesService :: addRole :: db result :: ${JSON.stringify(result)}`)
 
-      redis.deleteRedis(`ROLES`)
+      redis.deleteRedis(`ROLES`);
     } catch (error) {
       logger.error(`rolesService :: addRole :: ${error.message} :: ${error}`)
       throw new Error(error.message);

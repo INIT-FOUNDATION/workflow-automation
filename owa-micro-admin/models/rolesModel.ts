@@ -63,7 +63,7 @@ const validateUpdateRole = (role: IRole): Joi.ValidationResult => {
 const validateUpdateRoleStatus = (role: IRole): Joi.ValidationResult => {
   const roleSchema = Joi.object({
     role_id: Joi.number().required(),
-    status: Joi.number().allow(Object(ROLES_STATUS).values()).required().error(
+    status: Joi.number().allow(Object.values(ROLES_STATUS)).required().error(
       new Error(JSON.stringify(ROLES.ROLE00004))
     )
   });

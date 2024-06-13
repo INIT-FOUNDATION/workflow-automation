@@ -35,7 +35,7 @@ CREATE TABLE m_roles (
 );
 
 -- Table: m_department
-CREATE TABLE m_department (
+CREATE TABLE m_departments (
     department_id serial PRIMARY KEY,
     department_name VARCHAR(50),
     status smallint DEFAULT 1,

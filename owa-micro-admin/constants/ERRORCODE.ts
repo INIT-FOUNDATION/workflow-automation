@@ -28,3 +28,49 @@ export const ROLES = {
     errorMessage: "Requested Role does not exists!",
   }
 };
+
+export const USERS = {
+  USER00000: {
+    errorCode: "USER00000",
+    errorMessage: "Internal Server Error",
+  },
+  USER00001:  {
+    errorCode: "USER00001",
+    errorMessage: "Invalid User name length, It must be within 3 and 20",
+  },
+  USER00002:  {
+    errorCode: "USER00002",
+    errorMessage: "Invalid Display Name length, It must be within 3 and 20",
+  },
+  USER00003:  {
+    errorCode: "USER00003",
+    errorMessage: "Invalid First Name length, It must be within 3 and 20",
+  },
+  USER00004:  {
+    errorCode: "USER00004",
+    errorMessage: "Invalid Last Name length, It must be within 3 and 20",
+  },
+};
+
+export const DEPARTMENTS = {
+  DEPARTMENT000: {
+    errorCode: "DEPARTMENT000",
+    errorMessage: "Internal Server Error",
+  },
+  DEPARTMENT001:  {
+    errorCode: "DEPARTMENT001",
+    errorMessage: "Invalid Department name length, It must be within 3 and 20",
+  },
+  DEPARTMENT002:  {
+    errorCode: "DEPARTMENT002",
+    errorMessage: "Department Id Required!",
+  },
+  DEPARTMENT003:  {
+    errorCode: "DEPARTMENT003",
+    errorMessage: "Requested Department does not exists!",
+  },
+  DEPARTMENT004:  {
+    errorCode: "DEPARTMENT004",
+    errorMessage: "Invalid Department Status!",
+  },
+};

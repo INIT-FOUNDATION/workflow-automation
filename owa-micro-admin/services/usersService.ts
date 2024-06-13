@@ -3,8 +3,8 @@ import { ROLES } from "../constants/QUERY";
 import { IRole } from "../types/custom";
 import { CACHE_TTL } from "../constants/CONST";
 
-export const rolesService = {
-  listRoles: async (): Promise<IRole[]> => {
+export const usersService = {
+  role: async (): Promise<IRole[]> => {
     try {
       const key = `ROLES`;
       const cachedResult = await redis.GetKeyRedis(key);

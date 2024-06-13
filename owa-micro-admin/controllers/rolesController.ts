@@ -64,10 +64,10 @@ export const rolesController = {
 
             return res.status(STATUS.OK).send({
                 data: null,
-                message: "Role Added Successfully",
+                message: "Role Updated Successfully",
               });
         } catch (error) {
-            logger.error(`rolesController :: addRole :: ${error.message} :: ${error}`)
+            logger.error(`rolesController :: updateRole :: ${error.message} :: ${error}`)
         }
     },
     getRoleById: async(req: Request, res: Response): Promise<Response> => {
@@ -82,7 +82,7 @@ export const rolesController = {
 
             return res.status(STATUS.OK).send({
                 data: role,
-                message: "Role Added Successfully",
+                message: "Role Fetched Successfully",
               });
         } catch (error) {
             logger.error(`rolesController :: getRoleById :: ${error.message} :: ${error}`)

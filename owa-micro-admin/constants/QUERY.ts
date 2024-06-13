@@ -1,9 +1,9 @@
 export const ROLES = {
     listRoles: 'SELECT role_id, role_name from m_roles WHERE status = 1 ORDER BY date_created DESC',
     addRole: 'INSERT INTO m_roles (role_name, role_description, created_by, updated_by) VALUES ($1, $2, $3, $4)',
-    updateRole: 'UPDATE m_roles SET role_name = $2, role_description = $3, updated_by = $4 WHERE role_id = $1',
+    updateRole: 'UPDATE m_roles SET role_name = $2, role_description = $3, updated_by = $4, date_updated = NOW() WHERE role_id = $1',
     getRole: 'SELECT role_name, role_description, date_created, date_updated, created_by, updated_by FROM m_roles WHERE role_id = $1 AND status = 1',
-    updateRoleStatus: 'UPDATE m_roles SET status = $2, updated_by = $3 WHERE role_id = $1',
+    updateRoleStatus: 'UPDATE m_roles SET status = $2, updated_by = $3, date_updated = NOW() WHERE role_id = $1',
     getAccessListByRoleId: `SELECT mm.menu_id, 
                             mm.menu_name,
                             mm.route_url,
@@ -41,5 +41,21 @@ export const ROLES = {
                             FROM m_roles
                             WHERE role_id = $1 AND status = 1
                     )`
+}
 
+export const USERS = {
+
+}
+
+export const DEPARTMENTS = {
+    listDepartments: 'SELECT department_id, department_name FROM m_departments WHERE status = 1',
+    addDepartment: `INSERT INTO m_departments (department_name) VALUES ($1)`,
+    updateDepartment: `UPDATE m_departments SET department_name = $2, date_updated = NOW() WHERE department_id = $1`,
+    getDepartment: `SELECT department_id, department_name from m_departments WHERE department_id = $1 AND status = 1`,
+    updateDepartmentStatus: 'UPDATE m_departments SET status = $2, date_updated = NOW() WHERE department_id = $1',
+    existsByDepartmentId: `SELECT EXISTS (
+        SELECT 1
+            FROM m_departments
+            WHERE department_id = $1 AND status = 1
+    )`
 }
