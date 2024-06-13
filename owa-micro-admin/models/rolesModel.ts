@@ -42,7 +42,10 @@ const validateCreateRole = (role: IRole): Joi.ValidationResult => {
     ),
     role_description: Joi.string().min(3).max(50).required().error(
       new Error(JSON.stringify(ROLES.ROLE00002))
-    )
+    ),
+    status: Joi.number().valid(...Object.values(ROLES_STATUS)),
+    date_created: Joi.string().allow("", null),
+    date_updated: Joi.string().allow("", null)
   });
   return roleSchema.validate(role);
 };
@@ -63,7 +66,7 @@ const validateUpdateRole = (role: IRole): Joi.ValidationResult => {
 const validateUpdateRoleStatus = (role: IRole): Joi.ValidationResult => {
   const roleSchema = Joi.object({
     role_id: Joi.number().required(),
-    status: Joi.number().allow(Object.values(ROLES_STATUS)).required().error(
+    status: Joi.number().valid(...Object.values(ROLES_STATUS)).required().error(
       new Error(JSON.stringify(ROLES.ROLE00004))
     )
   });

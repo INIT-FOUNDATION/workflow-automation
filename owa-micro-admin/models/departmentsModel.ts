@@ -45,12 +45,7 @@ class Department {
       department_id: Joi.number().required(),
       department_name: Joi.string().min(3).max(20).required().error(
         new Error(JSON.stringify(DEPARTMENTS.DEPARTMENT001))
-      ),
-      status: Joi.number().valid(...Object.values(DEPARTMENTS_STATUS)).required().error(
-        new Error(JSON.stringify(DEPARTMENTS.DEPARTMENT004))
-      ),
-      date_created: Joi.string().allow("", null),
-      date_updated: Joi.string().allow("", null)
+      )
     });
     return departmentSchema.validate(department);
   };

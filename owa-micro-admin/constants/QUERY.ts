@@ -40,6 +40,11 @@ export const ROLES = {
                         SELECT 1
                             FROM m_roles
                             WHERE role_id = $1 AND status = 1
+                    )`,
+    existsByRoleName: `SELECT EXISTS (
+                        SELECT 1
+                            FROM m_roles
+                            WHERE role_name = $1 AND status = 1
                     )`
 }
 

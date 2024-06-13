@@ -26,6 +26,10 @@ export const ROLES = {
   ROLE00006:  {
     errorCode: "ROLE00006",
     errorMessage: "Requested Role does not exists!",
+  },
+  ROLE00007:  {
+    errorCode: "ROLE00007",
+    errorMessage: "Role with Requested Name already exists!",
   }
 };
 
@@ -75,6 +79,6 @@ export const DEPARTMENTS = {
   },
   DEPARTMENT005:  {
     errorCode: "DEPARTMENT005",
-    errorMessage: "Requested Department Name already exists!",
+    errorMessage: "Department with Requested Name already exists!",
   },
 };

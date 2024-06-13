@@ -57,7 +57,8 @@ export const rolesService = {
       const result = await pg.executeQueryPromise(_query);
       logger.debug(`rolesService :: updateRole :: db result :: ${JSON.stringify(result)}`)
 
-      redis.deleteRedis(`ROLE:${role.role_id}`)
+      redis.deleteRedis(`ROLE:${role.role_id}`);
+      redis.deleteRedis(`ROLES`);
     } catch (error) {
       logger.error(`rolesService :: updateRole :: ${error.message} :: ${error}`)
       throw new Error(error.message);
@@ -99,7 +100,8 @@ export const rolesService = {
       const result = await pg.executeQueryPromise(_query);
       logger.debug(`rolesService :: updateRoleStatus :: db result :: ${JSON.stringify(result)}`)
 
-      redis.deleteRedis(`ROLE:${roleId}`)
+      redis.deleteRedis(`ROLE:${roleId}`);
+      redis.deleteRedis(`ROLES`);
     } catch (error) {
       logger.error(`rolesService :: updateRoleStatus :: ${error.message} :: ${error}`)
       throw new Error(error.message);
@@ -194,9 +196,26 @@ export const rolesService = {
       const result = await pg.executeQueryPromise(_query);
       logger.debug(`rolesService :: existsByRoleId :: db result :: ${JSON.stringify(result)}`)
 
-      return (result && result.length > 0) ? result[0] : false;
+      return (result && result.length > 0) ? result[0].exists : false;
     } catch (error) {
       logger.error(`rolesService :: existsByRoleId :: ${error.message} :: ${error}`)
+      throw new Error(error.message);
+    }
+  },
+  existsByRoleName: async (roleName: string): Promise<boolean> => {
+    try {
+      const _query = {
+        text: ROLES.existsByRoleName,
+        values: [roleName]
+      };
+      logger.debug(`rolesService :: existsByRoleName :: query :: ${JSON.stringify(_query)}`)
+
+      const result = await pg.executeQueryPromise(_query);
+      logger.debug(`rolesService :: existsByRoleName :: db result :: ${JSON.stringify(result)}`)
+
+      return (result && result.length > 0) ? result[0].exists : false;
+    } catch (error) {
+      logger.error(`rolesService :: existsByRoleName :: ${error.message} :: ${error}`)
       throw new Error(error.message);
     }
   },
