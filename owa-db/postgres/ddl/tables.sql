@@ -10,7 +10,7 @@ CREATE TABLE m_users (
     gender SMALLINT,
     dob DATE,
     role_id INT,
-    password VARCHAR(50),
+    password VARCHAR(100),
     password_last_updated TIMESTAMP DEFAULT now(),
     invalid_attempts INT,
     status smallint DEFAULT 1,
