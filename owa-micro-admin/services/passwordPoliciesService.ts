@@ -67,6 +67,7 @@ export const passwordPoliciesService = {
             logger.debug(`passwordPoliciesService :: listPasswordPolicies :: db result :: ${JSON.stringify(result)}`)
 
             if (result && result.length > 0) redis.SetRedis(key, result, CACHE_TTL.LONG);
+            return result;
         } catch (error) {
             logger.error(`passwordPoliciesService :: listPasswordPolicies :: ${error.message} :: ${error}`)
             throw new Error(error.message);
