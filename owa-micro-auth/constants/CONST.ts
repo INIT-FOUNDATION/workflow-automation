@@ -12,7 +12,7 @@
 
   export const decryptPayload = function(reqData : string) {
     if (reqData) {
-        let bytes = CryptoJS.AES.decrypt(reqData, "EDU@$#&*(!@%^&");
+        let bytes = CryptoJS.AES.decrypt(reqData, "OWA@$#&*(!@%^&");
         return bytes.toString(CryptoJS.enc.Utf8);
     } else {
         return "";
