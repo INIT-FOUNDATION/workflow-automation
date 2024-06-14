@@ -10,6 +10,17 @@ import { usersService } from "../services/usersService";
 export const rolesController = {
     listRoles: async (req: Request, res: Response): Promise<Response> => {
         try {
+            /*  
+                #swagger.tags = ['Roles']
+                #swagger.summary = 'List Roles'
+                #swagger.description = 'Endpoint to retrieve Roles List'
+                #swagger.parameters['Authorization'] = {
+                    in: 'header',
+                    required: true,
+                    type: "string",
+                    description: "Bearer token for authentication"
+                }
+            */
             const roles = await rolesService.listRoles();
             return res.status(STATUS.OK).send({
                 data: roles,
@@ -22,35 +33,85 @@ export const rolesController = {
     },
     addRole: async (req: Request, res: Response): Promise<Response> => {
         try {
-            const plainToken = req.plainToken;
-            const role: IRole = new Role(req.body)
-            const { error } = validateCreateRole(role);
-
-            if (error) {
-                if (error.details != null)
-                    return res.status(STATUS.BAD_REQUEST).send({ errorCode: ROLES.ROLE00000.errorCode, errorMessage: error.details[0].message });
-                else return res.status(STATUS.BAD_REQUEST).send({ errorCode: ROLES.ROLE00000.errorCode, errorMessage: error.message });
+            /*
+            #swagger.tags = ['Roles']
+            #swagger.summary = 'Add Role'
+            #swagger.description = 'Endpoint to create Role'
+            #swagger.parameters['Authorization'] = {
+                in: 'header',
+                required: true,
+                type: 'string',
+                description: 'Bearer token for authentication'
             }
-
+            #swagger.parameters['body'] = {
+                in: 'body',
+                required: true,
+                schema: {
+                        role_name: 'Department Head',
+                        role_description: 'Head of the Department'
+                }
+             }
+            */
+            const plainToken = req.plainToken;
+            const role: IRole = new Role(req.body);
+            const { error } = validateCreateRole(role);
+    
+            if (error) {
+                if (error.details != null) {
+                    return res.status(STATUS.BAD_REQUEST).send({
+                        errorCode: ROLES.ROLE00000.errorCode,
+                        errorMessage: error.details[0].message
+                    });
+                } else {
+                    return res.status(STATUS.BAD_REQUEST).send({
+                        errorCode: ROLES.ROLE00000.errorCode,
+                        errorMessage: error.message
+                    });
+                }
+            }
+    
             const roleExistsByName = await rolesService.existsByRoleName(role.role_name, null);
-            if (roleExistsByName) return res.status(STATUS.BAD_REQUEST).send(ROLES.ROLE00007);
-
+            if (roleExistsByName) {
+                return res.status(STATUS.BAD_REQUEST).send(ROLES.ROLE00007);
+            }
+    
             role.created_by = plainToken.user_id;
             role.updated_by = plainToken.user_id;
-
+    
             await rolesService.addRole(role);
-
+    
             return res.status(STATUS.OK).send({
                 data: null,
-                message: "Role Added Successfully",
+                message: "Role Added Successfully"
             });
         } catch (error) {
             logger.error(`rolesController :: addRole :: ${error.message} :: ${error}`);
             return res.status(STATUS.INTERNAL_SERVER_ERROR).send(ROLES.ROLE00000);
         }
     },
+    
     updateRole: async (req: Request, res: Response): Promise<Response> => {
         try {
+            /*
+            #swagger.tags = ['Roles']
+            #swagger.summary = 'Update Role'
+            #swagger.description = 'Endpoint to update Role'
+            #swagger.parameters['Authorization'] = {
+                in: 'header',
+                required: true,
+                type: 'string',
+                description: 'Bearer token for authentication'
+            }
+            #swagger.parameters['body'] = {
+                in: 'body',
+                required: true,
+                schema: {
+                        role_id: 2,
+                        role_name: 'Department Head',
+                        role_description: 'Head of the Department'
+                }
+            }
+            */
             const plainToken = req.plainToken;
             const role: IRole = req.body
             const { error } = validateUpdateRole(role);
@@ -82,6 +143,18 @@ export const rolesController = {
     },
     getRoleById: async (req: Request, res: Response): Promise<Response> => {
         try {
+            /*
+            #swagger.tags = ['Roles']
+            #swagger.summary = 'Get Role'
+            #swagger.description = 'Endpoint to retrieve Role Information'
+            #swagger.parameters['Authorization'] = {
+                in: 'header',
+                required: true,
+                type: 'string',
+                description: 'Bearer token for authentication'
+            }
+            */
+
             const roleId = req.params.roleId;
             if (!roleId) return res.status(STATUS.BAD_REQUEST).send(ROLES.ROLE00003)
 
@@ -101,6 +174,25 @@ export const rolesController = {
     },
     updateRoleStatus: async (req: Request, res: Response): Promise<Response> => {
         try {
+            /*
+            #swagger.tags = ['Roles']
+            #swagger.summary = 'Update Role Status'
+            #swagger.description = 'Endpoint to update Role Status'
+            #swagger.parameters['Authorization'] = {
+                in: 'header',
+                required: true,
+                type: 'string',
+                description: 'Bearer token for authentication'
+            }
+            #swagger.parameters['body'] = {
+                in: 'body',
+                required: true,
+                schema: {
+                        role_id: 2,
+                        status: 1
+                }
+            }
+            */
             const plainToken = req.plainToken;
             const role: IRole = req.body
             const { error } = validateUpdateRoleStatus(role);
@@ -127,6 +219,17 @@ export const rolesController = {
     },
     getAccessListByRoleId: async (req: Request, res: Response): Promise<Response> => {
         try {
+            /*
+            #swagger.tags = ['Roles']
+            #swagger.summary = 'Get Access List By Role Id'
+            #swagger.description = 'Endpoint to retrieve Access List with Role Id'
+            #swagger.parameters['Authorization'] = {
+                in: 'header',
+                required: true,
+                type: 'string',
+                description: 'Bearer token for authentication'
+            }
+            */
             const roleId = req.params.roleId;
             if (!roleId) return res.status(STATUS.BAD_REQUEST).send(ROLES.ROLE00003);
 
@@ -146,6 +249,17 @@ export const rolesController = {
     },
     getMenusListByRoleId: async (req: Request, res: Response): Promise<Response> => {
         try {
+            /*
+            #swagger.tags = ['Roles']
+            #swagger.summary = 'Get Menu List By Role Id'
+            #swagger.description = 'Endpoint to retrieve Menu List with Role Id'
+            #swagger.parameters['Authorization'] = {
+                in: 'header',
+                required: true,
+                type: 'string',
+                description: 'Bearer token for authentication'
+            }
+            */
             const roleId = req.params.roleId;
             if (!roleId) return res.status(STATUS.BAD_REQUEST).send(ROLES.ROLE00003);
 
@@ -162,6 +276,17 @@ export const rolesController = {
     },
     getCombinedAccessListByRoleId: async (req: Request, res: Response): Promise<Response> => {
         try {
+            /*
+            #swagger.tags = ['Roles']
+            #swagger.summary = 'Get Combined Access List By Role Id and User Id'
+            #swagger.description = 'Endpoint to retrieve Combined Access List with Role Id and User Id'
+            #swagger.parameters['Authorization'] = {
+                in: 'header',
+                required: true,
+                type: 'string',
+                description: 'Bearer token for authentication'
+            }
+            */
             const roleId = req.params.roleId;
             const userId = req.params.userId;
 
@@ -187,6 +312,17 @@ export const rolesController = {
     },
     getDefaultAccessList: async (req: Request, res: Response): Promise<Response> => {
         try {
+            /*
+            #swagger.tags = ['Roles']
+            #swagger.summary = 'Get Default Access List'
+            #swagger.description = 'Endpoint to retrieve Default Access List'
+            #swagger.parameters['Authorization'] = {
+                in: 'header',
+                required: true,
+                type: 'string',
+                description: 'Bearer token for authentication'
+            }
+            */
             const defaultAccessList = await rolesService.getDefaultAccessList();
             return res.status(STATUS.OK).send({
                 data: defaultAccessList,

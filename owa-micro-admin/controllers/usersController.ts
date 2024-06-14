@@ -13,10 +13,30 @@ import { UploadedFile } from "express-fileupload";
 export const usersController = {
     listUsers: async (req: Request, res: Response): Promise<Response> => {
         try {
+            /*  
+                #swagger.tags = ['Users']
+                #swagger.summary = 'List Users'
+                #swagger.description = 'Endpoint to Retrieve Users List'
+                #swagger.parameters['Authorization'] = {
+                    in: 'header',
+                    required: true,
+                    type: 'string',
+                    description: 'Bearer token for authentication'
+                }
+                #swagger.parameters['body'] = {
+                    in: 'body',
+                    required: true,
+                    schema: {
+                        page_size: 50,
+                        current_page: 1,
+                        search_query: '8169104556'
+                    }
+                }    
+            */
             const plainToken = req.plainToken;
             const pageSize = req.body.page_size || GRID_DEFAULT_OPTIONS.PAGE_SIZE;
             let currentPage = req.body.current_page || GRID_DEFAULT_OPTIONS.CURRENT_PAGE;
-            const searchQuery = req.body.searchQuery || "";
+            const searchQuery = req.body.search_query || "";
 
             if (currentPage > 1) {
                 currentPage = (currentPage - 1) * pageSize;
@@ -38,6 +58,33 @@ export const usersController = {
     },
     createUser: async (req: Request, res: Response): Promise<Response> => {
         try {
+            /*  
+                #swagger.tags = ['Users']
+                #swagger.summary = 'Add User'
+                #swagger.description = 'Endpoint to Add User'
+                #swagger.parameters['Authorization'] = {
+                    in: 'header',
+                    required: true,
+                    type: 'string',
+                    description: 'Bearer token for authentication'
+                }
+                #swagger.parameters['body'] = {
+                    in: 'body',
+                    required: true,
+                    schema: {
+                        user_name: '8169104556',
+                        display_name: 'Narsima Chilkuri',
+                        first_name: 'Narsima',
+                        last_name: 'Chilkuri',
+                        email_id: 'narsimachilkuri237@gmail.com',
+                        mobile_number: '8169104556',
+                        dob: '1997-08-16',
+                        gender: 1,
+                        role_id: 2,
+                        department_id: 1
+                    }
+                }    
+            */
             const plainToken = req.plainToken;
             const user: IUser = new User(req.body)
             const { error } = validateCreateUser(user);
@@ -73,6 +120,34 @@ export const usersController = {
     },
     updateUser: async (req: Request, res: Response): Promise<Response> => {
         try {
+            /*  
+                #swagger.tags = ['Users']
+                #swagger.summary = 'Update User'
+                #swagger.description = 'Endpoint to Update User'
+                #swagger.parameters['Authorization'] = {
+                    in: 'header',
+                    required: true,
+                    type: 'string',
+                    description: 'Bearer token for authentication'
+                }
+                #swagger.parameters['body'] = {
+                    in: 'body',
+                    required: true,
+                    schema: {
+                        user_id: 2,
+                        user_name: '8169104556',
+                        display_name: 'Narsima Chilkuri',
+                        first_name: 'Narsima',
+                        last_name: 'Chilkuri',
+                        email_id: 'narsimachilkuri237@gmail.com',
+                        mobile_number: '8169104556',
+                        dob: '1997-08-16',
+                        gender: 1,
+                        role_id: 2,
+                        department_id: 1
+                    }
+                }    
+            */
             const plainToken = req.plainToken;
             const user: IUser = req.body;
 
@@ -108,6 +183,17 @@ export const usersController = {
     },
     getUserById: async (req: Request, res: Response): Promise<Response> => {
         try {
+            /*  
+                #swagger.tags = ['Users']
+                #swagger.summary = 'Get User'
+                #swagger.description = 'Endpoint to Retrieve User Information By User Id'
+                #swagger.parameters['Authorization'] = {
+                    in: 'header',
+                    required: true,
+                    type: 'string',
+                    description: 'Bearer token for authentication'
+                } 
+            */
             const userId = req.params.userId;
             if (!userId) return res.status(STATUS.BAD_REQUEST).send(USERS.USER00006)
 
@@ -124,6 +210,23 @@ export const usersController = {
     },
     updateProfilePic: async (req: Request, res: Response): Promise<Response> => {
         try {
+            /*  
+                #swagger.tags = ['Users']
+                #swagger.summary = 'Update Profile Pic'
+                #swagger.description = 'Endpoint to Update Profile Pic'
+                #swagger.parameters['Authorization'] = {
+                    in: 'header',
+                    required: true,
+                    type: 'string',
+                    description: 'Bearer token for authentication'
+                }
+                #swagger.parameters['file'] = {
+                    in: 'formData',
+                    required: true,
+                    type: 'file',
+                    description: 'Profile picture file to upload'
+                }
+            */
             const plainToken = req.plainToken;
             const file = req.files.file as UploadedFile;
 
@@ -151,6 +254,17 @@ export const usersController = {
     },
     listUsersByRoleId: async (req: Request, res: Response): Promise<Response> => {
         try {
+            /*  
+                #swagger.tags = ['Users']
+                #swagger.summary = 'List Users'
+                #swagger.description = 'Endpoint to Retrieve Users List By Role Id'
+                #swagger.parameters['Authorization'] = {
+                    in: 'header',
+                    required: true,
+                    type: 'string',
+                    description: 'Bearer token for authentication'
+                } 
+            */
             const roleId = req.params.roleId;
             if (!roleId) return res.status(STATUS.BAD_REQUEST).send(USERS.USER00007);
 
@@ -167,6 +281,17 @@ export const usersController = {
     },
     resetPasswordForUserId: async (req: Request, res: Response): Promise<Response> => {
         try {
+            /*  
+                #swagger.tags = ['Users']
+                #swagger.summary = 'Reset User Password'
+                #swagger.description = 'Endpoint to Reset User Password'
+                #swagger.parameters['Authorization'] = {
+                    in: 'header',
+                    required: true,
+                    type: 'string',
+                    description: 'Bearer token for authentication'
+                } 
+            */
             const userId = req.params.userId;
             if (!userId) return res.status(STATUS.BAD_REQUEST).send(USERS.USER00008);
 

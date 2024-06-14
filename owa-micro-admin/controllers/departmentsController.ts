@@ -9,6 +9,11 @@ import { Department, validateCreateDepartment, validateUpdateDepartment, validat
 export const departmentsController = {
   listDepartments: async (req: Request, res: Response): Promise<Response> => {
     try {
+      /*  
+          #swagger.tags = ['Departments']
+          #swagger.summary = 'List Departments'
+          #swagger.description = 'Endpoint to retrieve Department List'
+      */
       const departments = await departmentsService.listDepartments();
       return res.status(STATUS.OK).send({
         data: departments,
@@ -21,6 +26,18 @@ export const departmentsController = {
   },
   addDepartment: async (req: Request, res: Response): Promise<Response> => {
     try {
+      /*  
+          #swagger.tags = ['Departments']
+          #swagger.summary = 'Add Department'
+          #swagger.description = 'Endpoint to Add Department'
+          #swagger.parameters['body'] = {
+                in: 'body',
+                required: true,
+                schema: {
+                        department_name: 'Accounts'
+                }
+          }    
+      */
       const department: IDepartment = new Department(req.body)
       const { error } = validateCreateDepartment(department);
 
@@ -46,6 +63,19 @@ export const departmentsController = {
   },
   updateDepartment: async (req: Request, res: Response): Promise<Response> => {
     try {
+      /*  
+          #swagger.tags = ['Departments']
+          #swagger.summary = 'Update Department'
+          #swagger.description = 'Endpoint to Update Department'
+          #swagger.parameters['body'] = {
+                in: 'body',
+                required: true,
+                schema: {
+                        department_id: 1,
+                        department_name: 'Accounts'
+                }
+          }    
+      */
       const department: IDepartment = req.body
       const { error } = validateUpdateDepartment(department);
 
@@ -74,6 +104,11 @@ export const departmentsController = {
   },
   getDepartmentById: async (req: Request, res: Response): Promise<Response> => {
     try {
+      /*  
+          #swagger.tags = ['Departments']
+          #swagger.summary = 'Get Department'
+          #swagger.description = 'Endpoint to retrieve Department Information'
+      */
       const departmentId = req.params.departmentId;
       if (!departmentId) return res.status(STATUS.BAD_REQUEST).send(DEPARTMENTS.DEPARTMENT002)
 
@@ -93,6 +128,19 @@ export const departmentsController = {
   },
   updateDepartmentStatus: async (req: Request, res: Response): Promise<Response> => {
     try {
+      /*  
+          #swagger.tags = ['Departments']
+          #swagger.summary = 'Update Department Status'
+          #swagger.description = 'Endpoint to Update Department Status'
+          #swagger.parameters['body'] = {
+                in: 'body',
+                required: true,
+                schema: {
+                        department_id: 1,
+                        status: 1
+                }
+          }    
+      */
       const department: IDepartment = req.body
       const { error } = validateUpdateDepartmentStatus(department);
 

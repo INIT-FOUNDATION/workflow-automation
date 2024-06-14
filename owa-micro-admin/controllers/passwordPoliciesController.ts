@@ -9,6 +9,11 @@ import { PasswordPolicy, validateCreatePasswordPolicy, validateUpdatePasswordPol
 export const passwordPoliciesController = {
     listPasswordPolicies: async (req: Request, res: Response): Promise<Response> => {
         try {
+            /*  
+                #swagger.tags = ['Password Policies']
+                #swagger.summary = 'List Password Policies'
+                #swagger.description = 'Endpoint to List Password Policies'
+            */
             const passwordPolicies = await passwordPoliciesService.listPasswordPolicies();
             return res.status(STATUS.OK).send({
                 data: passwordPolicies,
@@ -21,6 +26,26 @@ export const passwordPoliciesController = {
     },
     addPasswordPolicy: async (req: Request, res: Response): Promise<Response> => {
         try {
+            /*  
+                #swagger.tags = ['Password Policies']
+                #swagger.summary = 'Add Password Policy'
+                #swagger.description = 'Endpoint to Add Password Policy'
+                #swagger.parameters['body'] = {
+                    in: 'body',
+                    required: true,
+                    schema: {
+                        password_expiry: 10,
+                        password_history: 10,
+                        minimum_password_length: 8,
+                        complexity: 3,
+                        alphabetical: 1,
+                        numeric: 1,
+                        special_characters: 1,
+                        allowed_special_characters: '!@#$%^&*()',
+                        maximum_invalid_attempts: 5,
+                    }
+                }    
+            */
             const passwordPolicy: IPasswordPolicy = new PasswordPolicy(req.body)
             const { error } = validateCreatePasswordPolicy(passwordPolicy);
 
@@ -43,6 +68,27 @@ export const passwordPoliciesController = {
     },
     updatePasswordPolicy: async (req: Request, res: Response): Promise<Response> => {
         try {
+            /*  
+                #swagger.tags = ['Password Policies']
+                #swagger.summary = 'Update Password Policy'
+                #swagger.description = 'Endpoint to Update Password Policy'
+                #swagger.parameters['body'] = {
+                    in: 'body',
+                    required: true,
+                    schema: {
+                        id: 1,
+                        password_expiry: 10,
+                        password_history: 10,
+                        minimum_password_length: 8,
+                        complexity: 3,
+                        alphabetical: 1,
+                        numeric: 1,
+                        special_characters: 1,
+                        allowed_special_characters: '!@#$%^&*()',
+                        maximum_invalid_attempts: 5,
+                    }
+                }    
+            */
             const passwordPolicy: IPasswordPolicy = req.body
             const { error } = validateUpdatePasswordPolicy(passwordPolicy);
 
@@ -68,6 +114,11 @@ export const passwordPoliciesController = {
     },
     getPasswordPolicyById: async (req: Request, res: Response): Promise<Response> => {
         try {
+            /*  
+                #swagger.tags = ['Password Policies']
+                #swagger.summary = 'Get Password Policy'
+                #swagger.description = 'Endpoint to Get Password Policy'
+            */
             const passwordPolicyId = req.params.passwordPolicyId;
             if (!passwordPolicyId) return res.status(STATUS.BAD_REQUEST).send(PASSWORDPOLICIES.PASSWORDPOLICIES002)
 
