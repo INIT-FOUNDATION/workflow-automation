@@ -1,58 +1,50 @@
-export const ERRORCODE = {
-    USRAUT0001: "Invalid Mobile Number or Password ",
-    USRAUT0005: "Invalid Login Attempts exceeded",
-    USRAUT0007: "Logged in with default password. Please reset your password",
-    USRAUT0010: "Mobile is Required",
-    USRAUT0012: "OTP is Required",
-    USRAUT0013: "txnId is Required",
-    USRAUT0014: "Invalid OTP",
-    USRAUT0015: "Your account does not exist. Please register.",
-    USRAUT0018: "Generate OTP failed",
-    USRAUT0019: "Confirm OTP failed",
-    USRAUT0020: "Something went wrong",
-    USRAUT0021: "Invalid Display Name",
-
-    USRMOB0000: "Phone Number should be of 10 digits ",
-    USRPRF0001: "This mobile number is not registered ",
-    USRPRF0002: "Phone Number should be of 10 digits ",
-    USRPRF0003: "OTP should be of 6 digits",
-    USRPRF0004: "New password cannot be same as current password ",
-    USRPRF0005: "Invalid OTP",
-    USRPRF0006: "User is not known.",
-    USRPRF0007: "Enter the OTP to help us verify your identity.",
-    USRPRF0008: "Invalid OTP",
-    USRPRF0009: "No user found .",
-    USRPRF0010: "New MobileNumber is required",
-    USRPRF0011: "Phone Number should be of 10 digits ",
-    USRPRF0012: "OTP should be of 6 digits",
-    USRPRF0013: "New password cannot be same as current password ",
-    USRPRF0014: "User is not known",
-    USRPRF0015: "User Name Must be between 2-30 characters ",
-    USRPRF00016: "The new mobile number is already registered.",
-    USRPRF00017: "New Mobile Number cannot be same as Current Mobile Number",
-    USRPRF00018: "User is not known.",
-    USRPRF00019: "New Password cannot be empty. ",
-    USRPRF00020: "Current Password does not match. ",
-    USRPRF00021: "New password cannot be same as current password ",
-    USRPRF00022: "Password is invalid as per password policy ",
-    USRPRF00023: "Captcha Invalid",
-    USRPRF00024: "Captcha Timed Out",
-    USRPRF00025: "Required missing parameters",
-    USRPRF00026: "User Name Must be between 2-30 characters ",
-    USRPRF00027: "TxnId required ",
-    USRPRF00028: "Confirm Password required ",
-    USRPRF00029: "Confirm Password and New password must be same",
-    USRPRF00030: "Invalid Forgot Password Request",
-    USRPRF00031: "User Id required",
-    USRPRF00032: "Invalid User Details",
-
-    CONFIG0001: "Set Application Category",
-    CONFIG0002: "Application Category already exist",
-    CONFIG0003: "Invalid User",
-    CONFIG0004: "Application category is not set",
-    CONFIG0020: "Passwords do not match",
-    CONFIG0021: "Password require atleast 8 digit and sholud be alpha - numeric",
-    CONFIG0022: "Phone number is required",
-    CONFIG0023: "Invalid Mobile Number",
- 
+export const AUTH = {
+    AUTH00000: {
+        errorCode: "AUTH00000",
+        errorMessage: "Internal Server Error",
+    },
+    AUTH00001: {
+        errorCode: "AUTH00001",
+        errorMessage: "User with requested Username does not exists!",
+    },
+    AUTH00002: {
+        errorCode: "AUTH00002",
+        errorMessage: "Logged In with Default Password, Please reset the Password!",
+    },
+    AUTH00003: {
+        errorCode: "AUTH00003",
+        errorMessage: "Invalid Login Attempts Exceeded!",
+    },
+    AUTH00004: {
+        errorCode: "AUTH00004",
+        errorMessage: "Invalid Mobile Number!",
+    },
+    AUTH00005: {
+        errorCode: "AUTH00005",
+        errorMessage: "User with requested Mobile Number does not exists!",
+    },
+    AUTH00006: {
+        errorCode: "AUTH00006",
+        errorMessage: "Forgot Password OTP already Sent!",
+    },
+    AUTH00007: {
+        errorCode: "AUTH00007",
+        errorMessage: "Invalid OTP Details!",
+    },
+    AUTH00008: {
+        errorCode: "AUTH00008",
+        errorMessage: "Passwords do not match!",
+    },
+    AUTH00009: {
+        errorCode: "AUTH00009",
+        errorMessage: "Password must be at least 8 characters long and contain at least one letter and one digit!"
+    },
+    AUTH00010: {
+        errorCode: "AUTH00010",
+        errorMessage: "Invalid Reset Password Request!"
+    },
+    AUTH00011: {
+        errorCode: "AUTH00011",
+        errorMessage: "Password Reset Failed!"
+    }
 };

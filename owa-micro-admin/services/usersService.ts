@@ -130,6 +130,7 @@ export const usersService = {
       await usersService.createUserDepartmentMapping(createdUserId, user.department_id);
 
       redis.deleteRedis(`USERS|OFFSET:0|LIMIT:50`);
+      redis.deleteRedis(`USERS_COUNT`);
     } catch (error) {
       logger.error(`usersService :: createUser :: ${error.message} :: ${error}`)
       throw new Error(error.message);
@@ -152,6 +153,7 @@ export const usersService = {
       await usersService.updateUserDepartmentMapping(user.user_id, user.department_id);
 
       redis.deleteRedis(`USERS|OFFSET:0|LIMIT:50`);
+      redis.deleteRedis(`USERS_COUNT`);
       redis.deleteRedis(`USER:${user.user_id}`);
     } catch (error) {
       logger.error(`usersService :: updateUser :: ${error.message} :: ${error}`)
@@ -304,6 +306,7 @@ export const usersService = {
       logger.debug(`usersService :: updateProfilePic :: db result :: ${JSON.stringify(result)}`);
 
       redis.deleteRedis(`USERS|OFFSET:0|LIMIT:50`);
+      redis.deleteRedis(`USERS_COUNT`);
       redis.deleteRedis(`USER:${userId}`);
     } catch (error) {
       logger.error(`usersService :: updateProfilePic :: ${error.message} :: ${error}`)

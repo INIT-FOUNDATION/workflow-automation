@@ -19,7 +19,8 @@ export const USERS_STATUS = {
   ACTIVE: 1,
   DELETED: 2,
   LOCKED: 3,
-  LOGGED_IN: 4
+  LOGGED_IN: 4,
+  LOGGED_OUT: 5
 }
 
 export const GENDER = {
