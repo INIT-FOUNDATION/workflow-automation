@@ -15,18 +15,20 @@ export const usersService = {
         text: USERS.usersList
       };
 
-      const isSearchStringAMobileNumber = /^\d{10}$/.test(searchQuery);
-      if (isSearchStringAMobileNumber) {
-        key += `|SEARCH:${isSearchStringAMobileNumber}`;
-        _query.text += ` WHERE mobile_number = ${searchQuery}`;
-      } else {
-        _query.text += ` WHERE display_name ILIKE %${searchQuery}%`;
-        key += `|SEARCH:${isSearchStringAMobileNumber}`;
+      if (searchQuery) {
+        const isSearchStringAMobileNumber = /^\d{10}$/.test(searchQuery);
+        if (isSearchStringAMobileNumber) {
+          key += `|SEARCH:${isSearchStringAMobileNumber}`;
+          _query.text += ` AND mobile_number = ${searchQuery}`;
+        } else {
+          _query.text += ` AND display_name ILIKE %${searchQuery}%`;
+          key += `|SEARCH:${isSearchStringAMobileNumber}`;
+        }
       }
 
       if (pageSize) {
         key += `|LIMIT:${pageSize}`;
-        _query.text += `LIMIT ${pageSize}`;
+        _query.text += ` LIMIT ${pageSize}`;
       }
 
       if (currentPage) {
@@ -45,7 +47,7 @@ export const usersService = {
       const result = await pg.executeQueryPromise(_query);
       logger.debug(`usersService :: listUsers :: db result :: ${JSON.stringify(result)}`);
 
-      if (result.length > 0) redis.SetRedis(key, result, CACHE_TTL.LONG);
+      if (result && result.length > 0) redis.SetRedis(key, result, CACHE_TTL.LONG);
       return result;
     } catch (error) {
       logger.error(`usersService :: listUsers :: ${error.message} :: ${error}`)
@@ -59,13 +61,15 @@ export const usersService = {
         text: USERS.usersListCount
       };
 
-      const isSearchStringAMobileNumber = /^\d{10}$/.test(searchQuery);
-      if (isSearchStringAMobileNumber) {
-        key += `|SEARCH:${isSearchStringAMobileNumber}`;
-        _query.text += ` WHERE mobile_number = ${searchQuery}`;
-      } else {
-        _query.text += ` WHERE display_name ILIKE %${searchQuery}%`;
-        key += `|SEARCH:${isSearchStringAMobileNumber}`;
+      if (searchQuery) {
+        const isSearchStringAMobileNumber = /^\d{10}$/.test(searchQuery);
+        if (isSearchStringAMobileNumber) {
+          key += `|SEARCH:${isSearchStringAMobileNumber}`;
+          _query.text += ` mobile_number = ${searchQuery}`;
+        } else {
+          _query.text += ` display_name ILIKE %${searchQuery}%`;
+          key += `|SEARCH:${isSearchStringAMobileNumber}`;
+        }
       }
 
       const cachedResult = await redis.GetKeyRedis(key);
@@ -79,10 +83,12 @@ export const usersService = {
       const result = await pg.executeQueryPromise(_query);
       logger.debug(`usersService :: listUsersCount :: db result :: ${JSON.stringify(result)}`)
 
-      if (result.length > 0) redis.SetRedis(key, result, CACHE_TTL.LONG);
-      return result;
+      if (result.length > 0) {
+         redis.SetRedis(key, result, CACHE_TTL.LONG);
+         return result[0].count
+      };
     } catch (error) {
-      logger.error(`usersService :: listRoles :: ${error.message} :: ${error}`)
+      logger.error(`usersService :: listUsersCount :: ${error.message} :: ${error}`)
       throw new Error(error.message);
     }
   },
@@ -100,6 +106,8 @@ export const usersService = {
         user.first_name,
         user.last_name,
         user.display_name,
+        user.dob,
+        user.gender,
         user.mobile_number,
         user.password,
         user.role_id,
@@ -116,7 +124,7 @@ export const usersService = {
       const createdUserId = result[0].user_id;
       await usersService.createUserDepartmentMapping(createdUserId, user.department_id);
 
-      redis.deleteRedis(`ROLES`)
+      redis.deleteRedis(`USERS|OFFSET:0|LIMIT:50`);
     } catch (error) {
       logger.error(`usersService :: createUser :: ${error.message} :: ${error}`)
       throw new Error(error.message);
@@ -127,6 +135,7 @@ export const usersService = {
       const _query = {
         text: USERS.updateUser,
         values: [user.user_id, user.first_name, user.last_name, user.display_name,
+        user.dob, user.gender,
         user.email_id, user.updated_by, user.role_id
         ]
       };
@@ -136,8 +145,9 @@ export const usersService = {
       logger.debug(`usersService :: updateUser :: db result :: ${JSON.stringify(result)}`)
 
       await usersService.updateUserDepartmentMapping(user.user_id, user.department_id);
-      
-      redis.deleteRedis(`ROLES`)
+
+      redis.deleteRedis(`USERS|OFFSET:0|LIMIT:50`);
+      redis.deleteRedis(`USER:${user.user_id}`);
     } catch (error) {
       logger.error(`usersService :: updateUser :: ${error.message} :: ${error}`)
       throw new Error(error.message);
@@ -163,7 +173,7 @@ export const usersService = {
 
       if (result.length > 0) {
         const bucketName = envUtils.getStringEnvVariableOrDefault("OWA_OBJECT_STORAGE_BUCKET", "owa-dev");
-        result[0].profile_pic_url = await usersService.generatePublicURLFromObjectStoragePrivateURL(bucketName, result[0].profile_pic_url, 3600);
+        if (result[0].profile_pic_url) result[0].profile_pic_url = await usersService.generatePublicURLFromObjectStoragePrivateURL(bucketName, result[0].profile_pic_url, 3600);
         redis.SetRedis(key, result[0], CACHE_TTL.LONG)
         return result[0]
       }
@@ -279,7 +289,7 @@ export const usersService = {
       const objectStoragePath = `profile-pictures/PROFILE_PICTURE_${userId}.${profilePicture.type}`;
       const bucketName = envUtils.getStringEnvVariableOrDefault("OWA_OBJECT_STORAGE_BUCKET", "owa-dev");
       const objectStorageUploadLocation = await objectStorageUtility.putObject(bucketName, objectStoragePath, profilePicture);
-      
+
       const _query = {
         text: USERS.updateProfilePic,
         values: [userId, objectStorageUploadLocation]
@@ -288,6 +298,9 @@ export const usersService = {
 
       const result = await pg.executeQueryPromise(_query);
       logger.debug(`usersService :: updateProfilePic :: db result :: ${JSON.stringify(result)}`);
+
+      redis.deleteRedis(`USERS|OFFSET:0|LIMIT:50`);
+      redis.deleteRedis(`USER:${userId}`);
     } catch (error) {
       logger.error(`usersService :: updateProfilePic :: ${error.message} :: ${error}`)
       throw new Error(error.message);
@@ -312,7 +325,7 @@ export const usersService = {
       logger.debug(`usersService :: getUsersByRoleId :: db result :: ${JSON.stringify(result)}`);
 
       if (result && result.length > 0) redis.SetRedis(key, result, CACHE_TTL.LONG);
-      return result; 
+      return result;
     } catch (error) {
       logger.error(`usersService :: getUsersByRoleId :: ${error.message} :: ${error}`)
       throw new Error(error.message);
@@ -322,7 +335,7 @@ export const usersService = {
     try {
       const salt = await bcrypt.genSalt(10);
       const password = await bcrypt.hash(DEFAULT_PASSWORD, salt);
-      
+
       const _query = {
         text: USERS.resetPasswordForUserId,
         values: [userId, password]

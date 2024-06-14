@@ -82,6 +82,10 @@ export const USERS = {
     errorCode: "USER00010",
     errorMessage: "Maximum Upload Size Limit Exceeded for Profile Picture, Please upload it of size less than equal to 5MB!",
   },
+  USER000011:  {
+    errorCode: "USER000011",
+    errorMessage: "User with Requested Id does not exists!",
+  },
 };
 
 export const DEPARTMENTS = {

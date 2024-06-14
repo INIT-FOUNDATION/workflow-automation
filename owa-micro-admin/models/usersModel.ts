@@ -101,7 +101,8 @@ const validateUpdateUser = (user: IUser): Joi.ValidationResult => {
     mobile_number: Joi.number().integer().min(6000000000).max(9999999999).required(),
     email_id: Joi.string().email().required(),
     gender: Joi.number().valid(...Object.values(GENDER)).required(),
-    role_id: Joi.number().required()
+    role_id: Joi.number().required(),
+    department_id: Joi.number().required()
   });
   return userSchema.validate(user);
 };

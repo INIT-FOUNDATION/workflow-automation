@@ -60,20 +60,20 @@ export const USERS = {
             WHERE user_id = $1 AND status = 1
     )`,
     createUser: `INSERT INTO m_users(
-        user_name, first_name, last_name, display_name, mobile_number, password, role_id, email_id, created_by, updated_by)
-        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) returning user_id;`,
-    updateUser: `UPDATE m_users SET first_name = $2, last_name = $3, display_name = $4, email_id = $5, updated_by = $6, role_id = $7, date_updated = NOW() WHERE user_id = $1`,
+        user_name, first_name, last_name, display_name, dob, gender, mobile_number, password, role_id, email_id, created_by, updated_by)
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) returning user_id;`,
+    updateUser: `UPDATE m_users SET first_name = $2, last_name = $3, display_name = $4, dob = $5, gender = $6, email_id = $7, updated_by = $8, role_id = $9, date_updated = NOW() WHERE user_id = $1`,
     getUser: `SELECT * from vw_m_users WHERE user_id = $1 AND status = 1`,
     updateProfilePic: `UPDATE m_users SET profile_pic_url = $2, updated_by = $1 WHERE user_id = $1`,
     getUsersByRoleId: `select user_id, user_name, initcap(display_name) as display_name, mobile_number, initcap(role_name) as role_name  from vw_m_users where role_id = $1`,
-    resetPasswordForUserId: `UPDATE m_users SET password = $2 WHERE user_id = $1`,
-    usersList: `select * from vw_m_users`,
-    usersListCount: `select count(*) as count from vw_m_users`
+    resetPasswordForUserId: `UPDATE m_users SET password = $2, date_updated = NOW() WHERE user_id = $1`,
+    usersList: `select * from vw_m_users WHERE user_id <> 1`,
+    usersListCount: `select count(*) as count from vw_m_users WHERE user_id <> 1`
 }   
 
 export const USER_DEPARTMENT_MAPPING = {
     createUserMapping: `INSERT INTO m_user_department_assoc (user_id, department_id) VALUES ($1, $2)`,
-    updateUserMapping: `UPDATE m_user_department_assoc SET department_id = $2 AND user_id = $1`
+    updateUserMapping: `UPDATE m_user_department_assoc SET department_id = $2 WHERE user_id = $1`
 }
 
 export const DEPARTMENTS = {

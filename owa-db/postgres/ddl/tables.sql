@@ -12,7 +12,7 @@ CREATE TABLE m_users (
     role_id INT,
     password VARCHAR(100),
     password_last_updated TIMESTAMP DEFAULT now(),
-    invalid_attempts INT,
+    invalid_attempts INT DEFAULT 0,
     status smallint DEFAULT 1,
     profile_pic_url VARCHAR(100),
     last_logged_in TIMESTAMP DEFAULT now(),

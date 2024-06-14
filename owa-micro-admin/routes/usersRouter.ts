@@ -17,11 +17,11 @@ usersRouter.post("/update", usersController.updateUser);
 
 usersRouter.get("/:userId", usersController.getUserById);
 
-usersRouter.post("/list", usersController.listUsers);
-
 usersRouter.post("/uploadProfilePicture", usersController.updateProfilePic);
 
 usersRouter.get("/list/:roleId", usersController.listUsersByRoleId);
+
+usersRouter.post("/list", usersController.listUsers);
 
 usersRouter.post("/resetPassword/:userId", usersController.resetPasswordForUserId);
 
