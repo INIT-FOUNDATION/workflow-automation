@@ -5,7 +5,7 @@
   "main": "app.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon --exec ts-node app.ts"
+    "start": "npx ts-node config/swagger.ts && nodemon --exec ts-node app.ts"
   },
   "keywords": [],
   "author": "",
@@ -34,7 +34,8 @@
   "nodemonConfig": {
     "restartable": "rs",
     "ignore": [
-      "node_modules/**/node_modules"
+      "node_modules/**/node_modules",
+      "config/swagger.json"
     ],
     "delay": "2000",
     "env": {
