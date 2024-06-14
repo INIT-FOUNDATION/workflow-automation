@@ -26,8 +26,8 @@ export const passwordPoliciesController = {
 
             if (error) {
                 if (error.details != null)
-                    return res.status(STATUS.BAD_REQUEST).send(error.details[0].message);
-                else return res.status(STATUS.BAD_REQUEST).send(error.message);
+                    return res.status(STATUS.BAD_REQUEST).send({ errorCode: PASSWORDPOLICIES.PASSWORDPOLICIES000.errorCode, errorMessage: error.details[0].message });
+                else return res.status(STATUS.BAD_REQUEST).send({ errorCode: PASSWORDPOLICIES.PASSWORDPOLICIES000.errorCode, errorMessage: error.message });
             }
 
             await passwordPoliciesService.createPasswordPolicy(passwordPolicy);
@@ -48,8 +48,8 @@ export const passwordPoliciesController = {
 
             if (error) {
                 if (error.details != null)
-                    return res.status(STATUS.BAD_REQUEST).send(error.details[0].message);
-                else return res.status(STATUS.BAD_REQUEST).send(error.message);
+                    return res.status(STATUS.BAD_REQUEST).send({ errorCode: PASSWORDPOLICIES.PASSWORDPOLICIES000.errorCode, errorMessage: error.details[0].message });
+                else return res.status(STATUS.BAD_REQUEST).send({ errorCode: PASSWORDPOLICIES.PASSWORDPOLICIES000.errorCode, errorMessage: error.message });
             }
 
             const passwordPolicyExists = await passwordPoliciesService.existsByPasswordPolicyId(passwordPolicy.id);

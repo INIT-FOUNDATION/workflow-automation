@@ -31,7 +31,7 @@ export const usersController = {
                 message: "Users Fetched Successfully",
             });
         } catch (error) {
-            logger.error(`usersController :: listRoles :: ${error.message} :: ${error}`);
+            logger.error(`usersController :: listUsers :: ${error.message} :: ${error}`);
             return res.status(STATUS.INTERNAL_SERVER_ERROR).send(USERS.USER00000);
         }
     },
@@ -43,8 +43,8 @@ export const usersController = {
 
             if (error) {
                 if (error.details != null)
-                    return res.status(STATUS.BAD_REQUEST).send(error.details[0].message);
-                else return res.status(STATUS.BAD_REQUEST).send(error.message);
+                    return res.status(STATUS.BAD_REQUEST).send({ errorCode: USERS.USER00000.errorCode, errorMessage: error.details[0].message });
+                else return res.status(STATUS.BAD_REQUEST).send({ errorCode: USERS.USER00000.errorCode, errorMessage: error.message });
             }
 
             const roleExists = await rolesService.existsByRoleId(user.role_id);
@@ -54,7 +54,7 @@ export const usersController = {
             if (!departmentExists) return res.status(STATUS.BAD_REQUEST).send(DEPARTMENTS.DEPARTMENT003);
 
             const userExists = await usersService.existsByMobileNumber(user.mobile_number);
-            if (!userExists) return res.status(STATUS.BAD_REQUEST).send(USERS.USER00005);
+            if (userExists) return res.status(STATUS.BAD_REQUEST).send(USERS.USER00005);
 
             user.created_by = plainToken.user_id;
             user.updated_by = plainToken.user_id;
@@ -79,8 +79,8 @@ export const usersController = {
 
             if (error) {
                 if (error.details != null)
-                    return res.status(STATUS.BAD_REQUEST).send(error.details[0].message);
-                else return res.status(STATUS.BAD_REQUEST).send(error.message);
+                    return res.status(STATUS.BAD_REQUEST).send({ errorCode: USERS.USER00000.errorCode, errorMessage: error.details[0].message });
+                else return res.status(STATUS.BAD_REQUEST).send({ errorCode: USERS.USER00000.errorCode, errorMessage: error.message });
             }
 
             user.updated_by = plainToken.user_id;

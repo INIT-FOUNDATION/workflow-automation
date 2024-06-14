@@ -63,9 +63,10 @@ const validateCreateUser = (user: IUser): Joi.ValidationResult => {
     last_name: Joi.string().min(3).max(50).required().error(
       new Error(JSON.stringify(USERS.USER00004))
     ),
-    mobile_number: validateMobileNumber.string().mobile().required(),
+    mobile_number: Joi.number().integer().min(6000000000).max(9999999999).required(),
+    dob: Joi.date().iso(),
     email_id: Joi.string().email().required(),
-    gender: Joi.number().allow(Object.values(GENDER)).required(),
+    gender: Joi.number().valid(...Object.values(GENDER)).required(),
     role_id: Joi.number().required(),
     department_id: Joi.number().required(),
     password: Joi.string().allow("", null),
@@ -96,31 +97,14 @@ const validateUpdateUser = (user: IUser): Joi.ValidationResult => {
     last_name: Joi.string().min(3).max(50).required().error(
       new Error(JSON.stringify(USERS.USER00004))
     ),
-    mobile_number: validateMobileNumber.string().mobile().required(),
+    dob: Joi.date().iso(),
+    mobile_number: Joi.number().integer().min(6000000000).max(9999999999).required(),
     email_id: Joi.string().email().required(),
-    gender: Joi.number().allow(Object.values(GENDER)).required(),
+    gender: Joi.number().valid(...Object.values(GENDER)).required(),
     role_id: Joi.number().required()
   });
   return userSchema.validate(user);
 };
-
-const validateMobileNumber = Joi.extend((joi) => ({
-  type: 'string',
-  base: joi.string(),
-  messages: {
-    'string.mobile': '{{#label}} must be a valid mobile number',
-  },
-  rules: {
-    mobile: {
-      validate(value, helpers) {
-        if (/^[6789]\d{9}$/.test(value)) {
-          return value;
-        }
-        return helpers.error('string.mobile');
-      },
-    },
-  },
-}));
 
 export {
   User,

@@ -11,7 +11,7 @@ usersRouter.use(fileUpload({
     }
 }));
 
-usersRouter.get("/create", usersController.createUser);
+usersRouter.post("/create", usersController.createUser);
 
 usersRouter.post("/update", usersController.updateUser);
 

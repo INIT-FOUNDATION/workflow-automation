@@ -26,8 +26,8 @@ export const departmentsController = {
 
       if (error) {
         if (error.details != null)
-          return res.status(STATUS.BAD_REQUEST).send(error.details[0].message);
-        else return res.status(STATUS.BAD_REQUEST).send(error.message);
+          return res.status(STATUS.BAD_REQUEST).send({ errorCode: DEPARTMENTS.DEPARTMENT000.errorCode, errorMessage: error.details[0].message });
+        else return res.status(STATUS.BAD_REQUEST).send({ errorCode: DEPARTMENTS.DEPARTMENT000.errorCode, errorMessage: error.message });
       }
 
       const departmentExistsByName = await departmentsService.existsByDepartmentName(department.department_name, null);
@@ -51,8 +51,8 @@ export const departmentsController = {
 
       if (error) {
         if (error.details != null)
-          return res.status(STATUS.BAD_REQUEST).send(error.details[0].message);
-        else return res.status(STATUS.BAD_REQUEST).send(error.message);
+          return res.status(STATUS.BAD_REQUEST).send({ errorCode: DEPARTMENTS.DEPARTMENT000.errorCode, errorMessage: error.details[0].message });
+        else return res.status(STATUS.BAD_REQUEST).send({ errorCode: DEPARTMENTS.DEPARTMENT000.errorCode, errorMessage: error.message });
       }
 
       const departmentExistsById = await departmentsService.existsByDepartmentId(department.department_id);
@@ -98,8 +98,8 @@ export const departmentsController = {
 
       if (error) {
         if (error.details != null)
-          return res.status(STATUS.BAD_REQUEST).send(error.details[0].message);
-        else return res.status(STATUS.BAD_REQUEST).send(error.message);
+          return res.status(STATUS.BAD_REQUEST).send({ errorCode: DEPARTMENTS.DEPARTMENT000.errorCode, errorMessage: error.details[0].message });
+        else return res.status(STATUS.BAD_REQUEST).send({ errorCode: DEPARTMENTS.DEPARTMENT000.errorCode, errorMessage: error.message });
       }
 
       const departmentExists = await departmentsService.existsByDepartmentId(department.department_id);
