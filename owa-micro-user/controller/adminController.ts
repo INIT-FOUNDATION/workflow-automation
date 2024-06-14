@@ -7,6 +7,17 @@ import { adminService } from "../services/adminService";
 export const adminController = {
     getLoggedInUserInfo: async (req: Request, res: Response): Promise<Response> => {
         try {
+            /*  
+                #swagger.tags = ['Admin']
+                #swagger.summary = 'Get Logged In User Info'
+                #swagger.description = 'Endpoint to retrieve information about the currently logged-in user.'
+                #swagger.parameters['Authorization'] = {
+                    in: 'header',
+                    required: true,
+                    type: "string",
+                    description: "Bearer token for authentication"
+                }
+            */
             const userName = req.plainToken.user_name;
             const user = await adminService.getLoggedInUserInfo(userName);
             return res.status(STATUS.OK).send({
@@ -19,4 +30,5 @@ export const adminController = {
         }
     }
 }
+
 

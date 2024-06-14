@@ -9,8 +9,9 @@ import fileUpload from "express-fileupload";
 import dotenv from "dotenv";
 import routes from "./startup/routes";
 import { AUTH } from "./constants/AUTH";
-
 import { SECURITY, logger } from "owa-micro-common";
+import swaggerUi from "swagger-ui-express";
+import swaggerFile from "./config/swagger.json"
 
 dotenv.config();
 
@@ -50,11 +51,11 @@ app.use(fileUpload());
 app.set("view engine", "ejs");
 app.use(helmet());
 app.use(resolveCrossDomain, setAppVersiontoHeader);
-
 app.use(function applyXFrame(req: Request, res: Response, next: NextFunction) {
   res.set("X-Frame-Options", "DENY");
   next();
 });
+app.use('/api/v1/user/docs', swaggerUi.serve, swaggerUi.setup(swaggerFile))
 
 SECURITY(app, AUTH);
 routes(app);
