@@ -6,11 +6,8 @@ import Joi from "joi";
 
 const validateLoginDetails = (user: IUser) => {
     const userSchema = Joi.object({
-        mobile_number: Joi.number(),
-        email_id: Joi.string(),
-        role_id: Joi.number().required(),
-        status: Joi.number().required(),
-        last_logged_in: Joi.string().required(),
+        user_name: Joi.string(),
+        password: Joi.string()
     });
     return userSchema.validate(user);
 };
