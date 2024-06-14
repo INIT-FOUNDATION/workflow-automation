@@ -10,7 +10,7 @@ import { ERRORCODE } from "../constants/ERRORCODE";
 import { v4 as uuidv4 } from 'uuid';
 import bcrypt from "bcryptjs";
 
-export const authService = {
+export const adminService = {
     getUserInRedisByUserName: async (username : string): Promise<string> => {
         let key = `User|Username:${username}`
         let result = await redis.GetKeyRedis(key);
@@ -22,14 +22,17 @@ export const authService = {
         }
     },
     setForgotPasswordOTPInRedis: async (userData: any) => {
+    try{
         if (userData != undefined && userData != null) {
             let txnId = userData.txnId;
     
             redis.SetRedis(`Admin_Forgot_Password|User:${userData.user_name}`, userData, 180)
-    
             redis.SetRedis(`Admin_Forgot_Password|txnId:${txnId}`, userData, 180)
             
         };
+    } catch (error) {
+        throw new Error(error.message);  
+    }
     },
     shareForgotOTPUserDetails: async (userDetails: any) => {
         let mobileNumber = userDetails.mobile_no;
@@ -108,7 +111,7 @@ export const authService = {
     },
     checkUser: async (username: string): Promise<IUser[]> => {
         try {
-            let redis_result = await authService.getUserInRedisByUserName(username);
+            let redis_result = await adminService.getUserInRedisByUserName(username);
 
             const parseResult: IUser[] =  JSON.parse(redis_result);
             if (redis_result && parseResult.length && parseResult[0].account_locked != 1) {
@@ -119,7 +122,7 @@ export const authService = {
                     values: [username]
                 };
                 const queryResult: IUser[]= await pg.executeQueryPromise(_query);
-                authService.setUserInRedisByUserNameForLogin(username, queryResult);
+                adminService.setUserInRedisByUserNameForLogin(username, queryResult);
                 return queryResult;
             }  
         } catch (error) {
@@ -140,16 +143,20 @@ export const authService = {
         }
     },
     resetPassword: async (newPassword: string, mobileNumber : number): Promise<IUser[]> => {
+        try {
             const _query = {
                 text: USER.resetPasswordQuery,
                 values: [newPassword,mobileNumber]
             };
             const result = await pg.executeQueryPromise(_query);
             return result;
+        } catch (error) {
+            throw new Error(error.message);  
+        }
     },
     login: async (user: IUser): Promise<IUser[]> => {
         try {
-            let redis_result = await authService.getUserInRedisByUserName(user.user_name);
+            let redis_result = await adminService.getUserInRedisByUserName(user.user_name);
             const parseResult: IUser[]= redis_result && typeof redis_result == 'string' ? JSON.parse(redis_result) : redis_result;
     
             if (redis_result && parseResult.length && parseResult[0].account_locked != 1) {
@@ -160,19 +167,20 @@ export const authService = {
                 text: USER.selectUserQuery,
                 values: [user.user_name]
             };
-    
+           
             const userResponse = await pg.executeQueryPromise(_query);
             if (!userResponse[0]) {
                 throw new Error(ERRORCODE.USRAUT0001);
             }
 
             const userId = userResponse[0].user_id;
-
-            const userRoleModuleData = await authService.getRoleModuleList(userResponse[0].role_id)
+            logger.debug(`authService :: login :: user Id :: ${JSON.stringify(userId)}`)
+            logger.debug(`authService :: login :: userResponse :: ${JSON.stringify(userResponse[0])}`)
+            const userRoleModuleData = await adminService.getRoleModuleList(userResponse[0].role_id)
             const userData = userResponse[0];
             const type = 1;
-
-            user.password = decryptPayload(user.password);
+            logger.debug(`authService :: login :: userData ::  ${JSON.stringify(userData)}`)
+            // user.password = decryptPayload(user.password);
             if (user.password == SERVICES.default_pass) {
                 throw new Error(ERRORCODE.USRAUT0007)
             }
@@ -180,31 +188,33 @@ export const authService = {
             const validPassword = await bcrypt.compare(user.password, userData.password);
             const policy = await passwordPolicy.validate_password(userId, user.password, type);
 
+            logger.debug(`authService :: login :: validPassword ::  ${JSON.stringify(validPassword)}`)
+            logger.debug(`authService :: login :: policy ::  ${JSON.stringify(policy)}`)
+
             if (validPassword && policy.status == true) {
                 const token = await generateToken.generate(userData.user_name, userData, userRoleModuleData, user)
                 return token.encoded;
-                return;
             }
 
-            const [invalidAttemptsData] = await authService.getInvalidLoginAttempts(user.user_name);
+            const [invalidAttemptsData] = await adminService.getInvalidLoginAttempts(user.user_name);
             const invalidAttempts = invalidAttemptsData.invalid_attempts;
-            const [maxInvalidAttemptsData] = await authService.getMaxInvalidLoginAttempts();
+            const [maxInvalidAttemptsData] = await adminService.getMaxInvalidLoginAttempts();
             const maxInvalidAttempts = maxInvalidAttemptsData.max_invalid_attempts;
 
             if (maxInvalidAttempts > invalidAttempts) {
-                await authService.incrementInvalidLoginAttempts(user.user_name);
+                await adminService.incrementInvalidLoginAttempts(user.user_name);
             } else {
-                await authService.setUserInactive(user.user_name);
+                await adminService.setUserInactive(user.user_name);
                 throw new Error(ERRORCODE.USRAUT0005);
             }
         } catch (error) {
-            logger.error(`rolesService :: listRoles :: ${error.message} :: ${error}`)
+            logger.error(`adminService :: login :: ${error.message} :: ${error}`)
             throw new Error(error.message);
         }
     },
     getForgetPasswordOtp: async (mobile_number: string): Promise<string> => {
     try{
-        let redis_result = await authService.getUserInRedisByUserName(mobile_number);
+        let redis_result = await adminService.getUserInRedisByUserName(mobile_number);
             const parseResult: IUser[] = redis_result && typeof redis_result == 'string' ? JSON.parse(redis_result) : redis_result;
     
             if (redis_result && parseResult.length && parseResult[0].account_locked != 1) {
@@ -237,15 +247,18 @@ export const authService = {
                         mobile_no : mobile_number
                     };
       
-                authService.setForgotPasswordOTPInRedis(userdata);
-                await authService.shareForgotOTPUserDetails(userdata);
+                adminService.setForgotPasswordOTPInRedis(userdata);
+                await adminService.shareForgotOTPUserDetails(userdata);
                 return new_txn_id;
             }
         }catch(err){
+            logger.error(`adminService :: getForgetPasswordOtp :: ${err.message} :: ${err}`)
             throw new Error(err.message);
         }
     },
     verifyForgetPasswordOtp: async (txnId: string, otp: string): Promise<IUser[]> => {
+        try {
+       
         let key = `Admin_Forgot_Password|txnId:${txnId}`;
         let redisResult = await redis.GetRedis(key);
     
@@ -255,7 +268,7 @@ export const authService = {
                 throw new Error (ERRORCODE.USRAUT0014);
             } else {
                 let user_name = UserData.user_name;
-                const checkUserData = await authService.checkUser(user_name);
+                const checkUserData = await adminService.checkUser(user_name);
                 if (checkUserData[0]) {
                     let new_txnId = uuidv4();
                     let mobile_key = `Admin_Forgot_Password|User:${user_name}`;
@@ -268,12 +281,16 @@ export const authService = {
                     throw new Error (ERRORCODE.USRAUT0014);
                 }
             }
-        } else {
-            throw new Error (ERRORCODE.USRAUT0014);
+            } else {
+                throw new Error (ERRORCODE.USRAUT0014);
+            }   
+        } catch (error) {
+            logger.error(`adminService :: getForgetPasswordOtp :: ${error.message} :: ${error}`)
+            throw new Error(error)
         }
     },
     resetForgetPassword: async (reqData: IUser) => {
-
+        try{
             const redisResult = await redis.GetRedis(`FORGOT_PASSWORD_CHANGE_${reqData.txnId}`);
 
             if (!redisResult) {
@@ -295,7 +312,7 @@ export const authService = {
 
             const hashedPassword = await bcrypt.hash(reqData.new_password, 10);
 
-            const passwordUpdated = await authService.resetPassword(hashedPassword, mobileNumber);
+            const passwordUpdated = await adminService.resetPassword(hashedPassword, mobileNumber);
 
             if (passwordUpdated) {
                 await redis.deleteKey(`FORGOT_PASSWORD_CHANGE_${reqData.txnId}`);
@@ -306,6 +323,10 @@ export const authService = {
             } else {
                 return ({ "error": 'Password Reset Timeout'});
             }
+        }catch (error) {
+            logger.error(`adminService :: resetForgetPassword :: ${error.message} :: ${error}`)
+            throw new Error(error)
         }
+    }
 
 }

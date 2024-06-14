@@ -1,7 +1,8 @@
 
 export const USER = {
-    selectUserQuery:`SELECT u.user_id, user_name, password, display_name, profile_picture_url, role_id, mobile_number, school_id, trust_id, email_id from m_users u 
-    left join m_user_mapping um on u.user_id = um.user_id WHERE user_name = $1 AND is_active = 1 AND is_deleted <> 1`,
+    selectUserQuery:`SELECT u.user_id,ud.department_id, user_name, password, display_name, role_id, mobile_number, email_id 
+	from m_users u left join m_user_department_assoc ud on u.user_id = ud.user_id
+	WHERE user_name = $1`,
     selectRoleDetailsQueryByRoleId:`SELECT * FROM m_roles WHERE role_id = $1`,
     getInvalidAttempts:`SELECT invalid_attempts from m_users WHERE user_name = $1`,
     getMaxInvalidLoginAttempts:`SELECT max_invalid_attempts, password_expiry FROM password_complexity ORDER BY date_created DESC LIMIT 1`,

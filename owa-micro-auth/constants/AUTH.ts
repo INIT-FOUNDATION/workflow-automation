@@ -4,6 +4,7 @@ export const AUTH = {
     API: {
        PUBLIC: [
          "/api/v1/auth/health",
+         "/api/v1/auth/admin/login",
        ]
     }
 }
