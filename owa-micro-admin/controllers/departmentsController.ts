@@ -16,7 +16,7 @@ export const departmentsController = {
       });
     } catch (error) {
       logger.error(`departmentsController :: listDepartments :: ${error.message} :: ${error}`);
-      return res.status(STATUS.OK).send(DEPARTMENTS.DEPARTMENT000);
+      return res.status(STATUS.INTERNAL_SERVER_ERROR).send(DEPARTMENTS.DEPARTMENT000);
     }
   },
   addDepartment: async (req: Request, res: Response): Promise<Response> => {
@@ -41,7 +41,7 @@ export const departmentsController = {
       });
     } catch (error) {
       logger.error(`departmentsController :: addDepartment :: ${error.message} :: ${error}`);
-      return res.status(STATUS.OK).send(DEPARTMENTS.DEPARTMENT000);
+      return res.status(STATUS.INTERNAL_SERVER_ERROR).send(DEPARTMENTS.DEPARTMENT000);
     }
   },
   updateDepartment: async (req: Request, res: Response): Promise<Response> => {
@@ -69,7 +69,7 @@ export const departmentsController = {
       });
     } catch (error) {
       logger.error(`departmentsController :: updateDepartment :: ${error.message} :: ${error}`);
-      return res.status(STATUS.OK).send(DEPARTMENTS.DEPARTMENT000);
+      return res.status(STATUS.INTERNAL_SERVER_ERROR).send(DEPARTMENTS.DEPARTMENT000);
     }
   },
   getDepartmentById: async (req: Request, res: Response): Promise<Response> => {
@@ -88,7 +88,7 @@ export const departmentsController = {
       });
     } catch (error) {
       logger.error(`departmentsController :: getDepartmentById :: ${error.message} :: ${error}`);
-      return res.status(STATUS.OK).send(DEPARTMENTS.DEPARTMENT000);
+      return res.status(STATUS.INTERNAL_SERVER_ERROR).send(DEPARTMENTS.DEPARTMENT000);
     }
   },
   updateDepartmentStatus: async (req: Request, res: Response): Promise<Response> => {
@@ -113,7 +113,7 @@ export const departmentsController = {
       });
     } catch (error) {
       logger.error(`departmentsController :: updateDepartmentStatus :: ${error.message} :: ${error}`);
-      return res.status(STATUS.OK).send(DEPARTMENTS.DEPARTMENT000);
+      return res.status(STATUS.INTERNAL_SERVER_ERROR).send(DEPARTMENTS.DEPARTMENT000);
     }
   },
 }

@@ -16,7 +16,7 @@ export const passwordPoliciesController = {
             });
         } catch (error) {
             logger.error(`passwordPoliciesController :: listPasswordPolicies :: ${error.message} :: ${error}`);
-            return res.status(STATUS.OK).send(PASSWORDPOLICIES.PASSWORDPOLICIES000);
+            return res.status(STATUS.INTERNAL_SERVER_ERROR).send(PASSWORDPOLICIES.PASSWORDPOLICIES000);
         }
     },
     addPasswordPolicy: async (req: Request, res: Response): Promise<Response> => {
@@ -38,7 +38,7 @@ export const passwordPoliciesController = {
             });
         } catch (error) {
             logger.error(`passwordPoliciesController :: addPasswordPolicy :: ${error.message} :: ${error}`);
-            return res.status(STATUS.OK).send(PASSWORDPOLICIES.PASSWORDPOLICIES000);
+            return res.status(STATUS.INTERNAL_SERVER_ERROR).send(PASSWORDPOLICIES.PASSWORDPOLICIES000);
         }
     },
     updatePasswordPolicy: async (req: Request, res: Response): Promise<Response> => {
@@ -63,7 +63,7 @@ export const passwordPoliciesController = {
             });
         } catch (error) {
             logger.error(`passwordPoliciesController :: updatePasswordPolicy :: ${error.message} :: ${error}`);
-            return res.status(STATUS.OK).send(PASSWORDPOLICIES.PASSWORDPOLICIES000);
+            return res.status(STATUS.INTERNAL_SERVER_ERROR).send(PASSWORDPOLICIES.PASSWORDPOLICIES000);
         }
     },
     getPasswordPolicyById: async (req: Request, res: Response): Promise<Response> => {
@@ -82,7 +82,7 @@ export const passwordPoliciesController = {
             });
         } catch (error) {
             logger.error(`passwordPoliciesController :: getPasswordPolicyById :: ${error.message} :: ${error}`);
-            return res.status(STATUS.OK).send(PASSWORDPOLICIES.PASSWORDPOLICIES000);
+            return res.status(STATUS.INTERNAL_SERVER_ERROR).send(PASSWORDPOLICIES.PASSWORDPOLICIES000);
         }
     },
 }

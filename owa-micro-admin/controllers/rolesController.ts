@@ -17,7 +17,7 @@ export const rolesController = {
               });
         } catch (error) {
             logger.error(`rolesController :: listRoles :: ${error.message} :: ${error}`);
-            return res.status(STATUS.OK).send(ROLES.ROLE00000);
+            return res.status(STATUS.INTERNAL_SERVER_ERROR).send(ROLES.ROLE00000);
         }
     },
     addRole: async(req: Request, res: Response): Promise<Response> => {
@@ -46,7 +46,7 @@ export const rolesController = {
               });
         } catch (error) {
             logger.error(`rolesController :: addRole :: ${error.message} :: ${error}`);
-            return res.status(STATUS.OK).send(ROLES.ROLE00000);
+            return res.status(STATUS.INTERNAL_SERVER_ERROR).send(ROLES.ROLE00000);
         }
     },
     updateRole: async(req: Request, res: Response): Promise<Response> => {
@@ -77,7 +77,7 @@ export const rolesController = {
               });
         } catch (error) {
             logger.error(`rolesController :: updateRole :: ${error.message} :: ${error}`);
-            return res.status(STATUS.OK).send(ROLES.ROLE00000);
+            return res.status(STATUS.INTERNAL_SERVER_ERROR).send(ROLES.ROLE00000);
         }
     },
     getRoleById: async(req: Request, res: Response): Promise<Response> => {
@@ -96,7 +96,7 @@ export const rolesController = {
               });
         } catch (error) {
             logger.error(`rolesController :: getRoleById :: ${error.message} :: ${error}`);
-            return res.status(STATUS.OK).send(ROLES.ROLE00000);
+            return res.status(STATUS.INTERNAL_SERVER_ERROR).send(ROLES.ROLE00000);
         }
     },
     updateRoleStatus: async(req: Request, res: Response): Promise<Response> => {
@@ -122,7 +122,7 @@ export const rolesController = {
               });
         } catch (error) {
             logger.error(`rolesController :: updateRoleStatus :: ${error.message} :: ${error}`);
-            return res.status(STATUS.OK).send(ROLES.ROLE00000);
+            return res.status(STATUS.INTERNAL_SERVER_ERROR).send(ROLES.ROLE00000);
         }
     },
     getAccessListByRoleId: async(req: Request, res: Response): Promise<Response> => {
@@ -141,7 +141,7 @@ export const rolesController = {
               });
         } catch (error) {
             logger.error(`rolesController :: getAccessListByRoleId :: ${error.message} :: ${error}`);
-            return res.status(STATUS.OK).send(ROLES.ROLE00000);
+            return res.status(STATUS.INTERNAL_SERVER_ERROR).send(ROLES.ROLE00000);
         }
     },
     getMenusListByRoleId: async(req: Request, res: Response): Promise<Response> => {
@@ -157,7 +157,7 @@ export const rolesController = {
               });
         } catch (error) {
             logger.error(`rolesController :: getMenusListByRoleId :: ${error.message} :: ${error}`);
-            return res.status(STATUS.OK).send(ROLES.ROLE00000);
+            return res.status(STATUS.INTERNAL_SERVER_ERROR).send(ROLES.ROLE00000);
         }
     },
     getCombinedAccessListByRoleId: async(req: Request, res: Response): Promise<Response> => {
@@ -182,7 +182,7 @@ export const rolesController = {
               });
         } catch (error) {
             logger.error(`rolesController :: getCombinedAccessListByRoleId :: ${error.message} :: ${error}`);
-            return res.status(STATUS.OK).send(ROLES.ROLE00000);
+            return res.status(STATUS.INTERNAL_SERVER_ERROR).send(ROLES.ROLE00000);
         }
     },
     getDefaultAccessList: async(req: Request, res: Response): Promise<Response> => {
@@ -194,7 +194,7 @@ export const rolesController = {
               });
         } catch (error) {
             logger.error(`rolesController :: getCombinedAccessListByRoleId :: ${error.message} :: ${error}`);
-            return res.status(STATUS.OK).send(ROLES.ROLE00000);
+            return res.status(STATUS.INTERNAL_SERVER_ERROR).send(ROLES.ROLE00000);
         }
     },
 }

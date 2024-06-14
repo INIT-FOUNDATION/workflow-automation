@@ -1,6 +1,6 @@
 import { pg, logger, redis, JSONUTIL, objectStorageUtility, envUtils } from "owa-micro-common";
-import { ROLES, USERS, USER_DEPARTMENT_MAPPING } from "../constants/QUERY";
-import { IPasswordPolicy, IRole, IUser } from "../types/custom";
+import { USERS, USER_DEPARTMENT_MAPPING } from "../constants/QUERY";
+import { IPasswordPolicy, IUser } from "../types/custom";
 import { CACHE_TTL, DEFAULT_PASSWORD } from "../constants/CONST";
 import { PlainToken } from "../types/express";
 import { passwordPoliciesService } from "./passwordPoliciesService";
@@ -10,30 +10,76 @@ import RandExp from "randexp";
 export const usersService = {
   listUsers: async (plainToken: PlainToken, pageSize: number, currentPage: number, searchQuery: string): Promise<IUser[]> => {
     try {
+      let key = `USERS`;
       const _query = {
-        text: ROLES.listRoles
+        text: USERS.usersList
       };
-      logger.debug(`usersService :: listUsers :: query :: ${JSON.stringify(_query)}`)
+
+      const isSearchStringAMobileNumber = /^\d{10}$/.test(searchQuery);
+      if (isSearchStringAMobileNumber) {
+        key += `|SEARCH:${isSearchStringAMobileNumber}`;
+        _query.text += ` WHERE mobile_number = ${searchQuery}`;
+      } else {
+        _query.text += ` WHERE display_name ILIKE %${searchQuery}%`;
+        key += `|SEARCH:${isSearchStringAMobileNumber}`;
+      }
+
+      if (pageSize) {
+        key += `|LIMIT:${pageSize}`;
+        _query.text += `LIMIT ${pageSize}`;
+      }
+
+      if (currentPage) {
+        key += `|OFFSET:${currentPage}`;
+        _query.text += ` OFFSET ${currentPage}`;
+      }
+
+      const cachedResult = await redis.GetKeyRedis(key);
+      if (cachedResult) {
+        logger.debug(`usersService :: listUsers :: cached result :: ${cachedResult}`)
+        return JSON.parse(cachedResult)
+      }
+
+      logger.debug(`usersService :: listUsers :: query :: ${JSON.stringify(_query)}`);
 
       const result = await pg.executeQueryPromise(_query);
-      logger.debug(`usersService :: listUsers :: db result :: ${JSON.stringify(result)}`)
+      logger.debug(`usersService :: listUsers :: db result :: ${JSON.stringify(result)}`);
+
+      if (result.length > 0) redis.SetRedis(key, result, CACHE_TTL.LONG);
       return result;
     } catch (error) {
       logger.error(`usersService :: listUsers :: ${error.message} :: ${error}`)
       throw new Error(error.message);
     }
   },
-  listUsersCount: async (plainToken: PlainToken, pageSize: number, currentPage: number, searchQuery: string): Promise<number> => {
+  listUsersCount: async (plainToken: PlainToken, searchQuery: string): Promise<number> => {
     try {
+      let key = `USERS_COUNT`;
       const _query = {
-        text: ROLES.listRoles
+        text: USERS.usersListCount
       };
+
+      const isSearchStringAMobileNumber = /^\d{10}$/.test(searchQuery);
+      if (isSearchStringAMobileNumber) {
+        key += `|SEARCH:${isSearchStringAMobileNumber}`;
+        _query.text += ` WHERE mobile_number = ${searchQuery}`;
+      } else {
+        _query.text += ` WHERE display_name ILIKE %${searchQuery}%`;
+        key += `|SEARCH:${isSearchStringAMobileNumber}`;
+      }
+
+      const cachedResult = await redis.GetKeyRedis(key);
+      if (cachedResult) {
+        logger.debug(`usersService :: listUsersCount :: cached result :: ${cachedResult}`)
+        return JSON.parse(cachedResult)
+      }
+
       logger.debug(`usersService :: listUsersCount :: query :: ${JSON.stringify(_query)}`)
 
       const result = await pg.executeQueryPromise(_query);
       logger.debug(`usersService :: listUsersCount :: db result :: ${JSON.stringify(result)}`)
 
-      if (result.length > 0) redis.SetRedis("", result, CACHE_TTL.LONG);
+      if (result.length > 0) redis.SetRedis(key, result, CACHE_TTL.LONG);
       return result;
     } catch (error) {
       logger.error(`usersService :: listRoles :: ${error.message} :: ${error}`)
@@ -117,7 +163,7 @@ export const usersService = {
 
       if (result.length > 0) {
         const bucketName = envUtils.getStringEnvVariableOrDefault("OWA_OBJECT_STORAGE_BUCKET", "owa-dev");
-        result[0].profile_pic_url = await objectStorageUtility.presignedGetObject(bucketName, new URL(result[0].profile_pic_url).pathname.substring(1))
+        result[0].profile_pic_url = await usersService.generatePublicURLFromObjectStoragePrivateURL(bucketName, result[0].profile_pic_url, 3600);
         redis.SetRedis(key, result[0], CACHE_TTL.LONG)
         return result[0]
       }
@@ -287,6 +333,16 @@ export const usersService = {
       logger.debug(`usersService :: resetPasswordForUserId :: db result :: ${JSON.stringify(result)}`);
     } catch (error) {
       logger.error(`usersService :: resetPasswordForUserId :: ${error.message} :: ${error}`)
+      throw new Error(error.message);
+    }
+  },
+  generatePublicURLFromObjectStoragePrivateURL: async (bucketName: string, locationUrl: string, expiresIn: number = 3600): Promise<string> => {
+    try {
+      const filePath = new URL(locationUrl).pathname.substring(1);
+      const temporaryPublicURL = await objectStorageUtility.presignedGetObject(bucketName, filePath, expiresIn);
+      return temporaryPublicURL;
+    } catch (error) {
+      logger.error(`usersService :: generatePublicURLFromObjectStoragePrivateURL :: ${error.message} :: ${error}`)
       throw new Error(error.message);
     }
   }

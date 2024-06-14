@@ -24,15 +24,15 @@ export const usersController = {
             }
 
             const usersList = await usersService.listUsers(plainToken, pageSize, currentPage, searchQuery);
-            const usersCount = await usersService.listUsersCount(plainToken, pageSize, currentPage, searchQuery);
+            const usersCount = await usersService.listUsersCount(plainToken, searchQuery);
 
             return res.status(STATUS.OK).send({
                 data: { usersList, usersCount },
-                message: "Roles Fetched Successfully",
+                message: "Users Fetched Successfully",
             });
         } catch (error) {
             logger.error(`usersController :: listRoles :: ${error.message} :: ${error}`);
-            return res.status(STATUS.OK).send(USERS.USER00000);
+            return res.status(STATUS.INTERNAL_SERVER_ERROR).send(USERS.USER00000);
         }
     },
     createUser: async (req: Request, res: Response): Promise<Response> => {
@@ -67,7 +67,7 @@ export const usersController = {
             });
         } catch (error) {
             logger.error(`usersController :: createUser :: ${error.message} :: ${error}`);
-            return res.status(STATUS.OK).send(USERS.USER00000);
+            return res.status(STATUS.INTERNAL_SERVER_ERROR).send(USERS.USER00000);
         }
     },
     updateUser: async (req: Request, res: Response): Promise<Response> => {
@@ -89,11 +89,11 @@ export const usersController = {
 
             return res.status(STATUS.OK).send({
                 data: null,
-                message: "Role Added Successfully",
+                message: "User Updated Successfully",
             });
         } catch (error) {
-            logger.error(`usersController :: addRole :: ${error.message} :: ${error}`);
-            return res.status(STATUS.OK).send(USERS.USER00000);
+            logger.error(`usersController :: updateUser :: ${error.message} :: ${error}`);
+            return res.status(STATUS.INTERNAL_SERVER_ERROR).send(USERS.USER00000);
         }
     },
     getUserById: async (req: Request, res: Response): Promise<Response> => {
@@ -109,7 +109,7 @@ export const usersController = {
             });
         } catch (error) {
             logger.error(`usersController :: getUserById :: ${error.message} :: ${error}`);
-            return res.status(STATUS.OK).send(USERS.USER00000);
+            return res.status(STATUS.INTERNAL_SERVER_ERROR).send(USERS.USER00000);
         }
     },
     updateProfilePic: async (req: Request, res: Response): Promise<Response> => {
@@ -140,7 +140,7 @@ export const usersController = {
             });
         } catch (error) {
             logger.error(`usersController :: updateProfilePic :: ${error.message} :: ${error}`);
-            return res.status(STATUS.OK).send(USERS.USER00000);
+            return res.status(STATUS.INTERNAL_SERVER_ERROR).send(USERS.USER00000);
         }
     },
     listUsersByRoleId: async (req: Request, res: Response): Promise<Response> => {
@@ -156,7 +156,7 @@ export const usersController = {
             });
         } catch (error) {
             logger.error(`usersController :: listUsersByRoleId :: ${error.message} :: ${error}`);
-            return res.status(STATUS.OK).send(USERS.USER00000);
+            return res.status(STATUS.INTERNAL_SERVER_ERROR).send(USERS.USER00000);
         }
     },
     resetPasswordForUserId: async (req: Request, res: Response): Promise<Response> => {
@@ -175,7 +175,7 @@ export const usersController = {
             });
         } catch (error) {
             logger.error(`usersController :: resetPasswordForUserId :: ${error.message} :: ${error}`);
-            return res.status(STATUS.OK).send(USERS.USER00000);
+            return res.status(STATUS.INTERNAL_SERVER_ERROR).send(USERS.USER00000);
         }
     },
 }
