@@ -1,5 +1,5 @@
 
-exports.QUERY = {
+export const USER = {
     selectUserQuery:`SELECT u.user_id, user_name, password, display_name, profile_picture_url, role_id, mobile_number, school_id, trust_id, email_id from m_users u 
     left join m_user_mapping um on u.user_id = um.user_id WHERE user_name = $1 AND is_active = 1 AND is_deleted <> 1`,
     selectRoleDetailsQueryByRoleId:`SELECT * FROM m_roles WHERE role_id = $1`,

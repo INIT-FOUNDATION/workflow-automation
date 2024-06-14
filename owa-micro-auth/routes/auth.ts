@@ -1,8 +1,8 @@
-import express from "express";
+import express from 'express';
 import { authController } from "../controllers/authController";
 
 
-const authRouter = express.Router();
+export const authRouter = express.Router();
 
 authRouter.get("/health", authController.health);
 
@@ -12,14 +12,10 @@ authRouter.post("/login", authController.login);
 
 authRouter.post("/postLoginUserUpdate", authController.postLoginUserUpdate);
 
-authRouter.get("/:logout", authController.logout);
+authRouter.get("/logout", authController.logout);
 
 authRouter.post("/getForgetPasswordOtp", authController.getForgetPasswordOtp);
 
 authRouter.get("/verifyForgetPasswordOtp", authController.verifyForgetPasswordOtp);
 
 authRouter.get("/resetForgetPassword", authController.resetForgetPassword);
-
-export {
-    authRouter
-}

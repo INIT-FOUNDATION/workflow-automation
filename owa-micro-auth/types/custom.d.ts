@@ -3,7 +3,12 @@ export interface IUser {
     mobile_number: string;
     email_id: string;
     role_id: string;
-    password: number;
+    password: string;
+    new_password: string;
+    confirm_password: string;
+    txnId: string,
+    max_invalid_attempts: number,
+    invalid_attempts: number,
     account_locked:number;
     password_last_updated: number;
     date_created: string | undefined;

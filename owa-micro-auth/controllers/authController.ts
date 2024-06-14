@@ -1,20 +1,15 @@
 import { Response } from "express";
 import { Request } from "../types/express";
 import { validateLoginDetails } from "../models/auth";
-import { STATUS, redis, generateToken, logger, SECRET_KEY, passwordPolicy } from "owa-micro-common";
+import { STATUS, redis, logger, SECRET_KEY } from "owa-micro-common";
 import { ERRORCODE } from "../constants/ERRORCODE";
 import { decryptPayload, SERVICES } from "../constants/CONST";
 import { authService } from "../services/authService";
-import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import { v4 as uuidv4 } from 'uuid';
-import { 
-    updateUserLoggedInOut
- } from "../constants/QUERY";
-
+import { IUser } from "../types/custom";
 
 export const authController = {
-    health: async(req: Request, res: Response): Response<Response> => {
+    health: (req: Request, res: Response): Response => {
         return res.status(STATUS.OK).send({
             data: null,
             message: "Auth Service is Healthy",
@@ -27,12 +22,13 @@ export const authController = {
             return res.status(STATUS.OK).send({message: "Success"});
         } catch (error) {
             logger.error(`authController :: validateToken :: ${error.message} :: ${error}`)
+            return res.status(STATUS.INTERNAL_SERVER_ERROR)
         }
     },
     login: async(req: Request, res: Response): Promise<Response> => {
         try { 
             const plainToken = req.plainToken;
-            const user: IUser = new User(req.body)
+            const user: IUser = req.body;
             const {error} = await validateLoginDetails(req.body);
             logger.error("ERROR", error);
 
@@ -50,21 +46,21 @@ export const authController = {
     },
     postLoginUserUpdate: async(req: Request, res: Response): Promise<Response> => {
         try { 
-            await updateUserLoggedInOut(1, req.body.user_name);
-            res.status(STATUS.OK).send('User login details successfully updated!');
+            await authService.updateUserLoggedInOut(1, req.body.user_name);
+            return res.status(STATUS.OK).send('User login details successfully updated!');
         } catch (error) {
             logger.error(`authController :: postLoginUserUpdate :: ${error.message} :: ${error}`)
         }
     },
     logout: async(req: Request, res: Response): Promise<Response> => {
         try { 
-            await updateUserLoggedInOut(0, req.plainToken.user_name);
+            await authService.updateUserLoggedInOut(0, req.plainToken.user_name);
             redis.deleteKey(req.plainToken.user_name);
             redis.deleteKey(`USER_PERMISSIONS_${req.plainToken.user_name}`);
             redis.deleteKey(`LOGGED_IN_USER_DETAILS_${req.plainToken.user_name}`);
             redis.deleteKey(`User|Username:${req.plainToken.user_name}`);
             redis.deleteKey(`COMBINED_ACCESS_LIST|USER:${req.plainToken.user_id}`);
-            res.status(STATUS.OK).send(`Username | ${req.plainToken.user_name} | Successfully Logged Out!!`);
+            return res.status(STATUS.OK).send(`Username | ${req.plainToken.user_name} | Successfully Logged Out!!`);
         } catch (error) {
             logger.error(`authController :: logout :: ${error.message} :: ${error}`)
         }
@@ -76,7 +72,11 @@ export const authController = {
                 return res.status(STATUS.BAD_REQUEST).json({ errorCode: "CONFIG0023", error: ERRORCODE.CONFIG0023 });
             }
       
-            await authService.getForgetPasswordOtp(mobile_number);
+            const response = await authService.getForgetPasswordOtp(mobile_number);
+            return res.status(STATUS.OK).send({
+                txnid: response,
+                message: "Forget Password OTP Success",
+            });
         } catch (error) {
             logger.error(`authController :: getForgetPasswordOtp :: ${error.message} :: ${error}`)
         }
@@ -100,6 +100,22 @@ export const authController = {
     },
     resetForgetPassword: async(req: Request, res: Response): Promise<Response> => {
         try { 
+            let new_password = decryptPayload(req.body.new_password);
+            let confirm_password = decryptPayload(req.body.confirm_password);
+
+            const { txnId } = req.body;
+
+            if (!txnId) {
+                return res.send(STATUS.BAD_REQUEST).json(`{"errorCode":"USRPRF00027", "error":"${ERRORCODE.USRPRF00027}"}`);
+            }
+
+            if (new_password !== confirm_password) {
+                return res.send(STATUS.BAD_REQUEST).json({"error": "Passwords do not match" });
+            }
+
+            if (!/^(?=.*\d)(?=.*[a-zA-Z]).{8,}$/.test(new_password)) {
+                return res.send(STATUS.BAD_REQUEST).json({ "error": "Password must be at least 8 characters long and contain at least one letter and one digit" });
+            }
             const data = await authService.resetForgetPassword(req.body);
             return res.status(STATUS.OK).send({
                 data: data,
