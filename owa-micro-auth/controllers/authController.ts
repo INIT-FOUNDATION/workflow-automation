@@ -3,7 +3,7 @@ import { Request } from "../types/express";
 import { validateLoginDetails } from "../models/auth";
 import { STATUS, redis, logger, SECRET_KEY } from "owa-micro-common";
 import { ERRORCODE } from "../constants/ERRORCODE";
-import { decryptPayload, SERVICES } from "../constants/CONST";
+import { decryptPayload } from "../constants/CONST";
 import { authService } from "../services/authService";
 import jwt from "jsonwebtoken";
 import { IUser } from "../types/custom";
