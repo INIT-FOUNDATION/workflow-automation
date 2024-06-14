@@ -9,8 +9,10 @@ import fileUpload from "express-fileupload";
 import dotenv from "dotenv";
 import routes from "./startup/routes";
 import { AUTH } from "./constants/AUTH";
-
-import { SECURITY, logger } from "owa-micro-common";
+import bodyParser from "body-parser";
+import { SECURITY, logger, envUtils } from "owa-micro-common";
+import swaggerUi from "swagger-ui-express";
+import swaggerFile from "./config/swagger.json"
 
 dotenv.config();
 
@@ -46,15 +48,19 @@ const setAppVersiontoHeader = async function (
   next();
 };
 
+app.use(bodyParser.json({
+  limit: envUtils.getStringEnvVariableOrDefault("OWA_BODY_PARSER_LIMIT", "5mb")
+}));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(fileUpload());
 app.set("view engine", "ejs");
 app.use(helmet());
 app.use(resolveCrossDomain, setAppVersiontoHeader);
-
 app.use(function applyXFrame(req: Request, res: Response, next: NextFunction) {
   res.set("X-Frame-Options", "DENY");
   next();
 });
+app.use('/api/v1/auth/docs', swaggerUi.serve, swaggerUi.setup(swaggerFile))
 
 SECURITY(app, AUTH);
 routes(app);

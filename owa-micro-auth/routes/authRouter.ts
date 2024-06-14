@@ -1,6 +1,6 @@
 import express from 'express';
-import { adminController } from "../controllers/adminController";
+import { authContoller } from '../controllers/authController';
 
 export const authRouter = express.Router();
 
-authRouter.get("/health", adminController.health);
+authRouter.get("/health", authContoller.health);

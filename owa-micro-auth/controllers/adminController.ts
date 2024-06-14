@@ -9,28 +9,20 @@ import jwt from "jsonwebtoken";
 import { IUser } from "../types/custom";
 
 export const adminController = {
-    health: (req: Request, res: Response): Response => {
-        return res.status(STATUS.OK).send({
-            data: null,
-            message: "Auth Service is Healthy",
-        });
-    },
-    validateToken: async(req: Request, res: Response): Promise<Response> => {
+    validateToken: async (req: Request, res: Response): Promise<Response> => {
         try {
             const token = req.header("authorization");
             jwt.verify(token, SECRET_KEY.SECRET_KEY);
-            return res.status(STATUS.OK).send({message: "Success"});
+            return res.status(STATUS.OK).send({ data: null, message: "Token Validated Successfully" });
         } catch (error) {
             logger.error(`adminController :: validateToken :: ${error.message} :: ${error}`)
             return res.status(STATUS.INTERNAL_SERVER_ERROR)
         }
     },
-    login: async(req: Request, res: Response): Promise<Response> => {
-        try { 
-            const plainToken = req.plainToken;
+    login: async (req: Request, res: Response): Promise<Response> => {
+        try {
             const user: IUser = req.body;
-            const {error} = await validateLoginDetails(req.body);
-            logger.error("ERROR", error);
+            const { error } = await validateLoginDetails(req.body);
 
             if (error) {
                 if (error.details)
@@ -44,16 +36,16 @@ export const adminController = {
             logger.error(`adminController :: login :: ${error.message} :: ${error}`)
         }
     },
-    postLoginUserUpdate: async(req: Request, res: Response): Promise<Response> => {
-        try { 
+    postLoginUserUpdate: async (req: Request, res: Response): Promise<Response> => {
+        try {
             await adminService.updateUserLoggedInOut(1, req.body.user_name);
             return res.status(STATUS.OK).send('User login details successfully updated!');
         } catch (error) {
             logger.error(`adminController :: postLoginUserUpdate :: ${error.message} :: ${error}`)
         }
     },
-    logout: async(req: Request, res: Response): Promise<Response> => {
-        try { 
+    logout: async (req: Request, res: Response): Promise<Response> => {
+        try {
             await adminService.updateUserLoggedInOut(0, req.plainToken.user_name);
             redis.deleteKey(req.plainToken.user_name);
             redis.deleteKey(`USER_PERMISSIONS_${req.plainToken.user_name}`);
@@ -65,41 +57,41 @@ export const adminController = {
             logger.error(`adminController :: logout :: ${error.message} :: ${error}`)
         }
     },
-    getForgetPasswordOtp: async(req: Request, res: Response): Promise<Response> => {
-        try { 
+    getForgetPasswordOtp: async (req: Request, res: Response): Promise<Response> => {
+        try {
             let mobile_number = req.body.mobile_number;
             if (!mobile_number || mobile_number.toString().length !== 10) {
                 return res.status(STATUS.BAD_REQUEST).json({ errorCode: "CONFIG0023", error: ERRORCODE.CONFIG0023 });
             }
-      
-            const response = await adminService.getForgetPasswordOtp(mobile_number);
+
+            const txnId = await adminService.getForgetPasswordOtp(mobile_number);
             return res.status(STATUS.OK).send({
-                txnid: response,
-                message: "Forget Password OTP Success",
+                data: { txnId },
+                message: "Fetched Forget Password OTP Successfully",
             });
         } catch (error) {
             logger.error(`adminController :: getForgetPasswordOtp :: ${error.message} :: ${error}`)
         }
     },
-    verifyForgetPasswordOtp: async(req: Request, res: Response): Promise<Response> => {
-        try { 
+    verifyForgetPasswordOtp: async (req: Request, res: Response): Promise<Response> => {
+        try {
             let otp = decryptPayload(req.body.otp);
             let txnId = req.body.txnId;
-          
+
             if (!otp || !txnId) {
                 return res.status(STATUS.BAD_REQUEST).send(`{"errorCode":"USRAUT0012", "error":"${ERRORCODE.USRAUT0012}"}`);
             }
             const data = await adminService.verifyForgetPasswordOtp(txnId, otp);
             return res.status(STATUS.OK).send({
                 data: data,
-                message: "Verify OTP Success",
+                message: "Fetched Verify Forget Password OTP Success Successfully",
             });
         } catch (error) {
             logger.error(`adminController :: verifyForgetPasswordOtp :: ${error.message} :: ${error}`)
         }
     },
-    resetForgetPassword: async(req: Request, res: Response): Promise<Response> => {
-        try { 
+    resetForgetPassword: async (req: Request, res: Response): Promise<Response> => {
+        try {
             let new_password = decryptPayload(req.body.new_password);
             let confirm_password = decryptPayload(req.body.confirm_password);
 
@@ -110,7 +102,7 @@ export const adminController = {
             }
 
             if (new_password !== confirm_password) {
-                return res.send(STATUS.BAD_REQUEST).json({"error": "Passwords do not match" });
+                return res.send(STATUS.BAD_REQUEST).json({ "error": "Passwords do not match" });
             }
 
             if (!/^(?=.*\d)(?=.*[a-zA-Z]).{8,}$/.test(new_password)) {
