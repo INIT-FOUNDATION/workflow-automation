@@ -8,6 +8,7 @@ import { User, validateCreateUser, validateUpdateUser } from "../models/usersMod
 import { departmentsService } from "../services/departmentsService";
 import { DEPARTMENTS, ROLES, USERS } from "../constants/ERRORCODE";
 import { rolesService } from "../services/rolesService";
+import { UploadedFile } from "express-fileupload";
 
 export const usersController = {
     listUsers: async (req: Request, res: Response): Promise<Response> => {
@@ -124,24 +125,20 @@ export const usersController = {
     updateProfilePic: async (req: Request, res: Response): Promise<Response> => {
         try {
             const plainToken = req.plainToken;
+            const file = req.files.file as UploadedFile;
 
-            if (!req.files || Object.keys(req.files).length === 0)
-                return res.status(STATUS.BAD_REQUEST).send(USERS.USER00008);
+            if (!file) return res.status(STATUS.BAD_REQUEST).send(USERS.USER00008);
 
             const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
-            if (!allowedTypes.includes(req.files.file[0].mimetype)) {
-                return res.status(STATUS.BAD_REQUEST).send(USERS.USER00009);
-            }
+            if (!allowedTypes.includes(file.mimetype)) return res.status(STATUS.BAD_REQUEST).send(USERS.USER00009);
 
             const uploadSizeLimit = envUtils.getNumberEnvVariableOrDefault("OWA_UPLOAD_FILE_SIZE_LIMIT", 5 * 1024 * 1024 )
-            if (req.files.file[0].size > uploadSizeLimit) {
-                return res.status(STATUS.BAD_REQUEST).send(USERS.USER00010);
-            }
+            if (file.size > uploadSizeLimit) return res.status(STATUS.BAD_REQUEST).send(USERS.USER00010);
 
             const userExists = await usersService.existsByUserId(plainToken.user_id);
             if (!userExists) return res.status(STATUS.BAD_REQUEST).send(USERS.USER00005);
 
-            await usersService.updateProfilePic(req.files.file[0], plainToken.user_id);
+            await usersService.updateProfilePic(file, plainToken.user_id);
 
             return res.status(STATUS.OK).send({
                 data: null,

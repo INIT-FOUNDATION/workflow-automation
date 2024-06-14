@@ -6,6 +6,7 @@ import { PlainToken } from "../types/express";
 import { passwordPoliciesService } from "./passwordPoliciesService";
 import bcrypt from "bcryptjs";
 import RandExp from "randexp";
+import { UploadedFile } from "express-fileupload";
 
 export const usersService = {
   listUsers: async (plainToken: PlainToken, pageSize: number, currentPage: number, searchQuery: string): Promise<IUser[]> => {
@@ -44,11 +45,15 @@ export const usersService = {
 
       logger.debug(`usersService :: listUsers :: query :: ${JSON.stringify(_query)}`);
 
-      const result = await pg.executeQueryPromise(_query);
-      logger.debug(`usersService :: listUsers :: db result :: ${JSON.stringify(result)}`);
+      const usersResult: IUser[] = await pg.executeQueryPromise(_query);
+      logger.debug(`usersService :: listUsers :: db result :: ${JSON.stringify(usersResult)}`);
 
-      if (result && result.length > 0) redis.SetRedis(key, result, CACHE_TTL.LONG);
-      return result;
+      for (const user of usersResult) {
+        user.profile_pic_url = await usersService.generatePublicURLFromObjectStoragePrivateURL(user.profile_pic_url, 3600);
+      }
+
+      if (usersResult && usersResult.length > 0) redis.SetRedis(key, usersResult, CACHE_TTL.LONG);
+      return usersResult;
     } catch (error) {
       logger.error(`usersService :: listUsers :: ${error.message} :: ${error}`)
       throw new Error(error.message);
@@ -172,8 +177,7 @@ export const usersService = {
       logger.debug(`usersService :: getUserById :: db result :: ${JSON.stringify(result)}`)
 
       if (result.length > 0) {
-        const bucketName = envUtils.getStringEnvVariableOrDefault("OWA_OBJECT_STORAGE_BUCKET", "owa-dev");
-        if (result[0].profile_pic_url) result[0].profile_pic_url = await usersService.generatePublicURLFromObjectStoragePrivateURL(bucketName, result[0].profile_pic_url, 3600);
+        if (result[0].profile_pic_url) result[0].profile_pic_url = await usersService.generatePublicURLFromObjectStoragePrivateURL(result[0].profile_pic_url, 3600);
         redis.SetRedis(key, result[0], CACHE_TTL.LONG)
         return result[0]
       }
@@ -284,15 +288,15 @@ export const usersService = {
       throw new Error(error.message);
     }
   },
-  updateProfilePic: async (profilePicture: File, userId: number) => {
+  updateProfilePic: async (profilePicture: UploadedFile, userId: number) => {
     try {
-      const objectStoragePath = `profile-pictures/PROFILE_PICTURE_${userId}.${profilePicture.type}`;
+      const objectStoragePath = `profile-pictures/PROFILE_PICTURE_${userId}.${profilePicture.mimetype.split("/")[1]}`;
       const bucketName = envUtils.getStringEnvVariableOrDefault("OWA_OBJECT_STORAGE_BUCKET", "owa-dev");
-      const objectStorageUploadLocation = await objectStorageUtility.putObject(bucketName, objectStoragePath, profilePicture);
-
+      await objectStorageUtility.putObject(bucketName, objectStoragePath, profilePicture.data);
+      
       const _query = {
         text: USERS.updateProfilePic,
-        values: [userId, objectStorageUploadLocation]
+        values: [userId, objectStoragePath]
       };
       logger.debug(`usersService :: updateProfilePic :: query :: ${JSON.stringify(_query)}`);
 
@@ -349,10 +353,10 @@ export const usersService = {
       throw new Error(error.message);
     }
   },
-  generatePublicURLFromObjectStoragePrivateURL: async (bucketName: string, locationUrl: string, expiresIn: number = 3600): Promise<string> => {
+  generatePublicURLFromObjectStoragePrivateURL: async (locationPath: string, expiresIn: number = 3600): Promise<string> => {
     try {
-      const filePath = new URL(locationUrl).pathname.substring(1);
-      const temporaryPublicURL = await objectStorageUtility.presignedGetObject(bucketName, filePath, expiresIn);
+      const bucketName = envUtils.getStringEnvVariableOrDefault("OWA_OBJECT_STORAGE_BUCKET", "owa-dev");
+      const temporaryPublicURL = await objectStorageUtility.presignedGetObject(bucketName, locationPath, expiresIn);
       return temporaryPublicURL;
     } catch (error) {
       logger.error(`usersService :: generatePublicURLFromObjectStoragePrivateURL :: ${error.message} :: ${error}`)

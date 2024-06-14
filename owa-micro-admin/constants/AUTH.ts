@@ -12,7 +12,7 @@ export const AUTH = {
          "/api/v1/admin/passwordPolicies/add",
          "/api/v1/admin/passwordPolicies/update",
          "/api/v1/admin/passwordPolicies/list",
-         "/api/v1/admin/passwordPolicies/:passwordPolicyId",
+         "/api/v1/admin/passwordPolicies/:passwordPolicyId"
        ]
     }
 }

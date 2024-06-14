@@ -1,7 +1,6 @@
-import express, {  Request, Response, Express, NextFunction } from 'express';
-import bodyParser from 'body-parser';
+import express, { Request, Response, Express, NextFunction } from 'express';
 import * as CONSTANT from '../constants/CONST';
-import {adminRouter} from '../routes/adminRouter';
+import { adminRouter } from '../routes/adminRouter';
 import { rolesRouter } from '../routes/rolesRouter';
 import { departmentRouter } from '../routes/departmentRouter';
 import { passwordPolicyRouter } from '../routes/passwordPolicyRouter';
@@ -31,8 +30,6 @@ export default function (app: Express): void {
     next();
   });
 
-  app.use(bodyParser.json());
-  app.use(bodyParser.urlencoded({ extended: false }));
   app.use("/api/v1/admin/roles", rolesRouter);
   app.use("/api/v1/admin/departments", departmentRouter);
   app.use("/api/v1/admin/passwordPolicies", passwordPolicyRouter);
