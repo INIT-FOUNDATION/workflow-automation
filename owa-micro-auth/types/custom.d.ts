@@ -1,16 +1,15 @@
 export interface IUser {
+    user_id: number,
     user_name: string;
     display_name: string;
     mobile_number: string;
     email_id: string;
-    role_id: string;
+    role_id: number;
+    department_id: number;
     password: string;
-    new_password: string;
-    confirm_password: string;
-    txnId: string,
-    max_invalid_attempts: number,
+    status: number,
+    maximum_invalid_attempts: number,
     invalid_attempts: number,
-    account_locked:number;
     password_last_updated: number;
     date_created: string | undefined;
     date_updated: string | undefined;

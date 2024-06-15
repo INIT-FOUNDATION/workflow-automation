@@ -65,7 +65,14 @@ export const adminController = {
             const isPasswordValid = await bcrypt.compare(user.password, existingUser.password);
             if (isPasswordValid) {
                 const expiryTime = envUtils.getNumberEnvVariableOrDefault("OWA_AUTH_TOKEN_EXPIRY_TIME", 8);
-                const token = await generateToken.generate(existingUser.user_name, existingUser, expiryTime, AUTHENTICATION.SECRET_KEY, req);
+                const tokenDetails = {
+                    user_id: existingUser.user_id,
+                    department_id: existingUser.department_id,
+                    role_id: existingUser.role_id,
+                    user_name: existingUser.user_name,
+                    email_id: existingUser.email_id
+                }
+                const token = await generateToken.generate(existingUser.user_name, tokenDetails, expiryTime, AUTHENTICATION.SECRET_KEY, req);
                 adminService.updateUserLoginStatus(USERS_STATUS.LOGGED_IN, req.body.user_name);
 
                 return res.status(STATUS.OK).send({
@@ -78,6 +85,7 @@ export const adminController = {
 
                 if (maximumInvalidAttempts > currentInvalidAttempts) {
                     await adminService.incrementInvalidLoginAttempts(user.user_name);
+                    return res.status(STATUS.BAD_REQUEST).send(AUTH.AUTH00012);
                 } else {
                     await adminService.setUserInActive(user.user_name);
                     return res.status(STATUS.BAD_REQUEST).send(AUTH.AUTH00003);

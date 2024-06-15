@@ -55,7 +55,7 @@ export const adminService = {
             const result = await pg.executeQueryPromise(_query);
             logger.debug(`adminService :: getMaxInvalidLoginAttempts :: db result :: ${JSON.stringify(result)}`)
 
-            if (result && result.length > 0) return result[0].max_invalid_attempts;
+            if (result && result.length > 0) return result[0].maximum_invalid_attempts;
         } catch (error) {
             logger.error(`adminService :: getMaxInvalidLoginAttempts :: ${error.message} :: ${error}`);
             throw new Error(error.message);
@@ -98,8 +98,7 @@ export const adminService = {
         try {
             const cachedResult = await adminService.getUserInRedisByUserName(userName);
             if (cachedResult) {
-                const parseResult: IUser = JSON.parse(cachedResult);
-                if (parseResult && parseResult.account_locked != 1) return parseResult;
+                return JSON.parse(cachedResult);
             } else {
                 const _query = {
                     text: USERS.getUserByUsername,
@@ -112,7 +111,7 @@ export const adminService = {
 
                 if (result && result.length > 0) {
                     redis.SetRedis(`User|Username:${userName}`, result[0], CONFIG.REDIS_EXPIRE_TIME_PWD);
-                    return result;
+                    return result[0];
                 };
             }
         } catch (error) {
@@ -130,6 +129,8 @@ export const adminService = {
 
             const result = await pg.executeQueryPromise(_query);
             logger.debug(`adminService :: updateUserLoginStatus :: db result :: ${JSON.stringify(result)}`);
+
+            redis.deleteRedis(`User|Username:${userName}`);
         } catch (error) {
             logger.error(`adminService :: updateUserLoginStatus :: ${error.message} :: ${error}`);
             throw new Error(error.message);
@@ -196,7 +197,7 @@ export const adminService = {
     shareForgotOTPUserDetails: async (otpDetails: any) => {
         try {
             if (otpDetails.emailId) {
-                const emailTemplateHtml = await ejsUtils.generateHtml('views/forgotPasswordOtpEmailTemplate', otpDetails);
+                const emailTemplateHtml = await ejsUtils.generateHtml('views/forgotPasswordOtpEmailTemplate.ejs', otpDetails);
                 await nodemailerUtils.sendEmail('OLL WORKFLOW AUTOMATION | FORGOT PASSWORD OTP', emailTemplateHtml, otpDetails.emailId);
             }
         } catch (error) {
