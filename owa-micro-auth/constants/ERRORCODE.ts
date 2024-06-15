@@ -46,5 +46,9 @@ export const AUTH = {
     AUTH00011: {
         errorCode: "AUTH00011",
         errorMessage: "Password Reset Failed!"
+    },
+    AUTH00012: {
+        errorCode: "AUTH00012",
+        errorMessage: "Invalid Password!"
     }
 };

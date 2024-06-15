@@ -21,7 +21,8 @@ SELECT
     ) AS last_logged_in_out,
     r.role_name,
     u.profile_pic_url,
-    d.department_name
+    d.department_name,
+    uda.reporting_to
 FROM
     m_users u
     LEFT JOIN m_roles r ON u.role_id = r.role_id

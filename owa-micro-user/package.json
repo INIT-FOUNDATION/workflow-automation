@@ -5,7 +5,8 @@
   "main": "app.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "npx ts-node config/swagger.ts && nodemon --exec ts-node app.ts"
+    "start": "nodemon --exec ts-node app.ts",
+    "swagger": "npx ts-node config/swagger.ts"
   },
   "keywords": [],
   "author": "",

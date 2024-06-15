@@ -26,6 +26,7 @@ export interface IUser {
     status: number;
     profile_pic_url: string;
     last_logged_in: string;
+    reporting_to: number;
     date_created: string | undefined;
     date_updated: string | undefined;
     created_by: number | undefined;
