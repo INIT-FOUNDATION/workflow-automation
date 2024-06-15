@@ -5,7 +5,8 @@
   "main": "app.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "npx ts-node config/swagger.ts && nodemon --exec ts-node app.ts"
+    "start": "nodemon --exec ts-node app.ts",
+    "swagger": "npx ts-node config/swagger.ts"
   },
   "keywords": [],
   "author": "",
@@ -60,7 +61,12 @@
       "INIT_COMMON_MINIO_ENABLE_SSL": true,
       "INIT_COMMON_MINIO_ACCESS_KEY": "dev",
       "INIT_COMMON_MINIO_SECRET_KEY": "by20Kife3vceCIJ",
-      "OWA_OBJECT_STORAGE_BUCKET": "owa-dev"
+      "OWA_OBJECT_STORAGE_BUCKET": "owa-dev",
+      "INIT_COMMON_NODEMAILER_USER": "info@orrizonte.in",
+      "INIT_COMMON_NODEMAILER_PASSWORD": "a1TXJbvXeLpy",
+      "INIT_COMMON_NODEMAILER_HOST": "smtppro.zoho.in",
+      "INIT_COMMON_NODEMAILER_SERVICE": "ZOHO PRO",
+      "INIT_COMMON_NODEMAILER_PORT": 465
     }
   }
 }

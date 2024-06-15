@@ -59,13 +59,20 @@ export const adminController = {
             const existingUser: IUser = await adminService.getUserByUserName(user.user_name);
             if (!existingUser) return res.status(STATUS.BAD_REQUEST).send(AUTH.AUTH00001);
             
-            const decryptedPassword = decryptPayload(existingUser.password);
-            if (decryptedPassword == DEFAULT_PASSWORD) return res.status(STATUS.BAD_REQUEST).send(AUTH.AUTH00002);
+            user.password = decryptPayload(user.password);
+            if (user.password == DEFAULT_PASSWORD) return res.status(STATUS.BAD_REQUEST).send(AUTH.AUTH00002);
             
-            const isPasswordValid = await bcrypt.compare(user.password, decryptedPassword);
+            const isPasswordValid = await bcrypt.compare(user.password, existingUser.password);
             if (isPasswordValid) {
                 const expiryTime = envUtils.getNumberEnvVariableOrDefault("OWA_AUTH_TOKEN_EXPIRY_TIME", 8);
-                const token = await generateToken.generate(existingUser.user_name, existingUser, expiryTime, AUTHENTICATION.SECRET_KEY, req);
+                const tokenDetails = {
+                    user_id: existingUser.user_id,
+                    department_id: existingUser.department_id,
+                    role_id: existingUser.role_id,
+                    user_name: existingUser.user_name,
+                    email_id: existingUser.email_id
+                }
+                const token = await generateToken.generate(existingUser.user_name, tokenDetails, expiryTime, AUTHENTICATION.SECRET_KEY, req);
                 adminService.updateUserLoginStatus(USERS_STATUS.LOGGED_IN, req.body.user_name);
 
                 return res.status(STATUS.OK).send({
@@ -78,6 +85,7 @@ export const adminController = {
 
                 if (maximumInvalidAttempts > currentInvalidAttempts) {
                     await adminService.incrementInvalidLoginAttempts(user.user_name);
+                    return res.status(STATUS.BAD_REQUEST).send(AUTH.AUTH00012);
                 } else {
                     await adminService.setUserInActive(user.user_name);
                     return res.status(STATUS.BAD_REQUEST).send(AUTH.AUTH00003);
@@ -103,11 +111,11 @@ export const adminController = {
             */
             const userName = req.plainToken.user_name;
             await adminService.updateUserLoginStatus(USERS_STATUS.LOGGED_OUT, userName);
-            redis.deleteKey(userName);
-            redis.deleteKey(`USER_PERMISSIONS_${userName}`);
-            redis.deleteKey(`LOGGED_IN_USER_DETAILS_${userName}`);
-            redis.deleteKey(`User|Username:${userName}`);
-            redis.deleteKey(`COMBINED_ACCESS_LIST|USER:${userName}`);
+            redis.deleteRedis(userName);
+            redis.deleteRedis(`USER_PERMISSIONS_${userName}`);
+            redis.deleteRedis(`LOGGED_IN_USER_DETAILS_${userName}`);
+            redis.deleteRedis(`User|Username:${userName}`);
+            redis.deleteRedis(`COMBINED_ACCESS_LIST|USER:${userName}`);
             return res.status(STATUS.OK).send({
                 data: null,
                 message: "User Logged out Successfully"
@@ -176,15 +184,15 @@ export const adminController = {
                 else return res.status(STATUS.BAD_REQUEST).send({ errorCode: AUTH.AUTH00000, errorMessage: error.message });
             }
 
-            const decryptedOtp = decryptPayload(otpDetails.otp);
+            otpDetails.otp = decryptPayload(otpDetails.otp);
             const txnId = otpDetails.txnId;
 
             const forgotPasswordOtpDetailsCachedResult = await adminService.getForgotPasswordOtpDetails(txnId);
-            if (!forgotPasswordOtpDetailsCachedResult) res.send(STATUS.BAD_REQUEST).send(AUTH.AUTH00007);
+            if (!forgotPasswordOtpDetailsCachedResult) return res.status(STATUS.BAD_REQUEST).send(AUTH.AUTH00007);
 
             const forgotPasswordOtpDetails = JSON.parse(forgotPasswordOtpDetailsCachedResult);
-            if (forgotPasswordOtpDetails.otp != parseInt(decryptedOtp) || forgotPasswordOtpDetails.txnId != txnId) {
-                res.send(STATUS.BAD_REQUEST).send(AUTH.AUTH00007);
+            if (forgotPasswordOtpDetails.otp != parseInt(otpDetails.otp) || forgotPasswordOtpDetails.txnId != txnId) {
+                return res.status(STATUS.BAD_REQUEST).send(AUTH.AUTH00007);
             }
 
             const newTxnId = await adminService.verifyForgetPasswordOtp(forgotPasswordOtpDetails.userName, txnId);
@@ -222,18 +230,19 @@ export const adminController = {
                 else return res.status(STATUS.BAD_REQUEST).send({ errorCode: AUTH.AUTH00000, errorMessage: error.message });
             }
 
-            const decryptedNewPassword = decryptPayload(resetForgetPasswordDetails.newPassword);
-            const decryptedConfirmPassword = decryptPayload(resetForgetPasswordDetails.confirmPassword);
+            resetForgetPasswordDetails.newPassword = decryptPayload(resetForgetPasswordDetails.newPassword);
+            resetForgetPasswordDetails.confirmPassword = decryptPayload(resetForgetPasswordDetails.confirmPassword);
 
-            if (decryptedNewPassword !== decryptedConfirmPassword) return res.send(STATUS.BAD_REQUEST).send(AUTH.AUTH00008);
+            if (resetForgetPasswordDetails.newPassword !== resetForgetPasswordDetails.confirmPassword) return res.status(STATUS.BAD_REQUEST).send(AUTH.AUTH00008);
 
-            if (!/^(?=.*\d)(?=.*[a-zA-Z]).{8,}$/.test(decryptedNewPassword)) return res.send(STATUS.BAD_REQUEST).send(AUTH.AUTH00009);
+            if (!/^(?=.*\d)(?=.*[a-zA-Z]).{8,}$/.test(resetForgetPasswordDetails.newPassword)) return res.status(STATUS.BAD_REQUEST).send(AUTH.AUTH00009);
 
             const forgotPasswordChangeRequestDetails = await adminService.getForgotPasswordChangeDetails(resetForgetPasswordDetails.txnId);
-            if (!forgotPasswordChangeRequestDetails) return res.send(STATUS.BAD_REQUEST).send(AUTH.AUTH00010);
+            if (!forgotPasswordChangeRequestDetails) return res.status(STATUS.BAD_REQUEST).send(AUTH.AUTH00010);
+            const parsedForgotPasswordChangeRequestDetails = JSON.parse(forgotPasswordChangeRequestDetails);
 
-            const passwordResetted = await adminService.resetForgetPassword(resetForgetPasswordDetails, forgotPasswordChangeRequestDetails.userName);
-            if (!passwordResetted) return res.send(STATUS.BAD_REQUEST).send(AUTH.AUTH00011);
+            const passwordResetted = await adminService.resetForgetPassword(resetForgetPasswordDetails, parsedForgotPasswordChangeRequestDetails.userName);
+            if (!passwordResetted) return res.status(STATUS.BAD_REQUEST).send(AUTH.AUTH00011);
 
             return res.status(STATUS.OK).send({
                 data: null,
