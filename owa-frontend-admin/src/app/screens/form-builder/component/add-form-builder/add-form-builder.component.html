@@ -1,73 +1,79 @@
 <div class="">
-    <div class="text-xl xxl:text-2xl font-semibold">
-      Add new form
-      <div class="border-4 rounded-xl w-10 border-red-500 mt-1"></div>
-    </div>
-  
-    <div cdkDropListGroup class="grid grid-cols-2 gap-4">
-      <div class="border-2 p-5 rounded-2xl">
-        <span class="font-medium">Choose form fields</span>
-  
+  <div class="text-xl xxl:text-2xl font-semibold mb-3">
+    Add new form
+    <div class="border-4 rounded-xl w-10 border-red-500 mt-1"></div>
+  </div>
+
+  <div cdkDropListGroup class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+    <div class="border-2 p-5 rounded-2xl">
+      <div class="font-medium mb-2">Choose form fields</div>
+
+      <div
+        class="grid grid-cols-1 md:grid-cols-2 gap-4 custom-scroll-bar"
+        cdkDropList
+        [cdkDropListData]="chooseFromArray"
+        (cdkDropListDropped)="dropFormField($event)"
+      >
         <div
-          class="grid grid-cols-2 gap-4"
-          cdkDropList
-          [cdkDropListData]="chooseFromArray"
-          (cdkDropListDropped)="drop($event)"
+          class="border rounded-md p-3 text-sm flex items-center cursor-grab bg-white"
+          *ngFor="let item of chooseFromArray"
+          cdkDrag
         >
-          <div
-            class="border rounded-md p-2 text-sm flex items-center"
-            *ngFor="let item of chooseFromArray"
-            cdkDrag
-          >
-            <img
-              src="/assets/images/addNewForm/{{ item.img }}.svg"
-              class="me-2 w-4"
-            />
-            <span>{{ item.label }}</span>
-          </div>
+          <img
+            src="/assets/images/addNewForm/{{ item.img }}.svg"
+            class="me-2 w-4"
+          />
+          <span>{{ item.label }}</span>
         </div>
       </div>
-  
-      <div class="border-2 p-5 rounded-2xl">
-        <span class="font-medium">Choosen fields</span>
-  
-        <form action="">
-          <mat-form-field class="w-full mb-3" appearance="outline">
-            <mat-label>Email</mat-label>
-            <input
-              matInput
-              placeholder="Email"
-              type="email"
-              appInputChar="email"
-            />
-          </mat-form-field>
+    </div>
+
+    <div class="border-2 p-5 rounded-2xl">
+      <span class="font-medium">Choosen fields</span>
+
+      <form action="" class="custom-scroll-bar">
+        <mat-form-field class="w-full mb-3" appearance="outline">
+          <mat-label class="text-sm">Email</mat-label>
+          <input
+            matInput
+            placeholder="Email"
+            type="email"
+            appInputChar="email"
+          />
+        </mat-form-field>
+        <div
+          cdkDropList
+          [cdkDropListData]="chosenFields"
+          (cdkDropListDropped)="dropFormField($event)"
+        >
           <div
-            cdkDropList
-            [cdkDropListData]="chosenFields"
-            (cdkDropListDropped)="drop($event)"
+            class="text-sm mb-3"
+            *ngFor="let item of chosenFields"
+            [cdkDragDisabled]="true"
+            cdkDrag
           >
-            <div
-              class="text-sm flex items-center mb-3"
-              *ngFor="let item of chosenFields"
-              cdkDrag
+            <mat-form-field
+              class="w-full relative"
+              appearance="outline"
+              *ngIf="item.acceptOnly == 'string'"
             >
-              <mat-form-field
-                class="w-full"
-                appearance="outline"
-                *ngIf="item.acceptOnly == 'string'"
+              <div
+                class="absolute -right-2 -top-6 cursor-pointer"
+                (click)="deleteFormField(item?.id)"
               >
-                <mat-label>{{ item?.label }}</mat-label>
-                <input
-                  matInput
-                  placeholder="{{ item?.label }}"
-                  type="email"
-                  appInputChar="email"
-                />
-              </mat-form-field>
-            </div>
+                <i class="fa-solid fa-circle-xmark text-xl text-red-500"></i>
+              </div>
+              <mat-label>{{ item?.label }}</mat-label>
+              <input
+                matInput
+                placeholder="{{ item?.label }}"
+                type="email"
+                appInputChar="email"
+              />
+            </mat-form-field>
           </div>
-        </form>
-      </div>
+        </div>
+      </form>
     </div>
   </div>
-  
+</div>
