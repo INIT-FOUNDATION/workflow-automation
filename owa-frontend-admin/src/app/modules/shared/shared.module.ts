@@ -36,6 +36,7 @@ import { IntegerInputDirective } from './directives/input-integer.directive';
 import { LoaderComponent } from './components/loader/loader.component';
 import { HeaderComponent } from './components/header/header.component';
 import { PropertiesModalComponent } from './components/properties-modal/properties-modal.component';
+
 /*------------------- DIRECTIVES ------------------------*/
 
 const MY_FORMATS = {
