@@ -10,6 +10,11 @@ export const CACHE_TTL = {
   LONG: 24 * 60 * 60,
 };
 
+export const CONFIG =  {
+  REDIS_EXPIRE_TIME_PWD: 28800,
+  SHA256_PVT_KEY: "OWA_2024"
+}
+
 export const decryptPayload = function (reqData: string) {
   if (reqData) {
     let bytes = CryptoJS.AES.decrypt(reqData, "OWA@$#&*(!@%^&");

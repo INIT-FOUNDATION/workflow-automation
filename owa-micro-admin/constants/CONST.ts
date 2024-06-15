@@ -8,6 +8,11 @@ export const CACHE_TTL = {
   LONG: 24 * 60 * 60,
 };
 
+export const CONFIG =  {
+  REDIS_EXPIRE_TIME_PWD: 28800,
+  SHA256_PVT_KEY: "OWA_2024"
+}
+
 export const ROLES_STATUS = {
   INACTIVE: 0,
   ACTIVE: 1,
