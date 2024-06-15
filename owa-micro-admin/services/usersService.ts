@@ -50,7 +50,7 @@ export const usersService = {
       logger.debug(`usersService :: listUsers :: db result :: ${JSON.stringify(usersResult)}`);
 
       for (const user of usersResult) {
-        user.profile_pic_url = await usersService.generatePublicURLFromObjectStoragePrivateURL(user.profile_pic_url, 3600);
+        if (user.profile_pic_url) user.profile_pic_url = await usersService.generatePublicURLFromObjectStoragePrivateURL(user.profile_pic_url, 3600);
       }
 
       if (usersResult && usersResult.length > 0) redis.SetRedis(key, usersResult, CACHE_TTL.LONG);
