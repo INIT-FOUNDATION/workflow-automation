@@ -59,10 +59,10 @@ export const adminController = {
             const existingUser: IUser = await adminService.getUserByUserName(user.user_name);
             if (!existingUser) return res.status(STATUS.BAD_REQUEST).send(AUTH.AUTH00001);
             
-            const decryptedPassword = decryptPayload(existingUser.password);
+            const decryptedPassword = decryptPayload(user.password);
             if (decryptedPassword == DEFAULT_PASSWORD) return res.status(STATUS.BAD_REQUEST).send(AUTH.AUTH00002);
             
-            const isPasswordValid = await bcrypt.compare(user.password, decryptedPassword);
+            const isPasswordValid = await bcrypt.compare(decryptedPassword, existingUser.password);
             if (isPasswordValid) {
                 const expiryTime = envUtils.getNumberEnvVariableOrDefault("OWA_AUTH_TOKEN_EXPIRY_TIME", 8);
                 const token = await generateToken.generate(existingUser.user_name, existingUser, expiryTime, AUTHENTICATION.SECRET_KEY, req);
