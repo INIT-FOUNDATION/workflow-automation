@@ -7,7 +7,7 @@ adminRouter.get("/validateToken", adminController.validateToken);
 
 adminRouter.post("/login", adminController.login);
 
-adminRouter.get("/logout", adminController.logout);
+adminRouter.post("/logout", adminController.logout);
 
 adminRouter.post("/getForgetPasswordOtp", adminController.getForgetPasswordOtp);
 

@@ -212,8 +212,8 @@ export const adminService = {
             const forgotPasswordChangeKey = `FORGOT_PASSWORD_CHANGE_${txnId}`;
             const forgotPasswordTxnIdKey = `Admin_Forgot_Password|TxnId:${txnId}`;
 
-            await redis.deleteKey(forgotPasswordUserKey);
-            await redis.deleteKey(forgotPasswordTxnIdKey);
+            await redis.deleteRedis(forgotPasswordUserKey);
+            await redis.deleteRedis(forgotPasswordTxnIdKey);
             redis.SetRedis(forgotPasswordChangeKey, { userName }, CACHE_TTL.SHORT);
             return txnId;
         } catch (error) {
@@ -236,10 +236,10 @@ export const adminService = {
             const passwordUpdated = await adminService.resetPassword(hashedPassword, parseInt(userName));
 
             if (passwordUpdated) {
-                await redis.deleteKey(`FORGOT_PASSWORD_CHANGE_${reqData.txnId}`);
-                await redis.deleteKey(`Admin_Forgot_Password|User:${userName}`);
-                await redis.deleteKey(`User|Username:${userName}`);
-                await redis.deleteKey(userName);
+                await redis.deleteRedis(`FORGOT_PASSWORD_CHANGE_${reqData.txnId}`);
+                await redis.deleteRedis(`Admin_Forgot_Password|User:${userName}`);
+                await redis.deleteRedis(`User|Username:${userName}`);
+                await redis.deleteRedis(userName);
                 return true;
             } else {
                 return false;
