@@ -2,7 +2,6 @@ import { pg, logger, redis, JSONUTIL, objectStorageUtility, envUtils, ejsUtils, 
 import { USERS, USER_DEPARTMENT_MAPPING } from "../constants/QUERY";
 import { IPasswordPolicy, IUser } from "../types/custom";
 import { CACHE_TTL, DEFAULT_PASSWORD } from "../constants/CONST";
-import { PlainToken } from "../types/express";
 import { passwordPoliciesService } from "./passwordPoliciesService";
 import bcrypt from "bcryptjs";
 import RandExp from "randexp";
