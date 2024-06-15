@@ -3,29 +3,16 @@ import express, {
   Request,
   Response,
   NextFunction,
-  Application,
 } from "express";
 import helmet from "helmet";
 import fileUpload from "express-fileupload";
 import dotenv from "dotenv";
 import routes from "./startup/routes";
 import { AUTH } from "./constants/AUTH";
-
-import { SECURITY, logger } from "owa-micro-common";
-
-declare global {
-  namespace Express {
-    interface Request {
-      plainToken?: PlainToken;
-    }
-  }
-}
-interface PlainToken {
-  emailId: string;
-  user_name: string;
-  user_id: string;
-  role_id: string;
-}
+import bodyParser from "body-parser";
+import { SECURITY, logger, envUtils } from "owa-micro-common";
+import swaggerUi from "swagger-ui-express";
+import swaggerFile from "./config/swagger.json"
 
 dotenv.config();
 
@@ -61,15 +48,19 @@ const setAppVersiontoHeader = async function (
   next();
 };
 
+app.use(bodyParser.json({
+  limit: envUtils.getStringEnvVariableOrDefault("OWA_BODY_PARSER_LIMIT", "5mb")
+}));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(fileUpload());
 app.set("view engine", "ejs");
 app.use(helmet());
 app.use(resolveCrossDomain, setAppVersiontoHeader);
-
 app.use(function applyXFrame(req: Request, res: Response, next: NextFunction) {
   res.set("X-Frame-Options", "DENY");
   next();
 });
+app.use('/api/v1/auth/docs', swaggerUi.serve, swaggerUi.setup(swaggerFile))
 
 SECURITY(app, AUTH);
 routes(app);
@@ -80,8 +71,5 @@ const port = process.env.PORT || 5000;
 const server = app.listen(port, () => {
   logger.info(`[SERVER STARTED] Listening to port [${port}]`);
 });
-
-if (process.env.LSS_KAFKA_TOTAL_PARTITIONS)
-  logger.info("app :: Kafka Dynamic Partioning Enabled");
 
 export = server;

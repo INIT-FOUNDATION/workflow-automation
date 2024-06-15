@@ -13,7 +13,7 @@ formsRouter.get("/health", async (req: Request, res: Response) => {
   try {
     return res.status(STATUS.OK).send("Form Service is Healthy");
   } catch (error) {
-    logger.error("Form :: healthCheck :: ", error);
+    logger.error("form :: health :: ", error);
     return res
       .status(STATUS.INTERNAL_SERVER_ERROR)
       .send({ errorCode: error, error });
