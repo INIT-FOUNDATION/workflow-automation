@@ -72,8 +72,8 @@ export const USERS = {
 }   
 
 export const USER_DEPARTMENT_MAPPING = {
-    createUserMapping: `INSERT INTO m_user_department_assoc (user_id, department_id) VALUES ($1, $2)`,
-    updateUserMapping: `UPDATE m_user_department_assoc SET department_id = $2 WHERE user_id = $1`
+    createUserMapping: `INSERT INTO m_user_department_assoc (user_id, department_id, reporting_to) VALUES ($1, $2, $3)`,
+    updateUserMapping: `UPDATE m_user_department_assoc SET department_id = $2, reporting_to = $3 WHERE user_id = $1`
 }
 
 export const DEPARTMENTS = {

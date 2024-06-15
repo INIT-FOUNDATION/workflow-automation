@@ -9,12 +9,14 @@ import RandExp from "randexp";
 import { UploadedFile } from "express-fileupload";
 
 export const usersService = {
-  listUsers: async (plainToken: PlainToken, pageSize: number, currentPage: number, searchQuery: string): Promise<IUser[]> => {
+  listUsers: async (userId: number, pageSize: number, currentPage: number, searchQuery: string): Promise<IUser[]> => {
     try {
-      let key = `USERS`;
+      let key = `USERS|USER:${userId}`;
       const _query = {
         text: USERS.usersList
       };
+
+      if (userId != 1) _query.text += ` AND reporting_to = ${userId}`;
 
       if (searchQuery) {
         const isSearchStringAMobileNumber = /^\d{10}$/.test(searchQuery);
@@ -59,12 +61,14 @@ export const usersService = {
       throw new Error(error.message);
     }
   },
-  listUsersCount: async (plainToken: PlainToken, searchQuery: string): Promise<number> => {
+  listUsersCount: async (userId: number, searchQuery: string): Promise<number> => {
     try {
-      let key = `USERS_COUNT`;
+      let key = `USERS_COUNT|${userId}`;
       const _query = {
         text: USERS.usersListCount
       };
+
+      if (userId != 1) _query.text += ` AND reporting_to = ${userId}`;
 
       if (searchQuery) {
         const isSearchStringAMobileNumber = /^\d{10}$/.test(searchQuery);
@@ -128,7 +132,7 @@ export const usersService = {
       logger.debug(`usersService :: createUser :: db result :: ${JSON.stringify(result)}`)
 
       const createdUserId = result[0].user_id;
-      await usersService.createUserDepartmentMapping(createdUserId, user.department_id);
+      await usersService.createUserDepartmentMapping(createdUserId, user.department_id, user.reporting_to);
 
       await usersService.sharePasswordToUser({
         emailId: user.email_id,
@@ -157,7 +161,7 @@ export const usersService = {
       const result = await pg.executeQueryPromise(_query);
       logger.debug(`usersService :: updateUser :: db result :: ${JSON.stringify(result)}`)
 
-      await usersService.updateUserDepartmentMapping(user.user_id, user.department_id);
+      await usersService.updateUserDepartmentMapping(user.user_id, user.department_id, user.reporting_to);
 
       redis.deleteRedis(`USERS|OFFSET:0|LIMIT:50`);
       redis.deleteRedis(`USERS_COUNT`);
@@ -266,11 +270,11 @@ export const usersService = {
       throw new Error(error.message);
     }
   },
-  createUserDepartmentMapping: async (userId: number, departmentId: number) => {
+  createUserDepartmentMapping: async (userId: number, departmentId: number, reportingTo: number) => {
     try {
       const _query = {
         text: USER_DEPARTMENT_MAPPING.createUserMapping,
-        values: [userId, departmentId]
+        values: [userId, departmentId, reportingTo]
       };
       logger.debug(`usersService :: createUserDepartmentMapping :: query :: ${JSON.stringify(_query)}`);
 
@@ -282,11 +286,11 @@ export const usersService = {
       throw new Error(error.message);
     }
   },
-  updateUserDepartmentMapping: async (userId: number, departmentId: number) => {
+  updateUserDepartmentMapping: async (userId: number, departmentId: number, reportingTo: number) => {
     try {
       const _query = {
         text: USER_DEPARTMENT_MAPPING.updateUserMapping,
-        values: [userId, departmentId]
+        values: [userId, departmentId, reportingTo]
       };
       logger.debug(`usersService :: updateUserDepartmentMapping :: query :: ${JSON.stringify(_query)}`);
 
