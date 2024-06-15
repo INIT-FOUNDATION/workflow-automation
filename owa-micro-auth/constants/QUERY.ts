@@ -9,7 +9,7 @@ export const USERS = {
     incrementInvalidAttempts:`UPDATE m_users SET invalid_attempts = invalid_attempts + 1 WHERE user_name = $1`,
     setUserInActive:`UPDATE m_users SET status = 0 WHERE user_name = $1`,
     updateUserLoggedInStatus:`UPDATE m_users SET status = $2, last_logged_in = NOW() WHERE user_name = $1`,
-    resetPasswordQuery:`UPDATE m_users SET password = $1 WHERE mobile_number = $2`,
+    resetPasswordQuery:`UPDATE m_users SET password = $1, password_last_updated = NOW() WHERE mobile_number = $2`,
     existsByUserName: `SELECT EXISTS (
         SELECT 1
             FROM m_users

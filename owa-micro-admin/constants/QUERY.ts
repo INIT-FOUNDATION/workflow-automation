@@ -66,7 +66,7 @@ export const USERS = {
     getUser: `SELECT * from vw_m_users WHERE user_id = $1 AND status NOT IN (0,2)`,
     updateProfilePic: `UPDATE m_users SET profile_pic_url = $2, updated_by = $1 WHERE user_id = $1`,
     getUsersByRoleId: `select user_id, user_name, initcap(display_name) as display_name, mobile_number, initcap(role_name) as role_name  from vw_m_users where role_id = $1`,
-    resetPasswordForUserId: `UPDATE m_users SET password = $2, date_updated = NOW() WHERE user_id = $1`,
+    resetPasswordForUserId: `UPDATE m_users SET password = $2, password_last_updated = NOW(), date_updated = NOW() WHERE user_id = $1`,
     usersList: `select * from vw_m_users WHERE user_id <> 1`,
     usersListCount: `select count(*) as count from vw_m_users WHERE user_id <> 1`
 }   
