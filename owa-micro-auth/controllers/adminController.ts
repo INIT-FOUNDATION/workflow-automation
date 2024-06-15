@@ -13,6 +13,17 @@ import bcrypt from "bcryptjs";
 export const adminController = {
     validateToken: async (req: Request, res: Response): Promise<Response> => {
         try {
+            /*  
+                #swagger.tags = ['Admin']
+                #swagger.summary = 'Validate Token'
+                #swagger.description = 'Endpoint to Validate Token'
+                #swagger.parameters['Authorization'] = {
+                    in: 'header',
+                    required: true,
+                    type: 'string',
+                    description: 'Bearer token for authentication'
+                }
+            */
             const token = req.header("authorization");
             jwt.verify(token, AUTHENTICATION.SECRET_KEY);
             return res.status(STATUS.OK).send({ data: null, message: "Token Validated Successfully" });
@@ -23,6 +34,19 @@ export const adminController = {
     },
     login: async (req: Request, res: Response): Promise<Response> => {
         try {
+            /*  
+                #swagger.tags = ['Admin']
+                #swagger.summary = 'User Login'
+                #swagger.description = 'Endpoint for User Login'
+                #swagger.parameters['body'] = {
+                    in: 'body',
+                    required: true,
+                    schema: {
+                        user_name: '8169104556',
+                        password: 'encyrptedPasswordHash'
+                    }
+                }    
+            */
             const user: IUser = req.body;
             const { error } = await validateLoginDetails(req.body);
 
@@ -66,6 +90,17 @@ export const adminController = {
     },
     logout: async (req: Request, res: Response): Promise<Response> => {
         try {
+            /*  
+                #swagger.tags = ['Admin']
+                #swagger.summary = 'Logout User'
+                #swagger.description = 'Endpoint to Logout User'
+                #swagger.parameters['Authorization'] = {
+                    in: 'header',
+                    required: true,
+                    type: 'string',
+                    description: 'Bearer token for authentication'
+                }
+            */
             const userName = req.plainToken.user_name;
             await adminService.updateUserLoginStatus(USERS_STATUS.LOGGED_OUT, userName);
             redis.deleteKey(userName);
@@ -84,6 +119,18 @@ export const adminController = {
     },
     getForgetPasswordOtp: async (req: Request, res: Response): Promise<Response> => {
         try {
+            /*  
+                #swagger.tags = ['Admin']
+                #swagger.summary = 'Get Forgot Password Otp'
+                #swagger.description = 'Endpoint to Generate OTP for Forgot Password'
+                #swagger.parameters['body'] = {
+                    in: 'body',
+                    required: true,
+                    schema: {
+                        mobile_number: 8169104556
+                    }
+                }    
+            */
             let mobile_number = req.body.mobile_number;
             if (!mobile_number || mobile_number.toString().length !== 10) {
                 return res.status(STATUS.BAD_REQUEST).send(AUTH.AUTH00004);
@@ -108,6 +155,19 @@ export const adminController = {
     },
     verifyForgetPasswordOtp: async (req: Request, res: Response): Promise<Response> => {
         try {
+            /*  
+                #swagger.tags = ['Admin']
+                #swagger.summary = 'Verify Forgot Password Otp'
+                #swagger.description = 'Endpoint to Verify OTP for Forgot Password'
+                #swagger.parameters['body'] = {
+                    in: 'body',
+                    required: true,
+                    schema: {
+                        otp: 123456,
+                        txnId: '1b99ee36-4d23-4d0a-9972-606f48bf5e33'
+                    }
+                }    
+            */
             const otpDetails = req.body;        
             const { error } = await validateVerifyForgotPassword(otpDetails);
             if (error) {
@@ -140,6 +200,20 @@ export const adminController = {
     },
     resetForgetPassword: async (req: Request, res: Response): Promise<Response> => {
         try {
+            /*  
+                #swagger.tags = ['Admin']
+                #swagger.summary = 'Reset Password'
+                #swagger.description = 'Endpoint to Reset the Password'
+                #swagger.parameters['body'] = {
+                    in: 'body',
+                    required: true,
+                    schema: {
+                        txnId: '1b99ee36-4d23-4d0a-9972-606f48bf5e33',
+                        newPassword: 'encryptedPasswordHash',
+                        confirmPassword: 'encryptedPasswordHash'
+                    }
+                }    
+            */
             const resetForgetPasswordDetails = req.body;        
             const { error } = await validateResetPassword(resetForgetPasswordDetails);
             if (error) {

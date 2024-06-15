@@ -5,6 +5,9 @@ export const AUTH = {
        PUBLIC: [
          "/api/v1/auth/health",
          "/api/v1/auth/admin/login",
+         "/api/v1/auth/admin/getForgetPasswordOtp",
+         "/api/v1/auth/admin/verifyForgetPasswordOtp",
+         "/api/v1/auth/admin/resetForgetPassword"
        ]
     }
 }

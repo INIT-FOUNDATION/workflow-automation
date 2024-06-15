@@ -13,7 +13,11 @@
   "paths": {
     "/api/v1/auth/health": {
       "get": {
-        "description": "",
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Health Check API",
+        "description": "Endpoint for health check of Auth Micro Service",
         "responses": {
           "default": {
             "description": ""
@@ -23,7 +27,25 @@
     },
     "/api/v1/auth/admin/validateToken": {
       "get": {
-        "description": "",
+        "tags": [
+          "Admin"
+        ],
+        "summary": "Validate Token",
+        "description": "Endpoint to Validate Token",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Bearer token for authentication"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
         "responses": {
           "default": {
             "description": ""
@@ -33,17 +55,31 @@
     },
     "/api/v1/auth/admin/login": {
       "post": {
-        "description": "",
-        "responses": {
-          "default": {
-            "description": ""
+        "tags": [
+          "Admin"
+        ],
+        "summary": "User Login",
+        "description": "Endpoint for User Login",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "user_name": {
+                  "type": "string",
+                  "example": "8169104556"
+                },
+                "password": {
+                  "type": "string",
+                  "example": "encyrptedPasswordHash"
+                }
+              }
+            }
           }
-        }
-      }
-    },
-    "/api/v1/auth/admin/postLoginUserUpdate": {
-      "post": {
-        "description": "",
+        ],
         "responses": {
           "default": {
             "description": ""
@@ -53,7 +89,20 @@
     },
     "/api/v1/auth/admin/logout": {
       "get": {
-        "description": "",
+        "tags": [
+          "Admin"
+        ],
+        "summary": "Logout User",
+        "description": "Endpoint to Logout User",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Bearer token for authentication"
+          }
+        ],
         "responses": {
           "default": {
             "description": ""
@@ -63,7 +112,27 @@
     },
     "/api/v1/auth/admin/getForgetPasswordOtp": {
       "post": {
-        "description": "",
+        "tags": [
+          "Admin"
+        ],
+        "summary": "Get Forgot Password Otp",
+        "description": "Endpoint to Generate OTP for Forgot Password",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "mobile_number": {
+                  "type": "number",
+                  "example": 8169104556
+                }
+              }
+            }
+          }
+        ],
         "responses": {
           "default": {
             "description": ""
@@ -73,20 +142,72 @@
     },
     "/api/v1/auth/admin/verifyForgetPasswordOtp": {
       "get": {
-        "description": "",
+        "tags": [
+          "Admin"
+        ],
+        "summary": "Verify Forgot Password Otp",
+        "description": "Endpoint to Verify OTP for Forgot Password",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "otp": {
+                  "type": "number",
+                  "example": 123456
+                },
+                "txnId": {
+                  "type": "string",
+                  "example": "1b99ee36-4d23-4d0a-9972-606f48bf5e33"
+                }
+              }
+            }
+          }
+        ],
         "responses": {
-          "default": {
-            "description": ""
+          "200": {
+            "description": "OK"
           }
         }
       }
     },
     "/api/v1/auth/admin/resetForgetPassword": {
       "get": {
-        "description": "",
+        "tags": [
+          "Admin"
+        ],
+        "summary": "Reset Password",
+        "description": "Endpoint to Reset the Password",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "txnId": {
+                  "type": "string",
+                  "example": "1b99ee36-4d23-4d0a-9972-606f48bf5e33"
+                },
+                "newPassword": {
+                  "type": "string",
+                  "example": "encryptedPasswordHash"
+                },
+                "confirmPassword": {
+                  "type": "string",
+                  "example": "encryptedPasswordHash"
+                }
+              }
+            }
+          }
+        ],
         "responses": {
-          "default": {
-            "description": ""
+          "200": {
+            "description": "OK"
           }
         }
       }
