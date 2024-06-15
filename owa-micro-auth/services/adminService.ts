@@ -156,7 +156,7 @@ export const adminService = {
     isForgotPasswordOtpAlreadySent: async (mobileNumber: string): Promise<boolean> => {
         try {
             const key = `Admin_Forgot_Password|User:${mobileNumber}`;
-            const cachedResult = await redis.GetRedis(key);
+            const cachedResult = await redis.GetKeyRedis(key);
             return cachedResult ? true : false;
         } catch (error) {
             logger.error(`adminService :: isForgotPasswordOtpAlreadySent :: ${error.message} :: ${error}`);
@@ -166,7 +166,7 @@ export const adminService = {
     getForgotPasswordOtpDetails: async (txnId: string): Promise<string> => {
         try {
             const key = `Admin_Forgot_Password|TxnId:${txnId}`;
-            const cachedResult = await redis.GetRedis(key);
+            const cachedResult = await redis.GetKeyRedis(key);
             return cachedResult;
         } catch (error) {
             logger.error(`adminService :: isForgotPasswordOtpAlreadySent :: ${error.message} :: ${error}`);
@@ -223,7 +223,7 @@ export const adminService = {
     },
     getForgotPasswordChangeDetails: async (txnId: string) => {
         try {
-            const cachedResult = await redis.GetRedis(`FORGOT_PASSWORD_CHANGE_${txnId}`);
+            const cachedResult = await redis.GetKeyRedis(`FORGOT_PASSWORD_CHANGE_${txnId}`);
             return cachedResult;
         } catch (error) {
             logger.error(`adminService :: getForgotPasswordChangeDetails :: ${error.message} :: ${error}`)
