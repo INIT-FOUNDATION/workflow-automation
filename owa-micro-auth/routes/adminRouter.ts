@@ -11,6 +11,6 @@ adminRouter.post("/logout", adminController.logout);
 
 adminRouter.post("/getForgetPasswordOtp", adminController.getForgetPasswordOtp);
 
-adminRouter.get("/verifyForgetPasswordOtp", adminController.verifyForgetPasswordOtp);
+adminRouter.post("/verifyForgetPasswordOtp", adminController.verifyForgetPasswordOtp);
 
-adminRouter.get("/resetForgetPassword", adminController.resetForgetPassword);
+adminRouter.post("/resetForgetPassword", adminController.resetForgetPassword);
