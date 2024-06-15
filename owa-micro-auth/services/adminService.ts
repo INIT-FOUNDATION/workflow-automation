@@ -3,7 +3,7 @@ import { redis, logger, pg, nodemailerUtils, ejsUtils } from "owa-micro-common";
 import { USERS } from "../constants/QUERY";
 import { v4 as uuidv4 } from 'uuid';
 import bcrypt from "bcryptjs";
-import { CONFIG } from "../constants/CONFIG";
+import { CONFIG } from "../constants/CONST";
 import { CACHE_TTL } from "../constants/CONST";
 
 export const adminService = {
