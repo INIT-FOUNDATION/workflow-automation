@@ -162,6 +162,7 @@ export const usersService = {
       redis.deleteRedis(`USERS|OFFSET:0|LIMIT:50`);
       redis.deleteRedis(`USERS_COUNT`);
       redis.deleteRedis(`USER:${user.user_id}`);
+      redis.deleteRedis(`User|Username:${user.user_name}`);
     } catch (error) {
       logger.error(`usersService :: updateUser :: ${error.message} :: ${error}`)
       throw new Error(error.message);
