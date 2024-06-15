@@ -72,9 +72,14 @@ export const USERS = {
 }   
 
 export const USER_DEPARTMENT_MAPPING = {
-    createUserMapping: `INSERT INTO m_user_department_assoc (user_id, department_id, reporting_to) VALUES ($1, $2, $3)`,
-    updateUserMapping: `UPDATE m_user_department_assoc SET department_id = $2, reporting_to = $3 WHERE user_id = $1`
+    createUserDepartmentMapping: `INSERT INTO m_user_department_assoc (user_id, department_id) VALUES ($1, $2)`,
+    updateUserUpdateMapping: `UPDATE m_user_department_assoc SET department_id = $2 WHERE user_id = $1`
 }
+
+export const USER_REPORTING_MAPPING = {
+    updateInActiveReportingMapping: `UPDATE m_user_reporting_assoc SET status = 0, date_updated = NOW() WHERE user_id = $1`,
+    createUserReportingMapping: `INSERT INTO m_user_reporting_assoc (user_id, reporting_to) VALUES ($1, $2)`
+};
 
 export const DEPARTMENTS = {
     listDepartments: 'SELECT department_id, department_name FROM m_departments WHERE status = 1',

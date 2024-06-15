@@ -105,11 +105,6 @@ export const usersController = {
             const userExists = await usersService.existsByMobileNumber(user.mobile_number);
             if (userExists) return res.status(STATUS.BAD_REQUEST).send(USERS.USER00005);
 
-            if (user.reporting_to) {
-                const reportingUserExists = await usersService.existsByUserId(user.reporting_to);
-                if (!reportingUserExists) return res.status(STATUS.BAD_REQUEST).send(USERS.USER000012);
-            }
-
             user.created_by = plainToken.user_id;
             user.updated_by = plainToken.user_id;
 
@@ -174,11 +169,6 @@ export const usersController = {
 
             const userExists = await usersService.existsByUserId(user.user_id);
             if (!userExists) return res.status(STATUS.BAD_REQUEST).send(USERS.USER000011);
-
-            if (user.reporting_to) {
-                const reportingUserExists = await usersService.existsByUserId(user.reporting_to);
-                if (!reportingUserExists) return res.status(STATUS.BAD_REQUEST).send(USERS.USER000012);
-            }
             
             user.updated_by = plainToken.user_id;
 

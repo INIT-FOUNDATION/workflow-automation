@@ -1,5 +1,5 @@
 import { pg, logger, redis, JSONUTIL, objectStorageUtility, envUtils, ejsUtils, nodemailerUtils } from "owa-micro-common";
-import { USERS, USER_DEPARTMENT_MAPPING } from "../constants/QUERY";
+import { USERS, USER_DEPARTMENT_MAPPING, USER_REPORTING_MAPPING } from "../constants/QUERY";
 import { IPasswordPolicy, IUser } from "../types/custom";
 import { CACHE_TTL, DEFAULT_PASSWORD } from "../constants/CONST";
 import { passwordPoliciesService } from "./passwordPoliciesService";
@@ -92,8 +92,8 @@ export const usersService = {
       logger.debug(`usersService :: listUsersCount :: db result :: ${JSON.stringify(result)}`)
 
       if (result.length > 0) {
-         redis.SetRedis(key, result, CACHE_TTL.LONG);
-         return result[0].count
+        redis.SetRedis(key, result, CACHE_TTL.LONG);
+        return result[0].count
       };
     } catch (error) {
       logger.error(`usersService :: listUsersCount :: ${error.message} :: ${error}`)
@@ -131,7 +131,11 @@ export const usersService = {
       logger.debug(`usersService :: createUser :: db result :: ${JSON.stringify(result)}`)
 
       const createdUserId = result[0].user_id;
-      await usersService.createUserDepartmentMapping(createdUserId, user.department_id, user.reporting_to);
+      await usersService.createUserDepartmentMapping(createdUserId, user.department_id);
+
+      if (user.reporting_to_users && user.reporting_to_users.length > 0) {
+        await usersService.createUserReportingMapping(createdUserId, user.reporting_to_users);
+      }
 
       await usersService.sharePasswordToUser({
         emailId: user.email_id,
@@ -160,7 +164,11 @@ export const usersService = {
       const result = await pg.executeQueryPromise(_query);
       logger.debug(`usersService :: updateUser :: db result :: ${JSON.stringify(result)}`)
 
-      await usersService.updateUserDepartmentMapping(user.user_id, user.department_id, user.reporting_to);
+      await usersService.updateUserDepartmentMapping(user.user_id, user.department_id);
+      
+      if (user.reporting_to_users && user.reporting_to_users.length > 0) {
+        await usersService.updateUserReportingMapping(user.user_id, user.reporting_to_users);
+      }
 
       redis.deleteRedis(`USERS|OFFSET:0|LIMIT:50`);
       redis.deleteRedis(`USERS_COUNT`);
@@ -269,11 +277,11 @@ export const usersService = {
       throw new Error(error.message);
     }
   },
-  createUserDepartmentMapping: async (userId: number, departmentId: number, reportingTo: number) => {
+  createUserDepartmentMapping: async (userId: number, departmentId: number) => {
     try {
       const _query = {
-        text: USER_DEPARTMENT_MAPPING.createUserMapping,
-        values: [userId, departmentId, reportingTo]
+        text: USER_DEPARTMENT_MAPPING.createUserDepartmentMapping,
+        values: [userId, departmentId]
       };
       logger.debug(`usersService :: createUserDepartmentMapping :: query :: ${JSON.stringify(_query)}`);
 
@@ -285,11 +293,11 @@ export const usersService = {
       throw new Error(error.message);
     }
   },
-  updateUserDepartmentMapping: async (userId: number, departmentId: number, reportingTo: number) => {
+  updateUserDepartmentMapping: async (userId: number, departmentId: number) => {
     try {
       const _query = {
-        text: USER_DEPARTMENT_MAPPING.updateUserMapping,
-        values: [userId, departmentId, reportingTo]
+        text: USER_DEPARTMENT_MAPPING.updateUserUpdateMapping,
+        values: [userId, departmentId]
       };
       logger.debug(`usersService :: updateUserDepartmentMapping :: query :: ${JSON.stringify(_query)}`);
 
@@ -306,7 +314,7 @@ export const usersService = {
       const objectStoragePath = `profile-pictures/PROFILE_PICTURE_${userId}.${profilePicture.mimetype.split("/")[1]}`;
       const bucketName = envUtils.getStringEnvVariableOrDefault("OWA_OBJECT_STORAGE_BUCKET", "owa-dev");
       await objectStorageUtility.putObject(bucketName, objectStoragePath, profilePicture.data);
-      
+
       const _query = {
         text: USERS.updateProfilePic,
         values: [userId, objectStoragePath]
@@ -379,13 +387,47 @@ export const usersService = {
   },
   sharePasswordToUser: async (passwordDetails: any) => {
     try {
-        if (passwordDetails.emailId) {
-            const emailTemplateHtml = await ejsUtils.generateHtml('views/sharePasswordEmailTemplate.ejs', passwordDetails);
-            await nodemailerUtils.sendEmail('OLL WORKFLOW AUTOMATION | LOGIN DETAILS', emailTemplateHtml, passwordDetails.emailId);
-        }
+      if (passwordDetails.emailId) {
+        const emailTemplateHtml = await ejsUtils.generateHtml('views/sharePasswordEmailTemplate.ejs', passwordDetails);
+        await nodemailerUtils.sendEmail('OLL WORKFLOW AUTOMATION | LOGIN DETAILS', emailTemplateHtml, passwordDetails.emailId);
+      }
     } catch (error) {
-        logger.error(`adminService :: sharePasswordToUser :: ${error.message} :: ${error}`)
-        throw new Error(error.message);
+      logger.error(`adminService :: sharePasswordToUser :: ${error.message} :: ${error}`)
+      throw new Error(error.message);
     }
-},
+  },
+  createUserReportingMapping: async (userId: number, reportingToUsers: number[]) => {
+    try {
+      for (const reportingToUser of reportingToUsers) {
+        const _query = {
+          text: USER_REPORTING_MAPPING.createUserReportingMapping,
+          values: [userId, reportingToUser]
+        };
+        logger.debug(`usersService :: createUserReportingMapping :: query :: ${JSON.stringify(_query)}`);
+
+        const result = await pg.executeQueryPromise(_query);
+        logger.debug(`usersService :: createUserReportingMapping :: db result :: ${JSON.stringify(result)}`);
+      }
+    } catch (error) {
+      logger.error(`usersService :: createUserReportingMapping :: ${error.message} :: ${error}`)
+      throw new Error(error.message);
+    }
+  },
+  updateUserReportingMapping: async (userId: number, reportingToUsers: number[]) => {
+    try {
+      const _query = {
+        text: USER_REPORTING_MAPPING.updateInActiveReportingMapping,
+        values: [userId]
+      };
+      logger.debug(`usersService :: updateUserDepartmentMapping :: query :: ${JSON.stringify(_query)}`);
+
+      const result = await pg.executeQueryPromise(_query);
+      logger.debug(`usersService :: updateUserDepartmentMapping :: db result :: ${JSON.stringify(result)}`);
+
+      await usersService.createUserReportingMapping(userId, reportingToUsers);
+    } catch (error) {
+      logger.error(`usersService :: updateUserDepartmentMapping :: ${error.message} :: ${error}`)
+      throw new Error(error.message);
+    }
+  },
 }
