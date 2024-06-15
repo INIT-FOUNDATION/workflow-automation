@@ -10,9 +10,9 @@ CREATE TABLE m_users (
     gender SMALLINT,
     dob DATE,
     role_id INT,
-    password VARCHAR(50),
+    password VARCHAR(100),
     password_last_updated TIMESTAMP DEFAULT now(),
-    invalid_attempts INT,
+    invalid_attempts INT DEFAULT 0,
     status smallint DEFAULT 1,
     profile_pic_url VARCHAR(100),
     last_logged_in TIMESTAMP DEFAULT now(),
@@ -35,7 +35,7 @@ CREATE TABLE m_roles (
 );
 
 -- Table: m_department
-CREATE TABLE m_department (
+CREATE TABLE m_departments (
     department_id serial PRIMARY KEY,
     department_name VARCHAR(50),
     status smallint DEFAULT 1,
@@ -65,8 +65,8 @@ CREATE TABLE m_user_department_assoc (
     date_updated TIMESTAMP DEFAULT now()
 );
 
--- Table: password_complexity
-CREATE TABLE password_complexity (
+-- Table: password_policies
+CREATE TABLE password_policies (
     id serial PRIMARY KEY,
     password_expiry SMALLINT,
     password_history SMALLINT,

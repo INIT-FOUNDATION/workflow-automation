@@ -3,7 +3,6 @@ import express, {
   Request,
   Response,
   NextFunction,
-  Application,
 } from "express";
 import helmet from "helmet";
 import fileUpload from "express-fileupload";
@@ -80,8 +79,5 @@ const port = process.env.PORT || 5000;
 const server = app.listen(port, () => {
   logger.info(`[SERVER STARTED] Listening to port [${port}]`);
 });
-
-if (process.env.LSS_KAFKA_TOTAL_PARTITIONS)
-  logger.info("app :: Kafka Dynamic Partioning Enabled");
 
 export = server;
