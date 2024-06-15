@@ -1,4 +1,4 @@
-import { pg, logger, redis, JSONUTIL, objectStorageUtility, envUtils } from "owa-micro-common";
+import { pg, logger, redis, JSONUTIL, objectStorageUtility, envUtils, ejsUtils, nodemailerUtils } from "owa-micro-common";
 import { USERS, USER_DEPARTMENT_MAPPING } from "../constants/QUERY";
 import { IPasswordPolicy, IUser } from "../types/custom";
 import { CACHE_TTL, DEFAULT_PASSWORD } from "../constants/CONST";
@@ -102,7 +102,8 @@ export const usersService = {
       const passwordPolicies = await passwordPoliciesService.listPasswordPolicies();
       const passwordPolicy = passwordPolicies[0];
 
-      user.password = await usersService.generatePasswordFromPasswordPolicy(passwordPolicy);
+      const { encryptedPassword, plainPassword } = await usersService.generatePasswordFromPasswordPolicy(passwordPolicy);
+      user.password = encryptedPassword;
       user.display_name = JSONUTIL.capitalize(user.display_name.trim());
 
       const _query = {
@@ -128,6 +129,12 @@ export const usersService = {
 
       const createdUserId = result[0].user_id;
       await usersService.createUserDepartmentMapping(createdUserId, user.department_id);
+
+      await usersService.sharePasswordToUser({
+        emailId: user.email_id,
+        password: plainPassword,
+        displayName: user.display_name
+      });
 
       redis.deleteRedis(`USERS|OFFSET:0|LIMIT:50`);
       redis.deleteRedis(`USERS_COUNT`);
@@ -222,7 +229,7 @@ export const usersService = {
       throw new Error(error.message);
     }
   },
-  generatePasswordFromPasswordPolicy: async (passwordPolicy: IPasswordPolicy): Promise<string> => {
+  generatePasswordFromPasswordPolicy: async (passwordPolicy: IPasswordPolicy): Promise<any> => {
     try {
       let pattern = "", tempStr = "";
       const alphabetical = /[A-Z][a-z]/;
@@ -251,8 +258,8 @@ export const usersService = {
       const regexPattern = new RegExp(pattern);
       const randomExpression = new RandExp(regexPattern).gen();
       const salt = await bcrypt.genSalt(10);
-      const password = await bcrypt.hash(randomExpression, salt);
-      return password;
+      const encryptedPassword = await bcrypt.hash(randomExpression, salt);
+      return { encryptedPassword, plainPassword: randomExpression };
     } catch (error) {
       logger.error(`usersService :: generatePasswordFromPasswordPolicy :: ${error.message} :: ${error}`)
       throw new Error(error.message);
@@ -365,5 +372,16 @@ export const usersService = {
       logger.error(`usersService :: generatePublicURLFromObjectStoragePrivateURL :: ${error.message} :: ${error}`)
       throw new Error(error.message);
     }
-  }
+  },
+  sharePasswordToUser: async (passwordDetails: any) => {
+    try {
+        if (passwordDetails.emailId) {
+            const emailTemplateHtml = await ejsUtils.generateHtml('views/sharePasswordEmailTemplate.ejs', passwordDetails);
+            await nodemailerUtils.sendEmail('OLL WORKFLOW AUTOMATION | LOGIN DETAILS', emailTemplateHtml, passwordDetails.emailId);
+        }
+    } catch (error) {
+        logger.error(`adminService :: sharePasswordToUser :: ${error.message} :: ${error}`)
+        throw new Error(error.message);
+    }
+},
 }
