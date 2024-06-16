@@ -36,7 +36,8 @@
   "nodemonConfig": {
     "restartable": "rs",
     "ignore": [
-      "node_modules/**/node_modules"
+      "node_modules/**/node_modules",
+      "config/swagger.json"
     ],
     "delay": "2000",
     "env": {
