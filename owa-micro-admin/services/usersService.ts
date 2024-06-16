@@ -15,7 +15,7 @@ export const usersService = {
         text: USERS.usersList
       };
 
-      if (userId != 1) _query.text += ` AND reporting_to = ${userId}`;
+      if (userId != 1) _query.text += ` AND ${userId} = ANY(reporting_to_users)`;
 
       if (searchQuery) {
         const isSearchStringAMobileNumber = /^\d{10}$/.test(searchQuery);
@@ -67,7 +67,7 @@ export const usersService = {
         text: USERS.usersListCount
       };
 
-      if (userId != 1) _query.text += ` AND reporting_to = ${userId}`;
+      if (userId != 1) _query.text += ` AND ${userId} = ANY(reporting_to_users)`;
 
       if (searchQuery) {
         const isSearchStringAMobileNumber = /^\d{10}$/.test(searchQuery);
