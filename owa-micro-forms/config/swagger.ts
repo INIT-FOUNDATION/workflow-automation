@@ -1,10 +1,8 @@
 import swaggerAutogen from 'swagger-autogen';
-import { envUtils } from "owa-micro-common";
 
-
-const moduleName = envUtils.getStringEnvVariableOrDefault("MODULE", "owa-micro-forms");
-const port = envUtils.getNumberEnvVariableOrDefault("PORT", 9005);
-const apiBaseUrl = envUtils.getStringEnvVariableOrDefault("OWA_APIS_BASE_URL", `localhost:${port}`);
+const moduleName = process.env.MODULE || "owa-micro-forms"
+const port = process.env.PORT || 9005;
+const apiBaseUrl = process.env.OWA_APIS_BASE_URL || `localhost:${port}`;
 const scheme = apiBaseUrl.includes("localhost") ? "http" : "https";
 
 const doc = {
@@ -24,10 +22,10 @@ const doc = {
         {
           url: `${scheme}://${apiBaseUrl}`            
         }
-    ]
+      ]
 };
 
 const outputFile = './swagger.json';
 const endpointsFiles = ['../startup/routes.ts'];
 
-swaggerAutogen(outputFile, endpointsFiles, doc);
+swaggerAutogen({openapi: '3.0.0'})(outputFile, endpointsFiles, doc);
