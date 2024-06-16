@@ -2,8 +2,8 @@ import swaggerAutogen from 'swagger-autogen';
 
 const doc = {
     info: {
-        title: "owa-micro-user",
-        description: `API Swagger for owa-micro-user`,
+        title: "owa-micro-admin",
+        description: `API Swagger for owa-micro-admin`,
     },
     servers: [
         {
