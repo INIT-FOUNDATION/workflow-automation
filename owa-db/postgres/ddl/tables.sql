@@ -61,6 +61,7 @@ CREATE TABLE m_menus (
 CREATE TABLE m_user_department_assoc (
     user_id INT,
     department_id INT,
+    reporting_to INT,
     date_created TIMESTAMP DEFAULT now(),
     date_updated TIMESTAMP DEFAULT now()
 );

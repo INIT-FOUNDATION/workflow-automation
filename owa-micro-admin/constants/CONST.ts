@@ -8,6 +8,11 @@ export const CACHE_TTL = {
   LONG: 24 * 60 * 60,
 };
 
+export const CONFIG =  {
+  REDIS_EXPIRE_TIME_PWD: 28800,
+  SHA256_PVT_KEY: "OWA_2024"
+}
+
 export const ROLES_STATUS = {
   INACTIVE: 0,
   ACTIVE: 1,
@@ -54,7 +59,7 @@ export const USER_DEPARMENT_ASSOCIATION_STATUS = {
 
 export const GRID_DEFAULT_OPTIONS = {
   PAGE_SIZE: 50,
-  CURRENT_PAGE: 0
+  CURRENT_PAGE: 1
 }
 
 export const DEFAULT_PASSWORD = "OWA123!@#"

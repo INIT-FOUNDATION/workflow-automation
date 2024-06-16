@@ -5,7 +5,8 @@
   "main": "app.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "npx ts-node config/swagger.ts && nodemon --exec ts-node app.ts"
+    "start": "nodemon --exec ts-node app.ts",
+    "swagger": "npx ts-node config/swagger.ts"
   },
   "keywords": [],
   "author": "",
@@ -59,7 +60,12 @@
       "INIT_COMMON_MASTER_USER": "dev",
       "INIT_COMMON_MASTER_DATABASE": "owa",
       "INIT_COMMON_MASTER_PASSWORD": "zQrBoxTNZffPZLak",
-      "INIT_COMMON_MASTER_PORT": 5432
+      "INIT_COMMON_MASTER_PORT": 5432,
+      "INIT_COMMON_NODEMAILER_USER": "info@orrizonte.in",
+      "INIT_COMMON_NODEMAILER_PASSWORD": "a1TXJbvXeLpy",
+      "INIT_COMMON_NODEMAILER_HOST": "smtppro.zoho.in",
+      "INIT_COMMON_NODEMAILER_SERVICE": "ZOHO PRO",
+      "INIT_COMMON_NODEMAILER_PORT": 465
     }
   }
 }

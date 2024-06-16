@@ -86,6 +86,10 @@ export const USERS = {
     errorCode: "USER000011",
     errorMessage: "User with Requested Id does not exists!",
   },
+  USER000012:  {
+    errorCode: "USER000012",
+    errorMessage: "User Requested to report does not exists!",
+  },
 };
 
 export const DEPARTMENTS = {

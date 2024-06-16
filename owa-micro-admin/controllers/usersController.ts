@@ -33,7 +33,7 @@ export const usersController = {
                     }
                 }    
             */
-            const plainToken = req.plainToken;
+            const userId = req.plainToken.user_id;
             const pageSize = req.body.page_size || GRID_DEFAULT_OPTIONS.PAGE_SIZE;
             let currentPage = req.body.current_page || GRID_DEFAULT_OPTIONS.CURRENT_PAGE;
             const searchQuery = req.body.search_query || "";
@@ -44,8 +44,8 @@ export const usersController = {
                 currentPage = 0;
             }
 
-            const usersList = await usersService.listUsers(plainToken, pageSize, currentPage, searchQuery);
-            const usersCount = await usersService.listUsersCount(plainToken, searchQuery);
+            const usersList = await usersService.listUsers(userId, pageSize, currentPage, searchQuery);
+            const usersCount = await usersService.listUsersCount(userId, searchQuery);
 
             return res.status(STATUS.OK).send({
                 data: { usersList, usersCount },
@@ -81,7 +81,8 @@ export const usersController = {
                         dob: '1997-08-16',
                         gender: 1,
                         role_id: 2,
-                        department_id: 1
+                        department_id: 1,
+                        reporting_to: 1
                     }
                 }    
             */
@@ -103,6 +104,11 @@ export const usersController = {
 
             const userExists = await usersService.existsByMobileNumber(user.mobile_number);
             if (userExists) return res.status(STATUS.BAD_REQUEST).send(USERS.USER00005);
+
+            if (user.reporting_to) {
+                const reportingUserExists = await usersService.existsByUserId(user.reporting_to);
+                if (!reportingUserExists) return res.status(STATUS.BAD_REQUEST).send(USERS.USER000012);
+            }
 
             user.created_by = plainToken.user_id;
             user.updated_by = plainToken.user_id;
@@ -144,7 +150,8 @@ export const usersController = {
                         dob: '1997-08-16',
                         gender: 1,
                         role_id: 2,
-                        department_id: 1
+                        department_id: 1,
+                        reporting_to: 1
                     }
                 }    
             */
@@ -168,6 +175,11 @@ export const usersController = {
             const userExists = await usersService.existsByUserId(user.user_id);
             if (!userExists) return res.status(STATUS.BAD_REQUEST).send(USERS.USER000011);
 
+            if (user.reporting_to) {
+                const reportingUserExists = await usersService.existsByUserId(user.reporting_to);
+                if (!reportingUserExists) return res.status(STATUS.BAD_REQUEST).send(USERS.USER000012);
+            }
+            
             user.updated_by = plainToken.user_id;
 
             await usersService.updateUser(user);

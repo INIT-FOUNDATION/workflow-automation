@@ -1,4 +1,4 @@
-import { CryptoJS } from "crypto-js";
+import CryptoJS from "crypto-js";
 
 export const allowed_headers =
   "Content-Type, Authorization, offline_mode, uo-device-type, uo-os, uo-os-version, uo-is-mobile, uo-is-tablet, uo-is-desktop, uo-browser-version, uo-browser, uo-client-id, uo-client-ip";
@@ -9,6 +9,11 @@ export const CACHE_TTL = {
   PAYMENT_LINK: 2 * 60 * 30,
   LONG: 24 * 60 * 60,
 };
+
+export const CONFIG =  {
+  REDIS_EXPIRE_TIME_PWD: 28800,
+  SHA256_PVT_KEY: "OWA_2024"
+}
 
 export const decryptPayload = function (reqData: string) {
   if (reqData) {

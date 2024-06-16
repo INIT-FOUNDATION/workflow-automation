@@ -3,7 +3,7 @@ import { redis, logger, pg, nodemailerUtils, ejsUtils } from "owa-micro-common";
 import { USERS } from "../constants/QUERY";
 import { v4 as uuidv4 } from 'uuid';
 import bcrypt from "bcryptjs";
-import { CONFIG } from "../constants/CONFIG";
+import { CONFIG } from "../constants/CONST";
 import { CACHE_TTL } from "../constants/CONST";
 
 export const adminService = {
@@ -55,7 +55,7 @@ export const adminService = {
             const result = await pg.executeQueryPromise(_query);
             logger.debug(`adminService :: getMaxInvalidLoginAttempts :: db result :: ${JSON.stringify(result)}`)
 
-            if (result && result.length > 0) return result[0].max_invalid_attempts;
+            if (result && result.length > 0) return result[0].maximum_invalid_attempts;
         } catch (error) {
             logger.error(`adminService :: getMaxInvalidLoginAttempts :: ${error.message} :: ${error}`);
             throw new Error(error.message);
@@ -98,8 +98,7 @@ export const adminService = {
         try {
             const cachedResult = await adminService.getUserInRedisByUserName(userName);
             if (cachedResult) {
-                const parseResult: IUser = JSON.parse(cachedResult);
-                if (parseResult && parseResult.account_locked != 1) return parseResult;
+                return JSON.parse(cachedResult);
             } else {
                 const _query = {
                     text: USERS.getUserByUsername,
@@ -112,7 +111,7 @@ export const adminService = {
 
                 if (result && result.length > 0) {
                     redis.SetRedis(`User|Username:${userName}`, result[0], CONFIG.REDIS_EXPIRE_TIME_PWD);
-                    return result;
+                    return result[0];
                 };
             }
         } catch (error) {
@@ -130,6 +129,8 @@ export const adminService = {
 
             const result = await pg.executeQueryPromise(_query);
             logger.debug(`adminService :: updateUserLoginStatus :: db result :: ${JSON.stringify(result)}`);
+
+            redis.deleteRedis(`User|Username:${userName}`);
         } catch (error) {
             logger.error(`adminService :: updateUserLoginStatus :: ${error.message} :: ${error}`);
             throw new Error(error.message);
@@ -155,7 +156,7 @@ export const adminService = {
     isForgotPasswordOtpAlreadySent: async (mobileNumber: string): Promise<boolean> => {
         try {
             const key = `Admin_Forgot_Password|User:${mobileNumber}`;
-            const cachedResult = await redis.GetRedis(key);
+            const cachedResult = await redis.GetKeyRedis(key);
             return cachedResult ? true : false;
         } catch (error) {
             logger.error(`adminService :: isForgotPasswordOtpAlreadySent :: ${error.message} :: ${error}`);
@@ -165,7 +166,7 @@ export const adminService = {
     getForgotPasswordOtpDetails: async (txnId: string): Promise<string> => {
         try {
             const key = `Admin_Forgot_Password|TxnId:${txnId}`;
-            const cachedResult = await redis.GetRedis(key);
+            const cachedResult = await redis.GetKeyRedis(key);
             return cachedResult;
         } catch (error) {
             logger.error(`adminService :: isForgotPasswordOtpAlreadySent :: ${error.message} :: ${error}`);
@@ -196,7 +197,7 @@ export const adminService = {
     shareForgotOTPUserDetails: async (otpDetails: any) => {
         try {
             if (otpDetails.emailId) {
-                const emailTemplateHtml = await ejsUtils.generateHtml('views/forgotPasswordOtpEmailTemplate', otpDetails);
+                const emailTemplateHtml = await ejsUtils.generateHtml('views/forgotPasswordOtpEmailTemplate.ejs', otpDetails);
                 await nodemailerUtils.sendEmail('OLL WORKFLOW AUTOMATION | FORGOT PASSWORD OTP', emailTemplateHtml, otpDetails.emailId);
             }
         } catch (error) {
@@ -211,8 +212,8 @@ export const adminService = {
             const forgotPasswordChangeKey = `FORGOT_PASSWORD_CHANGE_${txnId}`;
             const forgotPasswordTxnIdKey = `Admin_Forgot_Password|TxnId:${txnId}`;
 
-            await redis.deleteKey(forgotPasswordUserKey);
-            await redis.deleteKey(forgotPasswordTxnIdKey);
+            await redis.deleteRedis(forgotPasswordUserKey);
+            await redis.deleteRedis(forgotPasswordTxnIdKey);
             redis.SetRedis(forgotPasswordChangeKey, { userName }, CACHE_TTL.SHORT);
             return txnId;
         } catch (error) {
@@ -222,7 +223,7 @@ export const adminService = {
     },
     getForgotPasswordChangeDetails: async (txnId: string) => {
         try {
-            const cachedResult = await redis.GetRedis(`FORGOT_PASSWORD_CHANGE_${txnId}`);
+            const cachedResult = await redis.GetKeyRedis(`FORGOT_PASSWORD_CHANGE_${txnId}`);
             return cachedResult;
         } catch (error) {
             logger.error(`adminService :: getForgotPasswordChangeDetails :: ${error.message} :: ${error}`)
@@ -235,10 +236,10 @@ export const adminService = {
             const passwordUpdated = await adminService.resetPassword(hashedPassword, parseInt(userName));
 
             if (passwordUpdated) {
-                await redis.deleteKey(`FORGOT_PASSWORD_CHANGE_${reqData.txnId}`);
-                await redis.deleteKey(`Admin_Forgot_Password|User:${userName}`);
-                await redis.deleteKey(`User|Username:${userName}`);
-                await redis.deleteKey(userName);
+                await redis.deleteRedis(`FORGOT_PASSWORD_CHANGE_${reqData.txnId}`);
+                await redis.deleteRedis(`Admin_Forgot_Password|User:${userName}`);
+                await redis.deleteRedis(`User|Username:${userName}`);
+                await redis.deleteRedis(userName);
                 return true;
             } else {
                 return false;
