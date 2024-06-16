@@ -21,6 +21,8 @@ const doc = {
       ]
 };
 
+console.log(process.env)
+
 const outputFile = './swagger.json';
 const endpointsFiles = ['../startup/routes.ts'];
 
