@@ -1,27 +1,22 @@
 import swaggerAutogen from 'swagger-autogen';
+import { envUtils } from "owa-micro-common";
+
+const moduleName = envUtils.getStringEnvVariableOrDefault("MODULE", "owa-micro-auth");
+const port = envUtils.getNumberEnvVariableOrDefault("PORT", 9001);
+const apiBaseUrl = envUtils.getStringEnvVariableOrDefault("OWA_APIS_BASE_URL", `localhost:${port}`);
+const scheme = apiBaseUrl.includes("localhost") ? "http" : "https";
 
 const doc = {
     info: {
-        title: "owa-micro-auth",
-        description: `API Swagger for owa-micro-auth`,
+        title: moduleName,
+        description: `API Swagger for ${moduleName}`,
     },
     servers: [
         {
-          url: 'http://localhost:9001',              
-          description: 'Local Environment'       
-        },
-        {
-            url: 'https://apiowa.dev.orrizonte.in',              
-            description: 'Dev Environment'       
-        },
-        {
-            url: 'https://apiowa.orrizonte.in',              
-            description: 'Prod Environment'       
-        },
+          url: `${scheme}://${apiBaseUrl}`            
+        }
       ]
 };
-
-console.log(process.env)
 
 const outputFile = './swagger.json';
 const endpointsFiles = ['../startup/routes.ts'];

@@ -1,23 +1,20 @@
 import swaggerAutogen from 'swagger-autogen';
+import { envUtils } from "owa-micro-common";
+
+const moduleName = envUtils.getStringEnvVariableOrDefault("MODULE", "owa-micro-admin");
+const port = envUtils.getNumberEnvVariableOrDefault("PORT", 9002);
+const apiBaseUrl = envUtils.getStringEnvVariableOrDefault("OWA_APIS_BASE_URL", `localhost:${port}`);
+const scheme = apiBaseUrl.includes("localhost") ? "http" : "https";
 
 const doc = {
     info: {
-        title: "owa-micro-admin",
-        description: `API Swagger for owa-micro-admin`,
+        title: moduleName,
+        description: `API Swagger for ${moduleName}`,
     },
     servers: [
         {
-          url: 'http://localhost:9001',              
-          description: 'Local Environment'       
-        },
-        {
-            url: 'https://apiowa.dev.orrizonte.in',              
-            description: 'Dev Environment'       
-        },
-        {
-            url: 'https://apiowa.orrizonte.in',              
-            description: 'Prod Environment'       
-        },
+          url: `${scheme}://${apiBaseUrl}`            
+        }
       ]
 };
 
