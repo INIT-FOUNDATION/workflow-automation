@@ -7,16 +7,7 @@
   },
   "servers": [
     {
-      "url": "http://localhost:9001",
-      "description": "Local Environment"
-    },
-    {
-      "url": "https://apiowa.dev.orrizonte.in",
-      "description": "Dev Environment"
-    },
-    {
-      "url": "https://apiowa.orrizonte.in",
-      "description": "Prod Environment"
+      "url": "http://localhost:9001"
     }
   ],
   "paths": {

@@ -1,9 +1,8 @@
 import swaggerAutogen from 'swagger-autogen';
-import { envUtils } from "owa-micro-common";
 
-const moduleName = envUtils.getStringEnvVariableOrDefault("MODULE", "owa-micro-auth");
-const port = envUtils.getNumberEnvVariableOrDefault("PORT", 9001);
-const apiBaseUrl = envUtils.getStringEnvVariableOrDefault("OWA_APIS_BASE_URL", `localhost:${port}`);
+const moduleName = process.env.MODULE || "owa-micro-auth"
+const port = process.env.PORT || 9001;
+const apiBaseUrl = process.env.OWA_APIS_BASE_URL || `localhost:${port}`;
 const scheme = apiBaseUrl.includes("localhost") ? "http" : "https";
 
 const doc = {
