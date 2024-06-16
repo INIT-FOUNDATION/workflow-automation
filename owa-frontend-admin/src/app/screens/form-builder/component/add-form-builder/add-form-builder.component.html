@@ -1,8 +1,9 @@
 <div class="">
-  <div class="text-xl xxl:text-2xl font-semibold mb-3">
-    Add new form
-    <div class="border-4 rounded-xl w-10 border-red-500 mt-1"></div>
-  </div>
+  <app-title
+    titleName="Add New Form"
+    additionalClass="text-lg font-bold"
+    [canGoBack]="true"
+  ></app-title>
 
   <div cdkDropListGroup class="grid grid-cols-1 lg:grid-cols-2 gap-4">
     <div class="border-2 p-5 rounded-2xl">
@@ -31,8 +32,8 @@
     <div class="border-2 p-5 rounded-2xl">
       <span class="font-medium">Choosen fields</span>
 
-      <form action="" class="custom-scroll-bar">
-        <mat-form-field class="w-full mb-3" appearance="outline">
+      <form action="" class="custom-scroll-bar pt-3">
+        <!-- <mat-form-field class="w-full mb-3" appearance="outline">
           <mat-label class="text-sm">Email</mat-label>
           <input
             matInput
@@ -40,7 +41,7 @@
             type="email"
             appInputChar="email"
           />
-        </mat-form-field>
+        </mat-form-field> -->
         <div
           cdkDropList
           [cdkDropListData]="chosenFields"
@@ -48,29 +49,30 @@
         >
           <div
             class="text-sm mb-3"
-            *ngFor="let item of chosenFields"
+            *ngFor="let item of chosenFields; let i = index"
             [cdkDragDisabled]="true"
             cdkDrag
           >
-            <mat-form-field
-              class="w-full relative"
-              appearance="outline"
-              *ngIf="item.acceptOnly == 'string'"
-            >
-              <div
+            <div class="relative" *ngIf="item.acceptOnly == 'string'">
+              <!-- <div
                 class="absolute -right-2 -top-6 cursor-pointer"
                 (click)="deleteFormField(item?.id)"
               >
                 <i class="fa-solid fa-circle-xmark text-xl text-red-500"></i>
-              </div>
-              <mat-label>{{ item?.label }}</mat-label>
+              </div> -->
+              <label [for]="i" *ngIf="!item?.hideFieldLabel">{{
+                item.fieldLabel ? item.fieldLabel : item.label
+              }}</label>
               <input
-                matInput
-                placeholder="{{ item?.label }}"
-                type="email"
-                appInputChar="email"
+                [id]="i"
+                [type]="item?.rangeFormat"
+                [placeholder]="item.fieldLabel ? item.fieldLabel : item.label"
+                class="border rounded-md w-full py-2 ps-2"
+                [disabled]="item?.disabledField"
+                [attr.maxlength]="item?.maxRange"
+                [attr.minlength]="item?.minRange"
               />
-            </mat-form-field>
+            </div>
           </div>
         </div>
       </form>

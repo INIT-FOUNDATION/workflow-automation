@@ -1,6 +1,7 @@
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { findIndex } from 'rxjs';
 import { PropertiesModalComponent } from 'src/app/modules/shared/components/properties-modal/properties-modal.component';
 
 @Component({
@@ -73,7 +74,7 @@ export class AddFormBuilderComponent implements OnInit {
 
     this.chosenFields.some((item) => item.id === selectedItem.id);
     this.chosenFields.push(selectedItem);
-    this.openPropertyModal(selectedItem);
+    this.openPropertyModal(selectedItem, this.chosenFields.length - 1);
   }
 
   deleteFormField(id) {
@@ -83,7 +84,7 @@ export class AddFormBuilderComponent implements OnInit {
     }
   }
 
-  openPropertyModal(selectedItem) {
+  openPropertyModal(selectedItem, index) {
     const dialogRef = this.dialog.open(PropertiesModalComponent, {
       width: 'clamp(20rem, 60vw, 35rem)',
       panelClass: [
@@ -93,12 +94,13 @@ export class AddFormBuilderComponent implements OnInit {
       ],
       position: { right: '0px', top: '0px', bottom: '0px' },
       disableClose: true,
-      data: selectedItem,
+      data: { ...selectedItem, index },
     });
 
     dialogRef.afterClosed().subscribe((res) => {
-      // this.chosenFields.push(res);
-      console.log(res);
+      this.chosenFields.some((item) => item.index === index);
+      this.chosenFields[index] = res[0];
+      console.log(this.chosenFields);
     });
   }
 }
