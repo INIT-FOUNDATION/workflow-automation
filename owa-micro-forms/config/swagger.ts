@@ -12,6 +12,14 @@ const doc = {
         title: moduleName,
         description: `API Swagger for ${moduleName}`,
     },
+    securityDefinitions: {
+        Bearer: {
+          type: 'apiKey',
+          name: 'Authorization',
+          in: 'header',
+          description: 'Enter your bearer token in the format **&lt;token&gt;**'
+        }
+    },
     servers: [
         {
           url: `${scheme}://${apiBaseUrl}`            
