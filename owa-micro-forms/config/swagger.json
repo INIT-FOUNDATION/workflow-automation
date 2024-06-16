@@ -5,7 +5,12 @@
     "description": "API Swagger for owa-micro-forms",
     "version": "1.0.0"
   },
-  "host": "localhost:9005",
+  "host": "localhost:3000",
+  "servers": [
+    {
+      "url": "http://localhost:9005"
+    }
+  ],
   "basePath": "/",
   "schemes": [
     "http"
@@ -198,7 +203,7 @@
             "name": "formId",
             "in": "path",
             "required": true,
-            "type": "string"
+            "type": "number"
           },
           {
             "name": "Authorization",
@@ -227,7 +232,7 @@
             "name": "fieldId",
             "in": "path",
             "required": true,
-            "type": "string"
+            "type": "number"
           },
           {
             "name": "Authorization",
