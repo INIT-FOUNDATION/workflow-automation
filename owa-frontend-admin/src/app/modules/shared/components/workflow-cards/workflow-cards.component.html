@@ -1,16 +1,16 @@
-
-    <div class="bg-white border border-gray-300 rounded-lg shadow-md p-2">
-        <div class="flex items-center p-4">
-            <img src="../../../assets/images/workflowCards/cycleIcon.svg" alt="">
-            <p class="text-gray-800 font-medium text-sm ps-2">{{title}}</p>
-        </div>
-        <div>
-            <div class="flex items-start px-4">
-                <div class="badge-bg-color rounded-xl px-4 py-2 text-xs text-white font-semibold text-center">{{badge}}</div>
-            </div>
-        </div>
-        <div class="flex items-center p-4">
-            <img src="../../../assets/images/workflowCards/departmentIcon.svg" alt="">
-            <p class="text-gray-800 font-medium text-sm ps-2">{{departments}}</p>
-        </div>
-    </div>
+<div class="bg-white border rounded-lg shadow-md p-6">
+  <div class="flex items-center mb-5">
+    <img src="/assets/images/workflowCards/cycleIcon.svg" alt="" />
+    <p class="text-gray-800 font-medium text-sm ps-2">{{ title }}</p>
+  </div>
+  <span
+    class="rounded-lg px-4 py-2 text-xs text-white font-semibold text-center"
+    [ngClass]="[badge == 'Payment Collection' ? 'bg-emerald-500' : 'bg-sky-700']"
+  >
+    {{ badge }}
+  </span>
+  <div class="flex items-center mt-5">
+    <img src="/assets/images/workflowCards/departmentIcon.svg" alt="" />
+    <p class="text-gray-800 font-medium text-sm ps-2">{{ departments }}</p>
+  </div>
+</div>

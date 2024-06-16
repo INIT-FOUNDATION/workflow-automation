@@ -27,6 +27,9 @@ export class PropertiesModalComponent implements OnInit {
   formatRangeList: any = [
     { id: 1, label: 'character' },
     { id: 2, label: 'number' },
+    { id: 3, label: 'text' },
+    { id: 4, label: 'email' },
+    { id: 5, label: 'date' },
   ];
   selectedFieldId: number;
   constructor(
