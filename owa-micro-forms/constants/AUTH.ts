@@ -3,7 +3,8 @@ export const AUTH = {
     ENFORCE_ONLY_ONE_SESSION: process.env.INIT_COMMON_ENFORCE_ONLY_ONE_SESSION,
     API: {
        PUBLIC: [
-         "/api/v1/auth/health",
+         "/api/v1/forms/health",
+         "/api/v1/forms/list"
        ]
     }
 }

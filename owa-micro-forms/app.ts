@@ -9,22 +9,11 @@ import fileUpload from "express-fileupload";
 import dotenv from "dotenv";
 import routes from "./startup/routes";
 import { AUTH } from "./constants/AUTH";
-
-import { SECURITY, logger } from "owa-micro-common";
-
-declare global {
-  namespace Express {
-    interface Request {
-      plainToken?: PlainToken;
-    }
-  }
-}
-interface PlainToken {
-  emailId: string;
-  user_name: string;
-  user_id: string;
-  role_id: string;
-}
+import bodyParser from "body-parser";
+import { SECURITY, logger, envUtils } from "owa-micro-common";
+import * as CONST from "./constants/CONST";
+import swaggerUi from 'swagger-ui-express';
+import swaggerFile from './config/swagger.json';
 
 dotenv.config();
 
@@ -37,10 +26,7 @@ const resolveCrossDomain = function (
 ): void {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Methods", "GET,POST,OPTIONS");
-  res.header(
-    'Access-Control-Allow-Headers',
-    'Content-Type, Authorization, offline_mode, uo-device-type, uo-os, uo-os-version, uo-is-mobile, uo-is-tablet, uo-is-desktop, uo-browser-version, uo-browser, uo-client-id, uo-client-ip'
-  );
+  res.header('Access-Control-Allow-Headers', CONST.allowed_headers);
   res.header("Access-Control-Expose-Headers", "Version");
   res.header("Access-Control-Allow-Credentials", "true");
   res.header("Strict-Transport-Security", "max-age=15552000");
@@ -60,15 +46,22 @@ const setAppVersiontoHeader = async function (
   next();
 };
 
+// Swagger setup
+app.use(bodyParser.json({
+  limit: envUtils.getStringEnvVariableOrDefault("OWA_BODY_PARSER_LIMIT", "5mb")
+}));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(fileUpload());
 app.set("view engine", "ejs");
 app.use(helmet());
 app.use(resolveCrossDomain, setAppVersiontoHeader);
-
 app.use(function applyXFrame(req: Request, res: Response, next: NextFunction) {
   res.set("X-Frame-Options", "DENY");
   next();
 });
+
+
+app.use('/api/v1/forms/docs', swaggerUi.serve, swaggerUi.setup(swaggerFile))
 
 SECURITY(app, AUTH);
 routes(app);
