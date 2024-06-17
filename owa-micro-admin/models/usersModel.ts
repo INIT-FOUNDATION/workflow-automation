@@ -19,7 +19,7 @@ class User implements IUser {
   status: number;
   profile_pic_url: string;
   last_logged_in: string;
-  reporting_to: number;
+  reporting_to_users: number[];
   date_created: string;
   date_updated: string;
   created_by: number;
@@ -42,7 +42,7 @@ class User implements IUser {
     this.status = user.status;
     this.profile_pic_url = user.profile_pic_url;
     this.last_logged_in = user.last_logged_in;
-    this.reporting_to = user.reporting_to;
+    this.reporting_to_users = user.reporting_to_users;
     this.date_created = user.date_created;
     this.date_updated = user.date_updated;
     this.created_by = user.created_by;
@@ -76,7 +76,7 @@ const validateCreateUser = (user: IUser): Joi.ValidationResult => {
     status: Joi.number(),
     profile_pic_url: Joi.string().allow("", null),
     last_logged_in: Joi.string().allow("", null),
-    reporting_to: Joi.number(),
+    reporting_to_users: Joi.array().items(Joi.number()),
     date_created: Joi.string().allow("", null),
     date_updated: Joi.string().allow("", null),
     created_by: Joi.number(),
@@ -106,7 +106,7 @@ const validateUpdateUser = (user: IUser): Joi.ValidationResult => {
     gender: Joi.number().valid(...Object.values(GENDER)).required(),
     role_id: Joi.number().required(),
     department_id: Joi.number().required(),
-    reporting_to: Joi.number()
+    reporting_to_users: Joi.array().items(Joi.number()),
   });
   return userSchema.validate(user);
 };

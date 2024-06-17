@@ -13,6 +13,4 @@ COPY . .
 
 EXPOSE 9002
 
-RUN npm run swagger
-
 CMD [ "npm", "start" ]
