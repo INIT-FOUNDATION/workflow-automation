@@ -7,11 +7,13 @@ import { EditWorkflowAssignmentComponent } from './component/edit-workflow-assig
 import { FormWorkflowAssignmentComponent } from './component/form-workflow-assignment/form-workflow-assignment.component';
 import { SharedModule } from 'src/app/modules/shared/shared.module';
 
+
 @NgModule({
   declarations: [
     AddWorkflowAssignmentComponent,
     EditWorkflowAssignmentComponent,
     FormWorkflowAssignmentComponent,
+    
   ],
   imports: [CommonModule, WorkflowAssignmentRoutingModule, SharedModule],
 })

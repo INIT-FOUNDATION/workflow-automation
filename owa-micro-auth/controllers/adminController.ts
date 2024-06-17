@@ -9,6 +9,7 @@ import { adminService } from "../services/adminService";
 import jwt from "jsonwebtoken";
 import { IUser } from "../types/custom";
 import bcrypt from "bcryptjs";
+import { v4 as uuidv4 } from 'uuid';
 
 export const adminController = {
     validateToken: async (req: Request, res: Response): Promise<Response> => {
@@ -86,7 +87,7 @@ export const adminController = {
 
                 if (maximumInvalidAttempts > currentInvalidAttempts) {
                     await adminService.incrementInvalidLoginAttempts(user.user_name);
-                    return res.status(STATUS.BAD_REQUEST).send(AUTH.AUTH00012);
+                    return res.status(STATUS.BAD_REQUEST).send(AUTH.AUTH00001);
                 } else {
                     await adminService.setUserInActive(user.user_name);
                     return res.status(STATUS.BAD_REQUEST).send(AUTH.AUTH00003);
@@ -146,7 +147,10 @@ export const adminController = {
             }
 
             const userExists = await adminService.existsByMobileNumber(mobile_number);
-            if (!userExists) return res.status(STATUS.BAD_REQUEST).send(AUTH.AUTH00005);
+            if (!userExists) {
+                logger.error(`adminController :: getForgetPasswordOtp :: mobile number :: ${mobile_number} :: Password doesn't exist`);
+                return res.status(STATUS.OK).send({data: { txnId: uuidv4() }, message: "Generated Forget Password OTP Successfully"});
+            }
 
             const alreadySent = await adminService.isForgotPasswordOtpAlreadySent(mobile_number);
             if (alreadySent) return res.status(STATUS.BAD_REQUEST).send(AUTH.AUTH00006);

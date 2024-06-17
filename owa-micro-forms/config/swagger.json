@@ -1,0 +1,352 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "owa-micro-forms",
+    "description": "API Swagger for owa-micro-forms"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:9005",
+      "description": "Local Server"
+    },
+    {
+      "url": "https://apiowa.dev.orrizonte.in",
+      "description": "Development Server"
+    },
+    {
+      "url": "https://apiowa.orrizonte.in",
+      "description": "Production Server"
+    }
+  ],
+  "paths": {
+    "/api/v1/forms/health": {
+      "get": {
+        "tags": [
+          "Health"
+        ],
+        "summary": "Health Check API",
+        "description": "Endpoint to health check Form Service",
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/v1/forms/list": {
+      "post": {
+        "tags": [
+          "Form"
+        ],
+        "summary": "Get all the forms list",
+        "description": "Endpoint to get forms list by page size and current page",
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "apiKeyAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/formGridSchema"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/forms/create": {
+      "post": {
+        "tags": [
+          "Form"
+        ],
+        "summary": "Create dynamic form",
+        "description": "Endpoint to create a dynamic form",
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "apiKeyAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/createFormSchema"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/forms/update": {
+      "post": {
+        "tags": [
+          "Form"
+        ],
+        "summary": "Update dynamic form",
+        "description": "Endpoint to update a dynamic form",
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "apiKeyAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/updateFormSchema"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/forms/details/{formId}": {
+      "get": {
+        "tags": [
+          "Form"
+        ],
+        "summary": "Get Form details by form id",
+        "description": "Endpoint to get form details along with form fields",
+        "parameters": [
+          {
+            "name": "formId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Form Id",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "apiKeyAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/forms/fieldPropertiesDetails/{fieldId}": {
+      "get": {
+        "tags": [
+          "Form"
+        ],
+        "summary": "Get Field Properties by Field Id",
+        "description": "Endpoint to get all properties of fields",
+        "parameters": [
+          {
+            "name": "fieldId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Field Id",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "apiKeyAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/forms/fields": {
+      "get": {
+        "tags": [
+          "Form"
+        ],
+        "summary": "Get All Fields List API",
+        "description": "Endpoint to get all form fields",
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "apiKeyAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/forms/updateStatus": {
+      "post": {
+        "tags": [
+          "Form"
+        ],
+        "summary": "Update a dynamic form status",
+        "description": "Endpoint to update a dynamic form status",
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "apiKeyAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/updateFormStatusSchema"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "apiKeyAuth": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "Authorization",
+        "description": "Enter your token"
+      }
+    },
+    "security": [
+      {
+        "apiKeyAuth": []
+      }
+    ],
+    "schemas": {
+      "formGridSchema": {
+        "type": "object",
+        "properties": {
+          "page_size": {
+            "type": "number",
+            "example": 50
+          },
+          "current_page": {
+            "type": "number",
+            "example": 1
+          },
+          "search_query": {
+            "type": "string",
+            "example": ""
+          }
+        },
+        "required": [
+          "page_size",
+          "current_page"
+        ]
+      },
+      "updateFormStatusSchema": {
+        "type": "object",
+        "properties": {
+          "form_id": {
+            "type": "number",
+            "example": 7
+          },
+          "status": {
+            "type": "number",
+            "example": 1
+          }
+        },
+        "required": [
+          "form_id",
+          "status"
+        ]
+      },
+      "createFormSchema": {
+        "type": "object",
+        "properties": {
+          "form_name": {
+            "type": "string",
+            "example": "School Survey Form 2"
+          },
+          "form_description": {
+            "type": "string",
+            "example": "This form is used for taking feedback from schools cxzczx"
+          },
+          "form_fields": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "field_id": {
+                  "type": "number",
+                  "example": 1
+                },
+                "options": {
+                  "type": "object",
+                  "properties": {}
+                }
+              }
+            }
+          }
+        }
+      },
+      "updateFormSchema": {
+        "type": "object",
+        "properties": {
+          "form_id": {
+            "type": "number",
+            "example": 7
+          },
+          "form_name": {
+            "type": "string",
+            "example": "School Survey Form 2"
+          },
+          "form_description": {
+            "type": "string",
+            "example": "This form is used for taking feedback from schools cxzczx"
+          },
+          "form_fields": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "field_id": {
+                  "type": "number",
+                  "example": 1
+                },
+                "options": {
+                  "type": "object",
+                  "properties": {}
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
