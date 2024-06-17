@@ -5,6 +5,7 @@ export interface IUser {
     mobile_number: string;
     email_id: string;
     role_id: number;
+    level: string;
     department_id: number;
     password: string;
     status: number,
