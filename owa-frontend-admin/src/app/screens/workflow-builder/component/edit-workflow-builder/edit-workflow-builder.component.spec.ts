@@ -6,12 +6,10 @@ describe('EditWorkflowBuilderComponent', () => {
   let component: EditWorkflowBuilderComponent;
   let fixture: ComponentFixture<EditWorkflowBuilderComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [EditWorkflowBuilderComponent]
-    })
-    .compileComponents();
-    
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      declarations: [EditWorkflowBuilderComponent]
+    });
     fixture = TestBed.createComponent(EditWorkflowBuilderComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

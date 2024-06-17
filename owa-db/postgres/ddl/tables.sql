@@ -9,10 +9,11 @@ CREATE TABLE m_users (
     email_id VARCHAR(50),
     gender SMALLINT,
     dob DATE,
-    password VARCHAR(50),
+    role_id INT,
+    password VARCHAR(100),
     password_last_updated TIMESTAMP DEFAULT now(),
-    invalid_attempts INT,
-    status SMALLINT DEFAULT 1,
+    invalid_attempts INT DEFAULT 0,
+    status smallint DEFAULT 1,
     profile_pic_url VARCHAR(100),
     last_logged_in TIMESTAMP DEFAULT now(),
     date_created TIMESTAMP DEFAULT now(),
@@ -26,7 +27,7 @@ CREATE TABLE m_roles (
     role_id serial PRIMARY KEY,
     role_name VARCHAR(30),
     role_description VARCHAR(50),
-    is_active SMALLINT DEFAULT 1,
+    status smallint DEFAULT 1,
     date_created TIMESTAMP DEFAULT now(),
     date_updated TIMESTAMP DEFAULT now(),
     created_by INT,
@@ -34,10 +35,10 @@ CREATE TABLE m_roles (
 );
 
 -- Table: m_department
-CREATE TABLE m_department (
+CREATE TABLE m_departments (
     department_id serial PRIMARY KEY,
     department_name VARCHAR(50),
-    status INT DEFAULT 1,
+    status smallint DEFAULT 1,
     date_created TIMESTAMP DEFAULT now(),
     date_updated TIMESTAMP DEFAULT now()
 );
@@ -47,7 +48,7 @@ CREATE TABLE m_menus (
     menu_id serial PRIMARY KEY,
     menu_name VARCHAR(30),
     menu_description VARCHAR(50),
-    is_active SMALLINT DEFAULT 1,
+    status smallint DEFAULT 1,
     parent_menu_id INT,
     menu_order INT,
     route_url VARCHAR(30),
@@ -56,17 +57,17 @@ CREATE TABLE m_menus (
     date_updated TIMESTAMP DEFAULT now()
 );
 
--- Table: m_user_mapping
-CREATE TABLE m_user_mapping (
+-- Table: m_user_department_assoc
+CREATE TABLE m_user_department_assoc (
     user_id INT,
-    role_id INT,
     department_id INT,
+    reporting_to INT,
     date_created TIMESTAMP DEFAULT now(),
     date_updated TIMESTAMP DEFAULT now()
 );
 
--- Table: password_complexity
-CREATE TABLE password_complexity (
+-- Table: password_policies
+CREATE TABLE password_policies (
     id serial PRIMARY KEY,
     password_expiry SMALLINT,
     password_history SMALLINT,
@@ -104,8 +105,11 @@ CREATE TABLE app_version (
     app_version VARCHAR(10),
     apk_version VARCHAR(10),
     apk_link VARCHAR(100),
+    ios_version VARCHAR(10),
+    ios_link VARCHAR(100),
     force_update SMALLINT,
     remarks VARCHAR(100),
+    status smallint DEFAULT 1,
     release_date TIMESTAMP DEFAULT now(),
     date_created TIMESTAMP DEFAULT now(),
     date_updated TIMESTAMP DEFAULT now()

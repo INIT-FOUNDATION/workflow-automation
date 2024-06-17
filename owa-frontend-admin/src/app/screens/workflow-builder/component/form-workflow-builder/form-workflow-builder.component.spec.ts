@@ -6,12 +6,10 @@ describe('FormWorkflowBuilderComponent', () => {
   let component: FormWorkflowBuilderComponent;
   let fixture: ComponentFixture<FormWorkflowBuilderComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [FormWorkflowBuilderComponent]
-    })
-    .compileComponents();
-    
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      declarations: [FormWorkflowBuilderComponent]
+    });
     fixture = TestBed.createComponent(FormWorkflowBuilderComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

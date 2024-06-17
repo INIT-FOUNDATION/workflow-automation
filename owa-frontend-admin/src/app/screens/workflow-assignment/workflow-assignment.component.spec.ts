@@ -6,12 +6,10 @@ describe('WorkflowAssignmentComponent', () => {
   let component: WorkflowAssignmentComponent;
   let fixture: ComponentFixture<WorkflowAssignmentComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [WorkflowAssignmentComponent]
-    })
-    .compileComponents();
-    
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      declarations: [WorkflowAssignmentComponent]
+    });
     fixture = TestBed.createComponent(WorkflowAssignmentComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

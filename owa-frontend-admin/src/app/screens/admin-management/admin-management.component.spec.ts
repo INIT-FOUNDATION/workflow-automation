@@ -6,12 +6,10 @@ describe('AdminManagementComponent', () => {
   let component: AdminManagementComponent;
   let fixture: ComponentFixture<AdminManagementComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [AdminManagementComponent]
-    })
-    .compileComponents();
-    
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      declarations: [AdminManagementComponent]
+    });
     fixture = TestBed.createComponent(AdminManagementComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

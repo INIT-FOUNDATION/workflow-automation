@@ -1,0 +1,117 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  font-size: 16px;
+}
+
+ion-app,
+ion-content,
+ion-item {
+  font-family: "Poppins" !important;
+  --background: #fef8f2 !important;
+  --color: #000 !important;
+}
+
+.segment-button-checked {
+  --color-checked: #515a63 !important;
+}
+
+.swalOverlayLoader {
+  background-color: rgba(0, 0, 0, 0);
+}
+
+.swal2-loader {
+  border-color: #5278ff rgba(0, 0, 0, 0) #5278ff rgba(0, 0, 0, 0);
+  width: 7em;
+  height: 7em;
+  border-width: 0.5em;
+}
+
+.MuiSnackbar-root {
+  z-index: 9999999 !important;
+}
+
+ion-toolbar {
+  --background: #fef8f2;
+  /* --color: white; */
+
+  --border-color: transparent;
+  --border-width: 0px 0;
+  --border-style: solid;
+
+  --min-height: 70px;
+  --padding-top: 10px;
+  --padding-bottom: 10px;
+}
+
+ion-menu-button {
+  color: #000;
+}
+
+ion-alert.logout-custom-alert {
+  .alert-wrapper {
+    width: 100%;
+  }
+}
+
+ion-item {
+  --inner-padding-end: 0px;
+  --padding-start: 0px;
+  --background: inherit !important;
+}
+
+.bg-theme {
+  background-color: #dc852d !important;
+}
+
+.tab-selected {
+  color: #dc852d !important;
+}
+
+.fs-07 {
+  font-size: 0.7rem !important;
+}
+
+.fs-08 {
+  font-size: 0.8rem !important;
+}
+
+.fs-09 {
+  font-size: 0.9rem !important;
+}
+
+.fs-11 {
+  font-size: 1.1rem !important;
+}
+
+.fs-13 {
+  font-size: 1.3rem !important;
+}
+
+.fs-15 {
+  font-size: 1.5rem !important;
+}
+
+.text-theme {
+  color: #dc852d !important;
+}
+
+input:focus-visible {
+  outline: 0 !important;
+}
+
+.btn-check:focus + .btn,
+.btn:focus {
+  outline: 0;
+  box-shadow: unset !important;
+}
+
+.btn-check:checked + .btn,
+.btn.active,
+.btn.show,
+.btn:first-child:active,
+:not(.btn-check) + .btn:active {
+  border-color: #e6790c !important;
+}
