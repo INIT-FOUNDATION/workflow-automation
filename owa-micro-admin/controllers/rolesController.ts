@@ -286,42 +286,6 @@ export const rolesController = {
             return res.status(STATUS.INTERNAL_SERVER_ERROR).send(ROLES.ROLE00000);
         }
     },
-    getCombinedAccessListByRoleId: async (req: Request, res: Response): Promise<Response> => {
-        try {
-            /*
-            #swagger.tags = ['Roles']
-            #swagger.summary = 'Get Combined Access List By Role Id and User Id'
-            #swagger.description = 'Endpoint to retrieve Combined Access List with Role Id and User Id'
-            #swagger.parameters['Authorization'] = {
-                in: 'header',
-                required: true,
-                type: 'string',
-                description: 'Bearer token for authentication'
-            }
-            */
-            const roleId = req.params.roleId;
-            const userId = req.params.userId;
-
-            if (!roleId) return res.status(STATUS.BAD_REQUEST).send(ROLES.ROLE00003);
-            if (!userId) return res.status(STATUS.BAD_REQUEST).send(ROLES.ROLE00005);
-
-            const roleExists = await rolesService.existsByRoleId(parseInt(roleId));
-            if (!roleExists) return res.status(STATUS.BAD_REQUEST).send(ROLES.ROLE00006);
-
-            const userExists = await usersService.existsByUserId(parseInt(userId));
-            if (!userExists) return res.status(STATUS.BAD_REQUEST).send(ROLES.ROLE00008);
-
-            const combinedAccessList = await rolesService.getCombinedAccessListByRoleId(parseInt(roleId), parseInt(userId));
-
-            return res.status(STATUS.OK).send({
-                data: combinedAccessList,
-                message: "Combined Access List Fetched Successfully",
-            });
-        } catch (error) {
-            logger.error(`rolesController :: getCombinedAccessListByRoleId :: ${error.message} :: ${error}`);
-            return res.status(STATUS.INTERNAL_SERVER_ERROR).send(ROLES.ROLE00000);
-        }
-    },
     getDefaultAccessList: async (req: Request, res: Response): Promise<Response> => {
         try {
             /*
