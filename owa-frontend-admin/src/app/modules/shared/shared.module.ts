@@ -8,6 +8,8 @@ import { MatExpansionModule } from '@angular/material/expansion';
 
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { ToastrModule } from 'ngx-toastr';
+import { CommonDataTableComponent } from '../common-data-table/common-data-table.component';
+import { TableModule } from 'primeng/table';
 
 /*------------------- MATERIAL COMPONENTS ------------------------*/
 import { MatDialogModule } from '@angular/material/dialog';
@@ -49,6 +51,10 @@ const MY_FORMATS = {
   },
 };
 
+const common_components = [
+  CommonDataTableComponent
+]
+
 const export_components = [LoaderComponent, HeaderComponent];
 const export_directives = [
   RangeDirective,
@@ -77,16 +83,18 @@ const export_material_modules = [
   MatExpansionModule,
   MatTabsModule,
   DragDropModule,
+  TableModule,
 ];
 
 @NgModule({
-  declarations: [...export_components, ...export_directives],
+  declarations: [...export_components, ...export_directives, ...common_components],
   imports: [...export_material_modules, ToastrModule.forRoot()],
   exports: [
     FormsModule,
     ReactiveFormsModule,
     ...export_components,
     ...export_material_modules,
+    ...common_components,
     ...export_directives,
     ToastrModule,
   ],
