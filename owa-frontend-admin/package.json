@@ -27,6 +27,7 @@
     "@videogular/ngx-videogular": "~5.0.1",
     "angular-star-rating": "~5.1.0",
     "aos": "^2.3.4",
+    "crypto-js": "^4.2.0",
     "font-awesome": "^4.7.0",
     "gsap": "^3.12.5",
     "jquery": "^3.6.4",

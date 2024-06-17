@@ -16,6 +16,7 @@ import { AdminManagementComponent } from './screens/admin-management/admin-manag
 import { FormBuilderComponent } from './screens/form-builder/form-builder.component';
 import { WorkflowAssignmentComponent } from './screens/workflow-assignment/workflow-assignment.component';
 import { WorkflowBuilderComponent } from './screens/workflow-builder/workflow-builder.component';
+import { AuthComponent } from './screens/auth/auth.component';
 
 @NgModule({
   declarations: [
@@ -24,6 +25,7 @@ import { WorkflowBuilderComponent } from './screens/workflow-builder/workflow-bu
     FormBuilderComponent,
     WorkflowAssignmentComponent,
     WorkflowBuilderComponent,
+    AuthComponent,
   ],
   imports: [
     BrowserModule,
@@ -32,7 +34,7 @@ import { WorkflowBuilderComponent } from './screens/workflow-builder/workflow-bu
     HttpClientModule,
     SharedModule,
     ThemeModule,
-    NgxGoogleAnalyticsModule.forRoot(environment.ga),
+    // NgxGoogleAnalyticsModule.forRoot(environment.ga),
   ],
   providers: [
     {
