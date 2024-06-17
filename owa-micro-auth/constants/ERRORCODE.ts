@@ -5,7 +5,7 @@ export const AUTH = {
     },
     AUTH00001: {
         errorCode: "AUTH00001",
-        errorMessage: "User with requested Username does not exists!",
+        errorMessage: "Invalid User Name or Password",
     },
     AUTH00002: {
         errorCode: "AUTH00002",
