@@ -52,7 +52,15 @@ const doc = {
                 form_fields: [
                     {
                         field_id: 1,
-                        options: {}
+                        options: [
+                            {field_property_id: 1, type: "text"},
+                            {field_property_id: 2, name: "sample"},
+                            {field_property_id: 3, label: "Sample"},
+                            {field_property_id: 4, placeholder: "Sample"},
+                            {field_property_id: 5, required: true},
+                            {field_property_id: 6, minlength: 3},
+                            {field_property_id: 7, maxlength: 50}
+                        ]
                     }
                 ]
             },
@@ -63,7 +71,15 @@ const doc = {
                 form_fields: [
                     {
                         field_id: 1,
-                        options: {}
+                        options: [
+                            {field_property_id: 1, type: "text"},
+                            {field_property_id: 2, name: "sample"},
+                            {field_property_id: 3, label: "Sample"},
+                            {field_property_id: 4, placeholder: "Sample"},
+                            {field_property_id: 5, required: true},
+                            {field_property_id: 6, minlength: 3},
+                            {field_property_id: 7, maxlength: 50}
+                        ]
                     }
                 ]
             }

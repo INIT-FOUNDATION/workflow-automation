@@ -306,8 +306,20 @@
                   "example": 1
                 },
                 "options": {
-                  "type": "object",
-                  "properties": {}
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "field_property_id": {
+                        "type": "number",
+                        "example": 7
+                      },
+                      "maxlength": {
+                        "type": "number",
+                        "example": 50
+                      }
+                    }
+                  }
                 }
               }
             }
@@ -339,8 +351,20 @@
                   "example": 1
                 },
                 "options": {
-                  "type": "object",
-                  "properties": {}
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "field_property_id": {
+                        "type": "number",
+                        "example": 7
+                      },
+                      "maxlength": {
+                        "type": "number",
+                        "example": 50
+                      }
+                    }
+                  }
                 }
               }
             }
