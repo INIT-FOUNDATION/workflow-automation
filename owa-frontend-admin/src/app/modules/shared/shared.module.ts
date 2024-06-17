@@ -37,6 +37,8 @@ import { IntegerInputDirective } from './directives/input-integer.directive';
 import { LoaderComponent } from './components/loader/loader.component';
 import { HeaderComponent } from './components/header/header.component';
 import {MatStepperModule} from '@angular/material/stepper';
+import { PropertiesModalComponent } from './components/properties-modal/properties-modal.component';
+import { TitleComponent } from './components/title/title.component';
 
 /*------------------- DIRECTIVES ------------------------*/
 
@@ -52,7 +54,7 @@ const MY_FORMATS = {
   },
 };
 
-const export_components = [LoaderComponent, HeaderComponent];
+const export_components = [LoaderComponent, HeaderComponent, TitleComponent];
 const export_directives = [
   RangeDirective,
   RangeLengthDirective,
@@ -85,7 +87,11 @@ const export_material_modules = [
 ];
 
 @NgModule({
-  declarations: [...export_components, ...export_directives],
+  declarations: [
+    ...export_components,
+    ...export_directives,
+    PropertiesModalComponent,
+  ],
   imports: [...export_material_modules, ToastrModule.forRoot()],
   exports: [
     FormsModule,

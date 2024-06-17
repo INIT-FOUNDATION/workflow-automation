@@ -1,1 +1,42 @@
-<p>form-builder works!</p>
+<app-title
+  titleName="Form Builder"
+  additionalClass="text-lg font-bold"
+  [canGoBack]="false"
+></app-title>
+
+<div class="flex justify-between border-b-2 pb-8 mb-8">
+  <div class="border border-gray-300 rounded-full px-4 py-2 w-80 relative">
+    <input
+      type="text"
+      class="outline-none border-none w-full pr-3 text-sm"
+      placeholder="Search for an existing workflow"
+    />
+    <img
+      src="assets/images/workflowCards/searchIcon.svg"
+      alt=""
+      class="absolute right-3 top-2.5"
+    />
+  </div>
+  <button
+    type="button"
+    class="bg-red-600 text-white rounded-xl px-4 py-2 text-sm"
+  >
+    <a href="form-builder/add-form"
+      ><i class="fa-solid fa-plus me-2"></i>Add New Form</a
+    >
+  </button>
+</div>
+
+<app-title titleName="Pre Defined Forms" [canGoBack]="false"></app-title>
+
+<div
+  class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
+>
+  <div *ngFor="let data of cardData">
+    <app-workflow-cards
+      [title]="data.title"
+      [badge]="data.badge"
+      [departments]="data.departments"
+    ></app-workflow-cards>
+  </div>
+</div>
