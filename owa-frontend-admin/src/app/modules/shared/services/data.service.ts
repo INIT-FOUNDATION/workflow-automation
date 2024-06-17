@@ -224,7 +224,7 @@ export class DataService {
   }
 
   enquiry(payload) {
-    return this.http.post(`${environment.crm_prefix_url}/enquiry`, payload);
+    // return this.http.post(`${environment.crm_prefix_url}/enquiry`, payload);
   }
 
   get appVersion() {
