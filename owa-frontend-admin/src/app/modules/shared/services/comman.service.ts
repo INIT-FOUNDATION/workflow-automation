@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { AuthService } from 'src/app/screens/auth/auth.service';
 import { EncDecService } from './encryption-decryption.service';
 import { Router } from '@angular/router';
+import { AuthService } from 'src/app/screens/auth/services/auth.service';
 
 @Injectable({
   providedIn: 'root',
