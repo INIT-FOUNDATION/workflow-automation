@@ -17,5 +17,5 @@ export const USERS = {
                     LEFT OUTER JOIN m_user_department_assoc UDA ON U.user_id = UDA.user_id
                     LEFT OUTER JOIN m_departments D ON UDA.department_id = D.department_id
                     LEFT OUTER JOIN m_roles R ON U.role_id = R.role_id
-                    WHERE U.user_name IN (1,4) AND U.status = 1`
+                    WHERE U.user_name = $1 AND U.status IN (1,4)`
 }
