@@ -38,8 +38,8 @@ export const formRepository = {
             };
 
             if (searchQuery) {
-                _queryForListOfForms.text += ` AND form_name ILIKE %${searchQuery}%`;
-                _queryForTotalCountForms.text += ` AND form_name ILIKE %${searchQuery}%`;
+                _queryForListOfForms.text += ` AND form_name ILIKE '%${searchQuery}%'`;
+                _queryForTotalCountForms.text += ` AND form_name ILIKE '%${searchQuery}%'`;
             }
             
             if (pageSize) {
