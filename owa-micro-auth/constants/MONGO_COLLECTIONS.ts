@@ -1,7 +1,4 @@
-const MONGO_COLLECTIONS = {
-    
-
-}
+const MONGO_COLLECTIONS = {}
 
 export {
     MONGO_COLLECTIONS

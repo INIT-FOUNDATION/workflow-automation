@@ -1,0 +1,119 @@
+export const ROLES = {
+    listRoles: 'SELECT role_id, role_name, level from m_roles WHERE status = 1 AND role_id <> 1 ORDER BY date_created DESC',
+    addRole: 'INSERT INTO m_roles (role_name, role_description, level, created_by, updated_by) VALUES ($1, $2, $3, $4, $5) RETURNING role_id',
+    updateRole: 'UPDATE m_roles SET role_name = $2, role_description = $3, level = $4, updated_by = $5, date_updated = NOW() WHERE role_id = $1',
+    getRole: 'SELECT role_name, role_description, level FROM m_roles WHERE role_id = $1 AND status = 1',
+    updateRoleStatus: 'UPDATE m_roles SET status = $2, updated_by = $3, date_updated = NOW() WHERE role_id = $1',
+    getAccessListByRoleId: `SELECT mm.menu_id, 
+                            mm.menu_name,
+                            mm.route_url,
+                            mm.icon_class,
+                            sum(CASE WHEN (ac.permission_id) = 1 THEN 1 ELSE 0 END) write_permission,
+                            sum(CASE WHEN (ac.permission_id) = 2 THEN 1 ELSE 0 END) read_permission,
+                            (CASE WHEN sum(COALESCE(ac.permission_id, 0)) > 0 THEN 1 ELSE 0 END) display_permission
+                        FROM m_menus mm 
+                        LEFT OUTER JOIN access_control ac ON mm.menu_id = ac.menu_id AND ac.role_id=$1
+                        LEFT OUTER JOIN m_permissions mp ON ac.permission_id = mp.permission_id
+                        WHERE mm.status=1
+                        GROUP BY mm.menu_id, mm.menu_name, mm.route_url, mm.icon_class, mm.menu_order
+                        ORDER BY mm.menu_order ASC`,
+    getMenusListByRoleId: `SELECT menu_id, menu_name AS label, route_url as link, icon_class as icon, status, 'true' as initiallyOpened from m_menus WHERE status = 1`,
+    getCombinedAccessListByRoleId: `SELECT * FROM (
+                                        SELECT 
+                                            M.menu_id, 
+                                            M.menu_name, 
+                                            M.route_url, 
+                                            M.icon_class,
+                                            M.menu_order,
+                                            SUM(CASE WHEN (ac.permission_id) = 1 THEN 1 WHEN (uac.permission_id) = 1 THEN 1 ELSE 0 END) AS write_permission,
+                                            SUM(CASE WHEN (ac.permission_id) = 2 THEN 1 WHEN (uac.permission_id) = 2 THEN 1 ELSE 0 END) AS read_permission,
+                                            (CASE WHEN SUM(COALESCE(ac.permission_id, 0)) > 0 THEN 1 WHEN SUM(COALESCE(uac.permission_id, 0)) > 0 THEN 1 ELSE 0 END) AS display_permission
+                                        FROM m_menus M
+                                        LEFT JOIN access_control UAC ON M.menu_id = UAC.menu_id AND UAC.user_id = $1
+                                        LEFT JOIN access_control AC ON M.menu_id = AC.menu_id AND AC.role_id = $2
+                                        LEFT JOIN m_permissions P ON AC.permission_id = P.permission_id
+                                        LEFT JOIN m_permissions P2 ON UAC.permission_id = P2.permission_id
+                                        WHERE M.status = 1
+                                        GROUP BY M.menu_id, M.menu_name, M.route_url, M.icon_class, M.menu_order
+                                        ORDER BY M.menu_order ASC
+                                    ) T 
+                                    WHERE (write_permission = 1 OR read_permission = 1 OR display_permission = 1)`,
+    getDefaultAccessList: "SELECT menu_id, menu_name, route_url, icon_class, permission_id, permission_name FROM m_menus CROSS JOIN m_permissions WHERE status = 1 ORDER BY parent_menu_id, menu_id, permission_id",
+    existsByRoleId: `SELECT EXISTS (
+                        SELECT 1
+                            FROM m_roles
+                            WHERE role_id = $1 AND status = 1
+                    )`,
+    existsByRoleName: `SELECT EXISTS (
+                        SELECT 1
+                            FROM m_roles
+                            WHERE role_name = $1 AND status = 1
+                    )`,
+    deleteExistingPermissions: "DELETE from access_control where role_id = $1",
+    addPermissions: "INSERT INTO access_control (role_id, menu_id, permission_id, created_by, updated_by) values($1, $2, $3, $4, $4)",
+    getRolesByLevel: "SELECT role_id, role_name, level from m_roles WHERE status = 1 AND level = $1 ORDER BY date_created DESC"
+}
+
+export const USERS = {
+    existsByMobileNumber: `SELECT EXISTS (
+        SELECT 1
+            FROM m_users
+            WHERE mobile_number = $1 AND status NOT IN (0,2)
+    )`,
+    existsByUserId: `SELECT EXISTS (
+        SELECT 1
+            FROM m_users
+            WHERE user_id = $1 AND status NOT IN (0,2)
+    )`,
+    createUser: `INSERT INTO m_users(
+        user_name, first_name, last_name, display_name, dob, gender, mobile_number, password, role_id, email_id, created_by, updated_by)
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) RETURNING user_id`,
+    updateUser: `UPDATE m_users SET first_name = $2, last_name = $3, display_name = $4, dob = $5, gender = $6, email_id = $7, updated_by = $8, role_id = $9, date_updated = NOW() WHERE user_id = $1`,
+    getUser: `SELECT * from vw_m_users WHERE user_id = $1 AND status NOT IN (0,2)`,
+    updateProfilePic: `UPDATE m_users SET profile_pic_url = $2, updated_by = $1 WHERE user_id = $1`,
+    getUsersByRoleId: `select user_id, user_name, initcap(display_name) as display_name, mobile_number, initcap(role_name) as role_name  from vw_m_users where role_id = $1`,
+    resetPasswordForUserId: `UPDATE m_users SET password = $2, password_last_updated = NOW(), date_updated = NOW() WHERE user_id = $1`,
+    usersList: `select * from vw_m_users WHERE user_id <> 1`,
+    usersListCount: `select count(*) as count from vw_m_users WHERE user_id <> 1`
+}
+
+export const USER_DEPARTMENT_MAPPING = {
+    createUserDepartmentMapping: `INSERT INTO m_user_department_assoc (user_id, department_id) VALUES ($1, $2)`,
+    updateUserUpdateMapping: `UPDATE m_user_department_assoc SET department_id = $2 WHERE user_id = $1`
+}
+
+export const USER_REPORTING_MAPPING = {
+    updateInActiveReportingMapping: `UPDATE m_user_reporting_assoc SET status = 0, date_updated = NOW() WHERE user_id = $1`,
+    createUserReportingMapping: `INSERT INTO m_user_reporting_assoc (user_id, reporting_to) VALUES ($1, $2)`
+};
+
+export const DEPARTMENTS = {
+    listDepartments: 'SELECT department_id, department_name FROM m_departments WHERE status = 1',
+    addDepartment: `INSERT INTO m_departments (department_name) VALUES ($1)`,
+    updateDepartment: `UPDATE m_departments SET department_name = $2, date_updated = NOW() WHERE department_id = $1`,
+    getDepartment: `SELECT department_id, department_name from m_departments WHERE department_id = $1 AND status = 1`,
+    updateDepartmentStatus: 'UPDATE m_departments SET status = $2, date_updated = NOW() WHERE department_id = $1',
+    existsByDepartmentId: `SELECT EXISTS (
+        SELECT 1
+            FROM m_departments
+            WHERE department_id = $1 AND status = 1
+    )`,
+    existsByDepartmentName: `SELECT EXISTS (
+        SELECT 1
+            FROM m_departments
+            WHERE department_name = $1 AND status = 1
+    )`
+}
+
+export const PASSWORD_POLICY = {
+    addPasswordPolicy: `INSERT INTO password_policies(password_expiry, password_history, minimum_password_length, complexity, alphabetical, "numeric", special_characters, allowed_special_characters, maximum_invalid_attempts)
+	                                VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`,
+    listPasswordPolicies: `SELECT id, password_expiry, password_history, minimum_password_length, complexity, alphabetical, numeric, special_characters, allowed_special_characters, maximum_invalid_attempts FROM password_policies ORDER BY date_updated DESC`,
+    updatePasswordPolicy: `UPDATE password_policies SET password_expiry = $2, password_history = $3, minimum_password_length = $4, complexity = $5, alphabetical = $6, numeric = $7, special_characters = $8, allowed_special_characters = $9, maximum_invalid_attempts = $10, date_updated = NOW() WHERE id = $1`,
+    existsByPasswordPolicyId: `SELECT EXISTS (
+        SELECT 1
+            FROM password_policies
+            WHERE id = $1
+    )`,
+    getPasswordPolicyById: `SELECT password_expiry, password_history, minimum_password_length, complexity, alphabetical, numeric, special_characters, allowed_special_characters, maximum_invalid_attempts FROM password_policies WHERE id = $1`
+}

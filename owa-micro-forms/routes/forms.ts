@@ -1,21 +1,21 @@
-import express, { Request, Response } from "express";
-import { STATUS, redis, generateToken, mongoDBRead, mongoDB, logger, kafka, auditLog, auditLogModel } from "owa-micro-common";
-import { ERRORCODE } from "../constants/ERRORCODE";
-import { AUTH } from "../constants/AUTH";
-import { } from "../services/authService";
-import bcrypt from "bcryptjs";
-import { MONGO_COLLECTIONS } from "../constants/MONGO_COLLECTIONS";
-import {  } from "../constants/CONST";
+import express from "express";
+import { formController } from '../controllers/formController';
 
 export const formsRouter = express.Router();
 
-formsRouter.get("/health", async (req: Request, res: Response) => {
-  try {
-    return res.status(STATUS.OK).send("Form Service is Healthy");
-  } catch (error) {
-    logger.error("Form :: healthCheck :: ", error);
-    return res
-      .status(STATUS.INTERNAL_SERVER_ERROR)
-      .send({ errorCode: error, error });
-  }
-});
+
+formsRouter.get("/health", formController.health);
+
+formsRouter.post("/list", formController.listForms);
+
+formsRouter.post("/create", formController.createForm);
+
+formsRouter.post("/update", formController.updateForm);
+
+formsRouter.get("/details/:formId", formController.getFormDetailsById);
+
+formsRouter.get("/fieldPropertiesDetails/:fieldId", formController.getFieldPropertiesByFieldId);
+
+formsRouter.get("/fields", formController.getFields);
+
+formsRouter.post("/updateStatus", formController.updateFormStatus);

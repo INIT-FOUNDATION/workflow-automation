@@ -16,6 +16,7 @@ import { AdminManagementComponent } from './screens/admin-management/admin-manag
 import { FormBuilderComponent } from './screens/form-builder/form-builder.component';
 import { WorkflowAssignmentComponent } from './screens/workflow-assignment/workflow-assignment.component';
 import { WorkflowBuilderComponent } from './screens/workflow-builder/workflow-builder.component';
+import { WorkflowCardsComponent } from './modules/shared/components/workflow-cards/workflow-cards.component';
 
 @NgModule({
   declarations: [
@@ -24,6 +25,7 @@ import { WorkflowBuilderComponent } from './screens/workflow-builder/workflow-bu
     FormBuilderComponent,
     WorkflowAssignmentComponent,
     WorkflowBuilderComponent,
+    WorkflowCardsComponent
   ],
   imports: [
     BrowserModule,
