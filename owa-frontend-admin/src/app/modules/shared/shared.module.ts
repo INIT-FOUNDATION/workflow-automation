@@ -17,6 +17,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatTabsModule } from '@angular/material/tabs';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import {MatCheckboxModule} from '@angular/material/checkbox';
 /*------------------- MATERIAL COMPONENTS ------------------------*/
 
 /*------------------- DIRECTIVES ------------------------*/
@@ -35,6 +36,7 @@ import { OtpNumberDirective } from './directives/otp-number.directive';
 import { IntegerInputDirective } from './directives/input-integer.directive';
 import { LoaderComponent } from './components/loader/loader.component';
 import { HeaderComponent } from './components/header/header.component';
+import {MatStepperModule} from '@angular/material/stepper';
 
 /*------------------- DIRECTIVES ------------------------*/
 
@@ -78,6 +80,8 @@ const export_material_modules = [
   MatExpansionModule,
   MatTabsModule,
   DragDropModule,
+  MatCheckboxModule,
+  MatStepperModule
 ];
 
 @NgModule({
