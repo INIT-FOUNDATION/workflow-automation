@@ -1,19 +1,20 @@
 {
-  "swagger": "2.0",
+  "openapi": "3.0.0",
   "info": {
     "title": "owa-micro-forms",
     "description": "API Swagger for owa-micro-forms",
     "version": "1.0.0"
   },
-  "host": "localhost:3000",
   "servers": [
     {
       "url": "http://localhost:9005"
+    },
+    {
+      "url": "https://apiowa.dev.orrizonte.in"
+    },
+    {
+      "url": "https://apiowa.orrizonte.in"
     }
-  ],
-  "basePath": "/",
-  "schemes": [
-    "http"
   ],
   "paths": {
     "/api/v1/forms/health": {
@@ -42,35 +43,35 @@
             "name": "Authorization",
             "in": "header",
             "required": true,
-            "type": "string",
-            "description": "Bearer token for authentication"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
+            "description": "Bearer token for authentication",
             "schema": {
-              "type": "object",
-              "properties": {
-                "page_size": {
-                  "type": "number",
-                  "example": 50
-                },
-                "current_page": {
-                  "type": "number",
-                  "example": 1
-                },
-                "search_query": {
-                  "type": "string",
-                  "example": "School Feedback Form"
-                }
-              }
+              "type": "string"
             }
           }
         ],
         "responses": {
           "default": {
             "description": ""
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "page_size": {
+                    "example": "any"
+                  },
+                  "current_page": {
+                    "example": "any"
+                  },
+                  "search_query": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -203,14 +204,18 @@
             "name": "formId",
             "in": "path",
             "required": true,
-            "type": "number"
+            "schema": {
+              "type": "number"
+            }
           },
           {
             "name": "Authorization",
             "in": "header",
             "required": true,
-            "type": "string",
-            "description": "Bearer token for authentication"
+            "description": "Bearer token for authentication",
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -232,14 +237,18 @@
             "name": "fieldId",
             "in": "path",
             "required": true,
-            "type": "number"
+            "schema": {
+              "type": "number"
+            }
           },
           {
             "name": "Authorization",
             "in": "header",
             "required": true,
-            "type": "string",
-            "description": "Bearer token for authentication"
+            "description": "Bearer token for authentication",
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -261,8 +270,10 @@
             "name": "Authorization",
             "in": "header",
             "required": true,
-            "type": "string",
-            "description": "Bearer token for authentication"
+            "description": "Bearer token for authentication",
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -284,25 +295,9 @@
             "name": "Authorization",
             "in": "header",
             "required": true,
-            "type": "string",
-            "description": "Bearer token for authentication"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
+            "description": "Bearer token for authentication",
             "schema": {
-              "type": "object",
-              "properties": {
-                "form_id": {
-                  "type": "number",
-                  "example": 7
-                },
-                "status": {
-                  "type": "number",
-                  "example": 1
-                }
-              }
+              "type": "string"
             }
           }
         ],
@@ -310,7 +305,36 @@
           "default": {
             "description": ""
           }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "form_id": {
+                    "type": "number",
+                    "example": 7
+                  },
+                  "status": {
+                    "type": "number",
+                    "example": 1
+                  }
+                }
+              }
+            }
+          }
         }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "Bearer": {
+        "type": "apiKey",
+        "name": "Authorization",
+        "in": "header",
+        "description": "Enter your bearer token in the format **&lt;token&gt;**"
       }
     }
   }
