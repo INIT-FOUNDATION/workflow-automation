@@ -4,6 +4,7 @@ import 'aos/dist/aos.css';
 import { ThemeService } from './modules/shared/theme/theme.service';
 import { CookieService } from './modules/shared/services/cookies.service';
 import { UtilityService } from './modules/shared/services/utility.service';
+import { AuthService } from './screens/auth/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -12,7 +13,9 @@ import { UtilityService } from './modules/shared/services/utility.service';
 })
 export class AppComponent implements OnInit, AfterViewInit {
   display = false;
+  showHeader = false
   constructor(
+    public authService : AuthService,
     private themeService: ThemeService,
     private cookieService: CookieService,
     public utilityService: UtilityService
@@ -38,7 +41,10 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-    AOS.init();
+    let getUserDetails = sessionStorage.getItem('userToken')
+    if(getUserDetails){
+      this.showHeader = true
+    }
   }
 
   ngAfterViewInit(): void {}
