@@ -108,7 +108,13 @@ export const rolesController = {
                 schema: {
                         role_id: 2,
                         role_name: 'Department Head',
-                        role_description: 'Head of the Department'
+                        role_description: 'Head of the Department',
+                        permissions: [
+                            {
+                                menu_id: 1,
+                                permission_id: 2
+                            }
+                        ]
                 }
             }
             */

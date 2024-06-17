@@ -8,6 +8,7 @@ class Role implements IRole {
   role_name: string;
   role_description: string;
   status: number;
+  permissions: any;
   date_created: string;
   date_updated: string;
   created_by: number;
@@ -18,6 +19,7 @@ class Role implements IRole {
     this.role_name = role.role_name;
     this.role_description = role.role_description;
     this.status = role.status;
+    this.permissions = role.permissions;
     this.date_created = role.date_created;
     this.date_updated = role.date_updated;
     this.created_by = role.created_by;
@@ -51,7 +53,13 @@ const validateUpdateRole = (role: IRole): Joi.ValidationResult => {
     ),
     role_description: Joi.string().min(3).max(50).required().error(
       new Error(JSON.stringify(ROLES.ROLE00002))
-    )
+    ),
+    permissions: Joi.array().items(
+      Joi.object({
+        menu_id: Joi.number().required(),
+        permission_id: Joi.number().required()
+      })
+    ),
   });
   return roleSchema.validate(role);
 };

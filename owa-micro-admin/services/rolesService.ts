@@ -57,6 +57,13 @@ export const rolesService = {
       const result = await pg.executeQueryPromise(_query);
       logger.debug(`rolesService :: updateRole :: db result :: ${JSON.stringify(result)}`)
 
+      if (role.permissions && role.permissions.length > 0) {
+        await rolesService.deleteExistingPermissions(role.role_id);
+        for (const permission of role.permissions) {
+          await rolesService.addPermissions(role.role_id, permission.menu_id, permission.permission_id, role.updated_by);
+        }
+      }
+
       redis.deleteRedis(`ROLE:${role.role_id}`);
       redis.deleteRedis(`ROLES`);
     } catch (error) {
@@ -217,6 +224,38 @@ export const rolesService = {
       return (result && result.length > 0) ? result[0].exists : false;
     } catch (error) {
       logger.error(`rolesService :: existsByRoleName :: ${error.message} :: ${error}`)
+      throw new Error(error.message);
+    }
+  },
+  deleteExistingPermissions: async (roleId: number) => {
+    try {
+      const _query = {
+        text: ROLES.deleteExistingPermissions,
+        values: [roleId]
+      };
+      logger.debug(`rolesService :: deleteExistingPermissions :: query :: ${JSON.stringify(_query)}`)
+
+      const result = await pg.executeQueryPromise(_query);
+      logger.debug(`rolesService :: deleteExistingPermissions :: db result :: ${JSON.stringify(result)}`)
+
+      return (result && result.length > 0) ? result[0].exists : false;
+    } catch (error) {
+      logger.error(`rolesService :: deleteExistingPermissions :: ${error.message} :: ${error}`)
+      throw new Error(error.message);
+    }
+  },
+  addPermissions: async (roleId: number, menu_id: number, permission_id: number, updated_by: number) => {
+    try {
+      const _query = {
+        text: ROLES.addPermissions,
+        values: [roleId, menu_id, permission_id, updated_by]
+      };
+      logger.debug(`rolesService :: addPermissions :: query :: ${JSON.stringify(_query)}`)
+
+      const result = await pg.executeQueryPromise(_query);
+      logger.debug(`rolesService :: addPermissions :: db result :: ${JSON.stringify(result)}`)
+    } catch (error) {
+      logger.error(`rolesService :: addPermissions :: ${error.message} :: ${error}`)
       throw new Error(error.message);
     }
   },

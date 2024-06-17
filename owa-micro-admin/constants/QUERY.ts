@@ -45,7 +45,9 @@ export const ROLES = {
                         SELECT 1
                             FROM m_roles
                             WHERE role_name = $1 AND status = 1
-                    )`
+                    )`,
+    deleteExistingPermissions: "DELETE from access_control where role_id = $1",
+    addPermissions: "INSERT INTO access_control (role_id, menu_id, permission_id, created_by, updated_by) values($1, $2, $3, $4, $4)",
 }
 
 export const USERS = {

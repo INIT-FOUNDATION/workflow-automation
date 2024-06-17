@@ -3,6 +3,7 @@ export interface IRole {
     role_name: string;
     role_description: string;
     status: number;
+    permissions: any;
     date_created: string | undefined;
     date_updated: string | undefined;
     created_by: number | undefined;
