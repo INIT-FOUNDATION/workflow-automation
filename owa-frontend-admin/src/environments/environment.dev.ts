@@ -1,11 +1,8 @@
-const BASE_URL = 'https://api.cklassrooms.com';
-const DIRECT_BASE_URL = 'https://api.cklassrooms.com';
-const CRM_BASE_URL = 'https://apicrm.orrizonte.in'
-const API_CRM_PORT = ``;
+const BASE_URL = 'https://apiowa.dev.orrizonte.in';
+const DIRECT_BASE_URL = 'https://apiowa.dev.orrizonte.in';
 
 export const environment = {
   production: false,
-  crm_prefix_url: `${CRM_BASE_URL}${API_CRM_PORT}/api/v1/common/crm/cklassroom`,
-  landing_page_prefix: 'http://localhost:4200/',
-  ga: 'G-DHFBG5QNQ1'
+  forms_prefix_url: `${BASE_URL}/api/v1/forms`,
+  ga: 'G-DHFBG5QNQ1',
 };

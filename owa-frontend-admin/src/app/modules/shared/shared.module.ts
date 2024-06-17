@@ -39,6 +39,8 @@ import { LoaderComponent } from './components/loader/loader.component';
 import { HeaderComponent } from './components/header/header.component';
 import { PropertiesModalComponent } from './components/properties-modal/properties-modal.component';
 import { TitleComponent } from './components/title/title.component';
+import { CommonDataViewComponent } from '../common-data-view/common-data-view.component';
+import { DataViewModule } from 'primeng/dataview';
 
 /*------------------- DIRECTIVES ------------------------*/
 
@@ -55,8 +57,9 @@ const MY_FORMATS = {
 };
 
 const common_components = [
-  CommonDataTableComponent
-]
+  CommonDataTableComponent,
+  CommonDataViewComponent,
+];
 
 const export_components = [LoaderComponent, HeaderComponent, TitleComponent];
 const export_directives = [
@@ -87,6 +90,7 @@ const export_material_modules = [
   MatTabsModule,
   DragDropModule,
   TableModule,
+  DataViewModule,
 ];
 
 @NgModule({

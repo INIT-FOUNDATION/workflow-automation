@@ -10,6 +10,7 @@
       type="text"
       class="outline-none border-none w-full pr-3 text-sm"
       placeholder="Search for an existing workflow"
+      (input)="getSearchedValue($event.target.value)"
     />
     <img
       src="assets/images/workflowCards/searchIcon.svg"
@@ -29,14 +30,38 @@
 
 <app-title titleName="Pre Defined Forms" [canGoBack]="false"></app-title>
 
-<div
-  class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
+<app-common-data-view
+  #dataView
+  [paginator]="true"
+  paginationpos="bottom"
+  lazyLoad="false"
+  [localData]="gridData"
+  [gridViewItem]="gridViewItem"
+  [rowsPerPage]="rowsPerPage"
+  (onCustomPageAndFilterEvent)="onPageChangeEvent($event)"
 >
-  <div *ngFor="let data of cardData">
-    <app-workflow-cards
-      [title]="data.title"
-      [badge]="data.badge"
-      [departments]="data.departments"
-    ></app-workflow-cards>
-  </div>
-</div>
+  <ng-template #gridViewItem let-rowData="griDdata">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div class="bg-white border rounded-lg shadow-md p-6">
+        <div class="flex items-center mb-5">
+          <img src="/assets/images/workflowCards/cycleIcon.svg" alt="" />
+          <p class="text-gray-800 font-medium text-sm ps-2">
+            {{ rowData?.form_name }}
+          </p>
+        </div>
+        <span
+          class="rounded-lg px-4 py-2 text-xs text-white font-semibold text-center"
+          [ngClass]="[rowData?.status == 1 ? 'bg-emerald-500' : 'bg-sky-700']"
+        >
+          {{ rowData?.status == 1 ? "Payment Collection" : "Educator Payment" }}
+        </span>
+        <div class="flex items-start mt-5">
+          <img src="/assets/images/workflowCards/departmentIcon.svg" alt="" />
+          <p class="text-gray-800 text-sm ps-2">
+            {{ rowData?.form_description }}
+          </p>
+        </div>
+      </div>
+    </div>
+  </ng-template></app-common-data-view
+>

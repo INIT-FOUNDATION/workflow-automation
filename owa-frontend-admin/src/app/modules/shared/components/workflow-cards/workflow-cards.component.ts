@@ -1,12 +1,12 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-workflow-cards',
   templateUrl: './workflow-cards.component.html',
-  styleUrls: ['./workflow-cards.component.scss']
+  styleUrls: ['./workflow-cards.component.scss'],
 })
-export class WorkflowCardsComponent {
-  @Input() title: string;
-  @Input() badge: string;
-  @Input() departments: string;
+export class WorkflowCardsComponent implements OnInit {
+  @Input() data: any;
+
+  ngOnInit(): void {}
 }
