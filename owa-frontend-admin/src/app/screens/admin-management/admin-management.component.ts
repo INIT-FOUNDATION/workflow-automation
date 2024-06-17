@@ -18,9 +18,9 @@ export class AdminManagementComponent {
 
   prepareAssessmentGridCols() {
     this.cols = [
-      new Colmodel('', 'Name', false, false, false),
-      new Colmodel('', 'Role', false, false, false),
-      new Colmodel('', 'Mobile Number', false, false, false),
+      new Colmodel('name', 'Name', false, false, false),
+      new Colmodel('role', 'Role', false, false, false),
+      new Colmodel('mobile', 'Mobile Number', false, false, false),
     ];
   }
 
