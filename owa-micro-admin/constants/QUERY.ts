@@ -19,25 +19,25 @@ export const ROLES = {
                         ORDER BY mm.menu_order ASC`,
     getMenusListByRoleId: `SELECT menu_id, menu_name AS label, route_url as link, icon_class as icon, status, 'true' as initiallyOpened from m_menus WHERE status = 1`,
     getCombinedAccessListByRoleId: `SELECT * FROM (
-    SELECT 
-        M.menu_id, 
-        M.menu_name, 
-        M.route_url, 
-        M.icon_class,
-        M.menu_order,
-        SUM(CASE WHEN (ac.permission_id) = 1 THEN 1 WHEN (uac.permission_id) = 1 THEN 1 ELSE 0 END) AS write_permission,
-        SUM(CASE WHEN (ac.permission_id) = 2 THEN 1 WHEN (uac.permission_id) = 2 THEN 1 ELSE 0 END) AS read_permission,
-        (CASE WHEN SUM(COALESCE(ac.permission_id, 0)) > 0 THEN 1 WHEN SUM(COALESCE(uac.permission_id, 0)) > 0 THEN 1 ELSE 0 END) AS display_permission
-    FROM m_menus M
-    LEFT JOIN access_control UAC ON M.menu_id = UAC.menu_id AND UAC.user_id = $1
-    LEFT JOIN access_control AC ON M.menu_id = AC.menu_id AND AC.role_id = $2
-    LEFT JOIN m_permissions P ON AC.permission_id = P.permission_id
-    LEFT JOIN m_permissions P2 ON UAC.permission_id = P2.permission_id
-    WHERE M.status = 1
-    GROUP BY M.menu_id, M.menu_name, M.route_url, M.icon_class, M.menu_order
-    ORDER BY M.menu_order ASC
-) T 
-WHERE (write_permission = 1 OR read_permission = 1 OR display_permission = 1)`,
+                                        SELECT 
+                                            M.menu_id, 
+                                            M.menu_name, 
+                                            M.route_url, 
+                                            M.icon_class,
+                                            M.menu_order,
+                                            SUM(CASE WHEN (ac.permission_id) = 1 THEN 1 WHEN (uac.permission_id) = 1 THEN 1 ELSE 0 END) AS write_permission,
+                                            SUM(CASE WHEN (ac.permission_id) = 2 THEN 1 WHEN (uac.permission_id) = 2 THEN 1 ELSE 0 END) AS read_permission,
+                                            (CASE WHEN SUM(COALESCE(ac.permission_id, 0)) > 0 THEN 1 WHEN SUM(COALESCE(uac.permission_id, 0)) > 0 THEN 1 ELSE 0 END) AS display_permission
+                                        FROM m_menus M
+                                        LEFT JOIN access_control UAC ON M.menu_id = UAC.menu_id AND UAC.user_id = $1
+                                        LEFT JOIN access_control AC ON M.menu_id = AC.menu_id AND AC.role_id = $2
+                                        LEFT JOIN m_permissions P ON AC.permission_id = P.permission_id
+                                        LEFT JOIN m_permissions P2 ON UAC.permission_id = P2.permission_id
+                                        WHERE M.status = 1
+                                        GROUP BY M.menu_id, M.menu_name, M.route_url, M.icon_class, M.menu_order
+                                        ORDER BY M.menu_order ASC
+                                    ) T 
+                                    WHERE (write_permission = 1 OR read_permission = 1 OR display_permission = 1)`,
     getDefaultAccessList: "SELECT menu_id, menu_name, route_url, icon_class, permission_id, permission_name FROM m_menus CROSS JOIN m_permissions WHERE status = 1 ORDER BY parent_menu_id, menu_id, permission_id",
     existsByRoleId: `SELECT EXISTS (
                         SELECT 1
