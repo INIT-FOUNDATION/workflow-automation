@@ -53,7 +53,7 @@
           class="rounded-lg px-4 py-2 text-xs text-white font-semibold text-center"
           [ngClass]="[rowData?.status == 1 ? 'bg-emerald-500' : 'bg-sky-700']"
         >
-          {{ rowData?.status == 1 ? "Payment Collection" : "Educator Payment" }}
+          {{ rowData?.status == 1 ? "Active" : "In Active" }}
         </span>
         <div class="flex items-start mt-5">
           <img src="/assets/images/workflowCards/departmentIcon.svg" alt="" />
@@ -63,5 +63,5 @@
         </div>
       </div>
     </div>
-  </ng-template></app-common-data-view
->
+  </ng-template>
+</app-common-data-view>
