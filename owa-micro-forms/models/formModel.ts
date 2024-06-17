@@ -50,7 +50,7 @@ class FormField implements IFormFieldAssoc {
     form_field_assoc_id: number;
     form_id: number;
     field_id: number;
-    options: object;
+    options: [];
     status: number;
     date_created: string;
     date_updated: string;
@@ -71,11 +71,21 @@ class FormField implements IFormFieldAssoc {
 
 
     static validateFormFieldAssoc = (formFieldAssoc: IFormFieldAssoc) : Joi.ValidationResult => {
+        const optionSchema = Joi.object({
+            field_property_id: Joi.number().integer().required(),
+            type: Joi.string().valid('text', 'number', 'email', 'password').optional(), // Replace 'other_valid_types' with other valid types if needed
+            name: Joi.string().optional(),
+            label: Joi.string().optional(),
+            placeholder: Joi.string().optional(),
+            required: Joi.boolean().optional(),
+            minlength: Joi.number().integer().min(0).optional(),
+            maxlength: Joi.number().integer().min(0).optional()
+        });
         const formFieldAssocSchema = Joi.object({
             form_field_assoc_id: Joi.number().integer().optional(), 
             form_id: Joi.number().integer().optional(),
             field_id: Joi.number().integer().required(),
-            options: Joi.object().required(),
+            options: Joi.array().items(optionSchema).required(),
             status: Joi.number().integer().required(),
             date_created: Joi.string().allow("", null),
             date_updated: Joi.string().allow("", null),
