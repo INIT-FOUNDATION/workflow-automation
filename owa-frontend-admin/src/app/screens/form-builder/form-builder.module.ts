@@ -6,12 +6,14 @@ import { AddFormBuilderComponent } from './component/add-form-builder/add-form-b
 import { EditFormBuilderComponent } from './component/edit-form-builder/edit-form-builder.component';
 import { FormBuilderFormComponent } from './component/form-builder-form/form-builder-form.component';
 import { SharedModule } from 'src/app/modules/shared/shared.module';
+import { FormBuilderComponent } from './form-builder.component';
 
 @NgModule({
   declarations: [
     AddFormBuilderComponent,
     EditFormBuilderComponent,
     FormBuilderFormComponent,
+    FormBuilderComponent
   ],
   imports: [CommonModule, FormBuilderRoutingModule, SharedModule],
 })

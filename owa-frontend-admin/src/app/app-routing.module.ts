@@ -22,14 +22,7 @@ const routes: Routes = [
     loadChildren: () =>
       import('./screens/workflow-builder/workflow-builder.module').then((m) => m.WorkflowBuilderModule),
     canActivate: [AuthGuard],
-  },
-
-  {
-    path: 'workflow-assignment',
-    loadChildren: () =>
-      import('./screens/workflow-assignment/workflow-assignment.module').then((m) => m.WorkflowAssignmentModule),
-    canActivate: [AuthGuard],
-  },
+  }
 ];
 
 @NgModule({
