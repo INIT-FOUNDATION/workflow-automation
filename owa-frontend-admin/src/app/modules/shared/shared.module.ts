@@ -39,6 +39,7 @@ import { LoaderComponent } from './components/loader/loader.component';
 import { HeaderComponent } from './components/header/header.component';
 import { PropertiesModalComponent } from './components/properties-modal/properties-modal.component';
 import { TitleComponent } from './components/title/title.component';
+import { CardComponent } from './components/card/card.component';
 
 /*------------------- DIRECTIVES ------------------------*/
 
@@ -58,7 +59,7 @@ const common_components = [
   CommonDataTableComponent
 ]
 
-const export_components = [LoaderComponent, HeaderComponent, TitleComponent];
+const export_components = [LoaderComponent, HeaderComponent, TitleComponent, CardComponent];
 const export_directives = [
   RangeDirective,
   RangeLengthDirective,
