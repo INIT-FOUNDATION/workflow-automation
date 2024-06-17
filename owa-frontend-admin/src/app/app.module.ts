@@ -12,20 +12,10 @@ import { LoaderInterceptor } from './interceptor/loader.interceptor';
 import { ThemeModule } from './modules/shared/theme/theme.module';
 import { NgxGoogleAnalyticsModule } from 'ngx-google-analytics';
 import { environment } from 'src/environments/environment';
-import { AdminManagementComponent } from './screens/admin-management/admin-management.component';
-import { FormBuilderComponent } from './screens/form-builder/form-builder.component';
-import { WorkflowAssignmentComponent } from './screens/workflow-assignment/workflow-assignment.component';
-import { WorkflowBuilderComponent } from './screens/workflow-builder/workflow-builder.component';
-import { AuthComponent } from './screens/auth/auth.component';
 
 @NgModule({
   declarations: [
-    AppComponent,
-    AdminManagementComponent,
-    FormBuilderComponent,
-    WorkflowAssignmentComponent,
-    WorkflowBuilderComponent,
-    AuthComponent,
+    AppComponent
   ],
   imports: [
     BrowserModule,

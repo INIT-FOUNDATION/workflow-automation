@@ -6,12 +6,14 @@ import { AddAdminManagementComponent } from './component/add-admin-management/ad
 import { EditAdminManagementComponent } from './component/edit-admin-management/edit-admin-management.component';
 import { FormAdminManagementComponent } from './component/form-admin-management/form-admin-management.component';
 import { SharedModule } from 'src/app/modules/shared/shared.module';
+import { AdminManagementComponent } from './admin-management.component';
 
 @NgModule({
   declarations: [
     AddAdminManagementComponent,
     EditAdminManagementComponent,
     FormAdminManagementComponent,
+    AdminManagementComponent
   ],
   imports: [CommonModule, AdminManagementRoutingModule, SharedModule],
 })

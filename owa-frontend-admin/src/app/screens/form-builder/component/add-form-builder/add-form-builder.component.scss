@@ -1,0 +1,6 @@
+.custom-scroll-bar {
+  @media (min-width: 768px) {
+    overflow-y: auto;
+    height: calc(100vh - 13rem);
+  }
+}

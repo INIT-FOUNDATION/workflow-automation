@@ -1,12 +1,15 @@
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { findIndex } from 'rxjs';
+import { PropertiesModalComponent } from 'src/app/modules/shared/components/properties-modal/properties-modal.component';
 
 @Component({
   selector: 'app-add-form-builder',
   templateUrl: './add-form-builder.component.html',
-  styleUrls: ['./add-form-builder.component.scss',]
+  styleUrls: ['./add-form-builder.component.scss'],
 })
-export class AddFormBuilderComponent {
+export class AddFormBuilderComponent implements OnInit {
   chooseFromArray = [
     { id: 1, acceptOnly: 'string', label: 'Name', img: 'nameIcon' },
     { id: 2, acceptOnly: 'string', label: 'Address', img: 'addressIcon' },
@@ -62,12 +65,42 @@ export class AddFormBuilderComponent {
 
   chosenFields: any = [];
 
-  drop(event: CdkDragDrop<any[]>) {
+  constructor(private dialog: MatDialog) {}
+
+  ngOnInit(): void {}
+
+  dropFormField(event: CdkDragDrop<any[]>) {
     const selectedItem = event.previousContainer.data[event.previousIndex];
 
-    if (!this.chosenFields.some((item) => item.id === selectedItem.id)) {
-      this.chosenFields.push(selectedItem);
-      console.log(this.chosenFields);
+    this.chosenFields.some((item) => item.id === selectedItem.id);
+    this.chosenFields.push(selectedItem);
+    this.openPropertyModal(selectedItem, this.chosenFields.length - 1);
+  }
+
+  deleteFormField(id) {
+    const index = this.chosenFields.findIndex((item) => item.id === id);
+    if (index !== -1) {
+      this.chosenFields.splice(index, 1);
     }
+  }
+
+  openPropertyModal(selectedItem, index) {
+    const dialogRef = this.dialog.open(PropertiesModalComponent, {
+      width: 'clamp(20rem, 60vw, 35rem)',
+      panelClass: [
+        'animate__animated',
+        'animate__slideInRight',
+        'properties-container',
+      ],
+      position: { right: '0px', top: '0px', bottom: '0px' },
+      disableClose: true,
+      data: { ...selectedItem, index },
+    });
+
+    dialogRef.afterClosed().subscribe((res) => {
+      this.chosenFields.some((item) => item.index === index);
+      this.chosenFields[index] = res[0];
+      console.log(this.chosenFields);
+    });
   }
 }

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { EncDecService } from 'src/app/modules/shared/services/encryption-decryption.service';
-import { AuthService } from '../../auth.service';
+import { AuthService } from '../../services/auth.service';
 import { UtilityService } from 'src/app/modules/shared/services/utility.service';
 import { CommanService } from 'src/app/modules/shared/services/comman.service';
 
