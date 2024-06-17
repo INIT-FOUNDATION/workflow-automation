@@ -70,7 +70,8 @@ export const adminController = {
                     department_id: existingUser.department_id,
                     role_id: existingUser.role_id,
                     user_name: existingUser.user_name,
-                    email_id: existingUser.email_id
+                    email_id: existingUser.email_id,
+                    level: existingUser.level
                 }
                 const token = await generateToken.generate(existingUser.user_name, tokenDetails, expiryTime, AUTHENTICATION.SECRET_KEY, req);
                 adminService.updateUserLoginStatus(USERS_STATUS.LOGGED_IN, req.body.user_name);

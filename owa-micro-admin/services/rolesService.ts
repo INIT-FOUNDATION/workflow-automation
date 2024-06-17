@@ -33,12 +33,20 @@ export const rolesService = {
     try {
       const _query = {
         text: ROLES.addRole,
-        values: [role.role_name, role.role_description, role.created_by, role.updated_by]
+        values: [role.role_name, role.role_description, role.level, role.created_by, role.updated_by]
       };
       logger.debug(`rolesService :: addRole :: query :: ${JSON.stringify(_query)}`)
 
       const result = await pg.executeQueryPromise(_query);
       logger.debug(`rolesService :: addRole :: db result :: ${JSON.stringify(result)}`)
+
+      const createRoleId = result[0].role_id;
+
+      if (role.permissions && role.permissions.length > 0) {
+        for (const permission of role.permissions) {
+          await rolesService.addPermissions(createRoleId, permission.menu_id, permission.permission_id, role.updated_by);
+        }
+      }
 
       redis.deleteRedis(`ROLES`);
     } catch (error) {
@@ -50,7 +58,7 @@ export const rolesService = {
     try {
       const _query = {
         text: ROLES.updateRole,
-        values: [role.role_id, role.role_name, role.role_description, role.updated_by]
+        values: [role.role_id, role.role_name, role.role_description, role.level, role.updated_by]
       };
       logger.debug(`rolesService :: updateRole :: query :: ${JSON.stringify(_query)}`)
 
@@ -148,6 +156,8 @@ export const rolesService = {
 
       const result = await pg.executeQueryPromise(_query);
       logger.debug(`rolesService :: getMenusListByRoleId :: db result :: ${JSON.stringify(result)}`)
+
+      return result;
     } catch (error) {
       logger.error(`rolesService :: getMenusListByRoleId :: ${error.message} :: ${error}`)
       throw new Error(error.message);
@@ -172,6 +182,7 @@ export const rolesService = {
       logger.debug(`rolesService :: getCombinedAccessListByRoleId :: db result :: ${JSON.stringify(result)}`)
 
       redis.SetRedis(key, result, CACHE_TTL.LONG);
+      return result;
     } catch (error) {
       logger.error(`rolesService :: getCombinedAccessListByRoleId :: ${error.message} :: ${error}`)
       throw new Error(error.message);
@@ -187,6 +198,7 @@ export const rolesService = {
       const result = await pg.executeQueryPromise(_query);
       logger.debug(`rolesService :: getDefaultAccessList :: db result :: ${JSON.stringify(result)}`)
 
+      return result;
     } catch (error) {
       logger.error(`rolesService :: getDefaultAccessList :: ${error.message} :: ${error}`)
       throw new Error(error.message);
@@ -256,6 +268,23 @@ export const rolesService = {
       logger.debug(`rolesService :: addPermissions :: db result :: ${JSON.stringify(result)}`)
     } catch (error) {
       logger.error(`rolesService :: addPermissions :: ${error.message} :: ${error}`)
+      throw new Error(error.message);
+    }
+  },
+  getRolesByLevel: async (level: string): Promise<IRole[]> => {
+    try {
+      const _query = {
+        text: ROLES.getRolesByLevel,
+        values: [level]
+      };
+      logger.debug(`rolesService :: getRolesByLevel :: query :: ${JSON.stringify(_query)}`)
+
+      const result = await pg.executeQueryPromise(_query);
+      logger.debug(`rolesService :: getRolesByLevel :: db result :: ${JSON.stringify(result)}`)
+
+      return result
+    } catch (error) {
+      logger.error(`rolesService :: getRolesByLevel :: ${error.message} :: ${error}`)
       throw new Error(error.message);
     }
   },

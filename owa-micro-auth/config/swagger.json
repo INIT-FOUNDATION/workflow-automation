@@ -1,14 +1,14 @@
 {
-  "openapi": "3.0.0",
+  "swagger": "2.0",
   "info": {
     "title": "owa-micro-auth",
     "description": "API Swagger for owa-micro-auth",
     "version": "1.0.0"
   },
-  "servers": [
-    {
-      "url": "http://localhost:9001"
-    }
+  "host": "localhost:9001",
+  "basePath": "/",
+  "schemes": [
+    "http"
   ],
   "paths": {
     "/api/v1/auth/health": {
@@ -37,17 +37,13 @@
             "name": "Authorization",
             "in": "header",
             "required": true,
-            "description": "Bearer token for authentication",
-            "schema": {
-              "type": "string"
-            }
+            "type": "string",
+            "description": "Bearer token for authentication"
           },
           {
             "name": "authorization",
             "in": "header",
-            "schema": {
-              "type": "string"
-            }
+            "type": "string"
           }
         ],
         "responses": {
@@ -64,27 +60,29 @@
         ],
         "summary": "User Login",
         "description": "Endpoint for User Login",
-        "parameters": [],
-        "responses": {
-          "default": {
-            "description": ""
-          }
-        },
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "req": {
-                    "example": "any"
-                  },
-                  "password": {
-                    "example": "any"
-                  }
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "user_name": {
+                  "type": "string",
+                  "example": "8169104556"
+                },
+                "password": {
+                  "type": "string",
+                  "example": "encyrptedPasswordHash"
                 }
               }
             }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
           }
         }
       }
@@ -101,10 +99,8 @@
             "name": "Authorization",
             "in": "header",
             "required": true,
-            "description": "Bearer token for authentication",
-            "schema": {
-              "type": "string"
-            }
+            "type": "string",
+            "description": "Bearer token for authentication"
           }
         ],
         "responses": {
@@ -121,24 +117,25 @@
         ],
         "summary": "Get Forgot Password Otp",
         "description": "Endpoint to Generate OTP for Forgot Password",
-        "parameters": [],
-        "responses": {
-          "default": {
-            "description": ""
-          }
-        },
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "mobile_number": {
-                    "example": "any"
-                  }
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "mobile_number": {
+                  "type": "number",
+                  "example": 8169104556
                 }
               }
             }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
           }
         }
       }
@@ -150,27 +147,29 @@
         ],
         "summary": "Verify Forgot Password Otp",
         "description": "Endpoint to Verify OTP for Forgot Password",
-        "parameters": [],
-        "responses": {
-          "default": {
-            "description": ""
-          }
-        },
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "otp": {
-                    "example": "any"
-                  },
-                  "txnId": {
-                    "example": "any"
-                  }
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "otp": {
+                  "type": "number",
+                  "example": 123456
+                },
+                "txnId": {
+                  "type": "string",
+                  "example": "1b99ee36-4d23-4d0a-9972-606f48bf5e33"
                 }
               }
             }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
           }
         }
       }

@@ -20,6 +20,7 @@ SELECT
         'DD-MON-YYYY HH12:MI PM'
     ) AS last_logged_in_out,
     r.role_name,
+    r.level AS level,
     u.profile_pic_url,
     d.department_name,
     ARRAY_AGG(ura.reporting_to) AS reporting_to_users
@@ -45,5 +46,6 @@ GROUP BY
     u.display_name,
     u.last_logged_in,
     r.role_name,
+    r.level,
     u.profile_pic_url,
     d.department_name;

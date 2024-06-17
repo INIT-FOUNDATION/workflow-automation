@@ -27,6 +27,7 @@ CREATE TABLE m_roles (
     role_id serial PRIMARY KEY,
     role_name VARCHAR(30),
     role_description VARCHAR(50),
+    level VARCHAR(20),
     status smallint DEFAULT 1,
     date_created TIMESTAMP DEFAULT now(),
     date_updated TIMESTAMP DEFAULT now(),

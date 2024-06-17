@@ -48,7 +48,13 @@ export const rolesController = {
                 required: true,
                 schema: {
                         role_name: 'Department Head',
-                        role_description: 'Head of the Department'
+                        role_description: 'Head of the Department',
+                        permissions: [
+                            {
+                                menu_id: 1,
+                                permission_id: 2
+                            }
+                        ]
                 }
              }
             */
@@ -336,6 +342,71 @@ export const rolesController = {
             });
         } catch (error) {
             logger.error(`rolesController :: getCombinedAccessListByRoleId :: ${error.message} :: ${error}`);
+            return res.status(STATUS.INTERNAL_SERVER_ERROR).send(ROLES.ROLE00000);
+        }
+    },
+    getRolesByLevel: async (req: Request, res: Response): Promise<Response> => {
+        try {
+            /*
+            #swagger.tags = ['Roles']
+            #swagger.summary = 'Get Roles by Level'
+            #swagger.description = 'Endpoint to retrieve Roles List by level'
+            #swagger.parameters['Authorization'] = {
+                in: 'header',
+                required: true,
+                type: 'string',
+                description: 'Bearer token for authentication'
+            }
+            */
+            const level = req.params.level;
+            if (!level) return res.status(STATUS.BAD_REQUEST).send(ROLES.ROLE00009);
+
+            const roles = await rolesService.getRolesByLevel(level);
+            return res.status(STATUS.OK).send({
+                data: roles,
+                message: "Roles List Fetched Successfully",
+            });
+        } catch (error) {
+            logger.error(`rolesController :: getRolesByLevel :: ${error.message} :: ${error}`);
+            return res.status(STATUS.INTERNAL_SERVER_ERROR).send(ROLES.ROLE00000);
+        }
+    },
+    listLevels: async (req: Request, res: Response): Promise<Response> => {
+        try {
+            /*
+            #swagger.tags = ['Roles']
+            #swagger.summary = 'List Levels'
+            #swagger.description = 'Endpoint to retrieve List Levels'
+            #swagger.parameters['Authorization'] = {
+                in: 'header',
+                required: true,
+                type: 'string',
+                description: 'Bearer token for authentication'
+            }
+            */
+            const level = req.plainToken.level;
+            let levels = [];
+
+            switch (level) {
+
+                case 'Admin':
+                    levels = ['Department', 'Employee'];
+                    break;
+    
+                case 'Department':
+                    levels = ['Employee'];
+                    break;
+    
+                case 'Employee':
+                    levels = ['Employee'];
+                    break;
+            }
+            return res.status(STATUS.OK).send({
+                data: levels,
+                message: "Levels Fetched Successfully",
+            });
+        } catch (error) {
+            logger.error(`rolesController :: listLevels :: ${error.message} :: ${error}`);
             return res.status(STATUS.INTERNAL_SERVER_ERROR).send(ROLES.ROLE00000);
         }
     },

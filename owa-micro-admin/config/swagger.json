@@ -63,6 +63,22 @@
                 "role_description": {
                   "type": "string",
                   "example": "Head of the Department"
+                },
+                "permissions": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "menu_id": {
+                        "type": "number",
+                        "example": 1
+                      },
+                      "permission_id": {
+                        "type": "number",
+                        "example": 2
+                      }
+                    }
+                  }
                 }
               }
             }
@@ -108,9 +124,71 @@
                 "role_description": {
                   "type": "string",
                   "example": "Head of the Department"
+                },
+                "permissions": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "menu_id": {
+                        "type": "number",
+                        "example": 1
+                      },
+                      "permission_id": {
+                        "type": "number",
+                        "example": 2
+                      }
+                    }
+                  }
                 }
               }
             }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/v1/admin/roles/listLevels": {
+      "get": {
+        "tags": [
+          "Roles"
+        ],
+        "summary": "List Levels",
+        "description": "Endpoint to retrieve List Levels",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Bearer token for authentication"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/v1/admin/roles/defaultAccessList": {
+      "get": {
+        "tags": [
+          "Roles"
+        ],
+        "summary": "Get Default Access List",
+        "description": "Endpoint to retrieve Default Access List",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Bearer token for authentication"
           }
         ],
         "responses": {
@@ -248,7 +326,7 @@
         }
       }
     },
-    "/api/v1/admin/roles/combinedAccessList/{roleId}": {
+    "/api/v1/admin/roles/combinedAccessList/{roleId}/{userId}": {
       "get": {
         "tags": [
           "Roles"
@@ -258,6 +336,12 @@
         "parameters": [
           {
             "name": "roleId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "userId",
             "in": "path",
             "required": true,
             "type": "string"
@@ -277,14 +361,20 @@
         }
       }
     },
-    "/api/v1/admin/roles/defaultAccessList": {
+    "/api/v1/admin/roles/listBylevel/{level}": {
       "get": {
         "tags": [
           "Roles"
         ],
-        "summary": "Get Default Access List",
-        "description": "Endpoint to retrieve Default Access List",
+        "summary": "Get Roles by Level",
+        "description": "Endpoint to retrieve Roles List by level",
         "parameters": [
+          {
+            "name": "level",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
           {
             "name": "Authorization",
             "in": "header",
@@ -659,6 +749,16 @@
                 "department_id": {
                   "type": "number",
                   "example": 1
+                },
+                "reporting_to_users": {
+                  "type": "array",
+                  "example": [
+                    1,
+                    2
+                  ],
+                  "items": {
+                    "type": "number"
+                  }
                 }
               }
             }
@@ -736,6 +836,16 @@
                 "department_id": {
                   "type": "number",
                   "example": 1
+                },
+                "reporting_to_users": {
+                  "type": "array",
+                  "example": [
+                    1,
+                    2
+                  ],
+                  "items": {
+                    "type": "number"
+                  }
                 }
               }
             }
