@@ -41,6 +41,7 @@ import { PropertiesModalComponent } from './components/properties-modal/properti
 import { TitleComponent } from './components/title/title.component';
 import { CommonDataViewComponent } from '../common-data-view/common-data-view.component';
 import { DataViewModule } from 'primeng/dataview';
+import { CardComponent } from './components/card/card.component';
 
 /*------------------- DIRECTIVES ------------------------*/
 
@@ -61,7 +62,7 @@ const common_components = [
   CommonDataViewComponent,
 ];
 
-const export_components = [LoaderComponent, HeaderComponent, TitleComponent];
+const export_components = [LoaderComponent, HeaderComponent, TitleComponent, CardComponent];
 const export_directives = [
   RangeDirective,
   RangeLengthDirective,
