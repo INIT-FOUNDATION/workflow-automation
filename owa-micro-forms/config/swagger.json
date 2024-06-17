@@ -1,0 +1,341 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "owa-micro-forms",
+    "description": "API Swagger for owa-micro-forms",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:9005"
+    },
+    {
+      "url": "https://apiowa.dev.orrizonte.in"
+    },
+    {
+      "url": "https://apiowa.orrizonte.in"
+    }
+  ],
+  "paths": {
+    "/api/v1/forms/health": {
+      "get": {
+        "tags": [
+          "Health"
+        ],
+        "summary": "Health Check API",
+        "description": "Endpoint to health check Form Service",
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/v1/forms/list": {
+      "post": {
+        "tags": [
+          "Form Builder API"
+        ],
+        "summary": "Get all the forms list",
+        "description": "Endpoint to get forms list by page size and current page",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "description": "Bearer token for authentication",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "page_size": {
+                    "example": "any"
+                  },
+                  "current_page": {
+                    "example": "any"
+                  },
+                  "search_query": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/forms/create": {
+      "post": {
+        "tags": [
+          "Form Builder API"
+        ],
+        "summary": "Create a dynamic form",
+        "description": "Endpoint to create a dynamic form",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Bearer token for authentication"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "form_name": {
+                  "type": "string",
+                  "example": "School Survey Form"
+                },
+                "form_description": {
+                  "type": "string",
+                  "example": "This form is used for taking feedback from schools"
+                },
+                "form_fields": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "field_id": {
+                        "type": "number",
+                        "example": 1
+                      },
+                      "options": {
+                        "type": "object"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/v1/forms/update": {
+      "post": {
+        "tags": [
+          "Form Builder API"
+        ],
+        "summary": "Update a dynamic form",
+        "description": "Endpoint to update a dynamic form",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Bearer token for authentication"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "form_id": {
+                  "type": "number",
+                  "example": 7
+                },
+                "form_name": {
+                  "type": "string",
+                  "example": "School Survey Form"
+                },
+                "form_description": {
+                  "type": "string",
+                  "example": "This form is used for taking feedback from schools"
+                },
+                "form_fields": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "field_id": {
+                        "type": "number",
+                        "example": 1
+                      },
+                      "options": {
+                        "type": "object"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/v1/forms/details/{formId}": {
+      "get": {
+        "tags": [
+          "Form Builder API"
+        ],
+        "summary": "Get Form details by form id",
+        "description": "Endpoint to get form details along with form fields",
+        "parameters": [
+          {
+            "name": "formId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "description": "Bearer token for authentication",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/v1/forms/fieldPropertiesDetails/{fieldId}": {
+      "get": {
+        "tags": [
+          "Form Builder API"
+        ],
+        "summary": "Get Field Properties by Field Id",
+        "description": "Endpoint to get all properties of fields",
+        "parameters": [
+          {
+            "name": "fieldId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "description": "Bearer token for authentication",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/v1/forms/fields": {
+      "get": {
+        "tags": [
+          "Form Builder API"
+        ],
+        "summary": "Get All Fields List API",
+        "description": "Endpoint to get all form fields",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "description": "Bearer token for authentication",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/v1/forms/updateStatus": {
+      "post": {
+        "tags": [
+          "Form Builder API"
+        ],
+        "summary": "Update a dynamic form status",
+        "description": "Endpoint to update a dynamic form status",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "description": "Bearer token for authentication",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "form_id": {
+                    "type": "number",
+                    "example": 7
+                  },
+                  "status": {
+                    "type": "number",
+                    "example": 1
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "Bearer": {
+        "type": "apiKey",
+        "name": "Authorization",
+        "in": "header",
+        "description": "Enter your bearer token in the format **&lt;token&gt;**"
+      }
+    }
+  }
+}
