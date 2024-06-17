@@ -35,6 +35,7 @@ import "@ionic/react/css/palettes/dark.system.css";
 import "./theme/variables.css";
 import Login from "./pages/Login/Login";
 import Header from "./pages/Header/Header";
+import Footer from "./pages/Footer/Footer";
 
 setupIonicReact();
 
@@ -44,10 +45,15 @@ const App: React.FC = () => (
       <IonRouterOutlet>
         <Route exact path="/header">
           <Header />
+        <Footer/>
         </Route>
-        <Route exact path="/">
+        {/* <Route exact path="/header">
+          <Footer />
+        
+        </Route> */}
+        {/* <Route exact path="/">
           <Redirect to="/header" />
-        </Route>
+        </Route> */}
       </IonRouterOutlet>
     </IonReactRouter>
   </IonApp>
