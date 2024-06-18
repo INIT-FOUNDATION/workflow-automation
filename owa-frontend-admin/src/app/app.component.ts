@@ -33,7 +33,7 @@ export class AppComponent implements OnInit, AfterViewInit {
         const loggedInuserDetails =  sessionStorage.getItem('userDetails')
         let loggedinData = JSON.parse(loggedInuserDetails)
         this.dataService.permissions = loggedinData.menuList
-        
+        this.router.navigate([`/admin-management`]);
       }else{
         this.router.navigate([`/login`]);
       }
