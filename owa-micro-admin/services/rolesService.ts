@@ -163,31 +163,6 @@ export const rolesService = {
       throw new Error(error.message);
     }
   },
-  getCombinedAccessListByRoleId: async (roleId: number, userId: number): Promise<any> => {
-    try {
-      const key = `COMBINED_ACCESS_LIST|USER:${userId}`
-      const cachedResult = await redis.GetKeyRedis(key);
-      if (cachedResult) {
-        logger.debug(`rolesService :: getCombinedAccessListByRoleId :: roleId :: ${roleId} :: userId :: ${userId} :: cached result :: ${cachedResult}`)
-        return JSON.parse(cachedResult)
-      }
-
-      const _query = {
-        text: ROLES.getCombinedAccessListByRoleId,
-        values: [roleId, userId]
-      };
-      logger.debug(`rolesService :: getCombinedAccessListByRoleId :: query :: ${JSON.stringify(_query)}`)
-
-      const result = await pg.executeQueryPromise(_query);
-      logger.debug(`rolesService :: getCombinedAccessListByRoleId :: db result :: ${JSON.stringify(result)}`)
-
-      redis.SetRedis(key, result, CACHE_TTL.LONG);
-      return result;
-    } catch (error) {
-      logger.error(`rolesService :: getCombinedAccessListByRoleId :: ${error.message} :: ${error}`)
-      throw new Error(error.message);
-    }
-  },
   getDefaultAccessList: async (): Promise<any> => {
     try {
       const _query = {

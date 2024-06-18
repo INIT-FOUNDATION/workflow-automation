@@ -1,5 +1,8 @@
 <div class="h-100" appTheme>
   <app-loader></app-loader>
+  <!-- <ng-template [ngIf]="(authService.currentUser | async)" >
+    <app-header></app-header>
+  </ng-template> -->
   <app-header></app-header>
   <div class="px-2 md:px-20 mt-6">
     <router-outlet></router-outlet>
