@@ -8,15 +8,15 @@ input[type="checkbox"] {
   accent-color: #ef4444;
 }
 
-::ng-deep .mat-form-field-infix {
+.properties-select ::ng-deep .mat-form-field-infix {
   padding: 0.73rem 0rem !important;
   border-top: 0rem !important;
 }
 
-::ng-deep .mat-select-panel {
+.properties-select ::ng-deep .mat-select-panel {
   border-radius: 0.75rem !important;
 }
 
-::ng-deep .mat-select-trigger {
+.properties-select ::ng-deep .mat-select-trigger {
   border-radius: 0.75rem !important;
 }
