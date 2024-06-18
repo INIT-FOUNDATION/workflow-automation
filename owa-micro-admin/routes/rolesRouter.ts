@@ -21,8 +21,6 @@ rolesRouter.get("/accessList/:roleId", rolesController.getAccessListByRoleId);
 
 rolesRouter.get("/menusList/:roleId", rolesController.getAccessListByRoleId);
 
-rolesRouter.get("/combinedAccessList/:roleId/:userId", rolesController.getCombinedAccessListByRoleId);
-
 rolesRouter.get("/listBylevel/:level", rolesController.getRolesByLevel);
 
 export {
