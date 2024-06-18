@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { FormBuilderService } from 'src/app/screens/form-builder/services/form-builder.service';
 
 @Component({
   selector: 'app-properties-modal',
@@ -8,70 +8,39 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
   styleUrls: ['./properties-modal.component.scss'],
 })
 export class PropertiesModalComponent implements OnInit {
-  propertiesForm: FormGroup;
-  fieldSize: any = [
-    {
-      id: 1,
-      fieldName: 'Small',
-    },
-    {
-      id: 2,
-      fieldName: 'Medium',
-    },
-    {
-      id: 3,
-      fieldName: 'Large',
-    },
-  ];
+  getPropertyFields: any = [];
+  propertiesForm: any = {};
+  delayedTime: any;
 
-  formatRangeList: any = [
-    { id: 1, label: 'character' },
-    { id: 2, label: 'number' },
-    { id: 3, label: 'text' },
-    { id: 4, label: 'email' },
-    { id: 5, label: 'date' },
-  ];
-  selectedFieldId: number;
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private dialogRef: MatDialogRef<PropertiesModalComponent>
+    private dialogRef: MatDialogRef<PropertiesModalComponent>,
+    private formBuilderService: FormBuilderService
   ) {}
 
   ngOnInit(): void {
-    this.initForm();
+    this.getPropertyForFields();
   }
 
-  initForm() {
-    this.propertiesForm = new FormGroup({
-      fieldLabel: new FormControl(null),
-      instructionText: new FormControl(null),
-      fieldSize: new FormControl(null),
-      placeholderText: new FormControl(null),
-      minRange: new FormControl(null),
-      maxRange: new FormControl(null),
-      rangeFormat: new FormControl(null),
-      hideFieldLabel: new FormControl(false),
-      showCharacterCount: new FormControl(false),
-      mandatoryField: new FormControl(false),
-      hideField: new FormControl(false),
-      disabledField: new FormControl(false),
-    });
+  getPropertyForFields() {
+    this.formBuilderService
+      .getPropertiesFormFields(this.data?.field_id)
+      .subscribe((res: any) => {
+        this.getPropertyFields = res.data;
+      });
   }
 
-  selectedField(id) {
-    this.selectedFieldId = id;
-    this.propertiesForm.get('fieldSize').setValue(id);
-  }
-
-  selectedFormat(value) {
-    this.propertiesForm.get('rangeFormat').setValue(value);
+  getInputFieldValues(label, value) {
+    clearTimeout(this.delayedTime);
+    this.delayedTime = setTimeout(() => {
+      this.propertiesForm[label] = value;
+    }, 1000);
   }
 
   submitForm() {
     const formData: any = [];
-
     const mergedFormData = {
-      ...this.propertiesForm.getRawValue(),
+      ...this.propertiesForm,
       ...this.data,
     };
     formData.push(mergedFormData);
