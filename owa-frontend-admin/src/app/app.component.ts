@@ -4,6 +4,9 @@ import 'aos/dist/aos.css';
 import { ThemeService } from './modules/shared/theme/theme.service';
 import { CookieService } from './modules/shared/services/cookies.service';
 import { UtilityService } from './modules/shared/services/utility.service';
+import { AuthService } from './screens/auth/services/auth.service';
+import { DataService } from './modules/shared/services/data.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -14,36 +17,28 @@ export class AppComponent implements OnInit, AfterViewInit {
   display = false;
   showHeader = false
   constructor(
-    // public authService : AuthService,
+     public authService : AuthService,
     private themeService: ThemeService,
-    private cookieService: CookieService,
+    private router: Router,
+    private dataService: DataService,
     public utilityService: UtilityService
-  ) {
-    const theme = cookieService.getCookie('theme');
-    const darkModeMediaQuery = window.matchMedia(
-      '(prefers-color-scheme: dark)'
-    );
-    darkModeMediaQuery.addListener((e) => this.updateTheme(e.matches));
-    if (!theme) {
-      this.updateTheme(darkModeMediaQuery.matches);
-    }
-  }
+  ) {}
 
-  updateTheme(darkMode: boolean) {
-    if (darkMode) {
-      this.themeService.active_theme = 'dark_theme';
-      this.themeService.setActiveThem('dark_theme');
-    } else {
-      this.themeService.active_theme = 'light_theme';
-      this.themeService.setActiveThem('light_theme');
-    }
-  }
 
   ngOnInit(): void {
-    let getUserDetails = sessionStorage.getItem('userToken')
-    if(getUserDetails){
-      this.showHeader = true
-    }
+    this.authService.currentUser.subscribe(async (res) => {
+      
+      if(res){
+        this.showHeader = true
+        const loggedInuserDetails =  sessionStorage.getItem('userDetails')
+        let loggedinData = JSON.parse(loggedInuserDetails)
+        this.dataService.permissions = loggedinData.menuList
+        
+      }else{
+        this.router.navigate([`/login`]);
+      }
+      
+    })
   }
 
   ngAfterViewInit(): void {}
