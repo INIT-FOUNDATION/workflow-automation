@@ -1,17 +1,25 @@
-<!-- Button to toggle sidebar -->
-<button (click)="toggleMenu()">Toggle Menu</button>
+<div class="custom-height bg-blue-900">
+  <!-- <button (click)="toggleMenu()">Toggle Menu</button> -->
 
-<!-- Side Bar section start -->
-<div class="sideBarNav" [@toggleSidebar]="isOpen ? 'open' : 'closed'">
   <ul class="menu-collapsed">
     <ng-container *ngFor="let menu of menu_items">
-      <li *ngIf="menu.permission == 0">
-        <a [routerLink]="menu.route_url" routerLinkActive="active" matTooltip="{{menu.label}}" matTooltipPosition="right">
-          <mat-icon class="{{menu.icon}}"></mat-icon>
-          <span class="menuItemList">{{menu.label}}</span>
+      <li>
+        <a
+          [routerLink]="menu.route_url"
+          routerLinkActive="active"
+          matTooltip="{{ menu.label }}"
+          matTooltipPosition="right"
+          class="flex items-center justify-center flex-col text-center py-6"
+          [ngClass]="[
+            menu.menu_id == selectedTab ? 'bg-blue-800' : 'bg-blue-900'
+          ]"
+          (click)="activeTab(menu.menu_id)"
+        >
+          <!-- <mat-icon class="{{menu.icon}}"></mat-icon> -->
+          <i class="fa-solid fa-user-tie text-white"></i>
+          <div class="text-sm text-white mt-1">{{ menu.label }}</div>
         </a>
       </li>
     </ng-container>
   </ul>
 </div>
-<!-- Side Bar section end -->
