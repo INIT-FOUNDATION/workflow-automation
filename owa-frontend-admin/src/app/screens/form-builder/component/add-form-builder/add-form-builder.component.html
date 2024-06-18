@@ -5,7 +5,7 @@
     [canGoBack]="true"
   ></app-title>
 
-  <div cdkDropListGroup class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+  <div cdkDropListGroup class="grid grid-cols-1 lg:grid-cols-3 gap-4">
     <div class="border-2 p-5 rounded-2xl">
       <div class="font-medium mb-2">Choose form fields</div>
       <div class="custom-scroll-bar">
@@ -30,7 +30,7 @@
       </div>
     </div>
 
-    <div class="border-2 p-5 rounded-2xl">
+    <div class="border-2 p-5 rounded-2xl col-span-2">
       <span class="font-medium">Choosen fields</span>
 
       <form action="" class="custom-scroll-bar pt-3">
@@ -44,6 +44,7 @@
           />
         </mat-form-field> -->
         <div
+          class="grid grid-cols-1 md:grid-cols-2 gap-4"
           cdkDropList
           [cdkDropListData]="chosenFields"
           (cdkDropListDropped)="dropFormField($event)"

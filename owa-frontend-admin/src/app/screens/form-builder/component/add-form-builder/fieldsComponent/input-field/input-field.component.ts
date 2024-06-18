@@ -8,7 +8,5 @@ import { Component, Input, OnInit } from '@angular/core';
 export class InputFieldComponent implements OnInit {
   @Input() fieldData: any = {};
 
-  ngOnInit(): void {
-    console.log(this.fieldData);
-  }
+  ngOnInit(): void {}
 }

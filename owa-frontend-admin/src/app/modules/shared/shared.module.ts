@@ -19,7 +19,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatTabsModule } from '@angular/material/tabs';
 import { DragDropModule } from '@angular/cdk/drag-drop';
-import {MatCheckboxModule} from '@angular/material/checkbox';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatRadioModule } from '@angular/material/radio';
 /*------------------- MATERIAL COMPONENTS ------------------------*/
 
 /*------------------- DIRECTIVES ------------------------*/
@@ -38,7 +39,7 @@ import { OtpNumberDirective } from './directives/otp-number.directive';
 import { IntegerInputDirective } from './directives/input-integer.directive';
 import { LoaderComponent } from './components/loader/loader.component';
 import { HeaderComponent } from './components/header/header.component';
-import {MatStepperModule} from '@angular/material/stepper';
+import { MatStepperModule } from '@angular/material/stepper';
 import { PropertiesModalComponent } from './components/properties-modal/properties-modal.component';
 import { TitleComponent } from './components/title/title.component';
 import { CommonDataViewComponent } from '../common-data-view/common-data-view.component';
@@ -61,12 +62,15 @@ const MY_FORMATS = {
   },
 };
 
-const common_components = [
-  CommonDataTableComponent,
-  CommonDataViewComponent,
-];
+const common_components = [CommonDataTableComponent, CommonDataViewComponent];
 
-const export_components = [LoaderComponent, HeaderComponent, TitleComponent, CardComponent, SidebarMenuComponent];
+const export_components = [
+  LoaderComponent,
+  HeaderComponent,
+  TitleComponent,
+  CardComponent,
+  SidebarMenuComponent,
+];
 const export_directives = [
   RangeDirective,
   RangeLengthDirective,
@@ -97,6 +101,8 @@ const export_material_modules = [
   DragDropModule,
   TableModule,
   DataViewModule,
+  MatRadioModule,
+  MatCheckboxModule
 ];
 
 @NgModule({

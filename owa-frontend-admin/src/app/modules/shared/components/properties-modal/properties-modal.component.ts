@@ -34,7 +34,7 @@ export class PropertiesModalComponent implements OnInit {
     clearTimeout(this.delayedTime);
     this.delayedTime = setTimeout(() => {
       this.propertiesForm[label] = value;
-    }, 1000);
+    }, 500);
   }
 
   submitForm() {

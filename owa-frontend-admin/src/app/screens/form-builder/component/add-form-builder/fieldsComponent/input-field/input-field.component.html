@@ -1,16 +1,14 @@
-<div class="">
-  <mat-form-field class="w-full relative" appearance="outline">
-    <div class="absolute -right-2 -top-5 cursor-pointer">
-      <i class="fa-solid fa-circle-xmark text-xl text-red-500"></i>
-    </div>
-    <mat-label>{{ fieldData?.label }}</mat-label>
-    <input
-      matInput
-      [type]="fieldData?.type"
-      [placeholder]="fieldData?.placeholder ? fieldData?.placeholder : ''"
-      class="border rounded-md w-full py-2 ps-2 !outline-none"
-      [attr.maxlength]="fieldData?.maxlength"
-      [attr.minlength]="fieldData?.minlength"
-    />
-  </mat-form-field>
-</div>
+<mat-form-field class="w-full relative" appearance="outline">
+  <div class="absolute -right-2 -top-5 cursor-pointer">
+    <i class="fa-solid fa-circle-xmark text-xl text-red-500"></i>
+  </div>
+  <mat-label>{{ fieldData?.label }}</mat-label>
+  <input
+    matInput
+    [type]="fieldData?.type"
+    [placeholder]="fieldData?.placeholder ? fieldData?.placeholder : ''"
+    class="border rounded-md w-full py-2 ps-2 !outline-none"
+    [attr.maxlength]="fieldData?.maxlength"
+    [attr.minlength]="fieldData?.minlength"
+  />
+</mat-form-field>

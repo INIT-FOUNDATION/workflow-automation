@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-text-area-field',
@@ -6,5 +6,6 @@ import { Component } from '@angular/core';
   styleUrls: ['./text-area-field.component.scss']
 })
 export class TextAreaFieldComponent {
+  @Input() fieldData: any = {};
 
 }
