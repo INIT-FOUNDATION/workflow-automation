@@ -8,6 +8,8 @@ import { MatExpansionModule } from '@angular/material/expansion';
 
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { ToastrModule } from 'ngx-toastr';
+import { CommonDataTableComponent } from '../common-data-table/common-data-table.component';
+import { TableModule } from 'primeng/table';
 
 /*------------------- MATERIAL COMPONENTS ------------------------*/
 import { MatDialogModule } from '@angular/material/dialog';
@@ -39,6 +41,9 @@ import { HeaderComponent } from './components/header/header.component';
 import {MatStepperModule} from '@angular/material/stepper';
 import { PropertiesModalComponent } from './components/properties-modal/properties-modal.component';
 import { TitleComponent } from './components/title/title.component';
+import { CommonDataViewComponent } from '../common-data-view/common-data-view.component';
+import { DataViewModule } from 'primeng/dataview';
+import { CardComponent } from './components/card/card.component';
 
 /*------------------- DIRECTIVES ------------------------*/
 
@@ -54,7 +59,12 @@ const MY_FORMATS = {
   },
 };
 
-const export_components = [LoaderComponent, HeaderComponent, TitleComponent];
+const common_components = [
+  CommonDataTableComponent,
+  CommonDataViewComponent,
+];
+
+const export_components = [LoaderComponent, HeaderComponent, TitleComponent, CardComponent];
 const export_directives = [
   RangeDirective,
   RangeLengthDirective,
@@ -82,14 +92,15 @@ const export_material_modules = [
   MatExpansionModule,
   MatTabsModule,
   DragDropModule,
-  MatCheckboxModule,
-  MatStepperModule
+  TableModule,
+  DataViewModule,
 ];
 
 @NgModule({
   declarations: [
     ...export_components,
     ...export_directives,
+    ...common_components,
     PropertiesModalComponent,
   ],
   imports: [...export_material_modules, ToastrModule.forRoot()],
@@ -98,6 +109,7 @@ const export_material_modules = [
     ReactiveFormsModule,
     ...export_components,
     ...export_material_modules,
+    ...common_components,
     ...export_directives,
     ToastrModule,
   ],

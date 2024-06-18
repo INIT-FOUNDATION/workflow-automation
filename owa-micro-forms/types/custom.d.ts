@@ -14,7 +14,7 @@ export interface IFormFieldAssoc {
     form_field_assoc_id: number;
     form_id: number;
     field_id: number;
-    options: object;
+    options: [];
     status: number;
     date_created: string | undefined;
     date_updated: string | undefined;

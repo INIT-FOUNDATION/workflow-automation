@@ -18,4 +18,15 @@ export class AuthGuard implements CanActivate {
     return true;
   }
 
+  // if (this.auth.currentUserValue) {
+  //   if (this.routes_navigation_without_login.indexOf(state.url) != -1) {
+  //     //this.auth.redirectAsperPermission();
+  //   }
+  //   return true;
+  // } else {
+  //   if (this.routes_navigation_without_login.indexOf(state.url) == -1) {
+  //     this.router.navigate(['/login']);
+  //   }
+  //   return true;
+  // }
 }

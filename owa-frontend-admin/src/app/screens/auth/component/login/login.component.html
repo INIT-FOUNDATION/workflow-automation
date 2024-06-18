@@ -1,0 +1,32 @@
+
+<div>
+  <form [formGroup]="loginform" (ngSubmit)="login()">
+    <div class="form-group text-start mb-3">
+      <label for="mobileNumber" class="fw-bold text-secondary">Enter your Mobile Number*</label>
+      <input
+        type="tel"
+        numbersOnly
+        maxlength="10"
+        id="user_name"
+        placeholder="Enter Mobile Number"
+        autocomplete="off"
+        name="user_name"
+        formControlName="user_name"
+        class="form-control"
+      />
+    </div>
+    <div class="form-group text-start mb-3">
+      <label for="password" class="fw-bold text-secondary">Enter your Password*</label>
+      <input
+        type="password"
+        id="password"
+        placeholder="Enter password"
+        name="password"
+        formControlName="password"
+        matInput
+        class="form-control"
+      />
+    </div>
+    <button type="submit" class="btn btn-primary w-100 py-2 mt-3 fw-bold">Submit</button>
+  </form>
+</div>

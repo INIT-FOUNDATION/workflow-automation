@@ -3,6 +3,12 @@ import { NavigationEnd, Router, RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from './guards/auth.guard';
 
 const routes: Routes = [
+  { path: '', redirectTo: 'login', pathMatch: 'full'},
+  {
+    path: 'login',
+    loadChildren: () => import('./screens/auth/auth.module').then(m => m.AuthModule),
+    canActivate: [AuthGuard],
+  },
   {
     path: 'admin-management',
     loadChildren: () =>
@@ -22,14 +28,7 @@ const routes: Routes = [
     loadChildren: () =>
       import('./screens/workflow-builder/workflow-builder.module').then((m) => m.WorkflowBuilderModule),
     canActivate: [AuthGuard],
-  },
-
-  {
-    path: 'workflow-assignment',
-    loadChildren: () =>
-      import('./screens/workflow-assignment/workflow-assignment.module').then((m) => m.WorkflowAssignmentModule),
-    canActivate: [AuthGuard],
-  },
+  }
 ];
 
 @NgModule({

@@ -22,15 +22,12 @@ export const formController = {
 
     getFields: async (req: Request, res: Response): Promise<Response> => {
         /*  
-                #swagger.tags = ['Form Builder API']
+                #swagger.tags = ['Form']
                 #swagger.summary = 'Get All Fields List API'
                 #swagger.description = 'Endpoint to get all form fields',
-                #swagger.parameters['Authorization'] = {
-                    in: 'header',
-                    required: true,
-                    type: 'string',
-                    description: 'Bearer token for authentication'
-                }
+                #swagger.security = [{
+                        "apiKeyAuth": []
+                }]
         */
         try {
             logger.info(`formController :: Inside getFields`);
@@ -48,14 +45,18 @@ export const formController = {
     
     getFieldPropertiesByFieldId: async (req: Request, res: Response): Promise<Response> => {
         /*  
-                #swagger.tags = ['Form Builder API']
+                #swagger.tags = ['Form']
                 #swagger.summary = 'Get Field Properties by Field Id'
                 #swagger.description = 'Endpoint to get all properties of fields',
-                #swagger.parameters['Authorization'] = {
-                    in: 'header',
+                #swagger.security = [{
+                        "apiKeyAuth": []
+                }]
+                #swagger.parameters['fieldId'] = {
+                    in: 'path',
+                    description: 'Field Id',
                     required: true,
-                    type: 'string',
-                    description: 'Bearer token for authentication'
+                    type: 'number',
+                    format: 'int64'
                 }
         */
         try {
@@ -82,14 +83,18 @@ export const formController = {
 
     getFormDetailsById: async (req: Request, res: Response): Promise<Response> => {
         /*  
-                #swagger.tags = ['Form Builder API']
+                #swagger.tags = ['Form']
                 #swagger.summary = 'Get Form details by form id'
                 #swagger.description = 'Endpoint to get form details along with form fields'
-                #swagger.parameters['Authorization'] = {
-                    in: 'header',
+                #swagger.security = [{
+                        "apiKeyAuth": []
+                }]
+                #swagger.parameters['formId'] = {
+                    in: 'path',
+                    description: 'Form Id',
                     required: true,
-                    type: 'string',
-                    description: 'Bearer token for authentication'
+                    type: 'number',
+                    format: 'int64'
                 }
         */
         try {
@@ -120,24 +125,22 @@ export const formController = {
 
     listForms: async (req: Request, res: Response): Promise<Response> => {
         /*  
-                #swagger.tags = ['Form Builder API']
+                #swagger.tags = ['Form']
                 #swagger.summary = 'Get all the forms list'
                 #swagger.description = 'Endpoint to get forms list by page size and current page'
-                #swagger.parameters['Authorization'] = {
-                    in: 'header',
+                #swagger.security = [{
+                        "apiKeyAuth": []
+                }]
+                #swagger.requestBody = {
                     required: true,
-                    type: 'string',
-                    description: 'Bearer token for authentication'
-                }
-                #swagger.parameters['body'] = {
-                    in: 'body',
-                    required: true,
-                    schema: {
-                        page_size: 50,
-                        current_page: 1,
-                        search_query: "School Feedback Form"
+                    content: {
+                        "application/json": {
+                            schema: {
+                                $ref: "#/components/schemas/formGridSchema"
+                            }  
+                        }
                     }
-                }   
+                }  
         */
         try {
             logger.info(`formController :: Inside listForms`);
@@ -170,29 +173,22 @@ export const formController = {
 
     createForm: async(req: Request, res: Response) : Promise<Response> => {
         /*  
-                #swagger.tags = ['Form Builder API']
+                #swagger.tags = ['Form']
                 #swagger.summary = 'Create a dynamic form'
                 #swagger.description = 'Endpoint to create a dynamic form'
-                #swagger.parameters['Authorization'] = {
-                    in: 'header',
+                #swagger.security = [{
+                        "apiKeyAuth": []
+                }]
+                #swagger.requestBody = {
                     required: true,
-                    type: 'string',
-                    description: 'Bearer token for authentication'
-                }
-                #swagger.parameters['body'] = {
-                    in: 'body',
-                    required: true,
-                    schema: {
-                        form_name: "School Survey Form 2",
-                        form_description: "This form is used for taking feedback from schools cxzczx",
-                        form_fields: [
-                            {
-                                field_id: 1,
-                                options: {}
-                            }
-                        ]
+                    content: {
+                        "application/json": {
+                            schema: {
+                                 $ref: "#/components/schemas/createFormSchema"
+                            }  
+                        }
                     }
-                }   
+                }
         */
         try {
             logger.info(`formController :: Inside createForm`);
@@ -258,30 +254,22 @@ export const formController = {
 
     updateForm: async(req: Request, res: Response) : Promise<Response> => {
         /*  
-                #swagger.tags = ['Form Builder API']
+                #swagger.tags = ['Form']
                 #swagger.summary = 'Update a dynamic form'
                 #swagger.description = 'Endpoint to update a dynamic form'
-                #swagger.parameters['Authorization'] = {
-                    in: 'header',
+                #swagger.security = [{
+                        "apiKeyAuth": []
+                }]
+                #swagger.requestBody = {
                     required: true,
-                    type: 'string',
-                    description: 'Bearer token for authentication'
-                }
-                #swagger.parameters['body'] = {
-                    in: 'body',
-                    required: true,
-                    schema: {
-                        form_id: 7,
-                        form_name: "School Survey Form 2",
-                        form_description: "This form is used for taking feedback from schools cxzczx",
-                        form_fields: [
-                            {
-                                field_id: 1,
-                                options: {}
-                            }
-                        ]
+                    content: {
+                        "application/json": {
+                            schema: {
+                                 $ref: "#/components/schemas/updateFormSchema"
+                            }  
+                        }
                     }
-                }   
+                }  
         */
         try {
             logger.info(`formController :: Inside updateForm`);
@@ -362,23 +350,22 @@ export const formController = {
 
     updateFormStatus: async (req: Request, res: Response): Promise<Response> => {
         /*  
-                #swagger.tags = ['Form Builder API']
+                #swagger.tags = ['Form']
                 #swagger.summary = 'Update a dynamic form status'
                 #swagger.description = 'Endpoint to update a dynamic form status'
-                #swagger.parameters['Authorization'] = {
-                    in: 'header',
+                #swagger.security = [{
+                        "apiKeyAuth": []
+                }]
+                #swagger.requestBody = {
                     required: true,
-                    type: 'string',
-                    description: 'Bearer token for authentication'
-                }
-                #swagger.parameters['body'] = {
-                    in: 'body',
-                    required: true,
-                    schema: {
-                        form_id: 7,
-                        status: 1
+                    content: {
+                        "application/json": {
+                            schema: {
+                                 $ref: "#/components/schemas/updateFormStatusSchema"
+                            }  
+                        }
                     }
-                }   
+                }
         */
         try {
             logger.info(`formController :: Inside updateFormStatus`);

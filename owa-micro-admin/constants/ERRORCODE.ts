@@ -35,6 +35,10 @@ export const ROLES = {
     errorCode: "ROLE00008",
     errorMessage: "Requested User does not exists!",
   },
+  ROLE00009:  {
+    errorCode: "ROLE00009",
+    errorMessage: "Level Required!",
+  },
 };
 
 export const USERS = {

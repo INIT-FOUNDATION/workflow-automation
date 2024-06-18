@@ -38,8 +38,8 @@ export const formRepository = {
             };
 
             if (searchQuery) {
-                _queryForListOfForms.text += ` AND form_name ILIKE %${searchQuery}%`;
-                _queryForTotalCountForms.text += ` AND form_name ILIKE %${searchQuery}%`;
+                _queryForListOfForms.text += ` AND form_name ILIKE '%${searchQuery}%'`;
+                _queryForTotalCountForms.text += ` AND form_name ILIKE '%${searchQuery}%'`;
             }
             
             if (pageSize) {
@@ -117,7 +117,7 @@ export const formRepository = {
             logger.info(`formRepository :: Inside createFormFieldAssoc`);
             const _query = {
                 text: FORMS.createFormFieldAssoc,
-                values: [formFieldAssoc.form_id, formFieldAssoc.field_id, formFieldAssoc.options, formFieldAssoc.status, formFieldAssoc.date_created, formFieldAssoc.date_updated, formFieldAssoc.created_by, formFieldAssoc.updated_by]
+                values: [formFieldAssoc.form_id, formFieldAssoc.field_id, JSON.stringify(formFieldAssoc.options), formFieldAssoc.status, formFieldAssoc.date_created, formFieldAssoc.date_updated, formFieldAssoc.created_by, formFieldAssoc.updated_by]
             }
 
             const result = await pg.executeQueryPromise(_query);
@@ -134,7 +134,7 @@ export const formRepository = {
             logger.info(`formRepository :: Inside updateFormFieldAssoc :: formFieldAssoc :: ${JSON.stringify(formFieldAssoc)}`);
             const _query = {
                 text: FORMS.updateFormFieldsAssoc,
-                values: [formFieldAssoc.form_field_assoc_id, formFieldAssoc.options, formFieldAssoc.status, formFieldAssoc.date_updated, formFieldAssoc.updated_by]
+                values: [formFieldAssoc.form_field_assoc_id, JSON.stringify(formFieldAssoc.options), formFieldAssoc.status, formFieldAssoc.date_updated, formFieldAssoc.updated_by]
             }
 
             const result = await pg.executeQueryPromise(_query);

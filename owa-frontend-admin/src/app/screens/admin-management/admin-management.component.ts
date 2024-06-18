@@ -1,5 +1,6 @@
 import { Component, TemplateRef, ViewChild } from '@angular/core';
-
+import { CommonDataTableComponent } from 'src/app/modules/common-data-table/common-data-table.component';
+import {Colmodel} from "src/app/modules/common-data-table/model/colmodel.model"
 
 @Component({
   selector: 'app-admin-management',
@@ -7,6 +8,22 @@ import { Component, TemplateRef, ViewChild } from '@angular/core';
   styleUrls: ['./admin-management.component.scss']
 })
 export class AdminManagementComponent {
+  @ViewChild('adminManagementDetails')
+  adminManagementDetails: CommonDataTableComponent;
+  cols: Colmodel[] = [];
+
+  ngOnInit(): void {
+    this.prepareAssessmentGridCols();
+  }
+
+  prepareAssessmentGridCols() {
+    this.cols = [
+      new Colmodel('name', 'Name', false, false, false),
+      new Colmodel('role', 'Role', false, false, false),
+      new Colmodel('mobile', 'Mobile Number', false, false, false),
+    ];
+  }
+
 tabData = [
     { label: 'User Management', content: 'Content 1' },
     { label: 'Role Management', content: 'Content 2' },

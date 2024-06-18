@@ -58,93 +58,10 @@ export class ErrorHandlerInterceptor implements HttpInterceptor {
         case 409:
         case 400:
           if (response.error) {
-            if (typeof(response.error) === 'string') {
-              if (isJson(response.error)) {
-                const errmsg = JSON.parse(response.error);
-
-                if (errmsg.errorCode === 'MEET000117') {
-                  const navigationExtras: NavigationExtras = {
-                    state: errmsg,
-                  };
-                  this.router.navigate(['/waiting'], navigationExtras);
-                  return;
-                }
-
-
-                if (errmsg.errorCode === 'MEET000124') {
-                  return;
-                }
-
-                /* Password Policy Conditions */
-                if (errmsg.errorCode === 'USRAUT0004' ||
-                errmsg.errorCode === 'USRAUT0005' ||
-                errmsg.errorCode === 'USRAUT0006' || errmsg.errorCode === 'USRAUT0007') {
-                  if (errmsg.errorCode === 'USRAUT0004') {
-                    const userId = errmsg.userId;
-                    // this.authService.userId = userId;
-                    this.router.navigate(['/login/updatepassword']);
-                  } else if (errmsg.errorCode === 'USRAUT0005') {
-                    this.utilityService.showErrorMessage(errmsg.error);
-                    setTimeout(() => {
-                      this.router.navigate(['/login/forget']);
-                    }, 100);
-                  } else if (errmsg.errorCode === 'USRAUT0006') {
-                    const userId = errmsg.userId;
-                    // this.authService.userId = userId;
-                    this.utilityService.showErrorMessage(errmsg.error);
-                    setTimeout(() => {
-                      this.router.navigate(['/login/updatepassword']);
-                    }, 100);
-                  } else if (errmsg.errorCode === 'USRAUT0006' || errmsg.errorCode === 'USRAUT0007') {
-                    const userId = errmsg.userId;
-                    // this.authService.userId = userId;
-                    this.utilityService.showErrorMessage(errmsg.error);
-                    setTimeout(() => {
-                      this.router.navigate(['/login/updatepassword']);
-                    }, 100);
-                  }
-                } else if (errmsg.errorCode == 'CONFIG0001') {
-                  this.utilityService.showErrorMessage(errmsg.error);
-
-                  // this.openPopupForConfig(errmsg.user_name)
-                } else {
-                  if (errmsg.errorCode) {
-                    let errorCode: any = errmsg.errorCode;
-                    const errorMessage: any = ErrorCodes[errorCode];
-                    if (errorMessage) {
-                      this.utilityService.showErrorMessage(errorMessage);
-                    } else {
-                      this.utilityService.showErrorMessage(errmsg.error);
-                    }
-                  } else {
-                    this.utilityService.showErrorMessage(response.error);
-                  }
-                }
-              } else {
-                this.utilityService.showErrorMessage(response.error);
-              }
-            } else if (response.error.errorCode) {
-              if (response.error.errorCode === 'MEET000117') {
-                this.dialog.closeAll();
-                const navigationExtras: NavigationExtras = {
-                  state: response.error,
-                };
-                this.router.navigate(['/waiting'], navigationExtras);
-              }else if (response.error.errorCode === 'MEET000124') {
-                this.utilityService.showErrorMessage(response.error.error);
-              }else if (response.error.errorCode !== 'ADMROL0002') {
-                this.utilityService.showErrorMessage(`${response.error.error}`);
-              }
-
-            } else {
-              try{
-                this.utilityService.showErrorMessage(response.error.message);
-              } catch (e) {
-                console.error('Error!!! ', e);
-              }
-            }
-          } else {
-            this.utilityService.showErrorMessage(response.error);
+            this.utilityService.showErrorMessage(response.error.errorMessage);
+          } 
+          else {
+            this.utilityService.showErrorMessage("Something went wrong");
           }
 
           break;
