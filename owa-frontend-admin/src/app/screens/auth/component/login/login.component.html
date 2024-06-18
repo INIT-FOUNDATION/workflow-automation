@@ -13,7 +13,7 @@
               id="user_name" autocomplete="off"
               name="user_name"
               formControlName="user_name"
-              class="form-control w-full bg-gray-200 px-4 py-2 border !rounded-full" placeholder="Mobile Number">
+              class="form-control w-full !bg-gray-200 px-4 py-2 border !rounded-full" placeholder="Mobile Number">
           </div>
           <div class="mb-4 relative">
             <input type="password"
@@ -22,7 +22,7 @@
               name="password"
               formControlName="password"
               matInput 
-              class="form-control w-full bg-gray-200 px-4 py-2 border !rounded-full"
+              class="form-control w-full !bg-gray-200 px-4 py-2 border !rounded-full"
               [type]="passwordFieldType"
               placeholder="Password">
               <i [ngClass]="{'fa-eye': isPasswordVisible, 'fa-eye-slash': !isPasswordVisible}"
@@ -30,15 +30,15 @@
           </div>
           <div class="mb-4 text-right flex justify-end">
             <img src="assets/images/loginPage/lock.svg" alt="" />
-            <a href="#" class="text-red-600 ms-2">Forgot Password?</a>
+            <a href="#" class="text-red-600 ms-2 text-sm hover:text-red-700" [routerLink]="['/login/forgot-password']">Forgot Password?</a>
           </div>
-          <button type="submit" class="w-full bg-red-600 text-white py-2 rounded-full hover:bg-red-700 transition duration-200">Login</button>
+          <button type="submit" class="w-full bg-red-600 text-white py-2 rounded-full hover:bg-red-700 transition duration-200 font-semibold">Login</button>
           <div class="flex items-center my-6">
             <hr class="flex-grow border-gray-300">
             <span class="mx-4 text-gray-500">OR</span>
             <hr class="flex-grow border-gray-300">
         </div>
-        <button class="w-full bg-gray-100 text-red-600 py-2 rounded-full hover:bg-gray-300 transition duration-200 border">Login using OTP</button>
+        <button class="w-full bg-gray-100 text-red-600 font-semibold py-2 rounded-full hover:bg-gray-200 transition duration-200 border border-1">Login using OTP</button>
       </form>  
   </div>
 </div>
