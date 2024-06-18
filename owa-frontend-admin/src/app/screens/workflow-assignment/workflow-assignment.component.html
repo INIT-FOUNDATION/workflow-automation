@@ -1,26 +1,4 @@
-<h1 class="text-lg font-bold">Workflow Assignment</h1>
-<div class="border-4 rounded-xl w-10 border-red-600 mt-1"></div>
 
-<mat-stepper class="demo-stepper" #stepper>
-    <mat-step label="Select Workflow">
-        <app-select-workflow></app-select-workflow>
-      <div>
-        <div class="flex justify-end">
-            <button mat-button matStepperNext class="bg-red-600 text-white rounded-md px-4 py-2">Next</button>
-        </div>
-      </div>
-    </mat-step>
-    <mat-step label="Assign to">
-      <app-assign-to></app-assign-to>
-      <div class="flex justify-between">
-        <button mat-button matStepperPrevious class="bg-red-600 text-white rounded-md px-4 py-2">Back</button>
-        <button mat-button matStepperNext class="bg-red-600 text-white rounded-md px-4 py-2">Assign</button>
-      </div>
-    </mat-step>
-    <mat-step label="Predefined Conditions">
-     <app-predefined-conditions></app-predefined-conditions>
-    </mat-step>
-  </mat-stepper>
   
 
 
