@@ -36,6 +36,7 @@ import "./theme/variables.css";
 import Login from "./pages/Login/Login";
 import Header from "./pages/Header/Header";
 import Footer from "./pages/Footer/Footer";
+import WorkFlowSelection from "./pages/WorkFlowSelection/WorkFlowSelection";
 
 setupIonicReact();
 
@@ -45,8 +46,12 @@ const App: React.FC = () => (
       <IonRouterOutlet>
         <Route exact path="/header">
           <Header />
+          <Route path="/workflow" component={WorkFlowSelection} exact={true} /> 
+     
         <Footer/>
         </Route>
+         {/* <Route path="/my-tasks" component={MyTasks} exact={true} />
+        <Route path="/workflow" component={Workflow} exact={true} /> */}
         {/* <Route exact path="/header">
           <Footer />
         

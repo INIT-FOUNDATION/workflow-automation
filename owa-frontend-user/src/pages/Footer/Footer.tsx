@@ -18,7 +18,7 @@ const Footer: React.FC = () => {
     <IonReactRouter>
       <IonTabs>
         <IonRouterOutlet>
-          <Route path="/myTasks" render={() => <MyTasks />} exact={true} />
+          <Route path="/myTasks" component={MyTasks} exact={true} />
           {/* /  <Route path="/search" render={() => <SearchPage />} exact={true} /> */}
         </IonRouterOutlet>
 
@@ -49,6 +49,7 @@ const Footer: React.FC = () => {
             />
             <IonLabel className="custom-font">Task Report</IonLabel>
           </IonTabButton>
+
         </IonTabBar>
       </IonTabs>
     </IonReactRouter>
