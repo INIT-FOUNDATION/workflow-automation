@@ -3,6 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { EncDecService } from 'src/app/modules/shared/services/encryption-decryption.service';
 import { AuthService } from '../../services/auth.service';
 import { UtilityService } from 'src/app/modules/shared/services/utility.service';
+import { CommanService } from 'src/app/modules/shared/services/comman.service';
 
 @Component({
   selector: 'app-login',
@@ -14,7 +15,8 @@ export class LoginComponent implements OnInit {
   constructor(
     private encDecService: EncDecService,
     private authService: AuthService,
-    private utilityService: UtilityService
+    private utilityService: UtilityService,
+    private commanService: CommanService,
    ) { }
 
   loginform : FormGroup
@@ -40,6 +42,7 @@ export class LoginComponent implements OnInit {
       loginDetails.password = this.encDecService.set(loginDetails.password),
         this.authService.login(loginDetails).subscribe((res : any)=>{
           sessionStorage.setItem('userToken', JSON.stringify(res.data.token))
+          this.commanService.getUserDetails()
         })
     }
   }
