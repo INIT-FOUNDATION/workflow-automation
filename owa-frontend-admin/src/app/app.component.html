@@ -1,8 +1,8 @@
 <div class="h-100" appTheme>
-  <ng-container *ngIf="showHeader; else loading">
-    <app-header></app-header>
+  <ng-container>
+    <app-header *ngIf="showHeader; else loading"></app-header>
     <div class="flex">
-      <app-sidebar-menu></app-sidebar-menu>
+      <app-sidebar-menu *ngIf="showHeader; else loading"></app-sidebar-menu>
       <div class="px-2 md:px-6 w-full mt-4">
         <router-outlet></router-outlet>
       </div>
