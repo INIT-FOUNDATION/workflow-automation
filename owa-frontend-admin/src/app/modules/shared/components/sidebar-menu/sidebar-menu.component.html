@@ -1,0 +1,17 @@
+<!-- Button to toggle sidebar -->
+<button (click)="toggleMenu()">Toggle Menu</button>
+
+<!-- Side Bar section start -->
+<div class="sideBarNav" [@toggleSidebar]="isOpen ? 'open' : 'closed'">
+  <ul class="menu-collapsed">
+    <ng-container *ngFor="let menu of menu_items">
+      <li *ngIf="menu.permission == 0">
+        <a [routerLink]="menu.route_url" routerLinkActive="active" matTooltip="{{menu.label}}" matTooltipPosition="right">
+          <mat-icon class="{{menu.icon}}"></mat-icon>
+          <span class="menuItemList">{{menu.label}}</span>
+        </a>
+      </li>
+    </ng-container>
+  </ul>
+</div>
+<!-- Side Bar section end -->
