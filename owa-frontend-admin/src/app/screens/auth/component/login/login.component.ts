@@ -11,6 +11,7 @@ import { CommanService } from 'src/app/modules/shared/services/comman.service';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
+  isPasswordVisible: boolean = false;
 
   constructor(
     private encDecService: EncDecService,
@@ -45,5 +46,13 @@ export class LoginComponent implements OnInit {
           this.commanService.getUserDetails(res.data.token)
         })
     }
+  }
+
+  get passwordFieldType(): string {
+    return this.isPasswordVisible ? 'text' : 'password';
+  }
+  
+  togglePasswordVisibility(): void {
+    this.isPasswordVisible = !this.isPasswordVisible;
   }
 }
