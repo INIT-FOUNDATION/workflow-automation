@@ -11,9 +11,8 @@
           matTooltipPosition="right"
           class="flex items-center justify-center flex-col text-center py-6"
           [ngClass]="[
-            menu.menu_id == selectedTab ? 'bg-blue-800' : 'bg-blue-900'
+            menu.route_url == currentendPoint ? 'bg-blue-800' : 'bg-blue-900'
           ]"
-          (click)="activeTab(menu.menu_id)"
         >
           <!-- <mat-icon class="{{menu.icon}}"></mat-icon> -->
           <i class="fa-solid fa-user-tie text-white"></i>
