@@ -23,7 +23,7 @@ export const usersService = {
           key += `|SEARCH:${isSearchStringAMobileNumber}`;
           _query.text += ` AND mobile_number = ${searchQuery}`;
         } else {
-          _query.text += ` AND display_name ILIKE %${searchQuery}%`;
+          _query.text += ` AND display_name ILIKE '%${searchQuery}%'`;
           key += `|SEARCH:${isSearchStringAMobileNumber}`;
         }
       }
@@ -75,7 +75,7 @@ export const usersService = {
           key += `|SEARCH:${isSearchStringAMobileNumber}`;
           _query.text += ` mobile_number = ${searchQuery}`;
         } else {
-          _query.text += ` display_name ILIKE %${searchQuery}%`;
+          _query.text += ` display_name ILIKE '%${searchQuery}%'`;
           key += `|SEARCH:${isSearchStringAMobileNumber}`;
         }
       }
