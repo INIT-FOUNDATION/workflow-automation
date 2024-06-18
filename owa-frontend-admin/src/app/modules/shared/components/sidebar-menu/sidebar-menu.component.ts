@@ -1,25 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { DataService } from '../../services/data.service';
-import {
-  trigger,
-  state,
-  style,
-  transition,
-  animate,
-} from '@angular/animations';
 import { NavigationEnd, Router } from '@angular/router';
 
 @Component({
   selector: 'app-sidebar-menu',
   templateUrl: './sidebar-menu.component.html',
   styleUrls: ['./sidebar-menu.component.scss'],
- 
 })
 export class SidebarMenuComponent implements OnInit {
-  selectedTab: number = 1;
   menu_items = [];
   isOpen = false;
-  currentendPoint
+  currentendPoint;
   constructor(private dataService: DataService, private router: Router) {}
 
   ngOnInit(): void {
@@ -44,17 +35,11 @@ export class SidebarMenuComponent implements OnInit {
   logCurrentUrl() {
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
-        console.log(event.urlAfterRedirects);
-        this.currentendPoint = event.urlAfterRedirects
-       
+        this.currentendPoint = event.urlAfterRedirects;
       }
     });
   }
   toggleMenu() {
     this.isOpen = !this.isOpen;
-  }
-
-  activeTab(value) {
-    this.selectedTab = value;
   }
 }
