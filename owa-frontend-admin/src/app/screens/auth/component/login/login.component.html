@@ -1,32 +1,44 @@
-
-<div>
-  <form [formGroup]="loginform" (ngSubmit)="login()">
-    <div class="form-group text-start mb-3">
-      <label for="mobileNumber" class="fw-bold text-secondary">Enter your Mobile Number*</label>
-      <input
-        type="tel"
-        numbersOnly
-        maxlength="10"
-        id="user_name"
-        placeholder="Enter Mobile Number"
-        autocomplete="off"
-        name="user_name"
-        formControlName="user_name"
-        class="form-control"
-      />
-    </div>
-    <div class="form-group text-start mb-3">
-      <label for="password" class="fw-bold text-secondary">Enter your Password*</label>
-      <input
-        type="password"
-        id="password"
-        placeholder="Enter password"
-        name="password"
-        formControlName="password"
-        matInput
-        class="form-control"
-      />
-    </div>
-    <button type="submit" class="btn btn-primary w-100 py-2 mt-3 fw-bold">Submit</button>
-  </form>
+<div class="flex items-center justify-center h-full">
+  <div class="bg-white p-8 w-full max-w-md">
+      <div class="flex justify-center mb-6">
+          <img src="assets/images/loginPage/ollLogo.svg" alt="OLL Logo" class="h-16">
+      </div>
+      
+      <form class="border-2 rounded-3xl shadow-md p-10" [formGroup]="loginform" (ngSubmit)="login()">
+        <h2 class="text-center text-2xl font-semibold mb-6">Sign in to OLL</h2>
+          <div class="mb-4 rounded-full">
+              <input type="tel"
+              numbersOnly
+              maxlength="10"
+              id="user_name" autocomplete="off"
+              name="user_name"
+              formControlName="user_name"
+              class="form-control w-full bg-gray-200 px-4 py-2 border !rounded-full" placeholder="Mobile Number">
+          </div>
+          <div class="mb-4 relative">
+            <input type="password"
+              id="password"
+              placeholder="Enter password"
+              name="password"
+              formControlName="password"
+              matInput 
+              class="form-control w-full bg-gray-200 px-4 py-2 border !rounded-full"
+              [type]="passwordFieldType"
+              placeholder="Password">
+              <i [ngClass]="{'fa-eye': isPasswordVisible, 'fa-eye-slash': !isPasswordVisible}"
+              (click)="togglePasswordVisibility()" id="togglePassword" class="toggle-eye fas fa-eye-slash absolute right-3 top-1/2 transform -translate-y-1/2 text-red-600 cursor-pointer"></i>
+          </div>
+          <div class="mb-4 text-right flex justify-end">
+            <img src="assets/images/loginPage/lock.svg" alt="" />
+            <a href="#" class="text-red-600 ms-2">Forgot Password?</a>
+          </div>
+          <button type="submit" class="w-full bg-red-600 text-white py-2 rounded-full hover:bg-red-700 transition duration-200">Login</button>
+          <div class="flex items-center my-6">
+            <hr class="flex-grow border-gray-300">
+            <span class="mx-4 text-gray-500">OR</span>
+            <hr class="flex-grow border-gray-300">
+        </div>
+        <button class="w-full bg-gray-100 text-red-600 py-2 rounded-full hover:bg-gray-300 transition duration-200 border">Login using OTP</button>
+      </form>  
+  </div>
 </div>
