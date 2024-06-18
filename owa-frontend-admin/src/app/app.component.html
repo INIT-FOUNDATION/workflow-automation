@@ -2,10 +2,10 @@
   <ng-container *ngIf="showHeader; else loading">
     <app-header></app-header>
     <app-sidebar-menu></app-sidebar-menu>
-    <div class="px-2 md:px-20 mt-6">
-      <router-outlet></router-outlet>
-    </div>
   </ng-container>
+  <div class="px-2 md:px-20 mt-6">
+    <router-outlet></router-outlet>
+  </div>
   <ng-template #loading>
     <app-loader></app-loader>
   </ng-template>
