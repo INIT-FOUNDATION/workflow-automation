@@ -44,6 +44,8 @@ import { TitleComponent } from './components/title/title.component';
 import { CommonDataViewComponent } from '../common-data-view/common-data-view.component';
 import { DataViewModule } from 'primeng/dataview';
 import { CardComponent } from './components/card/card.component';
+import { SidebarMenuComponent } from './components/sidebar-menu/sidebar-menu.component';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 /*------------------- DIRECTIVES ------------------------*/
 
@@ -64,7 +66,7 @@ const common_components = [
   CommonDataViewComponent,
 ];
 
-const export_components = [LoaderComponent, HeaderComponent, TitleComponent, CardComponent];
+const export_components = [LoaderComponent, HeaderComponent, TitleComponent, CardComponent, SidebarMenuComponent];
 const export_directives = [
   RangeDirective,
   RangeLengthDirective,
@@ -87,6 +89,7 @@ const export_material_modules = [
   MatFormFieldModule,
   MatInputModule,
   MatSelectModule,
+  MatTooltipModule,
   MatAutocompleteModule,
   NgxSpinnerModule,
   MatExpansionModule,
@@ -102,6 +105,7 @@ const export_material_modules = [
     ...export_directives,
     ...common_components,
     PropertiesModalComponent,
+    SidebarMenuComponent,
   ],
   imports: [...export_material_modules, ToastrModule.forRoot()],
   exports: [

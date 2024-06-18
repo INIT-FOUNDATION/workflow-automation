@@ -1,0 +1,18 @@
+.sideBarNav {
+  transition: transform 0.3s ease-in-out;
+  width: 250px;
+  transform: translateX(-100%); /* Initially hide the sidebar */
+
+  &.open {
+    transform: translateX(0); /* Move into view when open */
+  }
+
+  &.closed {
+    transform: translateX(-100%); /* Hide the sidebar when closed */
+  }
+}
+
+.custom-height {
+  height: calc(100vh - 3.5rem);
+}
+
