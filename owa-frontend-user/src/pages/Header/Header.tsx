@@ -14,7 +14,7 @@ const Header: React.FC = () => {
   };
 
   return (
-    <div className="flex items-center justify-between px-2 md:px-20 mt-3 pb-1 shadow">
+    <div className="flex items-center justify-between px-2 md:px-20 mt-3 pb-1">
       <div className="flex items-center">
         <img src="Assets/images/Header/Header_logo.svg" className="w-16" alt="logo" />
       </div>
