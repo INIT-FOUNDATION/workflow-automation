@@ -56,9 +56,9 @@ const App: React.FC = () => (
           <Footer />
         
         </Route> */}
-        {/* <Route exact path="/">
-          <Redirect to="/header" />
-        </Route> */}
+        <Route exact path="/">
+          <Redirect to="/login" />
+        </Route>
       </IonRouterOutlet>
     </IonReactRouter>
   </IonApp>
