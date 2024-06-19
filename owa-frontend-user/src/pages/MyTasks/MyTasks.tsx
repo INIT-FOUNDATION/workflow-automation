@@ -17,7 +17,7 @@ const MyTasks: React.FC = () => {
 
   return (
     <>
-      <div className="search-container cursor-pointer rounded-md flex items-center">
+      <div className=" cursor-pointer rounded-md flex items-center pt-[8rem]">
         <IonIcon
           icon={searchOutline}
           className="search-icon w-5 h-5 mr-2 text-gray-500 pl-2"
