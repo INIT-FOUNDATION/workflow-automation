@@ -1,7 +1,13 @@
-import { IonCard, IonCardHeader, IonIcon } from "@ionic/react";
+import {
+  IonCard,
+  IonCardHeader,
+  IonIcon,
+  IonSelect,
+  IonSelectOption,
+} from "@ionic/react";
 import { arrowBack } from "ionicons/icons";
 import React from "react";
-import "./WorkFlowStarted.css"
+import "./WorkFlowStarted.css";
 
 const WorkFlowStarted: React.FC = () => {
   return (
@@ -12,7 +18,7 @@ const WorkFlowStarted: React.FC = () => {
           B2B lead conversion
         </span>
       </div>
-      <IonCard className="custom-card border border-gray-300 rounded mb-2 bg-gray-100">
+      <IonCard className="custom-cards border border-gray-300 rounded mb-2 bg-gray-100">
         <IonCardHeader>
           <div className="flex items-center">
             <img
@@ -21,6 +27,14 @@ const WorkFlowStarted: React.FC = () => {
               className="task-done-img w-5 h-5 mr-2"
             />
             <span className="form-title">Contact Lead</span>
+          </div>
+          <div className="flex items-center mt-2">
+            <img
+              src="Assets/images/MyTasks/calendar_icon.svg"
+              alt=""
+              className="calender-img w-3 h-3 mr-2"
+            />
+            <span className="text-sm text-black">Deadline</span>
           </div>
         </IonCardHeader>
       </IonCard>
