@@ -92,8 +92,9 @@ export const usersService = {
       logger.debug(`usersService :: listUsersCount :: db result :: ${JSON.stringify(result)}`)
 
       if (result.length > 0) {
-        redis.SetRedis(key, result, CACHE_TTL.LONG);
-        return result[0].count
+        const count = parseInt(result[0].count);
+        if (count > 0) redis.SetRedis(key, count, CACHE_TTL.LONG);
+        return count
       };
     } catch (error) {
       logger.error(`usersService :: listUsersCount :: ${error.message} :: ${error}`)
