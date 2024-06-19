@@ -12,6 +12,7 @@ import { IonReactRouter } from "@ionic/react-router";
 import { Route, Redirect } from "react-router";
 import "./Footer.css";
 import MyTasks from "../MyTasks/MyTasks";
+import AssignTasks from "../AssignTask/AssignTasks";
 
 const Footer: React.FC = () => {
   return (
@@ -19,6 +20,7 @@ const Footer: React.FC = () => {
       <IonTabs>
         <IonRouterOutlet>
           <Route path="/myTasks" component={MyTasks} exact={true} />
+          <Route path="/assignedTasks" component={AssignTasks} exact={true} />
           {/* /  <Route path="/search" render={() => <SearchPage />} exact={true} /> */}
         </IonRouterOutlet>
 
