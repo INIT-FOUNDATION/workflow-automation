@@ -1,5 +1,12 @@
 import React from "react";
-import { IonCard, IonCardHeader, IonIcon } from "@ionic/react";
+import {
+  IonCard,
+  IonCardContent,
+  IonCardHeader,
+  IonCardSubtitle,
+  IonCardTitle,
+  IonIcon,
+} from "@ionic/react";
 import { searchOutline } from "ionicons/icons";
 import Header from "../Header/Header";
 import "./AssignTasks.css";
@@ -10,28 +17,31 @@ const AssignTasks: React.FC = () => {
     <>
       {/* <Header /> */}
 
-      <div className="search-container pt-[9rem]">
+      <div className="cursor-pointer mx-2 rounded-sm flex items-center pt-[8rem]">
         <IonIcon icon={searchOutline} className="search-icon" />
         <span className="search-text">Search</span>
       </div>
-      <IonCard className="custom-card border border-gray-300 rounded p-4 mb-2">
+      <div className="ml-6 mt-8 text-sm font-medium text-black ">
+        <span>Assigned Tasks</span>
+      </div>
+      <IonCard className="border border-gray-300 rounded p-4 mb-2">
         <IonCardHeader>
-          <div>
-            <span>payment collection</span>
-          </div>
+          <IonCardSubtitle>Payment Collection</IonCardSubtitle>
+        </IonCardHeader>
+        <IonCardContent>
           <div className="flex items-center mt-2">
             <img
               src="Assets/images/MyTasks/calendar_icon.svg"
               alt=""
               className="calender-img"
             />
-            <span className="ml-1 calender-date">June 17, 2024</span>
+            <span className="ml-1 text-base font-medium text-black">June 17, 2024</span>
           </div>
           <div className="mt-1 flex items-center">
             <CgProfile color="black" size={22} />
-            <span className="ml-2 font-medium">Neha</span>
+            <span className="ml-2 font-medium text-black">Neha</span>
           </div>
-        </IonCardHeader>
+        </IonCardContent>
       </IonCard>
     </>
   );
