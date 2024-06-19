@@ -5,8 +5,8 @@ import {
   IonTabButton,
   IonLabel,
   IonRouterOutlet,
+  IonIcon,
 } from "@ionic/react";
-import { IonReactRouter } from "@ionic/react-router";
 import { Redirect, Route, useLocation } from "react-router-dom";
 import MyTasks from "../MyTasks/MyTasks";
 import AssignTasks from "../AssignTask/AssignTasks";
@@ -20,13 +20,12 @@ const Footer: React.FC = () => {
   if (skipFooter) return null;
 
   return (
-    <IonReactRouter>
       <IonTabs>
         <IonRouterOutlet>
+          <Route path="/tasks" component={MyTasks} exact={true} />
+          <Route path="/assigned-tasks" component={AssignTasks} exact={true} />
+          <Route path="/tasks-reports" component={AssignTasks} exact={true} />
           <Redirect exact path="/" to="/tasks" />
-          <Route path="/assigned-tasks" render={() => <AssignTasks/>} exact={true} />
-          <Route path="/tasks" render={() => <MyTasks/>} exact={true} />
-          <Route path="/tasks-reports" render={() => <AssignTasks/>} exact={true} />
         </IonRouterOutlet>
 
         <IonTabBar slot="bottom">
@@ -40,9 +39,8 @@ const Footer: React.FC = () => {
           </IonTabButton>
 
           <IonTabButton tab="assigned-tasks" href="/assigned-tasks">
-            <img
+            <IonIcon
               src="Assets/images/Footer/assigned_task.svg"
-              alt="Assigned Tasks"
               style={{ width: "24px", height: "24px" }}
             />
             <IonLabel className="custom-font">Assigned Tasks</IonLabel>
@@ -58,7 +56,6 @@ const Footer: React.FC = () => {
           </IonTabButton>
         </IonTabBar>
       </IonTabs>
-    </IonReactRouter>
   );
 };
 
