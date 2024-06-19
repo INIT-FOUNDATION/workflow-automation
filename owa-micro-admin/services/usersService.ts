@@ -436,9 +436,9 @@ export const usersService = {
       let query = `${USERS.getReportingUsersList} IN (${placeholders}) `;
 
       if (user_id) {
-        query += `${query} AND VU.user_id NOT IN (1, ${user_id})`
+        query += ` AND VU.user_id NOT IN (1, ${user_id})`
       } else {
-        query += `${query} AND VU.user_id <> 1`
+        query += ` AND VU.user_id <> 1`
       }
 
       const _query = {
