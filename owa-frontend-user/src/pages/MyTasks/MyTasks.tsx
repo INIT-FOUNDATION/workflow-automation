@@ -7,9 +7,9 @@ import {
   IonPopover,
 } from "@ionic/react";
 import { searchOutline } from "ionicons/icons";
-import Header from "../Header/Header";
+
 import TaskOptionsDialogBox from "./Component/TaskOptionsDialogBox/TaskOptionsDialogBox";
-import Footer from "../Footer/Footer";
+
 import "./MyTasks.css";
 
 const MyTasks: React.FC = () => {
@@ -17,17 +17,20 @@ const MyTasks: React.FC = () => {
 
   return (
     <>
-      <div className="search-container">
-        <IonIcon icon={searchOutline} className="search-icon" />
-        <span className="search-text">Search</span>
+      <div className=" cursor-pointer rounded-md flex items-center pt-[8rem]">
+        <IonIcon
+          icon={searchOutline}
+          className="search-icon w-5 h-5 mr-2 text-gray-500 pl-2"
+        />
+        <span className="search-text text-gray-500">Search</span>
       </div>
-      <IonCard className="custom-card border border-gray-300 rounded p-4 mb-2">
+      <IonCard className="custom-card border border-gray-300 rounded p-4 mb-2 bg-gray-100">
         <IonCardHeader>
           <div className="flex items-center">
             <img
               src="Assets/images/MyTasks/task_done.svg"
               alt=""
-              className="task-done-img"
+              className="task-done-img w-5 h-5 mr-2"
             />
             <span className="form-title">School Feedback Form</span>
           </div>
@@ -35,7 +38,7 @@ const MyTasks: React.FC = () => {
             <img
               src="Assets/images/MyTasks/calendar_icon.svg"
               alt=""
-              className="calender-img"
+              className="calender-img w-5 h-5 mr-2"
             />
             <span className="ml-1 calender-date">June 17, 2024</span>
           </div>
@@ -56,7 +59,8 @@ const MyTasks: React.FC = () => {
             onDidDismiss={() => setShowPopover(false)}
             id="add-task-popover"
             trigger="add-task-button"
-            side="top" alignment="center"
+            side="top"
+            alignment="center"
             className="custom-popover"
             // Set trigger to the ID of the button
           >

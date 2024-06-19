@@ -1,29 +1,25 @@
 .search-container {
-  cursor: pointer;
   margin: 0 10px;
-  border-radius: 3px;
-  display: flex;
-  align-items: center;
-  padding-top: 8rem;
+  padding-top: 100px;
 }
 
-.search-icon {
+/* .search-icon {
   width: 20px;
   height: 20px;
   margin-right: 10px;
   color: #737373;
-  padding-left: 10px;
-}
+  padding-left: 10px; */
+/* } */
 
-.search-text {
+/* .search-text {
   color: #737373;
-}
+} */
 .custom-card {
-    height: 118px;
-    color: #faf8f9 !important;
-  }
+  height: 118px;
+  color: #faf8f9 !important;
+}
 
-.calender-date {
+ .calender-date {
   color: #000000;
   font-weight: 500;
   font-family: "Poppins" !important;
@@ -35,7 +31,7 @@
   font-family: "Poppins" !important;
 }
 
-.task-done-img {
+/*.task-done-img {
   width: 20px;
   height: 20px;
   margin-right: 8px;
@@ -45,17 +41,16 @@
   width: 20px;
   height: 20px;
   margin-right: 8px;
-}
+} */
 
-
-.add-task-container {
+ .add-task-container {
   position: fixed;
   bottom: 20px;
   left: 0;
   width: 100%;
   display: flex;
   justify-content: center;
-}
+} 
 .add-task {
   width: 95%;
   margin: 0 auto;
@@ -69,6 +64,3 @@
   color: red !important;
 }
 
-.custom-popover {
-  --popover-margin-top: 40px; /* Adjust this value as needed */
-}
