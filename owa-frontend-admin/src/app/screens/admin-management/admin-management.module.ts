@@ -9,6 +9,9 @@ import { RoleManagementGridComponent } from './component/role-management/role-ma
 import { AddUserComponent } from './component/user-management/add-user/add-user.component';
 import { EditUserComponent } from './component/user-management/edit-user/edit-user.component';
 import { UserFormComponent } from './component/user-management/user-form/user-form.component';
+import { AddRoleComponent } from './component/role-management/add-role/add-role.component';
+import { EditRoleComponent } from './component/role-management/edit-role/edit-role.component';
+import { RoleFormComponent } from './component/role-management/role-form/role-form.component';
 
 @NgModule({
   declarations: [
@@ -17,7 +20,10 @@ import { UserFormComponent } from './component/user-management/user-form/user-fo
     RoleManagementGridComponent,
     AddUserComponent,
     EditUserComponent,
-    UserFormComponent
+    UserFormComponent,
+    AddRoleComponent,
+    EditRoleComponent,
+    RoleFormComponent
   ],
   imports: [CommonModule, AdminManagementRoutingModule, SharedModule],
 })
