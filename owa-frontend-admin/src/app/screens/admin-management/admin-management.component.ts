@@ -8,7 +8,7 @@ import {Colmodel} from "src/app/modules/common-data-table/model/colmodel.model"
   styleUrls: ['./admin-management.component.scss']
 })
 export class AdminManagementComponent {
-
+  
   ngOnInit(): void {
   }
 
