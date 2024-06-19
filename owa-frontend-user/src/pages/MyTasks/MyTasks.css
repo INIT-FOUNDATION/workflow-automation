@@ -1,3 +1,28 @@
+.search-container {
+  cursor: pointer;
+  margin: 0 10px;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  padding-top: 100px;
+}
+
+.search-icon {
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+  color: #737373;
+  padding-left: 10px;
+}
+
+.search-text {
+  color: #737373;
+}
+.custom-card {
+    height: 118px;
+    color: #faf8f9 !important;
+  }
+
 .calender-date {
   color: #000000;
   font-weight: 500;
@@ -21,30 +46,7 @@
   height: 20px;
   margin-right: 8px;
 }
-.custom-card {
-  height: 118px;
-  color: #faf8f9 !important;
-}
 
-.search-container {
-  cursor: pointer;
-  margin: 0 10px;
-  border-radius: 3px;
-  display: flex;
-  align-items: center;
-}
-
-.search-icon {
-  width: 20px;
-  height: 20px;
-  margin-right: 10px;
-  color: #737373;
-  padding-left: 10px;
-}
-
-.search-text {
-  color: #737373;
-}
 
 .add-task-container {
   position: fixed;
@@ -65,4 +67,8 @@
 
 .custom-popover-text {
   color: red !important;
+}
+
+.custom-popover {
+  --popover-margin-top: 40px; /* Adjust this value as needed */
 }

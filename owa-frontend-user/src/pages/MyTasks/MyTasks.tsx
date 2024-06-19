@@ -1,15 +1,22 @@
 import React, { useState } from "react";
-import { IonCard, IonCardHeader, IonIcon } from "@ionic/react";
+import {
+  IonButton,
+  IonCard,
+  IonCardHeader,
+  IonIcon,
+  IonPopover,
+} from "@ionic/react";
 import { searchOutline } from "ionicons/icons";
 import Header from "../Header/Header";
-import "./MyTasks.css";
 import TaskOptionsDialogBox from "./Component/TaskOptionsDialogBox/TaskOptionsDialogBox";
-
+import Footer from "../Footer/Footer";
+import "./MyTasks.css";
 
 const MyTasks: React.FC = () => {
+  const [showPopover, setShowPopover] = useState(false);
+
   return (
     <>
-      <Header />
       <div className="search-container">
         <IonIcon icon={searchOutline} className="search-icon" />
         <span className="search-text">Search</span>
@@ -34,7 +41,29 @@ const MyTasks: React.FC = () => {
           </div>
         </IonCardHeader>
       </IonCard>
-      <TaskOptionsDialogBox />
+      <div>
+        <div className="add-task-container">
+          <IonButton
+            color="red"
+            id="add-task-button" // Assign an ID to the button
+            className="text-white flex justify-center bg-red-500 rounded add-task"
+            onClick={() => setShowPopover(true)}
+          >
+            Add Task
+          </IonButton>
+          <IonPopover
+            isOpen={showPopover}
+            onDidDismiss={() => setShowPopover(false)}
+            id="add-task-popover"
+            trigger="add-task-button"
+            side="top" alignment="center"
+            className="custom-popover"
+            // Set trigger to the ID of the button
+          >
+            <TaskOptionsDialogBox />
+          </IonPopover>
+        </div>
+      </div>
     </>
   );
 };
