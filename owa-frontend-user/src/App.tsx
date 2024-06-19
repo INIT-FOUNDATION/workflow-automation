@@ -3,7 +3,6 @@ import { IonApp, IonRouterOutlet, setupIonicReact } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
 import "./App.css";
 
-
 /* Core CSS required for Ionic components to work properly */
 import "@ionic/react/css/core.css";
 
@@ -33,33 +32,27 @@ import "@ionic/react/css/palettes/dark.system.css";
 
 /* Theme variables */
 import "./theme/variables.css";
-import Login from "./pages/Login/Login";
-import Header from "./pages/Header/Header";
-import Footer from "./pages/Footer/Footer";
 import WorkFlowSelection from "./pages/WorkFlowSelection/WorkFlowSelection";
+import MyTasks from "./pages/MyTasks/MyTasks";
+import Login from "./pages/Login/Login";
+import Footer from "./pages/Footer/Footer";
+import Header from "./pages/Header/Header";
 
 setupIonicReact();
 
 const App: React.FC = () => (
   <IonApp>
     <IonReactRouter>
+      <Header />
       <IonRouterOutlet>
-        <Route exact path="/header">
-          <Header />
-          <Route path="/workflow" component={WorkFlowSelection} exact={true} /> 
-     
-        <Footer/>
-        </Route>
-         {/* <Route path="/my-tasks" component={MyTasks} exact={true} />
-        <Route path="/workflow" component={Workflow} exact={true} /> */}
-        {/* <Route exact path="/header">
-          <Footer />
-        
-        </Route> */}
+        <Route path="/myTasks" component={MyTasks} exact />
+        <Route path="/workflow-selection" component={WorkFlowSelection} exact />
+        <Route path="/login" component={Login} exact />
         <Route exact path="/">
           <Redirect to="/login" />
         </Route>
       </IonRouterOutlet>
+      <Footer />
     </IonReactRouter>
   </IonApp>
 );
