@@ -430,4 +430,30 @@ export const usersService = {
       throw new Error(error.message);
     }
   },
+  getReportingUsersList: async (levels: string[], user_id: number): Promise<{user_id: number, display_name: string}[]> => {
+    try {
+      const placeholders = levels.map((_, i) => `$${i + 1}`).join(', ');
+      let query = `${USERS.getReportingUsersList} IN (${placeholders}) `;
+
+      if (user_id) {
+        query += `${query} AND VU.user_id NOT IN (1, ${user_id})`
+      } else {
+        query += `${query} AND VU.user_id <> 1`
+      }
+
+      const _query = {
+        text: query,
+        values: levels
+      };
+      logger.debug(`usersService :: getReportingUsersList :: query :: ${JSON.stringify(_query)}`);
+
+      const result = await pg.executeQueryPromise(_query);
+      logger.debug(`usersService :: getReportingUsersList :: db result :: ${JSON.stringify(result)}`);
+
+      return result;
+    } catch (error) {
+      logger.error(`usersService :: getReportingUsersList :: ${error.message} :: ${error}`)
+      throw new Error(error.message);
+    }
+  }
 }
