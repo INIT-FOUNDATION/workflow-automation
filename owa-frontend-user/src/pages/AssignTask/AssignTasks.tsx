@@ -21,21 +21,23 @@ const AssignTasks: React.FC = () => {
       <div className="ml-6 mt-8 text-sm font-medium text-black ">
         <span>Assigned Tasks</span>
       </div>
-      <IonCard className="border border-gray-300 rounded p-4 mb-2">
+      <IonCard className="border border-gray-100 rounded p-4 mb-2">
         <IonCardHeader>
-          <IonCardSubtitle>Payment Collection</IonCardSubtitle>
+          <IonCardSubtitle class="text-black font-medium card-title">Payment Collection</IonCardSubtitle>
         </IonCardHeader>
         <IonCardContent>
           <div className="flex items-center mt-2">
-            <img
-              src="Assets/images/MyTasks/calendar_icon.svg"
-              alt=""
-              className="calender-img"
-            />
+            <IonIcon src="Assets/images/AssignTasks/calendar_month.svg"
+              
+              className="calender-img"></IonIcon>
+             
+            
             <span className="ml-1 text-base font-medium text-black">June 17, 2024</span>
           </div>
           <div className="mt-1 flex items-center">
-            <CgProfile color="black" size={22} />
+          <IonIcon src="Assets/images/AssignTasks/profile_icon.svg"
+              
+              className="calender-img"></IonIcon>
             <span className="ml-2 font-medium text-black">Neha</span>
           </div>
         </IonCardContent>
