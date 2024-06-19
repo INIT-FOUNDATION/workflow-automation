@@ -1,8 +1,15 @@
 import React from "react";
-import { IonButton, IonButtons, IonIcon } from "@ionic/react";
+import { IonButton, IonIcon, useIonRouter } from "@ionic/react";
 import { arrowBack } from "ionicons/icons";
 
 const WorkFlowSelection: React.FC = () => {
+  const router = useIonRouter();
+
+  const handleNextClick = () => {
+    console.log("Create new task clicked");
+    router.push("/workflow-started");
+  };
+
   return (
     <div className="flex flex-col h-screen p-2">
       <div className="cursor-pointer rounded-md flex items-center pt-32">
@@ -11,7 +18,13 @@ const WorkFlowSelection: React.FC = () => {
       </div>
       <div className="flex-grow"></div>
       <div className="flex justify-center pb-16">
-        <IonButton color="danger" className="bg-red-500 rounded w-full">Next</IonButton>
+        <IonButton
+          onClick={handleNextClick}
+          color="danger"
+          className="bg-red-500 rounded w-full"
+        >
+          Next
+        </IonButton>
       </div>
     </div>
   );

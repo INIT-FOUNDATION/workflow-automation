@@ -19,19 +19,12 @@ import "@ionic/react/css/text-transformation.css";
 import "@ionic/react/css/flex-utils.css";
 import "@ionic/react/css/display.css";
 
-/**
- * Ionic Dark Mode
- * -----------------------------------------------------
- * For more info, please see:
- * https://ionicframework.com/docs/theming/dark-mode
- */
-
-/* import '@ionic/react/css/palettes/dark.always.css'; */
-/* import '@ionic/react/css/palettes/dark.class.css'; */
+/* Ionic Dark Mode */
 import "@ionic/react/css/palettes/dark.system.css";
 
 /* Theme variables */
 import "./theme/variables.css";
+
 import WorkFlowSelection from "./pages/WorkFlowSelection/WorkFlowSelection";
 import MyTasks from "./pages/MyTasks/MyTasks";
 import Login from "./pages/Login/Login";
@@ -39,6 +32,7 @@ import Footer from "./pages/Footer/Footer";
 import Header from "./pages/Header/Header";
 import AssignTasks from "./pages/AssignTask/AssignTasks";
 import TasksReport from "./pages/TasksReport/TasksReport";
+import WorkFlowStarted from "./pages/WorkFlowSelection/Component/WorkFlowStarted/WorkFlowStarted";
 
 setupIonicReact();
 
@@ -53,6 +47,7 @@ const App: React.FC = () => (
         </Route>
         <Route path="/tasks" component={MyTasks} exact />
         <Route path="/workflow-selection" component={WorkFlowSelection} exact />
+        <Route path="/workflow-started" component={WorkFlowStarted} exact />
         <Route path="/tasks-reports" component={TasksReport} exact />
         <Route path="/assigned-tasks" component={AssignTasks} exact />
       </IonRouterOutlet>
