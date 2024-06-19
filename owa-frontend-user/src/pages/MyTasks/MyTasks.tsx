@@ -20,7 +20,7 @@ const MyTasks: React.FC = () => {
       <div className=" cursor-pointer rounded-md flex items-center pt-[8rem]">
         <IonIcon
           icon={searchOutline}
-          className="search-icon w-5 h-5 mr-2 text-gray-500 pl-2"
+          className="search-icon w-5 h-5 mr-2 text-gray-500 pl-4"
         />
         <span className="search-text text-gray-500">Search</span>
       </div>
@@ -47,7 +47,7 @@ const MyTasks: React.FC = () => {
       <div>
         <div className="add-task-container">
           <IonButton
-            color="red"
+            color="danger"
             id="add-task-button"
             className="text-white flex justify-center bg-red-500 rounded add-task"
             onClick={() => setShowPopover(true)}
