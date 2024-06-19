@@ -72,8 +72,6 @@ export const usersController = {
                     in: 'body',
                     required: true,
                     schema: {
-                        user_name: '8169104556',
-                        display_name: 'Narsima Chilkuri',
                         first_name: 'Narsima',
                         last_name: 'Chilkuri',
                         email_id: 'narsimachilkuri237@gmail.com',
@@ -88,6 +86,12 @@ export const usersController = {
             */
             const plainToken = req.plainToken;
             const user: IUser = new User(req.body)
+
+            if (user.mobile_number) {
+                user.user_name = user.mobile_number.toString();
+            }
+
+
             const { error } = validateCreateUser(user);
 
             if (error) {
@@ -136,8 +140,6 @@ export const usersController = {
                     required: true,
                     schema: {
                         user_id: 2,
-                        user_name: '8169104556',
-                        display_name: 'Narsima Chilkuri',
                         first_name: 'Narsima',
                         last_name: 'Chilkuri',
                         email_id: 'narsimachilkuri237@gmail.com',
@@ -152,7 +154,9 @@ export const usersController = {
             */
             const plainToken = req.plainToken;
             const user: IUser = req.body;
-
+            if (user.mobile_number) {
+                user.user_name = user.mobile_number.toString();
+            }
             const { error } = validateUpdateUser(user);
 
             if (error) {

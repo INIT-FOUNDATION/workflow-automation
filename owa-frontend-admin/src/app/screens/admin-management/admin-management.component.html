@@ -1,52 +1,45 @@
-<div class="mx-auto">
-    <div class="flex justify-between items-center mb-4">
-        <div>
-      <h1 class="text-xl font-bold">All Users <span class="text-gray-600 border-l-2 border-l-gray-400 ps-1">137</span></h1>
-      <div class="border-4 rounded-xl w-10 border-red-600 mt-1"></div>
-    </div>
-      <button class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded">+ Add New User</button>
-    </div>
-    <div class="border border-gray-300 rounded-full px-4 py-2 w-80 relative mb-4">
-      <input type="text" class="outline-none border-none w-full pr-3 text-sm" placeholder="Search for an existing workflow" />
-      <img src="assets/images/workflowCards/searchIcon.svg" alt="" class="absolute right-3 top-2.5" />
-    </div>
 
-    <div class="border rounded-lg border-red-500 flex p-4">
-        <mat-tab-group class="mt-4 flex-1">
-            <mat-tab *ngFor="let tab of tabData" [label]="tab.label">
+<app-title
+  titleName="All Users | {{users.length}}"
+  additionalClass="text-lg font-bold"
+  [canGoBack]="false"
+></app-title>
+
+<div class="flex justify-between border-b-2 pb-8 mb-8">
+  <div class="border border-gray-300 rounded-full px-4 py-2 w-80 relative">
+    <input
+      type="text"
+      class="outline-none border-none w-full pr-3 text-sm"
+      placeholder="Search for an existing workflow"
+    />
+    <img
+      src="assets/images/workflowCards/searchIcon.svg"
+      alt=""
+      class="absolute right-3 top-2.5"
+    />
+  </div>
+  <button
+    type="button"
+    class="bg-red-600 text-white rounded-lg px-4 py-2 text-sm"
+  >
+    <a href="form-builder/add-form"
+      ><i class="fa-solid fa-plus me-2"></i>Add New User</a
+    >
+  </button>
+</div>
+
+<div class="border rounded-lg border-red-500 flex p-4">
+  <mat-tab-group class="mt-4 flex-1">
+    <mat-tab label="User Management">
       <div class="overflow-x-auto mt-4">
-
-      <app-common-data-table
-        #adminManagementDetails
-        [colModel]="cols"
-        gridId="adminManagementDetails"
-        sField="updatedDate"
-        sOrder="desc"
-        [lazyLoad]="true"
-        selectType="none"
-        [localData]="users"
-        idColumn="fac_id"
-        [rowsPerPage]="rowsPerPage"
-        paginationpos="bottom"
-        [actionColumnTemplate]="assessmentEditButton"
-        [actionColumnRequired]="true"
-      >
-
-            <ng-template #assessmentEditButton let-gridData="griddata">
-              <div class="flex space-x-4 text-sm">
-                <button class="flex items-center hover:text-red-700 text-sm">
-                    <img src="assets/images/adminManagement/key_vertical.svg" alt="Key Icon" class="me-2" />
-                  Reset Password
-                </button>
-                <button class="flex items-center hover:text-red-700 text-sm">
-                  <img src="assets/images/adminManagement/delete.svg" alt="Delete Icon" class="me-2" />
-                  Delete
-                </button>
-              </div>
-            </ng-template>
-          </app-common-data-table>
+        <app-user-management-grid></app-user-management-grid>
+      </div>
+    </mat-tab>
+          
+    <mat-tab label="Role Management">
+      <div class="overflow-x-auto mt-4">
+        <app-role-management-grid></app-role-management-grid>     
         </div>
       </mat-tab>
     </mat-tab-group>
-  </div>
 </div>

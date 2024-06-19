@@ -15,7 +15,6 @@ import { Router } from '@angular/router';
 })
 export class AppComponent implements OnInit, AfterViewInit {
   display = false;
-  showHeader = false
   constructor(
      public authService : AuthService,
     private themeService: ThemeService,
@@ -29,11 +28,9 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.authService.currentUser.subscribe(async (res) => {
       
       if(res){
-        this.showHeader = true
         const loggedInuserDetails =  sessionStorage.getItem('userDetails')
         let loggedinData = JSON.parse(loggedInuserDetails)
         this.dataService.permissions = loggedinData.menuList
-        // this.router.navigate([`/admin-management`]);
       }else{
         this.router.navigate([`/login`]);
       }
