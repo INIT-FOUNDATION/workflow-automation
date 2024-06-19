@@ -1,0 +1,90 @@
+<app-title
+  titleName="Role Details"
+  additionalClass="text-lg font-bold"
+  [canGoBack]="true"
+></app-title>
+
+
+<div class="flex flex-wrap">
+
+  <div class="w-full md:w-1/2 p-4 bg-white rounded-md mb-4">
+    <form>
+    <div class="mb-4">
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Role Name</mat-label>
+        <input matInput placeholder="Enter Role Name" />
+      </mat-form-field>
+    </div>
+  
+    <div class="mb-4">
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Level</mat-label>
+        <mat-select>
+          <mat-option [value]="level.value" *ngFor="let level of levelsList">{{ level.label }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  
+    <div class="mb-4">
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Status</mat-label>
+        <mat-select>
+          <mat-option [value]="status.value" *ngFor="let status of statusList">{{ status.label }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    </form>
+  </div>
+  
+  <div class="w-full md:w-1/2 p-4 bg-white rounded-md mb-4">
+    <div class="mb-8">
+      <div class="text-lg font-semibold text-white bg-color rounded-t-md p-2 mb-4">Admin Management</div>
+      <div class="flex">
+        <div class="flex items-center space-x-4 me-4 ms-2">
+          <input type="checkbox" id="admin_read" class="form-checkbox h-4 w-4" />
+          <label for="admin_read" class="text-base text-gray-700">Read</label>
+        </div>
+        <div class="flex items-center space-x-4 me-4 ms-2">
+          <input type="checkbox" id="admin_write" class="form-checkbox h-4 w-4" />
+          <label for="admin_write" class="text-base text-gray-700">Write</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="mb-8">
+      <div class="text-lg font-semibold text-white bg-color p-2 mb-4">Form Builder</div>
+      <div class="flex">
+        <div class="flex items-center space-x-4 me-4 ms-2">
+          <input type="checkbox" id="form_read" class="form-checkbox h-4 w-4" />
+          <label for="form_read" class="text-base text-gray-700">Read</label>
+        </div>
+        <div class="flex items-center space-x-4 me-4 ms-2">
+          <input type="checkbox" id="form_write" class="form-checkbox h-4 w-4" />
+          <label for="form_write" class="text-base text-gray-700">Write</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="mb-8">
+      <div class="text-lg font-semibold text-white bg-color p-2 mb-4">Workflow Builder</div>
+      <div class="flex">
+        <div class="flex items-center space-x-4 me-4 ms-2">
+          <input type="checkbox" id="workflow_read" class="form-checkbox h-4 w-4" />
+          <label for="workflow_read" class="text-base text-gray-700">Read</label>
+        </div>
+        <div class="flex items-center space-x-4 me-4 ms-2">
+          <input type="checkbox" id="workflow_write" class="form-checkbox h-4 w-4" />
+          <label for="workflow_write" class="text-base text-gray-700">Write</label>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="flex flex-end">
+    <button class="bg-red-600 text-white rounded-lg px-4 py-2 text-sm">
+      Create
+     </button>
+  </div>
+
+</div>

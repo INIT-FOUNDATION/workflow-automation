@@ -12,4 +12,8 @@ export class RoleManagementService {
   getRolesList(headers: any) {
     return this.http.get(`${environment.admin_prefix_url}/roles/list`, { headers });
   }
+
+  getLevels() {
+    return this.http.get(`${environment.admin_prefix_url}/roles/listLevels`);
+  }
 }

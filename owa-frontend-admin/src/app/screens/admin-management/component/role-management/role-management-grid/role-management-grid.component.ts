@@ -2,6 +2,7 @@ import { Component, ViewChild } from '@angular/core';
 import { CommonDataTableComponent } from 'src/app/modules/common-data-table/common-data-table.component';
 import { Colmodel } from 'src/app/modules/common-data-table/model/colmodel.model';
 import { RoleManagementService } from '../services/role-management.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-role-management-grid',
@@ -15,7 +16,8 @@ export class RoleManagementGridComponent {
   rowsPerPage = 10;
 
   constructor(
-    private roleManagementService: RoleManagementService
+    private roleManagementService: RoleManagementService,
+    private router: Router,
   ) {}
 
   ngOnInit(): void {
@@ -52,5 +54,9 @@ export class RoleManagementGridComponent {
     this.rolesList = res.data;
     this.adminManagementDetails.data = this.rolesList;
     });
+  }
+
+  addRole() {
+    this.router.navigate(['/admin-management/add-role']);
   }
 }
