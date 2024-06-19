@@ -18,12 +18,12 @@ const AssignTasks: React.FC = () => {
         <IonIcon icon={searchOutline} className="search-icon" />
         <span className="search-text">Search</span>
       </div>
-      <div className="ml-6 mt-8 text-sm font-medium text-black ">
+      <div className="ml-4 mt-8 text-sm font-medium text-black ">
         <span>Assigned Tasks</span>
       </div>
       <IonCard className="border border-gray-100 rounded p-4 mb-2">
         <IonCardHeader>
-          <IonCardSubtitle class="text-black font-medium card-title">Payment Collection</IonCardSubtitle>
+          <IonCardSubtitle class="text-black text-[18px] text-left font-medium">Payment Collection</IonCardSubtitle>
         </IonCardHeader>
         <IonCardContent>
           <div className="flex items-center mt-2">
