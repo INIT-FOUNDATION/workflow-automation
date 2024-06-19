@@ -53,3 +53,10 @@ VALUES
     (5, 'name', 'text', 'Name', NULL, 'Field Name'),
     (5, 'options', 'json', 'Options', NULL, 'Options should be in Json format'),
     (5, 'label', 'text', 'Label', NULL, 'Field Label');
+
+--- Table: access_control
+INSERT INTO access_control VALUES 
+    (1, 1, 1, NOW(), NOW(), 1, 1), 
+    (1, 2, 1, NOW(), NOW(), 1, 1), 
+    (1, 3, 1, NOW(), NOW(), 1, 1), 
+    (1, 4, 1, NOW(), NOW(), 1, 1);
