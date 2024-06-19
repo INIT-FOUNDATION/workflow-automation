@@ -1,6 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { CommonDataTableComponent } from 'src/app/modules/common-data-table/common-data-table.component';
 import { Colmodel } from 'src/app/modules/common-data-table/model/colmodel.model';
+import { RoleManagementService } from '../services/role-management.service';
 
 @Component({
   selector: 'app-role-management-grid',
@@ -13,55 +14,23 @@ export class RoleManagementGridComponent {
   cols: Colmodel[] = [];
   rowsPerPage = 10;
 
+  constructor(
+    private roleManagementService: RoleManagementService
+  ) {}
+
   ngOnInit(): void {
     this.prepareAssessmentGridCols();
+    this.getRolesList();
   }
 
   prepareAssessmentGridCols() {
     this.cols = [
-      new Colmodel('name', 'Name', false, false, false),
-      new Colmodel('role', 'Role', false, false, false),
-      new Colmodel('mobile', 'Mobile Number', false, false, false),
+      new Colmodel('role_name', 'Role Name', false, false, false),
+      new Colmodel('level', 'Level', false, false, false),
     ];
   }
 
-  users = [
-    {
-      name: 'Ramesh Thakur',
-      email: 'ramesh@gmail.com',
-      role: 'Super Admin',
-      mobile: '7017019019',
-      image: 'path/to/image1.jpg'
-    },
-    {
-      name: 'Kamal Kishor',
-      email: 'kamal@gmail.com',
-      role: 'Admin',
-      mobile: '7017019019',
-      image: 'path/to/image2.jpg'
-    },
-    {
-      name: 'Nidhi Chandel',
-      email: 'nidhi@gmail.com',
-      role: 'Contributor',
-      mobile: '7017019019',
-      image: 'path/to/image3.jpg'
-    },
-    {
-      name: 'Samarth Gupta',
-      email: 'samarth@gmail.com',
-      role: 'Super Admin',
-      mobile: '7017019019',
-      image: 'path/to/image4.jpg'
-    },
-    {
-      name: 'Ashok Sharma',
-      email: 'ashok@gmail.com',
-      role: 'Super Admin',
-      mobile: '7017019019',
-      image: 'path/to/image5.jpg'
-    }
-  ];
+  rolesList = [];
 
   // getRoleClass(role: string) {
   //   switch (role) {
@@ -75,4 +44,13 @@ export class RoleManagementGridComponent {
   //       return 'bg-gray-500';
   //   }
   // }
+
+  getRolesList() {
+    const token = sessionStorage.getItem('userToken');
+    const headers = { Authorization: `Bearer ${JSON.parse(token)}` };
+    this.roleManagementService.getRolesList(headers).subscribe((res: any) => {
+    this.rolesList = res.data;
+    this.adminManagementDetails.data = this.rolesList;
+    });
+  }
 }

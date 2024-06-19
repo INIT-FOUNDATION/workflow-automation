@@ -6,7 +6,7 @@
         sOrder="desc"
         [lazyLoad]="true"
         selectType="none"
-        [localData]="users"
+        [localData]="rolesList"
         idColumn="fac_id"
         [rowsPerPage]="rowsPerPage"
         paginationpos="bottom"
@@ -17,12 +17,8 @@
             <ng-template #assessmentEditButton let-gridData="griddata">
               <div class="flex space-x-4 text-sm">
                 <button class="flex items-center hover:text-red-700 text-sm">
-                    <img src="assets/images/adminManagement/key_vertical.svg" alt="Key Icon" class="me-2" />
-                  Reset Password
-                </button>
-                <button class="flex items-center hover:text-red-700 text-sm">
-                  <img src="assets/images/adminManagement/delete.svg" alt="Delete Icon" class="me-2" />
-                  Delete
+                    <i class="fa-solid fa-pencil text-red-700 me-2 text-lg"></i>
+                  Edit
                 </button>
               </div>
             </ng-template>
