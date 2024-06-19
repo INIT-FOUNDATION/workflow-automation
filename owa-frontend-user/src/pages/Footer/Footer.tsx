@@ -24,7 +24,7 @@ const Footer: React.FC = () => {
       <IonTabs>
         <IonRouterOutlet>
           <Redirect exact path="/" to="/tasks" />
-          <Route path="/assignedges-tasks" render={() => <AssignTasks/>} exact={true} />
+          <Route path="/assigned-tasks" render={() => <AssignTasks/>} exact={true} />
           <Route path="/tasks" render={() => <MyTasks/>} exact={true} />
           <Route path="/tasks-reports" render={() => <AssignTasks/>} exact={true} />
         </IonRouterOutlet>
