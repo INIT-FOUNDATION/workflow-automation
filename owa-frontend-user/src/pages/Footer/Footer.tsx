@@ -20,9 +20,6 @@ const Footer: React.FC = () => {
 
   if (skipFooter) return null;
 
-  const location = useLocation();
-  console.log(location.pathname, "loc");
-
   return (
     <IonTabs>
       <IonRouterOutlet>
