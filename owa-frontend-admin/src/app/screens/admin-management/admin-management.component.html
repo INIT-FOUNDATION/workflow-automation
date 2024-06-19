@@ -21,7 +21,7 @@
     type="button"
     class="bg-red-600 text-white rounded-lg px-4 py-2 text-sm"
   >
-    <a [href]="tabGroup.selectedIndex === 0 ? 'form-builder/add-user' : 'form-builder/add-role'"
+    <a [routerLink]="tabGroup.selectedIndex === 0 ? ['/admin-management/add-user'] : '/admin-management/add-role'"
       ><i class="fa-solid fa-plus me-2"></i>{{ tabGroup.selectedIndex === 0 ? 'Add New User' : 'Add New Role' }}</a
     >
   </button>

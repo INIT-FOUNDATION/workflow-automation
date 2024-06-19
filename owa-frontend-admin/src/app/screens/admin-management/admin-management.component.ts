@@ -1,6 +1,4 @@
-import { Component, TemplateRef, ViewChild } from '@angular/core';
-import { CommonDataTableComponent } from 'src/app/modules/common-data-table/common-data-table.component';
-import {Colmodel} from "src/app/modules/common-data-table/model/colmodel.model"
+import { Component, ChangeDetectorRef } from '@angular/core';
 
 @Component({
   selector: 'app-admin-management',
@@ -8,8 +6,11 @@ import {Colmodel} from "src/app/modules/common-data-table/model/colmodel.model"
   styleUrls: ['./admin-management.component.scss']
 })
 export class AdminManagementComponent {
+
+  constructor(private cdr: ChangeDetectorRef) {}
   
   ngOnInit(): void {
+    this.cdr.detectChanges();
   }
 
   users = [
