@@ -47,14 +47,14 @@ const App: React.FC = () => (
     <IonReactRouter>
       <Header />
       <IonRouterOutlet>
-        <Route path="/tasks" component={MyTasks} exact />
-        <Route path="/workflow-selection" component={WorkFlowSelection} exact />
-        <Route path="/assigned-tasks" component={AssignTasks} exact />
         <Route path="/login" component={Login} exact />
-        <Route path="/tasks-reports" component={TasksReport} exact />
         <Route exact path="/">
           <Redirect to="/login" />
         </Route>
+        <Route path="/tasks" component={MyTasks} exact />
+        <Route path="/workflow-selection" component={WorkFlowSelection} exact />
+        <Route path="/tasks-reports" component={TasksReport} exact />
+        <Route path="/assigned-tasks" component={AssignTasks} exact />
       </IonRouterOutlet>
       <Footer />
     </IonReactRouter>

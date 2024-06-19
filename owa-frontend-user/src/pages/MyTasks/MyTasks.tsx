@@ -44,6 +44,26 @@ const MyTasks: React.FC = () => {
           </div>
         </IonCardHeader>
       </IonCard>
+      <IonCard className="custom-card border border-gray-300 rounded p-4 mb-2 bg-gray-100">
+        <IonCardHeader>
+          <div className="flex items-center">
+            <img
+              src="Assets/images/MyTasks/task_done.svg"
+              alt=""
+              className="task-done-img w-5 h-5 mr-2"
+            />
+            <span className="form-title">B2B lead conversion</span>
+          </div>
+          <div className="flex items-center mt-2">
+            <img
+              src="Assets/images/MyTasks/calendar_icon.svg"
+              alt=""
+              className="calender-img w-5 h-5 mr-2"
+            />
+            <span className="ml-1 calender-date">June 10, 2024</span>
+          </div>
+        </IonCardHeader>
+      </IonCard>
       <div>
         <div className="add-task-container">
           <IonButton
