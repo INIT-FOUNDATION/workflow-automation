@@ -11,6 +11,7 @@ const WorkFlowSelection: React.FC = () => {
   };
 
   return (
+    
     <div className="flex flex-col h-screen p-2">
       <div className="cursor-pointer rounded-md flex items-center pt-32">
         <IonIcon icon={arrowBack} className="pl-2" />
@@ -19,11 +20,11 @@ const WorkFlowSelection: React.FC = () => {
       <div className="flex-grow"></div>
       <div className="flex justify-center pb-16">
         <IonButton
-          onClick={handleNextClick}
-          color="danger"
+         onClick={() => handleNextClick()}
+         color="danger"
           className="bg-red-500 rounded w-full"
         >
-          Next
+          Next 
         </IonButton>
       </div>
     </div>

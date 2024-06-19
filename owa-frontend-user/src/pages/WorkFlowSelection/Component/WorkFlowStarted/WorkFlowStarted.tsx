@@ -2,8 +2,6 @@ import {
   IonCard,
   IonCardHeader,
   IonIcon,
-  IonSelect,
-  IonSelectOption,
 } from "@ionic/react";
 import { arrowBack } from "ionicons/icons";
 import React from "react";
