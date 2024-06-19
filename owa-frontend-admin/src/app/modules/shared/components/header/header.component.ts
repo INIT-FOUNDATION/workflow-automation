@@ -16,7 +16,8 @@ export class HeaderComponent {
 
   ngOnInit(): void {}
 
-  // logoutUser(): void {
-  //   this.authService.logout();
-  // }
+  logoutUser(): void {
+    
+     this.authService.logout();
+  }
 }
