@@ -48,7 +48,7 @@ const MyTasks: React.FC = () => {
         <div className="add-task-container">
           <IonButton
             color="red"
-            id="add-task-button" // Assign an ID to the button
+            id="add-task-button"
             className="text-white flex justify-center bg-red-500 rounded add-task"
             onClick={() => setShowPopover(true)}
           >
@@ -62,7 +62,6 @@ const MyTasks: React.FC = () => {
             side="top"
             alignment="center"
             className="custom-popover"
-            // Set trigger to the ID of the button
           >
             <TaskOptionsDialogBox />
           </IonPopover>

@@ -3,8 +3,17 @@ import { IonButton, IonIcon, IonButtons, IonPopover, IonContent } from '@ionic/r
 import { notificationsOutline, ellipsisVerticalOutline } from 'ionicons/icons';
 import { CgProfile } from 'react-icons/cg'; // Importing CgProfile
 import { AiOutlineLogout } from 'react-icons/ai';
+import { useLocation } from 'react-router';
+import { SKIP_HEADER_ROUTES } from '../../constants/constant';
 
 const Header: React.FC = () => {
+
+  const location = useLocation();
+  const { pathname } = location;
+
+  const skipHeader = SKIP_HEADER_ROUTES.includes(pathname)
+  if (skipHeader) return null;
+
   const [showPopover, setShowPopover] = useState(false);
   const popoverRef = useRef<HTMLIonPopoverElement>(null);
 

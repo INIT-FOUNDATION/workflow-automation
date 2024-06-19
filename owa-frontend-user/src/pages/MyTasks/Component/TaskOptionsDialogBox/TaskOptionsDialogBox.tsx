@@ -1,7 +1,5 @@
 import React from "react";
 import {
-  IonButton,
-  IonPopover,
   IonContent,
   IonList,
   IonItem,
@@ -9,7 +7,6 @@ import {
   useIonRouter,
 } from "@ionic/react";
 import "../../MyTasks.css";
-import Footer from "../../../Footer/Footer";
 
 const TaskOptionsDialogBox: React.FC = () => {
   const router = useIonRouter();

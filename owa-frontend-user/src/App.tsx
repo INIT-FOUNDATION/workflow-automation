@@ -37,6 +37,7 @@ import MyTasks from "./pages/MyTasks/MyTasks";
 import Login from "./pages/Login/Login";
 import Footer from "./pages/Footer/Footer";
 import Header from "./pages/Header/Header";
+import AssignTasks from "./pages/AssignTask/AssignTasks";
 
 setupIonicReact();
 
@@ -45,9 +46,11 @@ const App: React.FC = () => (
     <IonReactRouter>
       <Header />
       <IonRouterOutlet>
-        <Route path="/myTasks" component={MyTasks} exact />
+        <Route path="/tasks" component={MyTasks} exact />
         <Route path="/workflow-selection" component={WorkFlowSelection} exact />
+        <Route path="/assigned-tasks" component={AssignTasks} exact />
         <Route path="/login" component={Login} exact />
+        <Route path="/tasks-reports" component={AssignTasks} exact />
         <Route exact path="/">
           <Redirect to="/login" />
         </Route>

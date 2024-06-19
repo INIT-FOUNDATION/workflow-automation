@@ -1,15 +1,12 @@
 import React from "react";
 import { IonCard, IonCardHeader, IonIcon } from "@ionic/react";
 import { searchOutline } from "ionicons/icons";
-import Header from "../Header/Header";
 import "./AssignTasks.css";
 import { CgProfile } from "react-icons/cg";
 
 const AssignTasks: React.FC = () => {
   return (
     <>
-      {/* <Header /> */}
-
       <div className="search-container pt-[9rem]">
         <IonIcon icon={searchOutline} className="search-icon" />
         <span className="search-text">Search</span>
