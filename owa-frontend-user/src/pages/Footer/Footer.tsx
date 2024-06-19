@@ -12,6 +12,7 @@ import MyTasks from "../MyTasks/MyTasks";
 import AssignTasks from "../AssignTask/AssignTasks";
 import { SKIP_FOOTER_ROUTES } from "../../constants/constant";
 import "./Footer.css";
+import TasksReport from "../TasksReport/TasksReport";
 
 const Footer: React.FC = () => {
   const { pathname } = useLocation();
@@ -24,7 +25,7 @@ const Footer: React.FC = () => {
         <IonRouterOutlet>
           <Route path="/tasks" component={MyTasks} exact={true} />
           <Route path="/assigned-tasks" component={AssignTasks} exact={true} />
-          <Route path="/tasks-reports" component={AssignTasks} exact={true} />
+          <Route path="/tasks-reports" component={TasksReport} exact={true} />
           <Redirect exact path="/" to="/tasks" />
         </IonRouterOutlet>
 
