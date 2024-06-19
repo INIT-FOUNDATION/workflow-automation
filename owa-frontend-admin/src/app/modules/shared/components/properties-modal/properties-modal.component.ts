@@ -9,8 +9,10 @@ import { FormBuilderService } from 'src/app/screens/form-builder/services/form-b
 })
 export class PropertiesModalComponent implements OnInit {
   getPropertyFields: any = [];
+  optionArray: any = [];
   propertiesForm: any = {};
   delayedTime: any;
+  createdOptions: any = [];
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -34,15 +36,35 @@ export class PropertiesModalComponent implements OnInit {
     clearTimeout(this.delayedTime);
     this.delayedTime = setTimeout(() => {
       this.propertiesForm[label] = value;
-    }, 500);
+    }, 1000);
+  }
+
+  addNewOptions() {
+    this.createdOptions.push({});
+  }
+
+  getOptionValues(value) {
+    clearTimeout(this.delayedTime);
+
+    this.delayedTime = setTimeout(() => {
+      const options: any = {
+        value: value,
+      };
+      this.optionArray.push(options);
+    }, 1000);
   }
 
   submitForm() {
     const formData: any = [];
-    const mergedFormData = {
-      ...this.propertiesForm,
+    let mergedFormData: any = {};
+    mergedFormData = {
       ...this.data,
+      options: this.optionArray,
+      ...this.propertiesForm,
     };
+    console.log(this.propertiesForm);
+    console.log(mergedFormData);
+
     formData.push(mergedFormData);
     this.dialogRef.close(formData);
   }

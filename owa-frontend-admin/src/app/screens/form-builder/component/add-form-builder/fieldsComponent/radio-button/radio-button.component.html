@@ -1,3 +1,5 @@
 <mat-radio-group>
-  <mat-radio-button value="1">{{ fieldData?.label }}</mat-radio-button>
+  <mat-radio-button [value]="fieldData?.name">{{
+    fieldData?.label ? fieldData?.label : fieldData?.name
+  }}</mat-radio-button>
 </mat-radio-group>

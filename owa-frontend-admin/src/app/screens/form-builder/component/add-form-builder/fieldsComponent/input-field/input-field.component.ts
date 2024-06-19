@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 @Component({
   selector: 'app-input-field',
@@ -7,6 +7,16 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class InputFieldComponent implements OnInit {
   @Input() fieldData: any = {};
+  @Output() deleteFormFieldIndex = new EventEmitter<number>();
+  @Output() editFormFieldIndex = new EventEmitter<number>();
 
   ngOnInit(): void {}
+
+  deleteFormField(index) {
+    this.deleteFormFieldIndex.emit(index);
+  }
+
+  editFormField(index) {
+    this.editFormFieldIndex.emit(index);
+  }
 }

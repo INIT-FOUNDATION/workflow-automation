@@ -10,7 +10,7 @@ import { NavigationEnd, Router } from '@angular/router';
 export class SidebarMenuComponent implements OnInit {
   menu_items = [];
   isOpen = false;
-  currentendPoint;
+  currentEndPoint: any;
   constructor(private dataService: DataService, private router: Router) {}
 
   ngOnInit(): void {
@@ -35,10 +35,17 @@ export class SidebarMenuComponent implements OnInit {
   logCurrentUrl() {
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
-        this.currentendPoint = event.urlAfterRedirects;
+        const endPoint = event.urlAfterRedirects;
+        let count = (endPoint.match(/\//g) || []).length;
+        if (count > 1) {
+          this.currentEndPoint = '/' + endPoint.split('/')[1];
+        } else {
+          this.currentEndPoint = endPoint;
+        }
       }
     });
   }
+  
   toggleMenu() {
     this.isOpen = !this.isOpen;
   }

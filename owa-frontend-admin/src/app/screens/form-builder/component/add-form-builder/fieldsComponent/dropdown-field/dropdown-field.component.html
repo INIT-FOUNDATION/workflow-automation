@@ -1,8 +1,20 @@
-<mat-form-field>
-  <mat-label>Choose an option</mat-label>
+<mat-form-field class="w-full relative" appearance="outline">
+  <div
+    class="absolute right-4 -top-5 cursor-pointer"
+    (click)="editFormField(fieldData?.index)"
+  >
+    <i class="fa-solid fa-pen-to-square text-lg bg-white"></i>
+  </div>
+  <div
+    class="absolute -right-2 -top-5 cursor-pointer"
+    (click)="deleteFormField(fieldData?.index)"
+  >
+    <i class="fa-solid fa-circle-xmark text-xl text-red-500 bg-white"></i>
+  </div>
+  <mat-label>{{ fieldData?.label }}</mat-label>
   <mat-select>
-    <mat-option value="option1">Option 1</mat-option>
-    <mat-option value="option2" disabled>Option 2 (disabled)</mat-option>
-    <mat-option value="option3">Option 3</mat-option>
+    <mat-option *ngFor="let item of fieldData?.options" [value]="item?.value">{{
+      item?.value
+    }}</mat-option>
   </mat-select>
 </mat-form-field>

@@ -31,11 +31,20 @@ export class AddFormBuilderComponent implements OnInit {
     this.openPropertyModal(selectedItem, this.chosenFields.length - 1);
   }
 
-  deleteFormField(id) {
-    const index = this.chosenFields.findIndex((item) => item.id === id);
-    if (index !== -1) {
+  deleteFormField(index) {
+    const currentIndex = this.chosenFields.findIndex(
+      (item) => item.index === index
+    );
+    if (currentIndex !== -1) {
       this.chosenFields.splice(index, 1);
     }
+  }
+
+  editFormField(index) {
+    const selectedItem = this.chosenFields.filter(
+      (item) => item.index === index
+    );
+    this.openPropertyModal(selectedItem[0], index);
   }
 
   openPropertyModal(selectedItem, index) {

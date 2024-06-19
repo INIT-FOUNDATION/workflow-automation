@@ -49,27 +49,37 @@
             <app-input-field
               [fieldData]="item"
               *ngIf="item?.field_name == 'input'"
+              (deleteFormFieldIndex)="deleteFormField($event)"
+              (editFormFieldIndex)="editFormField($event)"
             ></app-input-field>
 
             <app-text-area-field
               [fieldData]="item"
               *ngIf="item?.field_name == 'textArea'"
+              (deleteFormFieldIndex)="deleteFormField($event)"
+              (editFormFieldIndex)="editFormField($event)"
             ></app-text-area-field>
 
             <app-radio-button
               [fieldData]="item"
               *ngIf="item?.field_name == 'radio'"
+              (deleteFormFieldIndex)="deleteFormField($event)"
+              (editFormFieldIndex)="editFormField($event)"
             ></app-radio-button>
 
             <app-checkbox-button
               [fieldData]="item"
               *ngIf="item?.field_name == 'checkbox'"
+              (deleteFormFieldIndex)="deleteFormField($event)"
+              (editFormFieldIndex)="editFormField($event)"
             ></app-checkbox-button>
 
-            <app-dropdown-button
+            <app-dropdown-field
               [fieldData]="item"
               *ngIf="item?.field_name == 'dropdown'"
-            ></app-dropdown-button>
+              (deleteFormFieldIndex)="deleteFormField($event)"
+              (editFormFieldIndex)="editFormField($event)"
+            ></app-dropdown-field>
           </div>
         </div>
       </form>
