@@ -54,6 +54,7 @@ export const USERS = {
     getUsersByRoleId: `select user_id, user_name, initcap(display_name) as display_name, mobile_number, initcap(role_name) as role_name  from vw_m_users where role_id = $1`,
     resetPasswordForUserId: `UPDATE m_users SET password = $2, password_last_updated = NOW(), date_updated = NOW() WHERE user_id = $1`,
     usersList: `select * from vw_m_users WHERE role_id <> 1`,
+    latestUpdatedCheck: `SELECT COUNT(*) as count FROM vw_m_users WHERE date_updated >= NOW() - INTERVAL '5 minutes'`,
     usersListCount: `select count(*) as count from vw_m_users WHERE role_id <> 1`,
     getReportingUsersList: `SELECT VU.user_id, VU.display_name FROM vw_m_users VU
     INNER JOIN m_roles R ON VU.role_id = R.role_id and R.status=1 and VU.status IN (1, 4, 5)

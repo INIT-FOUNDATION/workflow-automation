@@ -8,6 +8,25 @@ import RandExp from "randexp";
 import { UploadedFile } from "express-fileupload";
 
 export const usersService = {
+  usersUpdatedWithinFiveMints: async() : Promise<boolean> => {
+    try {
+        logger.info("usersService :: Inside usersUpdatedWithinFiveMints");
+
+        const _queryToCheckLatestUpdated = {
+            text: USERS.latestUpdatedCheck
+        };
+
+        logger.debug(`usersService :: latestUpdated :: query :: ${JSON.stringify(_queryToCheckLatestUpdated)}`)
+        const latestUpdatedInForm = await pg.executeQueryPromise(_queryToCheckLatestUpdated);
+        const isUserUpdatedWithin5mins = (latestUpdatedInForm[0].count > 0);
+        logger.info(`usersService :: latestUpdated :: result :: ${JSON.stringify(latestUpdatedInForm)} :: isUserUpdatedWithin5mins :: ${isUserUpdatedWithin5mins}`);
+
+        return isUserUpdatedWithin5mins;
+    } catch (error) {
+        logger.error(`usersService :: usersUpdatedWithinFiveMints :: ${error.message} :: ${error}`)
+        throw new Error(error.message);
+    }
+  },
   listUsers: async (userId: number, pageSize: number, currentPage: number, searchQuery: string): Promise<IUser[]> => {
     try {
       let key = `USERS|USER:${userId}`;
@@ -38,10 +57,14 @@ export const usersService = {
         _query.text += ` OFFSET ${currentPage}`;
       }
 
-      const cachedResult = await redis.GetKeyRedis(key);
-      if (cachedResult) {
-        logger.debug(`usersService :: listUsers :: cached result :: ${cachedResult}`)
-        return JSON.parse(cachedResult)
+      const isUserUpdatedWithin5min = await usersService.usersUpdatedWithinFiveMints();
+
+      if (isUserUpdatedWithin5min) {
+        const cachedResult = await redis.GetKeyRedis(key);
+        if (cachedResult) {
+          logger.debug(`usersService :: listUsers :: cached result :: ${cachedResult}`)
+          return JSON.parse(cachedResult)
+        }
       }
 
       logger.debug(`usersService :: listUsers :: query :: ${JSON.stringify(_query)}`);
@@ -80,10 +103,14 @@ export const usersService = {
         }
       }
 
-      const cachedResult = await redis.GetKeyRedis(key);
-      if (cachedResult) {
-        logger.debug(`usersService :: listUsersCount :: cached result :: ${cachedResult}`)
-        return JSON.parse(cachedResult)
+      const isUserUpdatedWithin5min = await usersService.usersUpdatedWithinFiveMints();
+
+      if (isUserUpdatedWithin5min) {
+        const cachedResult = await redis.GetKeyRedis(key);
+        if (cachedResult) {
+          logger.debug(`usersService :: listUsersCount :: cached result :: ${cachedResult}`)
+          return JSON.parse(cachedResult)
+        }
       }
 
       logger.debug(`usersService :: listUsersCount :: query :: ${JSON.stringify(_query)}`)
