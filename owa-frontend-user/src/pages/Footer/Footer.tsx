@@ -14,6 +14,7 @@ import TasksReport from "../TasksReport/TasksReport";
 import { SKIP_FOOTER_ROUTES } from "../../constants/constant";
 import "./Footer.css";
 import CreateTasks from "../CreateTasks/CreateTasks";
+import WorkFlowSelection from "../WorkFlowSelection/WorkFlowSelection";
 
 const Footer: React.FC = () => {
   const { pathname } = useLocation();
@@ -33,7 +34,12 @@ const Footer: React.FC = () => {
         <Route path="/assigned-tasks" component={AssignTasks} exact={true} />
         <Route path="/tasks-reports" component={TasksReport} exact={true} />
         <Route path="/create-tasks" component={CreateTasks} exact={true} />
-        
+        <Route
+          path="/workflow-selection"
+          component={WorkFlowSelection}
+          exact={true}
+        />
+
         <Redirect exact path="/" to="/tasks" />
       </IonRouterOutlet>
 
@@ -50,7 +56,13 @@ const Footer: React.FC = () => {
             style={{ width: "24px", height: "24px" }}
             className={selectedTab === "/tasks" ? "tab-button-icon" : ""}
           />
-          <IonLabel className={selectedTab === "/tasks" ? "tab-button-label" : "custom-font"}>My Tasks</IonLabel>
+          <IonLabel
+            className={
+              selectedTab === "/tasks" ? "tab-button-label" : "custom-font"
+            }
+          >
+            My Tasks
+          </IonLabel>
         </IonTabButton>
 
         <IonTabButton
@@ -62,9 +74,19 @@ const Footer: React.FC = () => {
           <IonIcon
             src="Assets/images/Footer/assigned_task.svg"
             style={{ width: "24px", height: "24px" }}
-            className={selectedTab === "/assigned-tasks" ? "tab-button-icon" : ""}
+            className={
+              selectedTab === "/assigned-tasks" ? "tab-button-icon" : ""
+            }
           />
-          <IonLabel className={selectedTab === "/assigned-tasks" ? "tab-button-label" : "custom-font"}>Assigned Tasks</IonLabel>
+          <IonLabel
+            className={
+              selectedTab === "/assigned-tasks"
+                ? "tab-button-label"
+                : "custom-font"
+            }
+          >
+            Assigned Tasks
+          </IonLabel>
         </IonTabButton>
 
         <IonTabButton
@@ -77,9 +99,19 @@ const Footer: React.FC = () => {
             src="Assets/images/Footer/task_report.svg"
             alt="Task Report"
             style={{ width: "24px", height: "24px" }}
-            className={selectedTab === "/tasks-reports" ? "tab-button-icon" : ""}
+            className={
+              selectedTab === "/tasks-reports" ? "tab-button-icon" : ""
+            }
           />
-          <IonLabel className={selectedTab === "/tasks-reports" ? "tab-button-label" : "custom-font"}>Task Report</IonLabel>
+          <IonLabel
+            className={
+              selectedTab === "/tasks-reports"
+                ? "tab-button-label"
+                : "custom-font"
+            }
+          >
+            Task Report
+          </IonLabel>
         </IonTabButton>
       </IonTabBar>
     </IonTabs>
