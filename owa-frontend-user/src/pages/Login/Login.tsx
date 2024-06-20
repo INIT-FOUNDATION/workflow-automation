@@ -1,5 +1,6 @@
 import React from "react";
 import "./Login.css";
+import { IonInput } from "@ionic/react";
 
 const Login: React.FC = () => {
   return (
@@ -9,7 +10,7 @@ const Login: React.FC = () => {
           <img src="Assets/images/Login/ollUserLogo.svg" alt="Login" />
         </div>
         <div className="mb-4">
-          <div className="border-b border-gray-300 pb-2" style={{ width: '98%' }}>
+          <div className="border-b border-gray-300" style={{ width: '98%' }}>
             <div className="ml-2">
               <h2 className="text-2xl font-medium">Login/SignUp</h2>
             </div>
@@ -22,6 +23,19 @@ const Login: React.FC = () => {
               placeholder="Enter your phone number"
               className="w-full px-4 py-2 border rounded-2xl focus:outline-none focus:ring-2 focus:ring-grey"
             />
+             {/* <IonInput
+                        label="Enter your Mobile Number *"
+                        labelPlacement="floating"
+                        fill="outline"
+                        placeholder="Enter here"
+                        maxlength={10}
+                         className="custom-input text-black"
+                        required
+                        
+                        mode="md"
+                       
+                        type="tel"
+                      ></IonInput> */}
           </div>
 
           <button

@@ -2,3 +2,8 @@
     background: linear-gradient(180deg, #E0001E 0%, #70000F 427.5%);
 
 }
+.custom-input {
+    border-radius: 14px;
+    border: 1px solid #000; /* You can customize the border color */
+    padding: 0.5rem; /* Adjust padding if needed */
+  }

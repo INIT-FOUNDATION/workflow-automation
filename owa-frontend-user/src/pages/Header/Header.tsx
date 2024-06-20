@@ -27,6 +27,12 @@ const Header: React.FC = () => {
     setShowPopover(true);
   };
 
+  const handleProfileClick = () => {
+    console.log('Profile clicked');
+   
+    // history.push('/profile'); 
+  };
+
   return (
     <div className="flex items-center justify-between px-2 md:px-20 mt-3 pb-1">
       <div className="flex items-center">

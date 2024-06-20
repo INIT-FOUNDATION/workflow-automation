@@ -15,6 +15,9 @@ const TaskOptionsDialogBox: React.FC = () => {
     router.push("/workflow-selection");
   };
 
+  const handleCreateTasks = () => {
+    router.push("/create-tasks");
+  };
   return (
     <IonContent className="ion-padding">
       <IonList>
@@ -23,7 +26,7 @@ const TaskOptionsDialogBox: React.FC = () => {
             Choose existing workflow
           </IonLabel>
         </IonItem>
-        <IonItem button onClick={() => console.log("Create new task clicked")}>
+        <IonItem button onClick={handleCreateTasks}>
           <IonLabel className="custom-popover-text">Create new task</IonLabel>
         </IonItem>
       </IonList>

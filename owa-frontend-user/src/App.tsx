@@ -33,6 +33,7 @@ import Header from "./pages/Header/Header";
 import AssignTasks from "./pages/AssignTask/AssignTasks";
 import TasksReport from "./pages/TasksReport/TasksReport";
 import WorkFlowStarted from "./pages/WorkFlowSelection/Component/WorkFlowStarted/WorkFlowStarted";
+import CreateTasks from "./pages/CreateTasks/CreateTasks";
 
 setupIonicReact();
 
@@ -50,6 +51,7 @@ const App: React.FC = () => (
         <Route path="/workflow-started" component={WorkFlowStarted} exact />
         <Route path="/tasks-reports" component={TasksReport} exact />
         <Route path="/assigned-tasks" component={AssignTasks} exact />
+        <Route path="/create-tasks" component={CreateTasks} exact />
       </IonRouterOutlet>
       <Footer />
     </IonReactRouter>
