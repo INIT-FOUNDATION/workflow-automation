@@ -1,7 +1,7 @@
 import { logger, STATUS, envUtils } from "owa-micro-common";
 import { Response } from "express";
 import { Request } from "../types/express";
-import { GRID_DEFAULT_OPTIONS } from "../constants/CONST";
+import { GRID_DEFAULT_OPTIONS, decryptPayload } from "../constants/CONST";
 import { usersService } from "../services/usersService";
 import { IUser } from "../types/custom";
 import { User, validateCreateUser, validateUpdateUser } from "../models/usersModel";
@@ -85,12 +85,7 @@ export const usersController = {
                 }    
             */
             const plainToken = req.plainToken;
-            const user: IUser = new User(req.body)
-
-            if (user.mobile_number) {
-                user.user_name = user.mobile_number.toString();
-            }
-
+            const user: IUser = new User(req.body);
 
             const { error } = validateCreateUser(user);
 
@@ -139,7 +134,7 @@ export const usersController = {
                     in: 'body',
                     required: true,
                     schema: {
-                        user_id: 2,
+                        user_id: 'encryptedHash',
                         first_name: 'Narsima',
                         last_name: 'Chilkuri',
                         email_id: 'narsimachilkuri237@gmail.com',
@@ -153,10 +148,14 @@ export const usersController = {
                 }    
             */
             const plainToken = req.plainToken;
+            if (req.body.user_id) req.body.user_id = parseInt(decryptPayload(req.body.user_id));
+
             const user: IUser = req.body;
+
             if (user.mobile_number) {
                 user.user_name = user.mobile_number.toString();
             }
+
             const { error } = validateUpdateUser(user);
 
             if (error) {
@@ -345,7 +344,7 @@ export const usersController = {
             const userId = (type === "edit" ? req.plainToken.user_id : null);
 
             if (!roleId) return res.status(STATUS.BAD_REQUEST).send(USERS.USER00007);
-            
+
             const roleDetails = await rolesService.getRoleById(parseInt(roleId));
 
             if(!roleDetails)  return res.status(STATUS.BAD_REQUEST).send(USERS.USER00007);
@@ -366,8 +365,6 @@ export const usersController = {
                     levels = ['Admin', 'Department', 'Employee'];
                     break;
             }
-
-
 
             const listOfUsers = await usersService.getReportingUsersList(levels, userId);
             return res.status(STATUS.OK).send({
