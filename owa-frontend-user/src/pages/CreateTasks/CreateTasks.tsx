@@ -7,11 +7,11 @@ import {
   MenuItem,
   FormControl,
   InputLabel,
-  TextareaAutosize
+  TextareaAutosize,
 } from "@mui/material";
 import { ArrowBack } from "@mui/icons-material";
 import "./CreateTasks.css";
-import { IonIcon } from "@ionic/react";
+import { IonIcon, IonInput } from "@ionic/react";
 
 const CreateTasks: React.FC = () => {
   return (
@@ -20,26 +20,36 @@ const CreateTasks: React.FC = () => {
         <IconButton>
           <ArrowBack />
         </IconButton>
-        <span className="text-lg font-medium text-black pl-2">Create New Task</span>
+        <span className="text-lg font-medium text-black pl-2">
+          Create New Task
+        </span>
       </div>
       <form className="mt-2 w-full">
         <div className="mb-4">
-          <TextField
+          <IonInput
+            label="Task Name *"
+            labelPlacement="floating"
+            fill="outline"
+            // placeholder="Enter here"
+            maxlength={10}
+            //  className=" text-black"
+            required
+            mode="md"
+            type="tel"
+          ></IonInput>
+          {/* <TextField
             label="Task Name"
             variant="outlined"
             // placeholder="Enter task name"
             className="w-full"
             InputProps={{ className: "text-black" }}
             required
-          />
+          /> */}
         </div>
         <div className="mb-4">
           <FormControl variant="outlined" className="w-full">
             <InputLabel>Select Priority</InputLabel>
-            <Select
-              label="Select Priority"
-              className="text-black"
-            >
+            <Select label="Select Priority" className="text-black">
               <MenuItem value="high">High</MenuItem>
               <MenuItem value="medium">Medium</MenuItem>
               <MenuItem value="low">Low</MenuItem>
@@ -50,14 +60,15 @@ const CreateTasks: React.FC = () => {
           <TextareaAutosize
             placeholder="Enter task description"
             className="w-full border rounded-md p-2 text-black"
-            
             style={{ minHeight: "100px" }}
             required
           />
         </div>
         <div>
           <div className="mt-0">
-            <span className="text-lg font-medium text-black p-2">Task Detail</span>
+            <span className="text-lg font-medium text-black p-2">
+              Task Detail
+            </span>
           </div>
           <div
             className="flex justify-between items-center mb-4 border-b border-gray-300 pb-2"
@@ -68,7 +79,9 @@ const CreateTasks: React.FC = () => {
                 src="Assets/images/CreateTasks/create_task_calender.svg"
                 className="calender-img"
               />
-              <span className="ml-1 text-base font-medium text-black">June 17, 2024</span>
+              <span className="ml-1 text-base font-medium text-black">
+                June 17, 2024
+              </span>
             </div>
           </div>
           <div
@@ -80,7 +93,9 @@ const CreateTasks: React.FC = () => {
                 src="Assets/images/CreateTasks/create_task_profile.svg"
                 className="calender-img"
               />
-              <span className="ml-1 text-base font-medium text-black">Assignee</span>
+              <span className="ml-1 text-base font-medium text-black">
+                Assignee
+              </span>
             </div>
           </div>
         </div>
