@@ -57,7 +57,11 @@ const Footer: React.FC = () => {
           className={selectedTab === "/tasks" ? "tab-button-red" : ""}
         >
           <img
-            src="Assets/images/Footer/my_task.svg"
+            src={
+              selectedTab === "/tasks"
+                ? "Assets/images/Footer/my_task_tab.svg"
+                : "Assets/images/Footer/my_task.svg"
+            }
             alt="My Tasks"
             style={{ width: "24px", height: "24px" }}
             className={selectedTab === "/tasks" ? "tab-button-icon" : ""}
@@ -78,7 +82,11 @@ const Footer: React.FC = () => {
           className={selectedTab === "/assigned-tasks" ? "tab-button-red" : ""}
         >
           <IonIcon
-            src="Assets/images/Footer/assigned_task.svg"
+            src={
+              selectedTab === "/assigned-tasks"
+                ? "Assets/images/Footer/assigned_task_tab.svg"
+                : "Assets/images/Footer/assigned_task.svg"
+            }
             style={{ width: "24px", height: "24px" }}
             className={
               selectedTab === "/assigned-tasks" ? "tab-button-icon" : ""
@@ -102,7 +110,11 @@ const Footer: React.FC = () => {
           className={selectedTab === "/tasks-reports" ? "tab-button-red" : ""}
         >
           <img
-            src="Assets/images/Footer/task_report.svg"
+            src={
+              selectedTab === "/tasks-reports"
+                ? "Assets/images/Footer/task_report_tab.svg"
+                : "Assets/images/Footer/task_report.svg"
+            }
             alt="Task Report"
             style={{ width: "24px", height: "24px" }}
             className={
