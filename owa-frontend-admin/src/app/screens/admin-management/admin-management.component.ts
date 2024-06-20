@@ -1,6 +1,5 @@
-import { Component, TemplateRef, ViewChild } from '@angular/core';
-import { CommonDataTableComponent } from 'src/app/modules/common-data-table/common-data-table.component';
-import {Colmodel} from "src/app/modules/common-data-table/model/colmodel.model"
+import { Component, ViewChild } from '@angular/core';
+import { MatTabGroup } from '@angular/material/tabs';
 
 @Component({
   selector: 'app-admin-management',
@@ -8,45 +7,34 @@ import {Colmodel} from "src/app/modules/common-data-table/model/colmodel.model"
   styleUrls: ['./admin-management.component.scss']
 })
 export class AdminManagementComponent {
+  @ViewChild('tabGroup') tabGroup: MatTabGroup;
+  selectedIndex: number = 0;
+  titleName: string = 'All Users';
+  searchText = 'Search for an existing user';
+  buttonText: string = 'Add New User';
+  buttonRoute: string = '/admin-management/add-user';
   
   ngOnInit(): void {
   }
 
-  users = [
-    {
-      name: 'Ramesh Thakur',
-      email: 'ramesh@gmail.com',
-      role: 'Super Admin',
-      mobile: '7017019019',
-      image: 'path/to/image1.jpg'
-    },
-    {
-      name: 'Kamal Kishor',
-      email: 'kamal@gmail.com',
-      role: 'Admin',
-      mobile: '7017019019',
-      image: 'path/to/image2.jpg'
-    },
-    {
-      name: 'Nidhi Chandel',
-      email: 'nidhi@gmail.com',
-      role: 'Contributor',
-      mobile: '7017019019',
-      image: 'path/to/image3.jpg'
-    },
-    {
-      name: 'Samarth Gupta',
-      email: 'samarth@gmail.com',
-      role: 'Super Admin',
-      mobile: '7017019019',
-      image: 'path/to/image4.jpg'
-    },
-    {
-      name: 'Ashok Sharma',
-      email: 'ashok@gmail.com',
-      role: 'Super Admin',
-      mobile: '7017019019',
-      image: 'path/to/image5.jpg'
+  ngAfterViewInit() {
+    this.tabGroup.selectedIndexChange.subscribe(index => {
+      this.selectedIndex = index;
+      this.updateDynamicProperties();
+    });
+  }
+
+  updateDynamicProperties() {
+    if (this.selectedIndex === 0) {
+      this.titleName = 'All Users';
+      this.searchText = 'Search for an existing user';
+      this.buttonText = 'Add New User';
+      this.buttonRoute = '/admin-management/add-user';
+    } else {
+      this.titleName = 'All Roles';
+      this.searchText = 'Search for a role';
+      this.buttonText = 'Add New Role';
+      this.buttonRoute = '/admin-management/add-role';
     }
-  ];
+  }
 }

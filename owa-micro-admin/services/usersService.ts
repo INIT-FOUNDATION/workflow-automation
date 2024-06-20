@@ -92,8 +92,9 @@ export const usersService = {
       logger.debug(`usersService :: listUsersCount :: db result :: ${JSON.stringify(result)}`)
 
       if (result.length > 0) {
-        redis.SetRedis(key, result, CACHE_TTL.LONG);
-        return result[0].count
+        const count = parseInt(result[0].count);
+        if (count > 0) redis.SetRedis(key, count, CACHE_TTL.LONG);
+        return count
       };
     } catch (error) {
       logger.error(`usersService :: listUsersCount :: ${error.message} :: ${error}`)
@@ -430,4 +431,28 @@ export const usersService = {
       throw new Error(error.message);
     }
   },
+  getReportingUsersList: async (levels: string[], user_id: number): Promise<{user_id: number, display_name: string}[]> => {
+    try {
+      const placeholders = levels.map((_, i) => `$${i + 1}`).join(', ');
+      let query = `${USERS.getReportingUsersList} IN (${placeholders}) AND VU.role_id <> 1`;
+
+      if (user_id) {
+        query += ` AND VU.user_id <> ${user_id}`
+      }
+
+      const _query = {
+        text: query,
+        values: levels
+      };
+      logger.debug(`usersService :: getReportingUsersList :: query :: ${JSON.stringify(_query)}`);
+
+      const result = await pg.executeQueryPromise(_query);
+      logger.debug(`usersService :: getReportingUsersList :: db result :: ${JSON.stringify(result)}`);
+
+      return result;
+    } catch (error) {
+      logger.error(`usersService :: getReportingUsersList :: ${error.message} :: ${error}`)
+      throw new Error(error.message);
+    }
+  }
 }

@@ -17,6 +17,8 @@ usersRouter.post("/list", usersController.listUsers);
 
 usersRouter.post("/resetPassword/:userId", usersController.resetPasswordForUserId);
 
+usersRouter.get("/reportingUsers/:roleId/:userId", usersController.reportingUsersList);
+
 export {
     usersRouter
 }
