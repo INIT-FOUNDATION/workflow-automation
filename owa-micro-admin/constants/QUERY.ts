@@ -1,5 +1,5 @@
 export const ROLES = {
-    listRoles: 'SELECT role_id, role_name, level from m_roles WHERE status = 1 AND role_id <> 1 ORDER BY date_created DESC',
+    listRoles: 'SELECT role_id, role_name, role_description, level from m_roles WHERE status = 1 AND role_id <> 1 ORDER BY date_created DESC',
     addRole: 'INSERT INTO m_roles (role_name, role_description, level, created_by, updated_by) VALUES ($1, $2, $3, $4, $5) RETURNING role_id',
     updateRole: 'UPDATE m_roles SET role_name = $2, role_description = $3, level = $4, updated_by = $5, date_updated = NOW() WHERE role_id = $1',
     getRole: 'SELECT role_name, role_description, level FROM m_roles WHERE role_id = $1 AND status = 1',
@@ -54,6 +54,7 @@ export const USERS = {
     getUsersByRoleId: `select user_id, user_name, initcap(display_name) as display_name, mobile_number, initcap(role_name) as role_name  from vw_m_users where role_id = $1`,
     resetPasswordForUserId: `UPDATE m_users SET password = $2, password_last_updated = NOW(), date_updated = NOW() WHERE user_id = $1`,
     usersList: `select * from vw_m_users WHERE role_id <> 1`,
+    latestUpdatedCheck: `SELECT COUNT(*) as count FROM vw_m_users WHERE date_updated >= NOW() - INTERVAL '5 minutes'`,
     usersListCount: `select count(*) as count from vw_m_users WHERE role_id <> 1`,
     getReportingUsersList: `SELECT VU.user_id, VU.display_name FROM vw_m_users VU
     INNER JOIN m_roles R ON VU.role_id = R.role_id and R.status=1 and VU.status IN (1, 4, 5)
