@@ -74,7 +74,7 @@ import { IonIcon } from "@ionic/react";
 
 const CreateTasks: React.FC = () => {
   return (
-    <div className="flex flex-col h-screen p-2 mt-20">
+    <div className="flex flex-col  p-2 mt-20">
       <div className="cursor-pointer rounded-md flex items-center pt-8">
         <IconButton>
           <ArrowBack />
@@ -149,7 +149,7 @@ const CreateTasks: React.FC = () => {
         </div>
 
       </div>
-      <div className="flex-grow"></div>
+      <div className="flex-grow">
       <div className="flex justify-center pb-16">
         <Button
           // onClick={() => handleNextClick()}
@@ -160,6 +160,8 @@ const CreateTasks: React.FC = () => {
           Next
         </Button>
       </div>
+      </div>
+     
     </div>
   );
 };
