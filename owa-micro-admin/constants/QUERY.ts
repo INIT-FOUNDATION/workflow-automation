@@ -48,7 +48,7 @@ export const USERS = {
     createUser: `INSERT INTO m_users(
         user_name, first_name, last_name, display_name, dob, gender, mobile_number, password, role_id, email_id, created_by, updated_by)
         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) RETURNING user_id`,
-    updateUser: `UPDATE m_users SET first_name = $2, last_name = $3, display_name = $4, dob = $5, gender = $6, email_id = $7, updated_by = $8, role_id = $9, date_updated = NOW() WHERE user_id = $1`,
+    updateUser: `UPDATE m_users SET first_name = $2, last_name = $3, dob = $4, gender = $5, email_id = $6, updated_by = $7, role_id = $8, date_updated = NOW() WHERE user_id = $1`,
     getUser: `SELECT * from vw_m_users WHERE user_id = $1 AND status NOT IN (0,2)`,
     updateProfilePic: `UPDATE m_users SET profile_pic_url = $2, updated_by = $1 WHERE user_id = $1`,
     getUsersByRoleId: `select user_id, user_name, initcap(display_name) as display_name, mobile_number, initcap(role_name) as role_name  from vw_m_users where role_id = $1`,

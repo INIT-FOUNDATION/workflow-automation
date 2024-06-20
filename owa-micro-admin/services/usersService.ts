@@ -182,7 +182,7 @@ export const usersService = {
     try {
       const _query = {
         text: USERS.updateUser,
-        values: [user.user_id, user.first_name, user.last_name, user.display_name,
+        values: [user.user_id, user.first_name, user.last_name,
         user.dob, user.gender,
         user.email_id, user.updated_by, user.role_id
         ]
