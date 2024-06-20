@@ -59,7 +59,7 @@ export const usersService = {
 
       const isUserUpdatedWithin5min = await usersService.usersUpdatedWithinFiveMints();
 
-      if (isUserUpdatedWithin5min) {
+      if (!isUserUpdatedWithin5min) {
         const cachedResult = await redis.GetKeyRedis(key);
         if (cachedResult) {
           logger.debug(`usersService :: listUsers :: cached result :: ${cachedResult}`)
@@ -105,7 +105,7 @@ export const usersService = {
 
       const isUserUpdatedWithin5min = await usersService.usersUpdatedWithinFiveMints();
 
-      if (isUserUpdatedWithin5min) {
+      if (!isUserUpdatedWithin5min) {
         const cachedResult = await redis.GetKeyRedis(key);
         if (cachedResult) {
           logger.debug(`usersService :: listUsersCount :: cached result :: ${cachedResult}`)
