@@ -1,5 +1,5 @@
 <app-title
-  titleName="Add New User"
+  [titleName]="titleName"
   additionalClass="text-lg font-bold"
   [canGoBack]="true"
 ></app-title>
@@ -10,9 +10,6 @@
         <mat-form-field appearance="outline" class="w-full">
           <mat-label>First Name</mat-label>
           <input matInput placeholder="Enter your first name" formControlName="first_name" name="first_name" autocomplete="off" />
-          <!-- <mat-error *ngIf="first_name.invalid && (first_name.dirty || first_name.touched)">
-            First Name is required
-          </mat-error> -->
         </mat-form-field>
       </div>
   
@@ -20,9 +17,6 @@
         <mat-form-field appearance="outline" class="w-full">
           <mat-label>Last Name</mat-label>
           <input matInput placeholder="Enter your last name" formControlName="last_name" autocomplete="off" />
-          <!-- <mat-error *ngIf="lastName.invalid && (lastName.dirty || lastName.touched)">
-            Last Name is required
-          </mat-error> -->
         </mat-form-field>
       </div>
   
@@ -30,10 +24,6 @@
         <mat-form-field appearance="outline" class="w-full">
           <mat-label>Email</mat-label>
           <input matInput type="email" placeholder="Enter your email" formControlName="email_id" autocomplete="off" />
-          <!-- <mat-error *ngIf="email.invalid && (email.dirty || email.touched)">
-            <span *ngIf="email.errors.required">Email is required</span>
-            <span *ngIf="email.errors.email">Enter a valid email</span>
-          </mat-error> -->
         </mat-form-field>
       </div>
 
@@ -43,9 +33,6 @@
           <input matInput [matDatepicker]="picker" placeholder="Choose a date" formControlName="dob" autocomplete="off" />
         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-datepicker #picker></mat-datepicker>
-          <!-- <mat-error *ngIf="dob.invalid && (dob.dirty || dob.touched)">
-            Date of Birth is required
-          </mat-error> -->
         </mat-form-field>
       </div>
 
@@ -53,13 +40,10 @@
         <mat-form-field appearance="outline" class="w-full">
           <mat-label>Gender</mat-label>
           <mat-select formControlName="gender">
-            <mat-option value="1">Male</mat-option>
-            <mat-option value="2">Female</mat-option>
-            <mat-option value="3">Others</mat-option>
+            <mat-option [value]="1">Male</mat-option>
+            <mat-option [value]="2">Female</mat-option>
+            <mat-option [value]="3">Others</mat-option>
           </mat-select>
-          <!-- <mat-error *ngIf="role.invalid && (role.dirty || role.touched)">
-            Role is required
-          </mat-error> -->
         </mat-form-field>
       </div>
   
@@ -67,22 +51,15 @@
         <mat-form-field appearance="outline" class="w-full">
           <mat-label>Mobile</mat-label>
           <input matInput type="tel" placeholder="Enter your mobile number" formControlName="mobile_number" autocomplete="off" />
-          <!-- <mat-error *ngIf="mobile.invalid && (mobile.dirty || mobile.touched)">
-            <span *ngIf="mobile.errors.required">Mobile number is required</span>
-            <span *ngIf="mobile.errors.pattern">Enter a valid mobile number</span>
-          </mat-error> -->
         </mat-form-field>
       </div>
   
       <div class="grid grid-cols-1">
         <mat-form-field appearance="outline" class="w-full">
           <mat-label>Role</mat-label>
-          <mat-select formControlName="role_id">
+          <mat-select formControlName="role_id" (selectionChange)="onRoleChange($event.value)">
             <mat-option *ngFor="let role of roles" [value]="role.role_id">{{ role.role_name }}</mat-option>
           </mat-select>
-          <!-- <mat-error *ngIf="role.invalid && (role.dirty || role.touched)">
-            Role is required
-          </mat-error> -->
         </mat-form-field>
       </div>
   
@@ -92,9 +69,6 @@
           <mat-select formControlName="department_id">
             <mat-option *ngFor="let department of departments" [value]="department.department_id">{{ department.department_name }}</mat-option>
           </mat-select>
-          <!-- <mat-error *ngIf="department.invalid && (department.dirty || department.touched)">
-            Department is required
-          </mat-error> -->
         </mat-form-field>
       </div>
 
@@ -102,17 +76,14 @@
         <mat-form-field appearance="outline" class="w-full">
           <mat-label>Reporting to</mat-label>
           <mat-select formControlName="reporting_to_users" multiple>
-              <mat-option *ngFor="let user of reportingUsers" [value]="user.user_id">{{ user.user_name }}</mat-option>
+              <mat-option *ngFor="let user of reportingUsers" [value]="user.user_id">{{ user.display_name}}</mat-option>
           </mat-select>
-          <!-- <mat-error *ngIf="department.invalid && (department.dirty || department.touched)">
-            Department is required
-          </mat-error> -->
         </mat-form-field>
       </div>
   
-      <div class="grid grid-cols-2 w-1/2">
-        <button type="submit" class="w-full bg-red-600 text-white py-2 px-4 rounded-full mt-4">Add User</button>
-        <button type="submit" class="w-full bg-red-600 text-white py-2 px-4 rounded-full mt-4 ms-4">Cancel</button>
+      <div class="col-span-2 flex justify-center space-x-4 mt-4">
+        <button type="submit" class="bg-red-600 hover:bg-red-700 text-white py-2 px-8 rounded-full">{{ primaryButtonText }}</button>
+        <button type="button" class="bg-gray-500 hover:bg-gray-600 text-white py-2 px-12 rounded-full" (click)="cancel()">{{ secondaryButtonText }}</button>
       </div>
     </form>
   </div>

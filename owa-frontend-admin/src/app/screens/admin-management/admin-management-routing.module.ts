@@ -12,7 +12,7 @@ const routes: Routes = [
     component: AdminManagementComponent
   },
   { path: 'add-user', component: AddUserComponent },
-  { path: 'edit-user', component: EditUserComponent },
+  { path: 'edit-user/:userId', component: EditUserComponent },
   {
     path: 'add-role',
     component: AddRoleComponent
