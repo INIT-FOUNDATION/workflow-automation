@@ -92,8 +92,9 @@ export const usersService = {
       logger.debug(`usersService :: listUsersCount :: db result :: ${JSON.stringify(result)}`)
 
       if (result.length > 0) {
-        redis.SetRedis(key, result, CACHE_TTL.LONG);
-        return result[0].count
+        const count = parseInt(result[0].count);
+        if (count > 0) redis.SetRedis(key, count, CACHE_TTL.LONG);
+        return count
       };
     } catch (error) {
       logger.error(`usersService :: listUsersCount :: ${error.message} :: ${error}`)
@@ -433,12 +434,10 @@ export const usersService = {
   getReportingUsersList: async (levels: string[], user_id: number): Promise<{user_id: number, display_name: string}[]> => {
     try {
       const placeholders = levels.map((_, i) => `$${i + 1}`).join(', ');
-      let query = `${USERS.getReportingUsersList} IN (${placeholders}) `;
+      let query = `${USERS.getReportingUsersList} IN (${placeholders}) AND VU.role_id <> 1`;
 
       if (user_id) {
-        query += `${query} AND VU.user_id NOT IN (1, ${user_id})`
-      } else {
-        query += `${query} AND VU.user_id <> 1`
+        query += ` AND VU.user_id <> ${user_id}`
       }
 
       const _query = {
