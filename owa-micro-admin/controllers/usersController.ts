@@ -319,7 +319,7 @@ export const usersController = {
         /*  
                 #swagger.tags = ['Users']
                 #swagger.summary = 'Reporting Users List'
-                #swagger.description = 'Get Reporting users based on role Id'
+                #swagger.description = 'Get Reporting Users based on role Id'
                 #swagger.parameters['Authorization'] = {
                     in: 'header',
                     required: true,
@@ -342,7 +342,7 @@ export const usersController = {
         try {
             const roleId = req.params.roleId;
             const type = req.params.type ? req.params.type : "add";
-            let userId = (type === "edit" ? req.plainToken.user_id : null);
+            const userId = (type === "edit" ? req.plainToken.user_id : null);
 
             if (!roleId) return res.status(STATUS.BAD_REQUEST).send(USERS.USER00007);
 
