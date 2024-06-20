@@ -19,6 +19,8 @@ usersRouter.post("/resetPassword/:userId", usersController.resetPasswordForUserI
 
 usersRouter.get("/reportingUsers/:roleId/:type", usersController.reportingUsersList);
 
+usersRouter.post("/deleteUser", usersController.deleteUser);
+
 export {
     usersRouter
 }

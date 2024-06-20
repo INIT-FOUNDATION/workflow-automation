@@ -481,5 +481,25 @@ export const usersService = {
       logger.error(`usersService :: getReportingUsersList :: ${error.message} :: ${error}`)
       throw new Error(error.message);
     }
+  },
+  deleteUser: async (user: IUser) => {
+    try {
+      const _query = {
+        text: USERS.deleteUser,
+        values: [user.user_id]
+      };
+      logger.debug(`usersService :: deleteUser :: query :: ${JSON.stringify(_query)}`)
+
+      const result = await pg.executeQueryPromise(_query);
+      logger.debug(`usersService :: deleteUser :: db result :: ${JSON.stringify(result)}`)
+
+      redis.deleteRedis(`USERS|OFFSET:0|LIMIT:50`);
+      redis.deleteRedis(`USERS_COUNT`);
+      redis.deleteRedis(`USER:${user.user_id}`);
+      redis.deleteRedis(`User|Username:${user.user_name}`);
+    } catch (error) {
+      logger.error(`usersService :: deleteUser :: ${error.message} :: ${error}`)
+      throw new Error(error.message);
+    }
   }
 }

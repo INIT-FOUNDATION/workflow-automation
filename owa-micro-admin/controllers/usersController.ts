@@ -375,5 +375,44 @@ export const usersController = {
             logger.error(`usersController :: reportingUsersList :: ${error.message} :: ${error}`);
             return res.status(STATUS.INTERNAL_SERVER_ERROR).send(USERS.USER00000);
         }
+    },
+    deleteUser: async (req: Request, res: Response): Promise<Response> => {
+        /*  
+                #swagger.tags = ['Users']
+                #swagger.summary = 'Delete User'
+                #swagger.description = 'Delete User by User Id'
+                #swagger.parameters['Authorization'] = {
+                    in: 'header',
+                    required: true,
+                    type: 'string',
+                    description: 'Bearer token for authentication'
+                }
+                #swagger.parameters['body'] = {
+                    in: 'body',
+                    required: true,
+                    schema: {
+                        user_id: 'encryptedHash'
+                    }
+                }
+        */
+        try {
+            let userId = req.body.user_id;
+
+            if (!userId) return res.status(STATUS.BAD_REQUEST).send(USERS.USER00006);
+            userId = parseInt(decryptPayload(userId));
+
+            const user = await usersService.getUserById(userId);
+            if(!user) return res.status(STATUS.BAD_REQUEST).send(USERS.USER000011);
+
+            await usersService.deleteUser(user);
+
+            return res.status(STATUS.OK).send({
+                data: null,
+                message: "User Deleted Successfully",
+            });
+        } catch (error) {
+            logger.error(`usersController :: deleteUser :: ${error.message} :: ${error}`);
+            return res.status(STATUS.INTERNAL_SERVER_ERROR).send(USERS.USER00000);
+        }
     }
 }

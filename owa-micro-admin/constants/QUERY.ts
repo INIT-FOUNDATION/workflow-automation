@@ -58,7 +58,8 @@ export const USERS = {
     usersListCount: `select count(*) as count from vw_m_users WHERE role_id <> 1`,
     getReportingUsersList: `SELECT VU.user_id, VU.display_name FROM vw_m_users VU
     INNER JOIN m_roles R ON VU.role_id = R.role_id and R.status=1 and VU.status IN (1, 4, 5)
-    WHERE R.level`
+    WHERE R.level`,
+    deleteUser: `UPDATE m_users SET status = 2, date_updated = NOW() WHERE user_id = $1`,
 }
 
 export const USER_DEPARTMENT_MAPPING = {
