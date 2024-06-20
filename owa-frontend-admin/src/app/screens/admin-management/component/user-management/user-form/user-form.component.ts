@@ -11,7 +11,11 @@ import { Router } from '@angular/router';
 })
 export class UserFormComponent {
   @Input() formType = 'add';
-  departments: any = [];
+  departments: any[] = [];
+  roles: any[] = [];
+  reports: any[] = [];
+  role_id: any;
+  reportingUsers: any[] = [];
 
   constructor(
     public adminManagementService: AdminManagementService,
@@ -28,12 +32,16 @@ export class UserFormComponent {
     mobile_number: new FormControl('', [Validators.required, Validators.pattern('^[0-9]{10}$')]),
     role_id: new FormControl('', [Validators.required]),
     department_id: new FormControl('', [Validators.required]),
+    reporting_to_users: new FormControl('', [Validators.required]),
     // password: new FormControl(''),
     // confirmPassword: new FormControl('')
   });
 
   ngOnInit(): void {
-
+    this.getDepartmentsList();
+    this.getRolesList();
+    // this.getRepostingsList();
+    // this.onRoleChange(this.role_id);
   }
 
   async submitUserForm() {
@@ -54,15 +62,38 @@ async createUser() {
   });
 }
 
-// async getDepartmentsList() {
-//   this.departments = await this.adminManagementService.getDepartments().toPromise();
-//   console.log(this.departments);
+getDepartmentsList() {
+  this.adminManagementService.getDepartments().subscribe((response) => {
+    this.departments = response.data;
+  });
+}
+
+getRolesList() {
+  this.adminManagementService.getRoles().subscribe((res) => {
+    this.roles = res.data;
+  });
+}
+
+// getReportingsList() {
+//   this.adminManagementService.getReportingUsers(this.role_id).subscribe((res) => {
+//     this.reports = res;
+//     console.log(res);
+//   });
 // }
 
-// getDepartmentsList() {
-//   this.adminManagementService.getDepartments().subscribe((data) => {
-//     this.departments = data;
-//     console.log(data);
-//   });
+// onRoleChange(role_id: any) {
+//   if (role_id) {
+//     this.adminManagementService.getReportingUsers(role_id).subscribe(
+//       (users: any) => {
+//         this.reportingUsers = users;
+//         this.userForm.controls['reporting_to_users'].setValue([]);
+//       },
+//       error => {
+//         console.error('Error fetching reporting users', error);
+//       }
+//     );
+//   } else {
+//     this.reportingUsers = [];
+//   }
 // }
 }

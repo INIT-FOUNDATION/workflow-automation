@@ -24,17 +24,15 @@ export class AdminManagementService {
     );
   }
 
-  // getDepartments() {
-  //   return this.http.get(
-  //     `${environment.admin_prefix_url}/departments/list`);
-  // }
+  getDepartments(): Observable<any> {
+    return this.http.get(`${environment.admin_prefix_url}/departments/list`);
+  }
 
-  // getDepartments() {
-  //   return this.http.get(
-  //     `${environment.admin_prefix_url}/departments/list`)
-  // }
+  getRoles(): Observable<any> {
+    return this.http.get(`${environment.admin_prefix_url}/roles/list`);
+  }
 
-  // getDepartments(): Observable<any> {
-  //   return this.http.get(`${environment.admin_prefix_url}/departments/list`);
+  // getReportingUsers(role_id): Observable<any> {
+  //   return this.http.get(`${environment.admin_prefix_url}/users/reportingUsers/${role_id}`);
   // }
 }

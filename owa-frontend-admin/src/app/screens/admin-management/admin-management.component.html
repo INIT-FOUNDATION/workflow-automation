@@ -1,5 +1,5 @@
 <app-title
-  [titleName]="tabGroup.selectedIndex === 0 ? 'All Users' : 'All Roles'"
+  [titleName]="titleName"
   additionalClass="text-lg font-bold"
   [canGoBack]="false"
 ></app-title>
@@ -9,7 +9,7 @@
     <input
       type="text"
       class="outline-none border-none w-full pr-3 text-sm"
-      [placeholder]="tabGroup.selectedIndex === 0 ? 'Search for an existing user' : 'Search for a role'"
+      [placeholder]="searchText"
     />
     <img
       src="assets/images/workflowCards/searchIcon.svg"
@@ -21,8 +21,8 @@
     type="button"
     class="bg-red-600 text-white rounded-lg px-4 py-2 text-sm"
   >
-    <a [routerLink]="tabGroup.selectedIndex === 0 ? ['/admin-management/add-user'] : '/admin-management/add-role'"
-      ><i class="fa-solid fa-plus me-2"></i>{{ tabGroup.selectedIndex === 0 ? 'Add New User' : 'Add New Role' }}</a
+    <a [routerLink]="buttonRoute"
+      ><i class="fa-solid fa-plus me-2"></i>{{ buttonText }}</a
     >
   </button>
 </div>

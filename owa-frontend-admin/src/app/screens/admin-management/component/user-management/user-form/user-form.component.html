@@ -78,8 +78,7 @@
         <mat-form-field appearance="outline" class="w-full">
           <mat-label>Role</mat-label>
           <mat-select formControlName="role_id">
-            <mat-option value="1">Admin</mat-option>
-            <mat-option value="2">User</mat-option>
+            <mat-option *ngFor="let role of roles" [value]="role.role_id">{{ role.role_name }}</mat-option>
           </mat-select>
           <!-- <mat-error *ngIf="role.invalid && (role.dirty || role.touched)">
             Role is required
@@ -91,7 +90,19 @@
         <mat-form-field appearance="outline" class="w-full">
           <mat-label>Department</mat-label>
           <mat-select formControlName="department_id">
-            <mat-option [value]="1">HR</mat-option>
+            <mat-option *ngFor="let department of departments" [value]="department.department_id">{{ department.department_name }}</mat-option>
+          </mat-select>
+          <!-- <mat-error *ngIf="department.invalid && (department.dirty || department.touched)">
+            Department is required
+          </mat-error> -->
+        </mat-form-field>
+      </div>
+
+      <div class="grid grid-cols-1">
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>Reporting to</mat-label>
+          <mat-select formControlName="reporting_to_users" multiple>
+              <mat-option *ngFor="let user of reportingUsers" [value]="user.user_id">{{ user.user_name }}</mat-option>
           </mat-select>
           <!-- <mat-error *ngIf="department.invalid && (department.dirty || department.touched)">
             Department is required
