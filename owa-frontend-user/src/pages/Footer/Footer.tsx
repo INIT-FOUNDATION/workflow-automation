@@ -15,6 +15,7 @@ import { SKIP_FOOTER_ROUTES } from "../../constants/constant";
 import "./Footer.css";
 import CreateTasks from "../CreateTasks/CreateTasks";
 import WorkFlowSelection from "../WorkFlowSelection/WorkFlowSelection";
+import WorkFlowStarted from "../WorkFlowSelection/Component/WorkFlowStarted/WorkFlowStarted";
 
 const Footer: React.FC = () => {
   const { pathname } = useLocation();
@@ -37,6 +38,11 @@ const Footer: React.FC = () => {
         <Route
           path="/workflow-selection"
           component={WorkFlowSelection}
+          exact={true}
+        />
+        <Route
+          path="/workflow-started"
+          component={WorkFlowStarted}
           exact={true}
         />
 

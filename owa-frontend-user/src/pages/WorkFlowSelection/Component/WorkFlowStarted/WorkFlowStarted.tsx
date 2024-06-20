@@ -1,13 +1,28 @@
 import {
   IonCard,
+  IonCardContent,
   IonCardHeader,
   IonIcon,
+  IonSelect,
+  IonSelectOption,
 } from "@ionic/react";
 import { arrowBack } from "ionicons/icons";
-import React from "react";
+import React, { useState } from "react";
 import "./WorkFlowStarted.css";
+import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from "@mui/material";
 
 const WorkFlowStarted: React.FC = () => {
+  const [deadline, setDeadline] = useState("");
+  const[assignee,setAssignee] =useState("");
+
+  const handleDeadlineChange = (event: SelectChangeEvent) => {
+    setDeadline(event.target.value as string);
+  };
+
+  const handleAssigneeChange = (event: SelectChangeEvent) => {
+    setAssignee(event.target.value as string);
+  };
+
   return (
     <div>
       <div className="cursor-pointer rounded-md flex items-center pt-32">
@@ -17,7 +32,7 @@ const WorkFlowStarted: React.FC = () => {
         </span>
       </div>
       <IonCard className="custom-cards border border-gray-300 rounded mb-2 bg-gray-100">
-        <IonCardHeader>
+        <IonCardContent>
           <div className="flex items-center">
             <img
               src="Assets/images/MyTasks/task_done.svg"
@@ -28,13 +43,50 @@ const WorkFlowStarted: React.FC = () => {
           </div>
           <div className="flex items-center mt-2">
             <img
-              src="Assets/images/MyTasks/calendar_icon.svg"
+              src="Assets/images/AssignTasks/calendar_month.svg"
               alt=""
-              className="calender-img w-3 h-3 mr-2"
+              className="calender-img w-4 h-4 mr-2"
             />
-            <span className="text-sm text-black">Deadline</span>
+            <span className="text-black deadline-label">Deadline</span>
           </div>
-        </IonCardHeader>
+          <form className="mb-4 pt-2">
+            <FormControl fullWidth 
+           >
+              <InputLabel>Select Deadline</InputLabel>
+              <Select
+                label="Select Deadline"
+                value={deadline}
+                onChange={handleDeadlineChange}
+                className="w-full text-black"
+              >
+                <MenuItem value="2024-06-21">2024-06-21</MenuItem>
+                <MenuItem value="2024-06-22">2024-06-22</MenuItem>
+                <MenuItem value="2024-06-23">2024-06-23</MenuItem>
+              </Select>
+            </FormControl>
+          <div className="flex items-center mt-2 pb-2">
+            <img
+              src="Assets/images/AssignTasks/profile_icon.svg"
+              alt=""
+              className="calender-img w-4 h-4 mr-2"
+            />
+            <span className="text-black deadline-label">Assignee</span>
+          </div>
+            <FormControl fullWidth 
+           >
+              <InputLabel>Select Assignee</InputLabel>
+              <Select
+                label="Select Assignee"
+                value={assignee}
+                onChange={handleAssigneeChange}
+                className="w-full text-black"
+              >
+                <MenuItem value="2024-06-21">Neha</MenuItem>
+                <MenuItem value="2024-06-22">Sumit</MenuItem>
+              </Select>
+            </FormControl>
+          </form>
+        </IonCardContent>
       </IonCard>
     </div>
   );
