@@ -345,8 +345,7 @@ export const usersController = {
             const userId = (type === "edit" ? req.plainToken.user_id : null);
 
             if (!roleId) return res.status(STATUS.BAD_REQUEST).send(USERS.USER00007);
-
-
+            
             const roleDetails = await rolesService.getRoleById(parseInt(roleId));
 
             if(!roleDetails)  return res.status(STATUS.BAD_REQUEST).send(USERS.USER00007);
