@@ -319,7 +319,7 @@ export const usersController = {
         /*  
                 #swagger.tags = ['Users']
                 #swagger.summary = 'Reporting Users List'
-                #swagger.description = 'Get Reporting Users based on role Id'
+                #swagger.description = 'Get Reporting Users based on Role Id and Type'
                 #swagger.parameters['Authorization'] = {
                     in: 'header',
                     required: true,
