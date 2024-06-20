@@ -332,16 +332,17 @@ export const usersController = {
                     type: 'number',
                     description: 'Role Id'
                 }
-                #swagger.parameters['userId'] = {
+                #swagger.parameters['type'] = {
                     in: 'path',
-                    required: false,
-                    type: 'number',
-                    description: 'User Id'
+                    required: true,
+                    type: 'string',
+                    description: 'Type'
                 }
         */
         try {
             const roleId = req.params.roleId;
-            const userId = req.params.userId ? parseInt(req.params.userId) : null;
+            const type = req.params.type ? req.params.type : "add";
+            let userId = (type === "edit" ? req.plainToken.user_id : null);
 
             if (!roleId) return res.status(STATUS.BAD_REQUEST).send(USERS.USER00007);
 
