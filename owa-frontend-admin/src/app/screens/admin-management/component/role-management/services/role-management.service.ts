@@ -29,13 +29,19 @@ export class RoleManagementService {
     return this.http.get(`${environment.admin_prefix_url}/roles/listLevels`);
   }
 
-  getMenuList() {
-    return this.http.get<any>(`${environment.admin_prefix_url}/roles/menusList/1`);
-  }
-
-  getCombinedAccessControlList(role_id) {
+  accessList(role_id) {
     return this.http.get<any>(
       `${environment.admin_prefix_url}/roles/accessList/${role_id}`
+    );
+  }
+
+  getDefaultAccessList(){
+    return this.http.get(`${environment.admin_prefix_url}/roles/defaultAccessList`)
+  }
+
+  getMenuListCall(){
+    return this.http.get<any>(
+      `${environment.admin_prefix_url}/roles/menusList`
     );
   }
 

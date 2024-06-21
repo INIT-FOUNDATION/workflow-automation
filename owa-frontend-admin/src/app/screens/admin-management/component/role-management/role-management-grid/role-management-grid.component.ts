@@ -30,6 +30,7 @@ export class RoleManagementGridComponent {
       new Colmodel('role_name', 'Role Name', false, false, false),
       new Colmodel('role_description', 'Role Description', false, false, false),
       new Colmodel('level', 'Level', false, false, false),
+      new Colmodel('status', 'Status', false, false, false),
     ];
   }
 
@@ -53,7 +54,13 @@ export class RoleManagementGridComponent {
     const headers = { Authorization: `Bearer ${JSON.parse(token)}` };
     this.roleManagementService.getRolesList(headers).subscribe((res: any) => {
     this.rolesList = res.data;
+
+    
     this.adminManagementDetails.data = this.rolesList;
+
+    this.adminManagementDetails.data.forEach((item)=>{
+      item.status == 1 ? item.status = 'Active' : item.status = 'Inactive'
+    })
     });
   }
 
@@ -62,7 +69,6 @@ export class RoleManagementGridComponent {
   }
 
   editRole(gridData) {
-    console.log(gridData)
     this.router.navigate([`/admin-management/edit-role/${gridData.role_id}`]);
   }
 }
