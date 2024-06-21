@@ -4,18 +4,17 @@ import {
   IonCard,
   IonCardContent,
   IonIcon,
-  IonPopover,
+  IonActionSheet,
 } from "@ionic/react";
 import { searchOutline } from "ionicons/icons";
-import TaskOptionsDialogBox from "./Component/TaskOptionsDialogBox/TaskOptionsDialogBox";
 import "./MyTasks.css";
 
 const MyTasks: React.FC = () => {
-  const [showPopover, setShowPopover] = useState(false);
+  const [showActionSheet, setShowActionSheet] = useState(false);
 
   return (
     <>
-      <div className=" cursor-pointer rounded-md flex items-center pt-[8rem]">
+      <div className="cursor-pointer rounded-md flex items-center pt-[8rem]">
         <IonIcon
           icon={searchOutline}
           className="search-icon w-5 h-5 mr-2 text-gray-500 pl-4"
@@ -68,21 +67,33 @@ const MyTasks: React.FC = () => {
             color="danger"
             id="add-task-button"
             className="rounded w-full add-task"
-            onClick={() => setShowPopover(true)}
+            onClick={() => setShowActionSheet(true)}
           >
             Add Task
           </IonButton>
-          <IonPopover
-            isOpen={showPopover}
-            onDidDismiss={() => setShowPopover(false)}
-            id="add-task-popover"
-            trigger="add-task-button"
-            side="top"
-            alignment="center"
-            className="custom-popover"
-          >
-            <TaskOptionsDialogBox />
-          </IonPopover>
+         <div>
+           <IonActionSheet
+           className="my-custom-class"
+            isOpen={showActionSheet}
+            onDidDismiss={() => setShowActionSheet(false)}
+            buttons={[
+              {
+                text: "Choose existing workflow",
+                handler: () => {
+                  setShowActionSheet(false);
+                  window.location.href = "/workflow-selection";
+                },
+              },
+              {
+                text: "Create new task",
+                handler: () => {
+                  setShowActionSheet(false);
+                  window.location.href = "/create-tasks";
+                },
+              },
+            ]}
+          />
+         </div>
         </div>
       </div>
     </>

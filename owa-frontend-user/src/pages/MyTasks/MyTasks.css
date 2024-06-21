@@ -16,9 +16,9 @@
 } */
 .custom-card {
   height: 118px;
- }
+}
 
- .calender-date {
+.calender-date {
   color: #000000;
   font-weight: 500;
   font-family: "Poppins" !important;
@@ -42,14 +42,14 @@
   margin-right: 8px;
 } */
 
- .add-task-container {
+.add-task-container {
   position: fixed;
   bottom: 20px;
   left: 0;
   width: 100%;
   display: flex;
   justify-content: center;
-} 
+}
 .add-task {
   width: 95%;
   /* margin: 0 auto;
@@ -61,3 +61,22 @@
   color: red !important;
 }
 
+ion-action-sheet.my-custom-class {
+  --background: #ffffff;
+  --backdrop-opacity: 0.6;
+  /* --button-background-selected: #e97223; */
+  --button-color: #e0001e;
+  --color: #fff;
+  /* role: "destructive" button iOS styling override */
+  --ion-color-danger: #000000;
+}
+.action-sheet-wrapper.sc-ion-action-sheet-md {
+  margin-bottom: 8rem;
+   /* display: flex;
+  justify-content: center; */
+}
+/* @media (any-hover: hover) {
+  ion-action-sheet.my-custom-class .action-sheet-button:hover {
+    color: #000000;
+  }
+} */
