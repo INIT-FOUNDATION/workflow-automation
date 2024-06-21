@@ -14,31 +14,20 @@ export class AdminManagementService {
   ) { }
 
   addUser(postParams: any): Observable<any> {
-    return this.http.post(
-      `${environment.admin_prefix_url}/users/create`,
-      postParams
-    );
+    return this.http.post(`${environment.admin_prefix_url}/users/create`, postParams);
   }
 
   updateUser(userId: any, postParams: any): Observable<any> {
     postParams['user_id'] = this.encDecService.set('' + userId);
-    return this.http.post(
-      `${environment.admin_prefix_url}/users/update`,
-      postParams
-    );
+    return this.http.post(`${environment.admin_prefix_url}/users/update`, postParams);
   }
 
   getUserById(userId): Observable<any> {
-    return this.http.get(
-      `${environment.admin_prefix_url}/users/${userId}`
-    );
+    return this.http.get(`${environment.admin_prefix_url}/users/${userId}`);
   }
 
   getUsersData(postParams: any): Observable<any> {
-    return this.http.post(
-      `${environment.admin_prefix_url}/users/list`,
-      postParams
-    );
+    return this.http.post(`${environment.admin_prefix_url}/users/list`, postParams);
   }
 
   getDepartments(): Observable<any> {
@@ -57,7 +46,10 @@ export class AdminManagementService {
     return this.http.post<any>(`${environment.admin_prefix_url}/users/resetPassword/${userId}`,{});
   }
 
-  // deleteUser(userId: any): Observable<any> {
-  //   return this.http.post(`${environment.admin_prefix_url}/users/deleteUser/${userId}`, {});
-  // }
+  deleteUser(userId: any) {
+    console.log('Test', userId);
+    return this.http.post<any>(`${environment.admin_prefix_url}/users/deleteUser`, {
+     user_id: this.encDecService.set('' + userId)
+    });
+  }
 }

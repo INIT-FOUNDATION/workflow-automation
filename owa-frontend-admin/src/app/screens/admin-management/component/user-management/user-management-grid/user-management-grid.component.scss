@@ -4,3 +4,7 @@
 //     overflow-y: auto;
 //     overflow-x: hidden;
 // }
+
+::ng-deep .swal2-confirm {
+    background-color: #dc2626 !important;
+}
