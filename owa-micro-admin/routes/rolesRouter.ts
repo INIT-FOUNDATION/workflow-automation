@@ -3,7 +3,7 @@ import { rolesController } from "../controllers/rolesController";
 
 const rolesRouter = express.Router();
 
-rolesRouter.get("/list", rolesController.listRoles);
+rolesRouter.post("/list", rolesController.listRoles);
 
 rolesRouter.post("/add", rolesController.addRole);
 
