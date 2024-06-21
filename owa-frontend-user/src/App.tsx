@@ -41,7 +41,8 @@ const App: React.FC = () => (
       <IonRouterOutlet>
         {/* Footer Avoiding Routes */}
         <Route path="/login" component={Login} exact />
-       
+        <Route path="/profile" component={Profile}exact />
+     
 
         {/* Redirect root to login */}
         <Route exact path="/">
@@ -56,8 +57,7 @@ const App: React.FC = () => (
           <Route path="/tasks" component={MyTasks} />
           <Route path="/tasks-reports" component={TasksReport} exact/>
           <Route path="/assigned-tasks" component={AssignTasks} exact/>
-          <Route path="/profile" component={Profile}exact />
-     
+        
         </Footer>
       </IonRouterOutlet>
     </IonReactRouter>
