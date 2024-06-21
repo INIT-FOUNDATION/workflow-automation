@@ -60,7 +60,7 @@ export const adminController = {
             const existingUser: IUser = await adminService.getUserByUserName(user.user_name);
             if (!existingUser) return res.status(STATUS.BAD_REQUEST).send(AUTH.AUTH00001);
             
-            //user.password = decryptPayload(user.password);
+            user.password = decryptPayload(user.password);
             if (user.password == DEFAULT_PASSWORD) return res.status(STATUS.BAD_REQUEST).send(AUTH.AUTH00002);
             
             const isPasswordValid = await bcrypt.compare(user.password, existingUser.password);
