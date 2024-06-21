@@ -5,6 +5,7 @@ import { AddUserComponent } from './component/user-management/add-user/add-user.
 import { EditUserComponent } from './component/user-management/edit-user/edit-user.component';
 import { AddRoleComponent } from './component/role-management/add-role/add-role.component';
 import { RoleFormComponent } from './component/role-management/role-form/role-form.component';
+import { EditRoleComponent } from './component/role-management/edit-role/edit-role.component';
 
 const routes: Routes = [
   {
@@ -17,6 +18,7 @@ const routes: Routes = [
     path: 'add-role',
     component: AddRoleComponent
   },
+  {path: 'edit-role/:role_id', component: EditRoleComponent}
 
 ];
 
