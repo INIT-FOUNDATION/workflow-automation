@@ -22,6 +22,7 @@ SELECT
     r.role_name,
     r.level AS level,
     u.profile_pic_url,
+    d.department_id,
     d.department_name,
     ARRAY_AGG(ura.reporting_to) AS reporting_to_users
 FROM
@@ -48,4 +49,5 @@ GROUP BY
     r.role_name,
     r.level,
     u.profile_pic_url,
+    d.department_id,
     d.department_name;

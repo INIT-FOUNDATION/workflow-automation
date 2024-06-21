@@ -91,9 +91,7 @@ const validateUpdateUser = (user: IUser): Joi.ValidationResult => {
     user_name: Joi.string().min(3).max(20).required().error(
       new Error(JSON.stringify(USERS.USER00001))
     ),
-    display_name: Joi.string().min(3).max(50).required().error(
-      new Error(JSON.stringify(USERS.USER00002))
-    ),
+    display_name: Joi.string().min(3).max(50),
     first_name: Joi.string().min(3).max(50).required().error(
       new Error(JSON.stringify(USERS.USER00003))
     ),

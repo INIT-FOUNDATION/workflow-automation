@@ -49,7 +49,7 @@ export class AddFormBuilderComponent implements OnInit {
 
   openPropertyModal(selectedItem, index) {
     const dialogRef = this.dialog.open(PropertiesModalComponent, {
-      width: 'clamp(20rem, 60vw, 35rem)',
+      width: 'clamp(20rem, 60vw, 25rem)',
       panelClass: [
         'animate__animated',
         'animate__slideInRight',

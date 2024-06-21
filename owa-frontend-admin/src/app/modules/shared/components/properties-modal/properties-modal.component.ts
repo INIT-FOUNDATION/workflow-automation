@@ -13,12 +13,17 @@ export class PropertiesModalComponent implements OnInit {
   propertiesForm: any = {};
   delayedTime: any;
   createdOptions: any = [];
+  generatedName: string = '';
+  objectKey: any;
+  objectValues: any;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     private dialogRef: MatDialogRef<PropertiesModalComponent>,
     private formBuilderService: FormBuilderService
-  ) {}
+  ) {
+    this.objectKey = Object.keys(data);
+  }
 
   ngOnInit(): void {
     this.getPropertyForFields();
@@ -36,7 +41,20 @@ export class PropertiesModalComponent implements OnInit {
     clearTimeout(this.delayedTime);
     this.delayedTime = setTimeout(() => {
       this.propertiesForm[label] = value;
-    }, 1000);
+      if (label == 'label') {
+        this.convertToCamelCase(value);
+        this.propertiesForm.name = value;
+      }
+    }, 500);
+  }
+
+  convertToCamelCase(value: string) {
+    let words = value.split(' ');
+    for (let i = 1; i < words.length; i++) {
+      words[i] = words[i].charAt(0).toUpperCase() + words[i].slice(1);
+    }
+
+    this.generatedName = words.join('');
   }
 
   addNewOptions() {
@@ -62,8 +80,6 @@ export class PropertiesModalComponent implements OnInit {
       options: this.optionArray,
       ...this.propertiesForm,
     };
-    console.log(this.propertiesForm);
-    console.log(mergedFormData);
 
     formData.push(mergedFormData);
     this.dialogRef.close(formData);

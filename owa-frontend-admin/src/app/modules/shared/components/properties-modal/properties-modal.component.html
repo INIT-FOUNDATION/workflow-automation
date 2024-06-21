@@ -32,6 +32,14 @@
           ? 'checkbox'
           : item?.field_property_type
       "
+      [value]="
+        objectKey && objectKey.includes(item?.field_property_name)
+          ? data[item?.field_property_name]
+          : item?.field_property_name == 'name'
+          ? generatedName
+          : ''
+      "
+      [checked]="objectKey && objectKey.includes(item?.field_property_name)"
       class="border-2 rounded-lg p-2 text-sm"
       [ngClass]="[
         item?.field_property_type == 'boolean' ? 'focus:outline-none' : ''
@@ -97,6 +105,8 @@
         (selectionChange)="
           getInputFieldValues(item?.field_property_name, $event.value)
         "
+        [(ngModel)]="data[item?.field_property_name]"
+        name="selectOption"
       >
         <mat-option
           *ngFor="let option of item?.options"
