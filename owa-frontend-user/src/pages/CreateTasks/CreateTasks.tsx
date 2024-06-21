@@ -11,9 +11,15 @@ import {
 } from "@mui/material";
 import { ArrowBack } from "@mui/icons-material";
 import "./CreateTasks.css";
-import { IonIcon, IonInput } from "@ionic/react";
+import { IonIcon, IonInput, useIonRouter } from "@ionic/react";
 
 const CreateTasks: React.FC = () => {
+  const router = useIonRouter();
+
+  const handleNextClick = () => {
+    console.log("Create new task clicked");
+    router.push("/trigger-details");
+  };
   return (
     <div className="flex flex-col p-2 mt-20">
       <div className="cursor-pointer rounded-md flex items-center pt-8">
@@ -102,7 +108,7 @@ const CreateTasks: React.FC = () => {
         <div className="flex-grow">
           <div className="flex justify-center pb-16">
             <Button
-              // onClick={() => handleNextClick()}
+              onClick={() => handleNextClick()}
               variant="contained"
               color="error"
               className="w-full"
