@@ -2,8 +2,42 @@
     background: linear-gradient(180deg, #E0001E 0%, #70000F 427.5%);
 
 }
+
 .custom-input {
     border-radius: 14px;
     border: 1px solid #000; /* You can customize the border color */
     padding: 0.5rem; /* Adjust padding if needed */
   }
+
+  .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+    border-color: black !important;
+  }
+  
+  .input-fill-outline.input-label-placement-stacked.sc-ion-input-md-h
+    input.sc-ion-input-md,
+  .input-fill-outline.input-label-placement-floating.sc-ion-input-md-h
+    input.sc-ion-input-md {
+    font-size: 1.1rem;
+  }
+  
+  .input-fill-outline.has-focus.sc-ion-input-md-h {
+    --border-width: 2px !important;
+    --border-color: black !important;
+  }
+  
+  .input-fill-outline.sc-ion-input-md-h {
+    --border-color: var(--ion-color-step-300, #b3b3b3);
+    --border-radius: 12px;
+    --padding-start: 16px;
+    --padding-end: 16px;
+    min-height: 56px;
+  }
+  
+  .native-input.sc-ion-input-md {
+     padding-left: 0px !important; 
+}
+
+.otp-button{
+    background: #FFFFFF;
+    border: 1px solid #E0E0E0;
+}
