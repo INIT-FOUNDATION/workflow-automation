@@ -86,7 +86,7 @@ export const usersService = {
   },
   listUsersCount: async (userId: number, searchQuery: string): Promise<number> => {
     try {
-      let key = `USERS_COUNT|${userId}`;
+      let key = `USERS_COUNT|USER:${userId}`;
       const _query = {
         text: USERS.usersListCount
       };
@@ -173,9 +173,6 @@ export const usersService = {
         mobileNumber: user.mobile_number,
         communicationType: "CREATE_USER"
       });
-
-      redis.deleteRedis(`USERS|OFFSET:0|LIMIT:50`);
-      redis.deleteRedis(`USERS_COUNT`);
     } catch (error) {
       logger.error(`usersService :: createUser :: ${error.message} :: ${error}`)
       throw new Error(error.message);
@@ -201,8 +198,8 @@ export const usersService = {
         await usersService.updateUserReportingMapping(user.user_id, user.reporting_to_users);
       }
 
-      redis.deleteRedis(`USERS|OFFSET:0|LIMIT:50`);
-      redis.deleteRedis(`USERS_COUNT`);
+      redis.deleteRedis(`USERS|USER:${user.user_id}|LIMIT:50`);
+      redis.deleteRedis(`USERS_COUNT|USER:${user.user_id}`);
       redis.deleteRedis(`USER:${user.user_id}`);
       redis.deleteRedis(`User|Username:${user.user_name}`);
     } catch (error) {
@@ -355,8 +352,8 @@ export const usersService = {
       const result = await pg.executeQueryPromise(_query);
       logger.debug(`usersService :: updateProfilePic :: db result :: ${JSON.stringify(result)}`);
 
-      redis.deleteRedis(`USERS|OFFSET:0|LIMIT:50`);
-      redis.deleteRedis(`USERS_COUNT`);
+      redis.deleteRedis(`USERS|USER:${userId}|LIMIT:50`);
+      redis.deleteRedis(`USERS_COUNT|USER:${userId}`);
       redis.deleteRedis(`USER:${userId}`);
     } catch (error) {
       logger.error(`usersService :: updateProfilePic :: ${error.message} :: ${error}`)
@@ -552,8 +549,8 @@ export const usersService = {
       const result = await pg.executeQueryPromise(_query);
       logger.debug(`usersService :: deleteUser :: db result :: ${JSON.stringify(result)}`)
 
-      redis.deleteRedis(`USERS|OFFSET:0|LIMIT:50`);
-      redis.deleteRedis(`USERS_COUNT`);
+      redis.deleteRedis(`USERS|USER:${user.user_id}|LIMIT:50`);
+      redis.deleteRedis(`USERS_COUNT|USER:${user.user_id}`);
       redis.deleteRedis(`USER:${user.user_id}`);
       redis.deleteRedis(`User|Username:${user.user_name}`);
     } catch (error) {
