@@ -1,7 +1,8 @@
 import Joi from "joi";
 import { IUser } from "../types/custom";
 import { USERS } from "../constants/ERRORCODE";
-import { GENDER } from "../constants/CONST";
+import { GENDER, USERS_STATUS } from "../constants/CONST";
+
 class User implements IUser {
   user_id: number;
   user_name: string;
@@ -105,6 +106,7 @@ const validateUpdateUser = (user: IUser): Joi.ValidationResult => {
     role_id: Joi.number().required(),
     department_id: Joi.number().required(),
     reporting_to_users: Joi.array().items(Joi.number()).optional(),
+    status: Joi.number().valid(...Object.values(USERS_STATUS)).required(),
   });
   return userSchema.validate(user);
 };

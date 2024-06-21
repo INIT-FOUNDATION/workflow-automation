@@ -188,6 +188,34 @@
         }
       }
     },
+    "/api/v1/admin/roles/menusList": {
+      "get": {
+        "tags": [
+          "Roles"
+        ],
+        "summary": "Get Menu List",
+        "description": "Endpoint to retrieve Menu List",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Bearer token for authentication"
+          },
+          {
+            "name": "isActive",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
     "/api/v1/admin/roles/defaultAccessList": {
       "get": {
         "tags": [
@@ -301,34 +329,6 @@
             "required": true,
             "type": "string",
             "description": "Bearer token for authentication"
-          }
-        ],
-        "responses": {
-          "default": {
-            "description": ""
-          }
-        }
-      }
-    },
-    "/api/v1/admin/roles/menusList": {
-      "get": {
-        "tags": [
-          "Roles"
-        ],
-        "summary": "Get Menu List By Role Id",
-        "description": "Endpoint to retrieve Menu List with Role Id",
-        "parameters": [
-          {
-            "name": "Authorization",
-            "in": "header",
-            "required": true,
-            "type": "string",
-            "description": "Bearer token for authentication"
-          },
-          {
-            "name": "isActive",
-            "in": "query",
-            "type": "string"
           }
         ],
         "responses": {
@@ -1041,8 +1041,8 @@
               "type": "object",
               "properties": {
                 "user_id": {
-                  "type": "string",
-                  "example": "encryptedHash"
+                  "type": "number",
+                  "example": 1
                 }
               }
             }
