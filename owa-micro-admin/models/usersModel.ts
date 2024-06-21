@@ -104,7 +104,7 @@ const validateUpdateUser = (user: IUser): Joi.ValidationResult => {
     gender: Joi.number().valid(...Object.values(GENDER)).required(),
     role_id: Joi.number().required(),
     department_id: Joi.number().required(),
-    reporting_to_users: Joi.array().items(Joi.number()),
+    reporting_to_users: Joi.array().items(Joi.number()).optional(),
   });
   return userSchema.validate(user);
 };
