@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { ReactNode, useEffect } from 'react';
 import {
   IonTabs,
   IonTabBar,
@@ -6,80 +6,58 @@ import {
   IonLabel,
   IonRouterOutlet,
   IonIcon,
-} from "@ionic/react";
-import { Redirect, Route, useLocation } from "react-router-dom";
-import MyTasks from "../MyTasks/MyTasks";
-import AssignTasks from "../AssignTask/AssignTasks";
-import TasksReport from "../TasksReport/TasksReport";
-import { SKIP_FOOTER_ROUTES } from "../../constants/constant";
-import "./Footer.css";
-import CreateTasks from "../CreateTasks/CreateTasks";
-import WorkFlowSelection from "../WorkFlowSelection/WorkFlowSelection";
-import WorkFlowStarted from "../WorkFlowSelection/Component/WorkFlowStarted/WorkFlowStarted";
+  useIonRouter,
+} from '@ionic/react';
+import { Redirect, useLocation } from 'react-router-dom';
+import './Footer.css';
 
-const Footer: React.FC = () => {
-  const { pathname } = useLocation();
-  const skipFooter = SKIP_FOOTER_ROUTES.includes(pathname);
-  const [selectedTab, setSelectedTab] = useState("/tasks");
+interface FooterProps {
+  children: ReactNode;
+}
+
+const Footer: React.FC<FooterProps> = ({ children }) => {
+  const location = useLocation();
+  const router = useIonRouter();
+  const [selectedTab, setSelectedTab] = React.useState(location.pathname);
 
   const handleTabClick = (tab: string) => {
-    setSelectedTab(tab);
+    if (selectedTab !== tab) {
+      setSelectedTab(tab);
+      router.push(tab);
+    }
   };
-
-  if (skipFooter) return null;
 
   return (
     <IonTabs>
       <IonRouterOutlet>
-        <Route path="/tasks" component={MyTasks} exact={true} />
-        <Route path="/assigned-tasks" component={AssignTasks} exact={true} />
-        <Route path="/tasks-reports" component={TasksReport} exact={true} />
-        <Route path="/create-tasks" component={CreateTasks} exact={true} />
-        <Route
-          path="/workflow-selection"
-          component={WorkFlowSelection}
-          exact={true}
-        />
-        <Route
-          path="/workflow-started"
-          component={WorkFlowStarted}
-          exact={true}
-        />
-
+        {children}
         <Redirect exact path="/" to="/tasks" />
       </IonRouterOutlet>
 
       <IonTabBar slot="bottom">
         <IonTabButton
           tab="tasks"
-          href="/tasks"
-          onClick={() => handleTabClick("/tasks")}
-          className={selectedTab === "/tasks" ? "tab-button-red" : ""}
+          onClick={() => handleTabClick('/tasks')}
+          className={selectedTab === '/tasks' ? 'tab-button-red' : ''}
         >
-          <img
+          <IonIcon
             src={
               selectedTab === "/tasks"
                 ? "Assets/images/Footer/my_task_tab.svg"
                 : "Assets/images/Footer/my_task.svg"
             }
-            alt="My Tasks"
             style={{ width: "24px", height: "24px" }}
             className={selectedTab === "/tasks" ? "tab-button-icon" : ""}
           />
-          <IonLabel
-            className={
-              selectedTab === "/tasks" ? "tab-button-label" : "custom-font"
-            }
-          >
+          <IonLabel className={selectedTab === '/tasks' ? 'tab-button-label' : 'custom-font'}>
             My Tasks
           </IonLabel>
         </IonTabButton>
 
         <IonTabButton
           tab="assigned-tasks"
-          href="/assigned-tasks"
-          onClick={() => handleTabClick("/assigned-tasks")}
-          className={selectedTab === "/assigned-tasks" ? "tab-button-red" : ""}
+          onClick={() => handleTabClick('/assigned-tasks')}
+          className={selectedTab === '/assigned-tasks' ? 'tab-button-red' : ''}
         >
           <IonIcon
             src={
@@ -92,42 +70,28 @@ const Footer: React.FC = () => {
               selectedTab === "/assigned-tasks" ? "tab-button-icon" : ""
             }
           />
-          <IonLabel
-            className={
-              selectedTab === "/assigned-tasks"
-                ? "tab-button-label"
-                : "custom-font"
-            }
-          >
+          <IonLabel className={selectedTab === '/assigned-tasks' ? 'tab-button-label' : 'custom-font'}>
             Assigned Tasks
           </IonLabel>
         </IonTabButton>
 
         <IonTabButton
           tab="tasks-reports"
-          href="/tasks-reports"
-          onClick={() => handleTabClick("/tasks-reports")}
-          className={selectedTab === "/tasks-reports" ? "tab-button-red" : ""}
+          onClick={() => handleTabClick('/tasks-reports')}
+          className={selectedTab === '/tasks-reports' ? 'tab-button-red' : ''}
         >
-          <img
+          <IonIcon
             src={
               selectedTab === "/tasks-reports"
                 ? "Assets/images/Footer/task_report_tab.svg"
                 : "Assets/images/Footer/task_report.svg"
             }
-            alt="Task Report"
             style={{ width: "24px", height: "24px" }}
             className={
               selectedTab === "/tasks-reports" ? "tab-button-icon" : ""
             }
           />
-          <IonLabel
-            className={
-              selectedTab === "/tasks-reports"
-                ? "tab-button-label"
-                : "custom-font"
-            }
-          >
+          <IonLabel className={selectedTab === '/tasks-reports' ? 'tab-button-label' : 'custom-font'}>
             Task Report
           </IonLabel>
         </IonTabButton>

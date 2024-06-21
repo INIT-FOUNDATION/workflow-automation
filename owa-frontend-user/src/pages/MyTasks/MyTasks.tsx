@@ -3,6 +3,7 @@ import {
   IonButton,
   IonCard,
   IonCardHeader,
+  IonCardContent,
   IonIcon,
   IonPopover,
 } from "@ionic/react";
@@ -25,7 +26,7 @@ const MyTasks: React.FC = () => {
         <span className="search-text text-gray-500">Search</span>
       </div>
       <IonCard className="custom-card border border-gray-300 rounded p-4 mb-2 bg-gray-100">
-        <IonCardHeader>
+        <IonCardContent>
           <div className="flex items-center">
             <img
               src="Assets/images/MyTasks/task_done.svg"
@@ -42,10 +43,10 @@ const MyTasks: React.FC = () => {
             />
             <span className="ml-1 calender-date">June 17, 2024</span>
           </div>
-        </IonCardHeader>
+        </IonCardContent>
       </IonCard>
       <IonCard className="custom-card border border-gray-300 rounded p-4 mb-2 bg-gray-100">
-        <IonCardHeader>
+        <IonCardContent>
           <div className="flex items-center">
             <img
               src="Assets/images/MyTasks/task_done.svg"
@@ -62,7 +63,7 @@ const MyTasks: React.FC = () => {
             />
             <span className="ml-1 calender-date">June 10, 2024</span>
           </div>
-        </IonCardHeader>
+        </IonCardContent>
       </IonCard>
       <div>
         <div className="add-task-container">
