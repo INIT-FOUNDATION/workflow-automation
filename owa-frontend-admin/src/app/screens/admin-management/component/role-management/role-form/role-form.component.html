@@ -8,18 +8,25 @@
 <div class="flex flex-wrap">
 
   <div class="w-full md:w-1/2 p-4 bg-white rounded-md mb-4">
-    <form>
+    <form [formGroup]="roleForm" (ngSubmit)="submit()">
     <div class="mb-4">
       <mat-form-field appearance="outline" class="w-full">
         <mat-label>Role Name</mat-label>
-        <input matInput placeholder="Enter Role Name" />
+        <input matInput type="text" placeholder="Enter Role Name"  id="role_name" formControlName="role_name"/>
+      </mat-form-field>
+    </div>
+
+    <div class="mb-4">
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Role Description</mat-label>
+        <input matInput type="text" placeholder="Enter Role Description"  id="role_description" formControlName="role_description"/>
       </mat-form-field>
     </div>
   
     <div class="mb-4">
       <mat-form-field appearance="outline" class="w-full">
         <mat-label>Level</mat-label>
-        <mat-select>
+        <mat-select formControlName="level" id="level">
           <mat-option [value]="level.value" *ngFor="let level of levelsList">{{ level.label }}</mat-option>
         </mat-select>
       </mat-form-field>
@@ -28,7 +35,7 @@
     <div class="mb-4">
       <mat-form-field appearance="outline" class="w-full">
         <mat-label>Status</mat-label>
-        <mat-select>
+        <mat-select  formControlName="is_active" id="is_active">
           <mat-option [value]="status.value" *ngFor="let status of statusList">{{ status.label }}</mat-option>
         </mat-select>
       </mat-form-field>
@@ -37,54 +44,136 @@
   </div>
   
   <div class="w-full md:w-1/2 p-4 bg-white rounded-md mb-4">
-    <div class="mb-8">
-      <div class="text-lg font-semibold text-white bg-color rounded-t-md p-2 mb-4">Admin Management</div>
-      <div class="flex">
-        <div class="flex items-center space-x-4 me-4 ms-2">
-          <input type="checkbox" id="admin_read" class="form-checkbox h-4 w-4" />
-          <label for="admin_read" class="text-base text-gray-700">Read</label>
-        </div>
-        <div class="flex items-center space-x-4 me-4 ms-2">
-          <input type="checkbox" id="admin_write" class="form-checkbox h-4 w-4" />
-          <label for="admin_write" class="text-base text-gray-700">Write</label>
-        </div>
-      </div>
-    </div>
+    <form [formGroup]="roleForm" (ngSubmit)="submit()">
 
-    <div class="mb-8">
-      <div class="text-lg font-semibold text-white bg-color p-2 mb-4">Form Builder</div>
-      <div class="flex">
-        <div class="flex items-center space-x-4 me-4 ms-2">
-          <input type="checkbox" id="form_read" class="form-checkbox h-4 w-4" />
-          <label for="form_read" class="text-base text-gray-700">Read</label>
-        </div>
-        <div class="flex items-center space-x-4 me-4 ms-2">
-          <input type="checkbox" id="form_write" class="form-checkbox h-4 w-4" />
-          <label for="form_write" class="text-base text-gray-700">Write</label>
-        </div>
-      </div>
-    </div>
+      <form [formGroup]="roleForm">
+        <div formArrayName="access_control">
+          <div
+            class="form-group"
+            *ngFor="let control of controls; let i = index"
+            [formGroup]="control"
+          >
+            <div class="mb-2">
+              <div class="text-lg font-semibold text-white bg-color rounded-t-md p-2 mb-4">
+                {{ control.get("menu_name").value }}
+              </div>
+              <div class="flex">
+                <div class="flex items-center space-x-4 me-4 ms-2">
+                  <input type="checkbox" id="{{
+                    'access_' + control.get('menu_id').value + '_read'
+                  }}" class="form-checkbox h-4 w-4" formControlName="read_permission" />
+                  <label for="{{
+                    'access_' + control.get('menu_id').value + '_read'
+                  }}" class="text-base text-gray-700">Read</label>
+                </div>
+                <div class="flex items-center space-x-4 me-4 ms-2">
+                  <input type="checkbox" id="{{
+                    'access_' + control.get('menu_id').value + '_write'
+                  }}" class="form-checkbox h-4 w-4" (change)="validate(control)" formControlName="write_permission" />
+                  <label for="{{
+                    'access_' + control.get('menu_id').value + '_write'
+                  }}" class="text-base text-gray-700">Write</label>
+                </div>
+              </div>
 
-    <div class="mb-8">
-      <div class="text-lg font-semibold text-white bg-color p-2 mb-4">Workflow Builder</div>
-      <div class="flex">
-        <div class="flex items-center space-x-4 me-4 ms-2">
-          <input type="checkbox" id="workflow_read" class="form-checkbox h-4 w-4" />
-          <label for="workflow_read" class="text-base text-gray-700">Read</label>
+              <!-- <div class="d-flex align-items-center my-3 ps-3">
+                <div class="custom-control d-flex align-items-center me-5">
+                  <input
+                    type="checkbox"
+                    class="custom-control-input"
+                    id="{{
+                      'access_' + control.get('menu_id').value + '_read'
+                    }}"
+                    formControlName="read_permission"
+                  />
+                  <label
+                    class="custom-control-label"
+                    for="{{
+                      'access_' + control.get('menu_id').value + '_read'
+                    }}"
+                    >Read</label
+                  >
+                </div>
+                <div class="custom-control d-flex align-items-center">
+                  <input
+                    type="checkbox"
+                    class="custom-control-input"
+                    id="{{
+                      'access_' + control.get('menu_id').value + '_write'
+                    }}"
+                    (change)="validate(control)"
+                    formControlName="write_permission"
+                  />
+                  <label
+                    class="custom-control-label"
+                    for="{{
+                      'access_' + control.get('menu_id').value + '_write'
+                    }}"
+                    >Write</label
+                  >
+                </div>
+              </div> -->
+            </div>
+          </div>
         </div>
-        <div class="flex items-center space-x-4 me-4 ms-2">
-          <input type="checkbox" id="workflow_write" class="form-checkbox h-4 w-4" />
-          <label for="workflow_write" class="text-base text-gray-700">Write</label>
+      </form>
+
+      
+      <!-- <div formGroupName="permissions">
+        <div class="mb-8">
+          <div class="text-lg font-semibold text-white bg-color rounded-t-md p-2 mb-4">Admin Management</div>
+          <div class="flex">
+            <div class="flex items-center space-x-4 me-4 ms-2">
+              <input type="checkbox" id="admin_read" class="form-checkbox h-4 w-4" formControlName="admin_read" />
+              <label for="admin_read" class="text-base text-gray-700">Read</label>
+            </div>
+            <div class="flex items-center space-x-4 me-4 ms-2">
+              <input type="checkbox" id="admin_write" class="form-checkbox h-4 w-4" formControlName="admin_write" />
+              <label for="admin_write" class="text-base text-gray-700">Write</label>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
+    
+        <div class="mb-8">
+          <div class="text-lg font-semibold text-white bg-color p-2 mb-4">Form Builder</div>
+          <div class="flex">
+            <div class="flex items-center space-x-4 me-4 ms-2">
+              <input type="checkbox" id="form_read" class="form-checkbox h-4 w-4" formControlName="form_read" />
+              <label for="form_read" class="text-base text-gray-700">Read</label>
+            </div>
+            <div class="flex items-center space-x-4 me-4 ms-2">
+              <input type="checkbox" id="form_write" class="form-checkbox h-4 w-4" formControlName="form_write" />
+              <label for="form_write" class="text-base text-gray-700">Write</label>
+            </div>
+          </div>
+        </div>
+    
+        <div class="mb-8">
+          <div class="text-lg font-semibold text-white bg-color p-2 mb-4">Workflow Builder</div>
+          <div class="flex">
+            <div class="flex items-center space-x-4 me-4 ms-2">
+              <input type="checkbox" id="workflow_read" class="form-checkbox h-4 w-4" formControlName="workflow_read" />
+              <label for="workflow_read" class="text-base text-gray-700">Read</label>
+            </div>
+            <div class="flex items-center space-x-4 me-4 ms-2">
+              <input type="checkbox" id="workflow_write" class="form-checkbox h-4 w-4" formControlName="workflow_write" />
+              <label for="workflow_write" class="text-base text-gray-700">Write</label>
+            </div>
+          </div>
+        </div>
+      </div> -->
+ 
+  
+    </form>
 
   </div>
 
   <div class="flex flex-end">
-    <button class="bg-red-600 text-white rounded-lg px-4 py-2 text-sm">
+    <form [formGroup]="roleForm" (ngSubmit)="submit()">
+    <button type="submit" class="bg-red-600 text-white rounded-lg px-4 py-2 text-sm">
       Create
      </button>
+     </form>
   </div>
 
 </div>
