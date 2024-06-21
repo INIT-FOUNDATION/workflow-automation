@@ -13,6 +13,7 @@ export class AdminManagementComponent {
   searchText = 'Search for an existing user';
   buttonText: string = 'Add New User';
   buttonRoute: string = '/admin-management/add-user';
+  formType: any;
   
   ngOnInit(): void {
   }
@@ -21,7 +22,7 @@ export class AdminManagementComponent {
     this.tabGroup.selectedIndexChange.subscribe(index => {
       this.selectedIndex = index;
       this.updateDynamicProperties();
-    });
+    });    
   }
 
   updateDynamicProperties() {
