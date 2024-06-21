@@ -68,7 +68,7 @@ export const USER_DEPARTMENT_MAPPING = {
 }
 
 export const USER_REPORTING_MAPPING = {
-    updateInActiveReportingMapping: `UPDATE m_user_reporting_assoc SET status = 0, date_updated = NOW() WHERE user_id = $1`,
+    updateInActiveReportingMapping: `UPDATE m_user_reporting_assoc SET status = 0, date_updated = NOW() WHERE user_id = $1 RETURNING reporting_to`,
     createUserReportingMapping: `INSERT INTO m_user_reporting_assoc (user_id, reporting_to) VALUES ($1, $2)`
 };
 

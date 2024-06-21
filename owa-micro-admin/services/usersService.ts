@@ -9,23 +9,23 @@ import { UploadedFile } from "express-fileupload";
 import { SMS, WHATSAPP } from "../constants/Communication";
 
 export const usersService = {
-  usersUpdatedWithinFiveMints: async() : Promise<boolean> => {
+  usersUpdatedWithinFiveMints: async (): Promise<boolean> => {
     try {
-        logger.info("usersService :: Inside usersUpdatedWithinFiveMints");
+      logger.info("usersService :: Inside usersUpdatedWithinFiveMints");
 
-        const _queryToCheckLatestUpdated = {
-            text: USERS.latestUpdatedCheck
-        };
+      const _queryToCheckLatestUpdated = {
+        text: USERS.latestUpdatedCheck
+      };
 
-        logger.debug(`usersService :: latestUpdated :: query :: ${JSON.stringify(_queryToCheckLatestUpdated)}`)
-        const latestUpdatedInForm = await pg.executeQueryPromise(_queryToCheckLatestUpdated);
-        const isUserUpdatedWithin5mins = (latestUpdatedInForm[0].count > 0);
-        logger.info(`usersService :: latestUpdated :: result :: ${JSON.stringify(latestUpdatedInForm)} :: isUserUpdatedWithin5mins :: ${isUserUpdatedWithin5mins}`);
+      logger.debug(`usersService :: latestUpdated :: query :: ${JSON.stringify(_queryToCheckLatestUpdated)}`)
+      const latestUpdatedInForm = await pg.executeQueryPromise(_queryToCheckLatestUpdated);
+      const isUserUpdatedWithin5mins = (latestUpdatedInForm[0].count > 0);
+      logger.info(`usersService :: latestUpdated :: result :: ${JSON.stringify(latestUpdatedInForm)} :: isUserUpdatedWithin5mins :: ${isUserUpdatedWithin5mins}`);
 
-        return isUserUpdatedWithin5mins;
+      return isUserUpdatedWithin5mins;
     } catch (error) {
-        logger.error(`usersService :: usersUpdatedWithinFiveMints :: ${error.message} :: ${error}`)
-        throw new Error(error.message);
+      logger.error(`usersService :: usersUpdatedWithinFiveMints :: ${error.message} :: ${error}`)
+      throw new Error(error.message);
     }
   },
   listUsers: async (userId: number, pageSize: number, currentPage: number, searchQuery: string): Promise<IUser[]> => {
@@ -173,6 +173,8 @@ export const usersService = {
         mobileNumber: user.mobile_number,
         communicationType: "CREATE_USER"
       });
+
+      if (user.reporting_to_users && user.reporting_to_users.length > 0 ) await usersService.clearGridCache(user.reporting_to_users);
     } catch (error) {
       logger.error(`usersService :: createUser :: ${error.message} :: ${error}`)
       throw new Error(error.message);
@@ -193,13 +195,11 @@ export const usersService = {
       logger.debug(`usersService :: updateUser :: db result :: ${JSON.stringify(result)}`)
 
       await usersService.updateUserDepartmentMapping(user.user_id, user.department_id);
-      
+
       if (user.reporting_to_users && user.reporting_to_users.length > 0) {
         await usersService.updateUserReportingMapping(user.user_id, user.reporting_to_users);
       }
 
-      redis.deleteRedis(`USERS|USER:${user.user_id}|LIMIT:50`);
-      redis.deleteRedis(`USERS_COUNT|USER:${user.user_id}`);
       redis.deleteRedis(`USER:${user.user_id}`);
       redis.deleteRedis(`User|Username:${user.user_name}`);
     } catch (error) {
@@ -423,15 +423,15 @@ export const usersService = {
             await commonCommunication.sendEmail(emailBodyBase64, 'OLL WORKFLOW AUTOMATION | LOGIN DETAILS', [passwordDetails.emailId]);
             // await nodemailerUtils.sendEmail('OLL WORKFLOW AUTOMATION | LOGIN DETAILS', emailTemplateHtml, passwordDetails.emailId);
           }
-    
+
           if (passwordDetails.mobileNumber) {
             const adminUrl = envUtils.getStringEnvVariableOrDefault("OWA_WORKFLOW_ADMIN_MODULE_URL", "http://localhost:4200");
             const smsBodyTemplate = SMS.ADMIN_USER_CREATION.body;
             const smsBodyCompiled = smsBodyTemplate.replace("<name>", passwordDetails.displayName)
-                                                   .replace("<password>", passwordDetails.password)
-                                                   .replace("<url>", adminUrl);
+              .replace("<password>", passwordDetails.password)
+              .replace("<url>", adminUrl);
             await commonCommunication.sendSms(smsBodyCompiled, passwordDetails.mobileNumber, SMS.ADMIN_USER_CREATION.template_id);
-    
+
             await commonCommunication.sendWhatsapp(WHATSAPP.ADMIN_USER_CREATION.template_id, passwordDetails.mobileNumber, [passwordDetails.displayName, passwordDetails.password, adminUrl])
           }
           break;
@@ -442,14 +442,14 @@ export const usersService = {
             await commonCommunication.sendEmail(emailBodyBase64, 'OLL WORKFLOW AUTOMATION | LOGIN DETAILS', [passwordDetails.emailId]);
             // await nodemailerUtils.sendEmail('OLL WORKFLOW AUTOMATION | LOGIN DETAILS', emailTemplateHtml, passwordDetails.emailId);
           }
-    
+
           if (passwordDetails.mobileNumber) {
             const adminUrl = envUtils.getStringEnvVariableOrDefault("OWA_WORKFLOW_ADMIN_MODULE_URL", "http://localhost:4200");
             const smsBodyTemplate = SMS.ADMIN_RESET_PASSWORD.body;
             const smsBodyCompiled = smsBodyTemplate.replace("<name>", passwordDetails.displayName)
-                                                    .replace("<password>", passwordDetails.password)
+              .replace("<password>", passwordDetails.password)
             await commonCommunication.sendSms(smsBodyCompiled, passwordDetails.mobileNumber, SMS.ADMIN_RESET_PASSWORD.template_id);
-    
+
             await commonCommunication.sendWhatsapp(WHATSAPP.ADMIN_RESET_PASSWORD.template_id, passwordDetails.mobileNumber, [passwordDetails.displayName, passwordDetails.password])
           }
           break;
@@ -460,18 +460,18 @@ export const usersService = {
             await commonCommunication.sendEmail(emailBodyBase64, 'OLL WORKFLOW AUTOMATION | LOGIN DETAILS', [passwordDetails.emailId]);
             // await nodemailerUtils.sendEmail('OLL WORKFLOW AUTOMATION | LOGIN DETAILS', emailTemplateHtml, passwordDetails.emailId);
           }
-    
+
           if (passwordDetails.mobileNumber) {
             const smsBodyTemplate = SMS.USER_LOGIN_WITH_OTP.body;
             const smsBodyCompiled = smsBodyTemplate.replace("<otp>", passwordDetails.otp)
-                                                    .replace("<module>", "OLL Workflow Automation")
-                                                    .replace("<time>", "3 min");
+              .replace("<module>", "OLL Workflow Automation")
+              .replace("<time>", "3 min");
             await commonCommunication.sendSms(smsBodyCompiled, passwordDetails.mobileNumber, SMS.USER_LOGIN_WITH_OTP.template_id);
-    
+
             await commonCommunication.sendWhatsapp(WHATSAPP.USER_LOGIN_WITH_OTP.template_id, passwordDetails.mobileNumber, ["OLL Workflow Automation", passwordDetails.otp, "3 mins"])
           }
           break;
-      
+
         default:
           break;
       }
@@ -491,6 +491,9 @@ export const usersService = {
 
         const result = await pg.executeQueryPromise(_query);
         logger.debug(`usersService :: createUserReportingMapping :: db result :: ${JSON.stringify(result)}`);
+
+        await redis.deleteRedis(`USERS|USER:${reportingToUser}|LIMIT:50`);
+        await redis.deleteRedis(`USERS_COUNT|USER:${reportingToUser}`);
       }
     } catch (error) {
       logger.error(`usersService :: createUserReportingMapping :: ${error.message} :: ${error}`)
@@ -508,13 +511,18 @@ export const usersService = {
       const result = await pg.executeQueryPromise(_query);
       logger.debug(`usersService :: updateUserDepartmentMapping :: db result :: ${JSON.stringify(result)}`);
 
+      if (result.length > 0) {
+        const oldReportingUsers = result.map(record => record.reporting_to);
+        await usersService.clearGridCache(oldReportingUsers)
+      }
+
       await usersService.createUserReportingMapping(userId, reportingToUsers);
     } catch (error) {
       logger.error(`usersService :: updateUserDepartmentMapping :: ${error.message} :: ${error}`)
       throw new Error(error.message);
     }
   },
-  getReportingUsersList: async (levels: string[], user_id: number): Promise<{user_id: number, display_name: string}[]> => {
+  getReportingUsersList: async (levels: string[], user_id: number): Promise<{ user_id: number, display_name: string }[]> => {
     try {
       const placeholders = levels.map((_, i) => `$${i + 1}`).join(', ');
       let query = `${USERS.getReportingUsersList} IN (${placeholders}) AND VU.role_id <> 1`;
@@ -549,12 +557,23 @@ export const usersService = {
       const result = await pg.executeQueryPromise(_query);
       logger.debug(`usersService :: deleteUser :: db result :: ${JSON.stringify(result)}`)
 
-      redis.deleteRedis(`USERS|USER:${user.user_id}|LIMIT:50`);
-      redis.deleteRedis(`USERS_COUNT|USER:${user.user_id}`);
       redis.deleteRedis(`USER:${user.user_id}`);
       redis.deleteRedis(`User|Username:${user.user_name}`);
+
+      if (user.reporting_to_users && user.reporting_to_users.length > 0 ) await usersService.clearGridCache(user.reporting_to_users);
     } catch (error) {
       logger.error(`usersService :: deleteUser :: ${error.message} :: ${error}`)
+      throw new Error(error.message);
+    }
+  },
+  clearGridCache: async (reportingToUsers: number[]) => {
+    try {
+      for (const reportingUser of reportingToUsers) {
+        await redis.deleteRedis(`USERS|USER:${reportingUser}|LIMIT:50`);
+        await redis.deleteRedis(`USERS_COUNT|USER:${reportingUser}`);
+      }
+    } catch (error) {
+      logger.error(`usersService :: clearGridCache :: ${error.message} :: ${error}`)
       throw new Error(error.message);
     }
   }
