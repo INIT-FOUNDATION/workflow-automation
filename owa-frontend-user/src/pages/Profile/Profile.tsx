@@ -17,7 +17,7 @@ const Profile: React.FC = () => {
         <IonIcon icon={arrowBack} className="pl-2" />
         <span className="search-text text-black-600 pl-2">Choose workflow</span>
       </div>
-      <div className="profile-container flex justify-center items-center pt-4">
+      <div className="profile-container flex justify-center items-center pt-2">
         <img
           src="Assets/images/Profile/Profile_img.svg"
           alt="Profile"
@@ -25,7 +25,7 @@ const Profile: React.FC = () => {
         />
       </div>
 
-       {/* <div className="mb-1 fw-bold fs-4 text-gray-800 px-4">Login</div>
+      {/* <div className="mb-1 fw-bold fs-4 text-gray-800 px-4">Login</div>
                   <form className="form-profile" onSubmit={handleSubmit(onSubmit)}>
                     <div className="form-group text-start mb-2">
                       <IonInput
