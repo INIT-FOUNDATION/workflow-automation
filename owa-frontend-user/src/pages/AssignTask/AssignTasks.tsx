@@ -4,13 +4,10 @@ import {
   IonCardContent,
   IonCardHeader,
   IonCardSubtitle,
-  IonCardTitle,
   IonIcon,
 } from "@ionic/react";
 import { searchOutline } from "ionicons/icons";
 import "./AssignTasks.css";
-import { CgProfile } from "react-icons/cg";
-
 const AssignTasks: React.FC = () => {
   return (
     <>

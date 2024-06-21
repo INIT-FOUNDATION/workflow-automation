@@ -52,11 +52,9 @@
 } 
 .add-task {
   width: 95%;
-  margin: 0 auto;
-  font-weight: 600;
-  font-size: 16px;
+  /* margin: 0 auto;
   text-transform: none;
-  font-family: "Poppins" !important;
+  font-family: "Poppins" !important; */
 }
 
 .custom-popover-text {

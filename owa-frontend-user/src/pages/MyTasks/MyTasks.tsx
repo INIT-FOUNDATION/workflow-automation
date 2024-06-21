@@ -2,15 +2,12 @@ import React, { useState } from "react";
 import {
   IonButton,
   IonCard,
-  IonCardHeader,
   IonCardContent,
   IonIcon,
   IonPopover,
 } from "@ionic/react";
 import { searchOutline } from "ionicons/icons";
-
 import TaskOptionsDialogBox from "./Component/TaskOptionsDialogBox/TaskOptionsDialogBox";
-
 import "./MyTasks.css";
 
 const MyTasks: React.FC = () => {
@@ -70,7 +67,7 @@ const MyTasks: React.FC = () => {
           <IonButton
             color="danger"
             id="add-task-button"
-            className="text-white flex justify-center bg-red-500 rounded add-task"
+            className="rounded w-full add-task"
             onClick={() => setShowPopover(true)}
           >
             Add Task

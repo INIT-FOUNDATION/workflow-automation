@@ -1,4 +1,4 @@
-.workflow-selection-container {
+/* .workflow-selection-container {
     display: flex;
     flex-direction: column;
     height: 100vh;
@@ -13,5 +13,15 @@
     display: flex;
     justify-content: center;
     padding-bottom: 4rem;
+  } */
+  .css-1yk1gt9-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root{
+    --border-radius: 14px !important;
   }
-  
+
+  /* .css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input {
+    color: black !important;
+  } */
+
+  .css-1d3z3hw-MuiOutlinedInput-notchedOutline{
+    --border-radius: 14px !important;
+  }

@@ -56,7 +56,7 @@ const WorkFlowSelection: React.FC = () => {
         <IonButton
           onClick={() => handleNextClick()}
           color="danger"
-          className="bg-red-500 rounded w-full"
+          className="w-full"
         >
           Next
         </IonButton>
