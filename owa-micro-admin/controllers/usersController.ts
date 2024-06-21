@@ -143,7 +143,8 @@ export const usersController = {
                         gender: 1,
                         role_id: 2,
                         department_id: 1,
-                        reporting_to_users: [1, 2]
+                        reporting_to_users: [1, 2],
+                        status: 1
                     }
                 }    
             */

@@ -186,7 +186,7 @@ export const usersService = {
         text: USERS.updateUser,
         values: [user.user_id, user.first_name, user.last_name,
         user.dob, user.gender,
-        user.email_id, user.updated_by, user.role_id
+        user.email_id, user.updated_by, user.role_id, user.status
         ]
       };
       logger.debug(`usersService :: updateUser :: query :: ${JSON.stringify(_query)}`)
