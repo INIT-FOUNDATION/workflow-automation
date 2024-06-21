@@ -541,11 +541,11 @@ export const usersService = {
       throw new Error(error.message);
     }
   },
-  deleteUser: async (user: IUser) => {
+  deleteUser: async (user: IUser, deletedBy: number) => {
     try {
       const _query = {
         text: USERS.deleteUser,
-        values: [user.user_id]
+        values: [user.user_id, deletedBy]
       };
       logger.debug(`usersService :: deleteUser :: query :: ${JSON.stringify(_query)}`)
 
