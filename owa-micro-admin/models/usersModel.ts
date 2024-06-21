@@ -27,7 +27,7 @@ class User implements IUser {
 
   constructor(user: IUser) {
     this.user_id = user.user_id;
-    this.user_name = user.user_name;
+    this.user_name = user.mobile_number ? user.mobile_number.toString() : "";
     this.display_name = `${user.first_name ? user.first_name : ""} ${user.last_name ? user.last_name : ""}`;
     this.first_name = user.first_name;
     this.last_name = user.last_name;
