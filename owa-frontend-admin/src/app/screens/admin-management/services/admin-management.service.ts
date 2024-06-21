@@ -34,8 +34,8 @@ export class AdminManagementService {
     return this.http.get(`${environment.admin_prefix_url}/departments/list`);
   }
 
-  getRoles(): Observable<any> {
-    return this.http.get(`${environment.admin_prefix_url}/roles/list`);
+  getRoles(postParams: any): Observable<any> {
+    return this.http.post(`${environment.admin_prefix_url}/roles/list`, postParams);
   }
 
   getReportingUsers(roleId, type): Observable<any> {

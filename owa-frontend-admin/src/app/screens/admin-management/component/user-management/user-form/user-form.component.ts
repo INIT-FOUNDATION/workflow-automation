@@ -150,8 +150,10 @@ getDepartmentsList() {
 }
 
 getRolesList() {
-  this.adminManagementService.getRoles().subscribe((res) => {
-    this.roles = res.data;
+  this.adminManagementService.getRoles({
+    is_active: true
+  }).subscribe((res) => {
+    this.roles = res.data.rolesList;
   });
 }
 
