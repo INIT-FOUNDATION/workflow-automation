@@ -25,6 +25,11 @@
             "required": true,
             "type": "string",
             "description": "Bearer token for authentication"
+          },
+          {
+            "name": "isActive",
+            "in": "query",
+            "type": "string"
           }
         ],
         "responses": {
@@ -305,26 +310,25 @@
         }
       }
     },
-    "/api/v1/admin/roles/menusList/{roleId}": {
+    "/api/v1/admin/roles/menusList": {
       "get": {
         "tags": [
           "Roles"
         ],
-        "summary": "Get Access List By Role Id",
-        "description": "Endpoint to retrieve Access List with Role Id",
+        "summary": "Get Menu List By Role Id",
+        "description": "Endpoint to retrieve Menu List with Role Id",
         "parameters": [
-          {
-            "name": "roleId",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
           {
             "name": "Authorization",
             "in": "header",
             "required": true,
             "type": "string",
             "description": "Bearer token for authentication"
+          },
+          {
+            "name": "isActive",
+            "in": "query",
+            "type": "string"
           }
         ],
         "responses": {

@@ -20,7 +20,9 @@ export const rolesController = {
                     description: "Bearer token for authentication"
                 }
             */
-            const roles = await rolesService.listRoles();
+            const isActive = req.query.isActive === "1";
+            const roles = await rolesService.listRoles(Boolean(isActive));
+            
             return res.status(STATUS.OK).send({
                 data: roles,
                 message: "Roles Fetched Successfully",
@@ -260,12 +262,12 @@ export const rolesController = {
             return res.status(STATUS.INTERNAL_SERVER_ERROR).send(ROLES.ROLE00000);
         }
     },
-    getMenusListByRoleId: async (req: Request, res: Response): Promise<Response> => {
+    getMenusList: async (req: Request, res: Response): Promise<Response> => {
         try {
             /*
             #swagger.tags = ['Roles']
-            #swagger.summary = 'Get Menu List By Role Id'
-            #swagger.description = 'Endpoint to retrieve Menu List with Role Id'
+            #swagger.summary = 'Get Menu List'
+            #swagger.description = 'Endpoint to retrieve Menu List'
             #swagger.parameters['Authorization'] = {
                 in: 'header',
                 required: true,
@@ -273,10 +275,8 @@ export const rolesController = {
                 description: 'Bearer token for authentication'
             }
             */
-            const roleId = req.params.roleId;
-            if (!roleId) return res.status(STATUS.BAD_REQUEST).send(ROLES.ROLE00003);
-
-            const menusList = await rolesService.getMenusListByRoleId(parseInt(roleId));
+            const isActive = req.query.isActive === "1";
+            const menusList = await rolesService.getMenusList(Boolean(isActive));
 
             return res.status(STATUS.OK).send({
                 data: menusList,

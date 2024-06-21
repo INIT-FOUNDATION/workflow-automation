@@ -4,9 +4,11 @@ import { IRole } from "../types/custom";
 import { CACHE_TTL } from "../constants/CONST";
 
 export const rolesService = {
-  listRoles: async (): Promise<IRole[]> => {
+  listRoles: async (isActive: boolean): Promise<IRole[]> => {
     try {
-      const key = `ROLES`;
+      let key = `ROLES`;
+      if (isActive) key += '|ACTIVE';
+
       const cachedResult = await redis.GetKeyRedis(key);
 
       if (cachedResult) {
@@ -15,8 +17,9 @@ export const rolesService = {
       }
 
       const _query = {
-        text: ROLES.listRoles
+        text: ROLES.listRoles + ` WHERE status ${isActive ? '= 1' : 'IN (0, 1)'} AND role_id <> 1 ORDER BY date_created DESC`
       };
+      
       logger.debug(`rolesService :: listRoles :: query :: ${JSON.stringify(_query)}`)
 
       const result = await pg.executeQueryPromise(_query);
@@ -49,6 +52,7 @@ export const rolesService = {
       }
 
       redis.deleteRedis(`ROLES`);
+      redis.deleteRedis(`ROLES|ACTIVE`);
     } catch (error) {
       logger.error(`rolesService :: addRole :: ${error.message} :: ${error}`)
       throw new Error(error.message);
@@ -74,6 +78,7 @@ export const rolesService = {
 
       redis.deleteRedis(`ROLE:${role.role_id}`);
       redis.deleteRedis(`ROLES`);
+      redis.deleteRedis(`ROLES|ACTIVE`);
     } catch (error) {
       logger.error(`rolesService :: updateRole :: ${error.message} :: ${error}`)
       throw new Error(error.message);
@@ -117,6 +122,7 @@ export const rolesService = {
 
       redis.deleteRedis(`ROLE:${roleId}`);
       redis.deleteRedis(`ROLES`);
+      redis.deleteRedis(`ROLES|ACTIVE`);
     } catch (error) {
       logger.error(`rolesService :: updateRoleStatus :: ${error.message} :: ${error}`)
       throw new Error(error.message);
@@ -141,25 +147,26 @@ export const rolesService = {
       logger.debug(`rolesService :: getAccessListByRoleId :: db result :: ${JSON.stringify(result)}`)
 
       redis.SetRedis(key, result, CACHE_TTL.LONG);
+      return result;
     } catch (error) {
       logger.error(`rolesService :: getAccessListByRoleId :: ${error.message} :: ${error}`)
       throw new Error(error.message);
     }
   },
-  getMenusListByRoleId: async (roleId: number): Promise<any> => {
+  getMenusList: async (isActive: boolean): Promise<any> => {
     try {
       const _query = {
-        text: ROLES.getMenusListByRoleId,
-        values: [roleId]
+        text: ROLES.getMenusList + ` ${isActive ? 'WHERE status = 1 ORDER BY menu_order ASC' : 'ORDER BY menu_order ASC'}`
       };
-      logger.debug(`rolesService :: getMenusListByRoleId :: query :: ${JSON.stringify(_query)}`)
+
+      logger.debug(`rolesService :: getMenusList :: query :: ${JSON.stringify(_query)}`)
 
       const result = await pg.executeQueryPromise(_query);
-      logger.debug(`rolesService :: getMenusListByRoleId :: db result :: ${JSON.stringify(result)}`)
+      logger.debug(`rolesService :: getMenusList :: db result :: ${JSON.stringify(result)}`)
 
       return result;
     } catch (error) {
-      logger.error(`rolesService :: getMenusListByRoleId :: ${error.message} :: ${error}`)
+      logger.error(`rolesService :: getMenusList :: ${error.message} :: ${error}`)
       throw new Error(error.message);
     }
   },
