@@ -173,7 +173,7 @@ export const usersController = {
 
             const userExists = await usersService.existsByUserId(user.user_id);
             if (!userExists) return res.status(STATUS.BAD_REQUEST).send(USERS.USER000011);
-            
+
             user.updated_by = plainToken.user_id;
 
             await usersService.updateUser(user);
@@ -241,7 +241,7 @@ export const usersController = {
             const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
             if (!allowedTypes.includes(file.mimetype)) return res.status(STATUS.BAD_REQUEST).send(USERS.USER00009);
 
-            const uploadSizeLimit = envUtils.getNumberEnvVariableOrDefault("OWA_UPLOAD_FILE_SIZE_LIMIT", 5 * 1024 * 1024 )
+            const uploadSizeLimit = envUtils.getNumberEnvVariableOrDefault("OWA_UPLOAD_FILE_SIZE_LIMIT", 5 * 1024 * 1024)
             if (file.size > uploadSizeLimit) return res.status(STATUS.BAD_REQUEST).send(USERS.USER00010);
 
             const userExists = await usersService.existsByUserId(plainToken.user_id);
@@ -348,20 +348,17 @@ export const usersController = {
 
             const roleDetails = await rolesService.getRoleById(parseInt(roleId));
 
-            if(!roleDetails)  return res.status(STATUS.BAD_REQUEST).send(USERS.USER00007);
+            if (!roleDetails) return res.status(STATUS.BAD_REQUEST).send(USERS.USER00007);
 
             const levelDB = roleDetails.level;
             let levels = [];
             switch (levelDB) {
-
                 case 'Admin':
                     levels = ['Admin'];
                     break;
-    
                 case 'Department':
                     levels = ['Admin', 'Department'];
                     break;
-    
                 case 'Employee':
                     levels = ['Admin', 'Department', 'Employee'];
                     break;
@@ -404,7 +401,7 @@ export const usersController = {
             userId = parseInt(decryptPayload(userId));
 
             const user = await usersService.getUserById(userId);
-            if(!user) return res.status(STATUS.BAD_REQUEST).send(USERS.USER000011);
+            if (!user) return res.status(STATUS.BAD_REQUEST).send(USERS.USER000011);
 
             await usersService.deleteUser(user, deletedBy);
 
