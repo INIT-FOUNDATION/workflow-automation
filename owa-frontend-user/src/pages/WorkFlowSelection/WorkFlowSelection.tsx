@@ -14,6 +14,7 @@ import {
   Select,
   SelectChangeEvent,
 } from "@mui/material";
+import { Label } from "@mui/icons-material";
 
 const WorkFlowSelection: React.FC = () => {
   const [deadline, setDeadline] = useState("");
@@ -35,22 +36,23 @@ const WorkFlowSelection: React.FC = () => {
         <IonIcon icon={arrowBack} className="pl-2" />
         <span className="search-text text-black-600 pl-2">Choose workflow</span>
       </div>
+
       {/* <IonCard className="border border-gray-300 rounded mb-2 bg-gray-100"> */}
-          <form className="mb-4 pt-2">
-            <FormControl fullWidth>
-              <InputLabel>Select Workflow</InputLabel>
-              <Select
-                label="Select Workflow"
-                value={workflow}
-                onChange={handleWorkflowChange}
-                className="w-full text-black"
-              >
-                <MenuItem value="2024-06-21">2024-06-21</MenuItem>
-                <MenuItem value="2024-06-22">2024-06-22</MenuItem>
-                <MenuItem value="2024-06-23">2024-06-23</MenuItem>
-              </Select>
-            </FormControl>
-          </form>
+      <form className="mb-4 pt-2">
+        <FormControl fullWidth>
+          <InputLabel>Select Workflow</InputLabel>
+          <Select
+            label="Select Workflow"
+            value={workflow}
+            onChange={handleWorkflowChange}
+            className="w-full text-black"
+          >
+            <MenuItem value="2024-06-21">2024-06-21</MenuItem>
+            <MenuItem value="2024-06-22">2024-06-22</MenuItem>
+            <MenuItem value="2024-06-23">2024-06-23</MenuItem>
+          </Select>
+        </FormControl>
+      </form>
       {/* </IonCard>{" "} */}
       <div className="flex-grow"></div>
       <div className="flex justify-center pb-16">

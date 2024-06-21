@@ -5,6 +5,7 @@ import {
   IonButtons,
   IonPopover,
   IonContent,
+  useIonRouter,
 } from "@ionic/react";
 import { notificationsOutline, ellipsisVerticalOutline } from "ionicons/icons";
 import { CgProfile } from "react-icons/cg"; // Importing CgProfile
@@ -14,6 +15,7 @@ import { SKIP_HEADER_ROUTES } from "../../constants/constant";
 
 const Header: React.FC = () => {
   const location = useLocation();
+  const router = useIonRouter();
   const { pathname } = location;
 
   const skipHeader = SKIP_HEADER_ROUTES.includes(pathname);
@@ -28,9 +30,9 @@ const Header: React.FC = () => {
   };
 
   const handleProfileClick = () => {
-    console.log('Profile clicked');
-   
-    // history.push('/profile'); 
+    router.push("/profile");
+    setShowPopover(false);
+    // history.push('/profile');
   };
 
   return (
@@ -69,7 +71,7 @@ const Header: React.FC = () => {
           <div
             className="flex justify-start items-center mb-3"
             style={{ cursor: "pointer" }}
-            onClick={() => console.log("Profile clicked")}
+            onClick={handleProfileClick}
           >
             <CgProfile color="black" size={22} />
             <span className="text-black m-0 ml-2" id="pop-over-text">

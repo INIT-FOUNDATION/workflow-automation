@@ -1,0 +1,15 @@
+.profile-container {
+  padding-top: 16px;
+}
+
+.input-field {
+  width: 100%;
+  /* padding-right: 30px; */
+  border: 1px solid #7b7b7b;
+  border-radius: 20px;
+}
+.scrollable-content {
+  max-height: calc(200vh - 150px); /* Adjust the height as needed */
+  overflow: hidden; /* Enable vertical scrolling */
+  padding-right: 15px; /* Add padding to avoid scrollbar overlap */
+}
