@@ -31,6 +31,7 @@ FROM
     LEFT JOIN m_user_department_assoc uda ON u.user_id = uda.user_id
     LEFT JOIN m_departments d ON uda.department_id = d.department_id
     LEFT JOIN m_user_reporting_assoc ura ON u.user_id = ura.user_id
+WHERE ura.status = 1
 GROUP BY
     u.user_id,
     u.user_name,
