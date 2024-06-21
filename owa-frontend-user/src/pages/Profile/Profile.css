@@ -13,3 +13,18 @@
   overflow: hidden; /* Enable vertical scrolling */
   padding-right: 15px; /* Add padding to avoid scrollbar overlap */
 }
+
+.form-profile {
+  padding-left: 13px;
+}
+
+/* .native-input.sc-ion-input-md {
+  padding-left: 13px;
+}
+.has-focus.sc-ion-input-md-h input.sc-ion-input-md {
+  caret-color: grey;
+} */
+
+.native-input.sc-ion-input-ios {
+  padding-left: 13px;
+}

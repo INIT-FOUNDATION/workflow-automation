@@ -14,11 +14,9 @@ import {
   Select,
   SelectChangeEvent,
 } from "@mui/material";
-import { Label } from "@mui/icons-material";
+import "./WorkFlowSelection.css";
 
 const WorkFlowSelection: React.FC = () => {
-  const [deadline, setDeadline] = useState("");
-  const [assignee, setAssignee] = useState("");
   const [workflow, setWorkflow] = useState("");
   const router = useIonRouter();
 
@@ -26,7 +24,6 @@ const WorkFlowSelection: React.FC = () => {
     setWorkflow(event.target.value as string);
   };
   const handleNextClick = () => {
-    console.log("Create new task clicked");
     router.push("/workflow-started");
   };
 
