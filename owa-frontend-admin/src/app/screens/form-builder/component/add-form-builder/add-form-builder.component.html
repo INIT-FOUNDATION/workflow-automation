@@ -30,62 +30,60 @@
       </div>
     </div>
 
-    <div class="border-2 p-5 rounded-2xl col-span-2">
+    <div class="border-2 px-5 pt-5 rounded-2xl col-span-2">
       <span class="font-medium">Choosen fields</span>
 
-      <form action="" class="custom-scroll-bar pt-3">
+      <form action="" class="custom-scroll-bar">
         <div
-          class="grid grid-cols-1 md:grid-cols-2 gap-4 flex flex-col justify-between"
+          class="grid grid-cols-1 md:grid-cols-2 gap-4"
           cdkDropList
           [cdkDropListData]="chosenFields"
           (cdkDropListDropped)="dropFormField($event)"
         >
-          <div class="grow">
-            <div
-              class="text-sm mb-3"
-              *ngFor="let item of chosenFields; let i = index"
-              [cdkDragDisabled]="true"
-              cdkDrag
-            >
-              <app-input-field
-                [fieldData]="item"
-                *ngIf="item?.field_name == 'input'"
-                (deleteFormFieldIndex)="deleteFormField($event)"
-                (editFormFieldIndex)="editFormField($event)"
-              ></app-input-field>
+          <div
+            class="text-sm mb-3"
+            *ngFor="let item of chosenFields; let i = index"
+            [cdkDragDisabled]="true"
+            cdkDrag
+          >
+            <app-input-field
+              [fieldData]="item"
+              *ngIf="item?.field_name == 'input'"
+              (deleteFormFieldIndex)="deleteFormField($event)"
+              (editFormFieldIndex)="editFormField($event)"
+            ></app-input-field>
 
-              <app-text-area-field
-                [fieldData]="item"
-                *ngIf="item?.field_name == 'textArea'"
-                (deleteFormFieldIndex)="deleteFormField($event)"
-                (editFormFieldIndex)="editFormField($event)"
-              ></app-text-area-field>
+            <app-text-area-field
+              [fieldData]="item"
+              *ngIf="item?.field_name == 'textArea'"
+              (deleteFormFieldIndex)="deleteFormField($event)"
+              (editFormFieldIndex)="editFormField($event)"
+            ></app-text-area-field>
 
-              <app-radio-button
-                [fieldData]="item"
-                *ngIf="item?.field_name == 'radio'"
-                (deleteFormFieldIndex)="deleteFormField($event)"
-                (editFormFieldIndex)="editFormField($event)"
-              ></app-radio-button>
+            <app-radio-button
+              [fieldData]="item"
+              *ngIf="item?.field_name == 'radio'"
+              (deleteFormFieldIndex)="deleteFormField($event)"
+              (editFormFieldIndex)="editFormField($event)"
+            ></app-radio-button>
 
-              <app-checkbox-button
-                [fieldData]="item"
-                *ngIf="item?.field_name == 'checkbox'"
-                (deleteFormFieldIndex)="deleteFormField($event)"
-                (editFormFieldIndex)="editFormField($event)"
-              ></app-checkbox-button>
+            <app-checkbox-button
+              [fieldData]="item"
+              *ngIf="item?.field_name == 'checkbox'"
+              (deleteFormFieldIndex)="deleteFormField($event)"
+              (editFormFieldIndex)="editFormField($event)"
+            ></app-checkbox-button>
 
-              <app-dropdown-field
-                [fieldData]="item"
-                *ngIf="item?.field_name == 'dropdown'"
-                (deleteFormFieldIndex)="deleteFormField($event)"
-                (editFormFieldIndex)="editFormField($event)"
-              ></app-dropdown-field>
-            </div>
+            <app-dropdown-field
+              [fieldData]="item"
+              *ngIf="item?.field_name == 'dropdown'"
+              (deleteFormFieldIndex)="deleteFormField($event)"
+              (editFormFieldIndex)="editFormField($event)"
+            ></app-dropdown-field>
           </div>
           <button
             type="button"
-            class="bg-red-500 text-white rounded-lg py-2 col-span-2"
+            class="bg-red-500 text-white rounded-lg py-2 fixed bottom-8"
           >
             Submit
           </button>
