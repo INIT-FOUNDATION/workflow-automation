@@ -492,6 +492,8 @@ export const usersService = {
 
         await redis.deleteRedis(`USERS|USER:${reportingToUser}|LIMIT:50`);
         await redis.deleteRedis(`USERS_COUNT|USER:${reportingToUser}`);
+        await redis.deleteRedis(`USERS|USER:1|LIMIT:50`);
+        await redis.deleteRedis(`USERS_COUNT|USER:1`);
       }
     } catch (error) {
       logger.error(`usersService :: createUserReportingMapping :: ${error.message} :: ${error}`)
@@ -569,6 +571,8 @@ export const usersService = {
       for (const reportingUser of reportingToUsers) {
         await redis.deleteRedis(`USERS|USER:${reportingUser}|LIMIT:50`);
         await redis.deleteRedis(`USERS_COUNT|USER:${reportingUser}`);
+        await redis.deleteRedis(`USERS|USER:1|LIMIT:50`);
+        await redis.deleteRedis(`USERS_COUNT|USER:1`);
       }
     } catch (error) {
       logger.error(`usersService :: clearGridCache :: ${error.message} :: ${error}`)

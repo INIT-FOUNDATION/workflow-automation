@@ -4,7 +4,7 @@ import { Colmodel } from 'src/app/modules/common-data-table/model/colmodel.model
 import { AdminManagementService } from '../../../services/admin-management.service';
 import { Router } from '@angular/router';
 import { UtilityService } from 'src/app/modules/shared/services/utility.service';
-import Swal from 'sweetalert2';
+// import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-user-management-grid',
@@ -59,36 +59,24 @@ export class UserManagementGridComponent {
     this.router.navigate([`/admin-management/edit-user/${data.user_id}`]);
   }
 
-  deleteUserConfirmation(userId: any) {
-    Swal.fire({
-      title: `Are you sure you want to delete ?`,
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonText: 'Yes, delete it!',
-      cancelButtonText: 'No, keep it'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this.adminService.deleteUser(userId).subscribe(
-          response => {   
-            console.log(response);       
-            Swal.fire('Deleted!', 'User has been deleted.', 'success');
-            // this.snackBar.open('User deleted successfully', 'Close', {
-            //   duration: 3000,
-            // });
-          },
-          error => {
-            Swal.fire('Failed!', 'Failed to delete user.', 'error');
-            // this.snackBar.open('Failed to delete user', 'Close', {
-            //   duration: 3000,
-            // });
-          }
-        );
-      } 
-      // else if (result.dismiss === Swal.DismissReason.cancel) {
-      //   Swal.fire('Cancelled');
-      // }
-    });
-  }
+  // deleteUserConfirmation(gridData) {
+  //   Swal.fire({
+  //     title: `Are you sure you want to delete ${gridData.display_name} ?`,
+  //     showCancelButton: true,
+  //     confirmButtonText: 'Save',
+  //     allowEscapeKey: false,
+  //     allowOutsideClick: false,
+  //   }).then((result) => {
+  //     if (result.isConfirmed) {
+  //       const response = this.adminManagementDetails
+  //         .deleteUser(this.user_id)
+  //         .toPromise();
+  //       this.getUsersDataArray();
+  //     } else if (result.isDismissed) {
+  //       rowData.mobile_number = null;
+  //     }
+  //   });
+  // }
 
   onResetPassword(userId: any) {
     this.adminService.resetPasswordByAdmin(userId).subscribe((response) => {
