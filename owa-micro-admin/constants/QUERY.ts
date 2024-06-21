@@ -1,8 +1,8 @@
 export const ROLES = {
-    listRoles: 'SELECT role_id, role_name, role_description, level from m_roles WHERE status = 1 AND role_id <> 1 ORDER BY date_created DESC',
+    listRoles: 'SELECT role_id, role_name, role_description, level, status from m_roles WHERE status IN (0, 1) AND role_id <> 1 ORDER BY date_created DESC',
     addRole: 'INSERT INTO m_roles (role_name, role_description, level, created_by, updated_by) VALUES ($1, $2, $3, $4, $5) RETURNING role_id',
     updateRole: 'UPDATE m_roles SET role_name = $2, role_description = $3, level = $4, updated_by = $5, date_updated = NOW() WHERE role_id = $1',
-    getRole: 'SELECT role_name, role_description, level FROM m_roles WHERE role_id = $1 AND status = 1',
+    getRole: 'SELECT role_name, role_description, level, status FROM m_roles WHERE role_id = $1 AND status IN (0, 1)',
     updateRoleStatus: 'UPDATE m_roles SET status = $2, updated_by = $3, date_updated = NOW() WHERE role_id = $1',
     getAccessListByRoleId: `SELECT mm.menu_id, 
                             mm.menu_name,
