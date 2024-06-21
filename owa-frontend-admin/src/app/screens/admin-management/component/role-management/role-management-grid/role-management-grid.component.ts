@@ -14,6 +14,7 @@ export class RoleManagementGridComponent {
   adminManagementDetails: CommonDataTableComponent;
   cols: Colmodel[] = [];
   rowsPerPage = 10;
+  currentPage = 1;
 
   constructor(
     private roleManagementService: RoleManagementService,
@@ -22,7 +23,7 @@ export class RoleManagementGridComponent {
 
   ngOnInit(): void {
     this.prepareAssessmentGridCols();
-    this.getRolesList();
+    this.getAllRolesData();
   }
 
   prepareAssessmentGridCols() {
@@ -35,6 +36,17 @@ export class RoleManagementGridComponent {
   }
 
   rolesList = [];
+
+  getAllRolesData() {
+    const payload: any = {
+      page_size:
+        this.adminManagementDetails && this.adminManagementDetails.rows
+          ? this.adminManagementDetails.rows
+          : 50,        
+      current_page: this.currentPage,
+    };
+    this.getRolesList(payload);
+  }
 
   // getRoleClass(role: string) {
   //   switch (role) {
@@ -49,14 +61,11 @@ export class RoleManagementGridComponent {
   //   }
   // }
 
-  getRolesList() {
-    const token = sessionStorage.getItem('userToken');
-    const headers = { Authorization: `Bearer ${JSON.parse(token)}` };
-    this.roleManagementService.getRolesList(headers).subscribe((res: any) => {
-    this.rolesList = res.data;
-
-    
-    this.adminManagementDetails.data = this.rolesList;
+  getRolesList(payload) {
+    this.roleManagementService.getRolesList(payload).subscribe((res: any) => {
+   console.log(res.data)
+    this.adminManagementDetails.data = res.data.rolesList;
+    this.adminManagementDetails.totalRecords = res.data.rolesCount;
 
     this.adminManagementDetails.data.forEach((item)=>{
       item.status == 1 ? item.status = 'Active' : item.status = 'Inactive'
@@ -70,5 +79,12 @@ export class RoleManagementGridComponent {
 
   editRole(gridData) {
     this.router.navigate([`/admin-management/edit-role/${gridData.role_id}`]);
+  }
+
+  onPageChangeEvent(event) {
+    this.currentPage = event.first == 0 ? 1 : event.first / event.rows + 1;
+    this.adminManagementDetails.rows = event.rows;
+    const payload = { limit: true };
+    this.getAllRolesData();
   }
 }

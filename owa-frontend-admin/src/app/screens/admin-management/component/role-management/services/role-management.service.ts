@@ -9,8 +9,8 @@ export class RoleManagementService {
 
   constructor(private http: HttpClient) { }
 
-  getRolesList(headers: any) {
-    return this.http.get(`${environment.admin_prefix_url}/roles/list`, { headers });
+  getRolesList(postParams: any) {
+    return this.http.post(`${environment.admin_prefix_url}/roles/list`, postParams);
   }
 
   getRole(role_id) {
