@@ -11,6 +11,8 @@ rolesRouter.post("/update", rolesController.updateRole);
 
 rolesRouter.get("/listLevels", rolesController.listLevels);
 
+rolesRouter.get("/menusList", rolesController.getMenusList);
+
 rolesRouter.get("/defaultAccessList", rolesController.getDefaultAccessList);
 
 rolesRouter.get("/:roleId", rolesController.getRoleById);
@@ -18,8 +20,6 @@ rolesRouter.get("/:roleId", rolesController.getRoleById);
 rolesRouter.post("/updateStatus", rolesController.updateRoleStatus);
 
 rolesRouter.get("/accessList/:roleId", rolesController.getAccessListByRoleId);
-
-rolesRouter.get("/menusList/:roleId", rolesController.getAccessListByRoleId);
 
 rolesRouter.get("/listBylevel/:level", rolesController.getRolesByLevel);
 

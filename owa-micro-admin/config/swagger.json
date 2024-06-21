@@ -25,6 +25,11 @@
             "required": true,
             "type": "string",
             "description": "Bearer token for authentication"
+          },
+          {
+            "name": "isActive",
+            "in": "query",
+            "type": "string"
           }
         ],
         "responses": {
@@ -63,6 +68,10 @@
                 "role_description": {
                   "type": "string",
                   "example": "Head of the Department"
+                },
+                "level": {
+                  "type": "string",
+                  "example": "Level of Role"
                 },
                 "permissions": {
                   "type": "array",
@@ -124,6 +133,10 @@
                 "role_description": {
                   "type": "string",
                   "example": "Head of the Department"
+                },
+                "level": {
+                  "type": "string",
+                  "example": "Level of Role"
                 },
                 "permissions": {
                   "type": "array",
@@ -297,61 +310,25 @@
         }
       }
     },
-    "/api/v1/admin/roles/menusList/{roleId}": {
+    "/api/v1/admin/roles/menusList": {
       "get": {
         "tags": [
           "Roles"
         ],
-        "summary": "Get Access List By Role Id",
-        "description": "Endpoint to retrieve Access List with Role Id",
+        "summary": "Get Menu List By Role Id",
+        "description": "Endpoint to retrieve Menu List with Role Id",
         "parameters": [
-          {
-            "name": "roleId",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
           {
             "name": "Authorization",
             "in": "header",
             "required": true,
             "type": "string",
             "description": "Bearer token for authentication"
-          }
-        ],
-        "responses": {
-          "default": {
-            "description": ""
-          }
-        }
-      }
-    },
-    "/api/v1/admin/roles/combinedAccessList/{roleId}/{userId}": {
-      "get": {
-        "tags": [
-          "Roles"
-        ],
-        "summary": "Get Combined Access List By Role Id and User Id",
-        "description": "Endpoint to retrieve Combined Access List with Role Id and User Id",
-        "parameters": [
-          {
-            "name": "roleId",
-            "in": "path",
-            "required": true,
-            "type": "string"
           },
           {
-            "name": "userId",
-            "in": "path",
-            "required": true,
+            "name": "isActive",
+            "in": "query",
             "type": "string"
-          },
-          {
-            "name": "Authorization",
-            "in": "header",
-            "required": true,
-            "type": "string",
-            "description": "Bearer token for authentication"
           }
         ],
         "responses": {
@@ -710,14 +687,6 @@
             "schema": {
               "type": "object",
               "properties": {
-                "user_name": {
-                  "type": "string",
-                  "example": "8169104556"
-                },
-                "display_name": {
-                  "type": "string",
-                  "example": "Narsima Chilkuri"
-                },
                 "first_name": {
                   "type": "string",
                   "example": "Narsima"
@@ -794,16 +763,8 @@
               "type": "object",
               "properties": {
                 "user_id": {
-                  "type": "number",
-                  "example": 2
-                },
-                "user_name": {
                   "type": "string",
-                  "example": "8169104556"
-                },
-                "display_name": {
-                  "type": "string",
-                  "example": "Narsima Chilkuri"
+                  "example": "encryptedHash"
                 },
                 "first_name": {
                   "type": "string",
@@ -1011,6 +972,80 @@
             "required": true,
             "type": "string",
             "description": "Bearer token for authentication"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/v1/admin/users/reportingUsers/{roleId}/{type}": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Reporting Users List",
+        "description": "Get Reporting Users based on Role Id and Type",
+        "parameters": [
+          {
+            "name": "roleId",
+            "in": "path",
+            "required": true,
+            "type": "number",
+            "description": "Role Id"
+          },
+          {
+            "name": "type",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Type"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Bearer token for authentication"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/v1/admin/users/deleteUser": {
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Delete User",
+        "description": "Delete User by User Id",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Bearer token for authentication"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "user_id": {
+                  "type": "string",
+                  "example": "encryptedHash"
+                }
+              }
+            }
           }
         ],
         "responses": {
