@@ -28,6 +28,7 @@ export class RoleManagementGridComponent {
   prepareAssessmentGridCols() {
     this.cols = [
       new Colmodel('role_name', 'Role Name', false, false, false),
+      new Colmodel('role_description', 'Role Description', false, false, false),
       new Colmodel('level', 'Level', false, false, false),
     ];
   }
@@ -58,5 +59,10 @@ export class RoleManagementGridComponent {
 
   addRole() {
     this.router.navigate(['/admin-management/add-role']);
+  }
+
+  editRole(gridData) {
+    console.log(gridData)
+    this.router.navigate([`/admin-management/edit-role/${gridData.role_id}`]);
   }
 }
