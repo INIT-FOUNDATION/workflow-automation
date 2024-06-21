@@ -37,7 +37,7 @@ export class AuthService {
 
   getMenuList(role_id) {
     return this.http.get<any>(
-      `${environment.admin_prefix_url}/roles/menusList/${role_id}`
+      `${environment.admin_prefix_url}/roles/accessList/${role_id}`
     );
   }
 
