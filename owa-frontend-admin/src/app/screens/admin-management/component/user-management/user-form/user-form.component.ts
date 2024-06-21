@@ -160,7 +160,7 @@ getReportingList(roleId) {
     this.adminManagementService.getReportingUsers(roleId, this.formType).subscribe(
       (users: any) => {
         this.reportingUsers = users.data;
-        this.userForm.controls['reporting_to_users'].setValue([]);
+        this.userForm.controls['reporting_to_users'].setValue(this.editUserInfo?.reporting_to_users || []);
       },
       error => {
         console.error('Error fetching reporting users', error);
