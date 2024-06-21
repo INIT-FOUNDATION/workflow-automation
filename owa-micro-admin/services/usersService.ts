@@ -352,8 +352,6 @@ export const usersService = {
       const result = await pg.executeQueryPromise(_query);
       logger.debug(`usersService :: updateProfilePic :: db result :: ${JSON.stringify(result)}`);
 
-      redis.deleteRedis(`USERS|USER:${userId}|LIMIT:50`);
-      redis.deleteRedis(`USERS_COUNT|USER:${userId}`);
       redis.deleteRedis(`USER:${userId}`);
     } catch (error) {
       logger.error(`usersService :: updateProfilePic :: ${error.message} :: ${error}`)
@@ -489,7 +487,7 @@ export const usersService = {
         };
         logger.debug(`usersService :: createUserReportingMapping :: query :: ${JSON.stringify(_query)}`);
 
-        const result = await pg.executeQueryPromise(_query);
+        const result =  await pg.executeQueryPromise(_query);
         logger.debug(`usersService :: createUserReportingMapping :: db result :: ${JSON.stringify(result)}`);
 
         await redis.deleteRedis(`USERS|USER:${reportingToUser}|LIMIT:50`);
