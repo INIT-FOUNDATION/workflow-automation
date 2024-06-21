@@ -397,6 +397,7 @@ export const usersController = {
         */
         try {
             let userId = req.body.user_id;
+            const deletedBy = req.plainToken.user_id;
 
             if (!userId) return res.status(STATUS.BAD_REQUEST).send(USERS.USER00006);
             userId = parseInt(decryptPayload(userId));
@@ -404,7 +405,7 @@ export const usersController = {
             const user = await usersService.getUserById(userId);
             if(!user) return res.status(STATUS.BAD_REQUEST).send(USERS.USER000011);
 
-            await usersService.deleteUser(user);
+            await usersService.deleteUser(user, deletedBy);
 
             return res.status(STATUS.OK).send({
                 data: null,
