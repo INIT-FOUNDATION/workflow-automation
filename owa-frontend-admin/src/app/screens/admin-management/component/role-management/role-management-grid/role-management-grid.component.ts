@@ -64,7 +64,8 @@ export class RoleManagementGridComponent {
   getRolesList(payload) {
     this.roleManagementService.getRolesList(payload).subscribe((res: any) => {
    console.log(res.data)
-    this.adminManagementDetails.data = res.data.rolesList;
+   let reverseTheList = res.data.rolesList.reverse();
+    this.adminManagementDetails.data = reverseTheList;
     this.adminManagementDetails.totalRecords = res.data.rolesCount;
 
     this.adminManagementDetails.data.forEach((item)=>{

@@ -56,7 +56,7 @@ export class RoleFormComponent {
         return;
       }
       let roleData = await this.getRoleDetails().toPromise();
-
+      console.log(roleData)
       this.roleDetails = roleData.role_details;
       
       this.roleDetails.moduleJson = roleData.role_modules;
@@ -71,12 +71,13 @@ export class RoleFormComponent {
         this.roleForm.disable();
         this.roleForm.get('status').enable();
       }
-      console.log(this.roleDetails.moduleJson.data)
+      console.log(this.roleDetails)
       this.roleDetails.moduleJson.data.forEach((menuItem: any) => {
-        console.log(menuItem)
         let readPermission = menuItem.read_permission == '1' ? true : false;
         let writePermission = menuItem.write_permission == '1' ? true : false;
         let disableChkbx = writePermission ? true : false;
+
+        console.log(menuItem.read_permission)
 
         let formGroup = new FormGroup({
           menu_id: new FormControl(menuItem.menu_id),
@@ -92,6 +93,7 @@ export class RoleFormComponent {
         });
    
         (this.roleForm.get('permissions') as FormArray).push(formGroup);
+        console.log(formGroup)
      
       });
     }
