@@ -104,7 +104,7 @@ export class RoleFormComponent {
     this.roleForm = new FormGroup({
       role_name: new FormControl(null, [Validators.required]),
       level: new FormControl(null, [Validators.required]),
-      status: new FormControl(null, [Validators.required]),
+      status: new FormControl(this.formType == 'edit' ? null : 1, [Validators.required]),
       role_description: new FormControl(null, [Validators.required]),
       permissions: new FormArray([]),
     });

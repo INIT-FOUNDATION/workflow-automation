@@ -41,7 +41,7 @@ export class UserFormComponent {
     role_id: new FormControl('', [Validators.required]),
     department_id: new FormControl('', [Validators.required]),
     reporting_to_users: new FormControl([]), 
-    status: new FormControl(null, [Validators.required]),
+    status: new FormControl(this.formType == 'edit' ? null : 1, [Validators.required]),
     // password: new FormControl(''),
     // confirmPassword: new FormControl('')
   });
