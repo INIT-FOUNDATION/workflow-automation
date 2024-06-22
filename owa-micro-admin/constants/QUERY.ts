@@ -39,12 +39,12 @@ export const USERS = {
     existsByMobileNumber: `SELECT EXISTS (
         SELECT 1
             FROM m_users
-            WHERE mobile_number = $1 AND status NOT IN (0,2)
+            WHERE mobile_number = $1 AND status <> 2
     )`,
     existsByUserId: `SELECT EXISTS (
         SELECT 1
             FROM m_users
-            WHERE user_id = $1 AND status NOT IN (0,2)
+            WHERE user_id = $1 AND status <> 2
     )`,
     createUser: `INSERT INTO m_users(
         user_name, first_name, last_name, display_name, dob, gender, mobile_number, password, role_id, email_id, created_by, updated_by)
