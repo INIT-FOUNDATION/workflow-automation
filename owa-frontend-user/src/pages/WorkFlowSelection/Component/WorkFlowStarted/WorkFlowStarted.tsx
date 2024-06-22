@@ -31,7 +31,7 @@ const WorkFlowStarted: React.FC = () => {
           B2B lead conversion
         </span>
       </div>
-      <IonCard className="custom-cards border border-gray-300 rounded mb-2 bg-gray-100">
+      <IonCard className="custom-cards border rounded-lg mb-2 bg-neutral-100 shadow-md">
         <IonCardContent>
           <div className="flex items-center">
             <img

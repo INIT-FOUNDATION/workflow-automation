@@ -18,7 +18,7 @@ const AssignTasks: React.FC = () => {
       <div className="ml-4 mt-6 text-sm font-medium text-black ">
         <span>Assigned Tasks</span>
       </div>
-      <IonCard className="border border-gray-100 rounded p-4 mb-2 bg-gray-100 assign-task">
+      <IonCard className=" rounded-lg p-4 mb-2 bg-neutral-100 assign-task">
         <IonCardHeader>
           <IonCardSubtitle class="text-black text-[18px] text-left font-medium">Payment Collection</IonCardSubtitle>
         </IonCardHeader>

@@ -5,6 +5,7 @@ import {
   IonItem,
   IonInput,
   IonTextarea,
+  IonContent,
 } from "@ionic/react";
 import {
   Button,
@@ -15,9 +16,9 @@ import {
 
 const NotificationTriggerDetails: React.FC = () => {
   return (
-    <div style={{ height: "100vh", overflowY: "auto" }}>
+    <div>
       <div className="font-poppins text-base font-normal leading-5 mb-2">
-        <div >Choose Notification</div>
+        <div>Choose Notification</div>
       </div>
       <div className="flex space-x-4">
         <IonItem lines="none" className="flex-1  custom-ion-item">
@@ -33,8 +34,8 @@ const NotificationTriggerDetails: React.FC = () => {
           <IonLabel>SMS</IonLabel>
         </IonItem>
       </div>
-      <IonItem lines="none" className="mb-4">
-        <div className="mt-8">
+      <IonItem lines="none" className="mb-4 ">
+        <div className="mt-8 w-full">
           <div className="mb-4 ">Enter details for email</div>
           <IonInput
             label="Task Name *"
@@ -42,7 +43,7 @@ const NotificationTriggerDetails: React.FC = () => {
             fill="outline"
             // placeholder="Enter here"
 
-            className="w-[140%]"
+            className="w-full"
             required
             mode="md"
             type="text"
@@ -62,14 +63,14 @@ const NotificationTriggerDetails: React.FC = () => {
       </div>
 
       <IonItem lines="none" className="mb-4">
-        <div className="mt-5">
+        <div className="mt-5 w-full">
           <IonInput
             label="Task Name *"
             labelPlacement="floating"
             fill="outline"
             // placeholder="Enter here"
 
-            className="w-[143%]"
+            className="w-full"
             required
             mode="md"
             type="text"
@@ -85,7 +86,7 @@ const NotificationTriggerDetails: React.FC = () => {
             className="w-full"
             type="submit"
           >
-           Create Task
+            Create Task
           </Button>
         </div>
       </div>

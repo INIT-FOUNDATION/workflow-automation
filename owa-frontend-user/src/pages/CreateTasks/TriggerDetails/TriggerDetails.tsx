@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./TriggerDetails.css";
-import { IonPage } from "@ionic/react";
+import { IonContent, IonPage } from "@ionic/react";
 import { ArrowBack } from "@mui/icons-material";
 import { IconButton, Tabs, Tab, Box } from "@mui/material";
 import { useHistory } from "react-router";
@@ -21,8 +21,9 @@ const TriggerDetails: React.FC = () => {
   };
 
   return (
-    <div>
+   
       <IonPage>
+        <IonContent>
         <div className="flex flex-col p-2 mt-20">
           <div className="cursor-pointer rounded-md flex items-center pt-8">
             <IconButton onClick={handleBackClick}>
@@ -48,8 +49,9 @@ const TriggerDetails: React.FC = () => {
             {selectedTab === 1 && <ApiTriggerDetails />}
           </Box>
         </div>
+        </IonContent>
       </IonPage>
-    </div>
+   
   );
 };
 
