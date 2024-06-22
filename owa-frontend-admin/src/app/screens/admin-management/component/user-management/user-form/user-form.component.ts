@@ -74,6 +74,8 @@ export class UserFormComponent {
     if (this.formType == 'edit') {
       this.user_id = this.activatedRoute.snapshot.params.userId;
       this.getSingleUserDetails();
+      this.userForm.get('mobile_number').disable();
+      this.userForm.get('role_id').disable();
     }
   }
 
@@ -151,10 +153,10 @@ export class UserFormComponent {
     }
     if (this.formType != 'edit') {
       this.createUser();
-      this.utilsService.showSuccessMessage('User created successfully');
+      // this.utilsService.showSuccessMessage('User created successfully');
     } else {
       this.updateUser();
-      this.utilsService.showSuccessMessage('User updated successfully');
+      // this.utilsService.showSuccessMessage('User updated successfully');
     }
   }
 
@@ -184,6 +186,7 @@ export class UserFormComponent {
     let formData = this.userForm.getRawValue();
     formData.dob = moment(formData.dob).format('YYYY-MM-DD');
     await this.adminManagementService.addUser(formData).subscribe((res) => {
+      this.utilsService.showSuccessMessage('User updated successfully');
       this.router.navigate(['/admin-management']);
     });
   }
@@ -194,6 +197,7 @@ export class UserFormComponent {
     const response = await this.adminManagementService
       .updateUser(this.user_id, formData)
       .subscribe((res) => {
+        this.utilsService.showSuccessMessage('User updated successfully');
         this.router.navigate(['/admin-management']);
       });
   }

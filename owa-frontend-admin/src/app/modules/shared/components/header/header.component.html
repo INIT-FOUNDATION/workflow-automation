@@ -1,20 +1,32 @@
 <div class="flex items-center justify-between px-2 md:px-10 py-3 shadow">
   <img src="assets/images/header/headerLogo.svg" class="w-16" />
-  <div (click)="showProfileCard = !showProfileCard">
+  <div (click)="showProfileCard = !showProfileCard" class="flex items-center">
     <span>{{ userData.display_name }}</span>
-    <i class="fa-solid fa-angle-down arrow-down ms-2"></i>
+
     <div
-        class="absolute shadow-sm show-profile bg-white border border-2 d-flex flex-column rounded -ms-12" *ngIf="showProfileCard"
-      >
-        <span class="custom-arrow absolute"></span>
-        <!-- <div class="px-3 py-2 border-bottom flex items-center">
+      class="px-3 py-2 flex items-center cursor-pointer"
+      (click)="logoutUser()"
+    >
+      <i class="fa-solid fa-right-from-bracket me-2 text-red-600"></i>
+      <!-- <span class="me-4">Logout</span> -->
+    </div>
+    <!-- <i class="fa-solid fa-angle-down arrow-down ms-2"></i>
+    <div
+      class="absolute shadow-sm show-profile bg-white border border-2 d-flex flex-column rounded -ms-12"
+      *ngIf="showProfileCard"
+    >
+      <span class="custom-arrow absolute"></span>
+      <div class="px-3 py-2 border-bottom flex items-center">
           <i class="fa-solid fa-user me-2 text-red-600"></i>
           <span class="me-4">Profile</span>
-        </div> -->
-        <div class="px-3 py-2 flex items-center cursor-pointer" (click)="logoutUser()">
-          <i class="fa-solid fa-right-from-bracket me-2 text-red-600"></i>
-          <span class="me-4">Logout</span>
         </div>
+      <div
+        class="px-3 py-2 flex items-center cursor-pointer"
+        (click)="logoutUser()"
+      >
+        <i class="fa-solid fa-right-from-bracket me-2 text-red-600"></i>
+        <span class="me-4">Logout</span>
       </div>
+    </div> -->
   </div>
 </div>
