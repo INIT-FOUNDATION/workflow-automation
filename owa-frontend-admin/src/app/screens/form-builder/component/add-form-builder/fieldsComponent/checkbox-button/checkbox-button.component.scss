@@ -1,0 +1,8 @@
+.custom-checkbox ::ng-deep .mat-checkbox-layout {
+  display: flex !important;
+  align-items: center !important;
+}
+
+.custom-checkbox ::ng-deep .mat-checkbox-inner-container{
+    margin: 0rem 0.5rem !important;
+}

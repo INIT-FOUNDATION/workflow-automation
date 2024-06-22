@@ -31,9 +31,19 @@
     </div>
 
     <div class="border-2 px-5 pt-5 rounded-2xl col-span-2">
-      <span class="font-medium">Choosen fields</span>
+      <div class="relative">
+        <input
+          type="text"
+          class="border-b outline-none w-full font-medium pb-2"
+          placeholder="Enter Form Name"
+        />
+        <i class="fa-solid fa-pencil absolute right-0 cursor-pointer"></i>
+      </div>
 
-      <form action="" class="custom-scroll-bar">
+      <form
+        action=""
+        class="custom-scroll-bar flex flex-col justify-between pt-2"
+      >
         <div
           class="grid grid-cols-1 md:grid-cols-2 gap-4"
           cdkDropList
@@ -81,13 +91,14 @@
               (editFormFieldIndex)="editFormField($event)"
             ></app-dropdown-field>
           </div>
+        </div>
           <button
             type="button"
-            class="bg-red-500 text-white rounded-lg py-2 fixed bottom-8"
+            class="bg-red-600 text-white rounded-lg w-full py-2 px-10"
+            (click)="submitForm()"
           >
-            Submit
+            Save Form
           </button>
-        </div>
       </form>
     </div>
   </div>

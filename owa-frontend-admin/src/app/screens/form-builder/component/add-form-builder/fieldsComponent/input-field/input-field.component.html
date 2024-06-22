@@ -9,15 +9,33 @@
     class="absolute -right-2 -top-5 cursor-pointer"
     (click)="deleteFormField(fieldData?.index)"
   >
-    <i class="fa-solid fa-circle-xmark text-xl text-red-500 bg-white"></i>
+    <i class="fa-solid fa-circle-xmark text-xl text-red-600 bg-white"></i>
   </div>
   <mat-label>{{ fieldData?.label }}</mat-label>
   <input
+    *ngIf="fieldData?.type == 'number'"
     matInput
     [type]="fieldData?.type"
     [placeholder]="fieldData?.placeholder ? fieldData?.placeholder : ''"
     class="border rounded-md w-full py-2 ps-2 !outline-none"
     [attr.maxlength]="fieldData?.maxlength"
     [attr.minlength]="fieldData?.minlength"
+    [required]="fieldData?.required"
+    appIntegerInput
+    appMobileNumber="true"
+  />
+  <input
+    *ngIf="fieldData?.type !== 'number'"
+    matInput
+    [type]="fieldData?.type"
+    [placeholder]="fieldData?.placeholder ? fieldData?.placeholder : ''"
+    class="border rounded-md w-full py-2 ps-2 !outline-none"
+    [attr.maxlength]="fieldData?.maxlength"
+    [attr.minlength]="fieldData?.minlength"
+    [required]="fieldData?.required"
+    [appInputChar]="fieldData?.type == 'email' ? 'email' : ''"
   />
 </mat-form-field>
+<!-- <span class="text-red-600 text-sm" *ngIf="fieldData?.required"
+  >Please enter {{ fieldData?.label }}</span
+> -->

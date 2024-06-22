@@ -73,4 +73,8 @@ export class AddFormBuilderComponent implements OnInit {
       this.chooseFromArray = res.data;
     });
   }
+
+  submitForm(){
+
+  }
 }

@@ -39,7 +39,7 @@
           ? generatedName
           : ''
       "
-      [checked]="objectKey && objectKey.includes(item?.field_property_name)"
+      [checked]="data.required == true"
       class="border-2 rounded-lg p-2 text-sm"
       [ngClass]="[
         item?.field_property_type == 'boolean' ? 'focus:outline-none' : ''
@@ -53,6 +53,11 @@
         )
       "
     />
+    <span
+      *ngIf="minLength && item?.field_property_name == 'minlength'"
+      class="text-red-600 text-xs"
+      >The minimum length should be shorter than the maximum length.</span
+    >
     <div
       class="w-full flex flex-col"
       *ngIf="
@@ -68,27 +73,41 @@
               ? 'checkbox'
               : item?.field_property_type
           "
-          class="border-2 rounded-lg p-2 text-sm w-full me-2"
+          class="border-2 rounded-lg p-2 text-sm w-full"
           [ngClass]="[
             item?.field_property_type == 'boolean' ? 'focus:outline-none' : ''
           ]"
+          [value]="data.options ? data.options[0].value : ''"
           (input)="getOptionValues($event.target.value)"
         />
         <button
+          *ngIf="createdOptions.length == 0"
           type="button"
-          class="bg-red-500 text-white px-4 py-2 rounded-lg"
+          class="bg-red-600 text-white px-4 py-2 ms-2 rounded-lg"
           (click)="addNewOptions(item)"
         >
           +
         </button>
       </div>
-      <div class="" *ngFor="let item of createdOptions; let i = index">
+      <div
+        class="flex items-center mt-2"
+        *ngFor="let item of createdOptions; let i = index"
+      >
         <input
           type="text"
           placeholder="Option {{ i + 1 }}"
-          class="border-2 rounded-lg p-2 mt-2 text-sm w-full"
+          class="border-2 rounded-lg p-2 text-sm w-full"
           (input)="getOptionValues($event.target.value)"
+          [value]="item?.value ? item?.value : ''"
         />
+        <button
+          *ngIf="createdOptions.length == i + 1"
+          type="button"
+          class="bg-red-600 text-white px-4 py-2 ms-2 rounded-lg"
+          (click)="addNewOptions(item)"
+        >
+          +
+        </button>
       </div>
     </div>
 
@@ -121,14 +140,15 @@
     <button
       (click)="closeModal()"
       type="button"
-      class="border mb-3 px-6 py-2 text-sm border-red-500 rounded text-red-500 rounded-lg me-4 outline-none"
+      class="border mb-3 px-6 py-2 text-sm border-red-600 rounded text-red-600 rounded-lg me-4 outline-none"
     >
       Cancel
     </button>
     <button
+      [disabled]="minLength"
       (click)="submitForm()"
       type="button"
-      class="bg-red-500 mb-3 px-6 py-2 text-sm rounded text-white rounded-lg"
+      class="bg-red-600 mb-3 px-6 py-2 text-sm rounded text-white rounded-lg"
     >
       Submit
     </button>

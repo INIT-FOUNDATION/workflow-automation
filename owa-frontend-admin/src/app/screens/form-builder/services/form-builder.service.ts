@@ -21,4 +21,8 @@ export class FormBuilderService {
       `${environment.forms_prefix_url}/fieldPropertiesDetails/${field_id}`
     );
   }
+
+  createForm(payload) {
+    return this.http.post(`${environment.forms_prefix_url}/create`, payload);
+  }
 }

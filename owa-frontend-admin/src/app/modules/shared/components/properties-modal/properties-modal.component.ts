@@ -16,6 +16,7 @@ export class PropertiesModalComponent implements OnInit {
   generatedName: string = '';
   objectKey: any;
   objectValues: any;
+  minLength: boolean = false;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -23,6 +24,12 @@ export class PropertiesModalComponent implements OnInit {
     private formBuilderService: FormBuilderService
   ) {
     this.objectKey = Object.keys(data);
+    if (data.options) {
+      this.createdOptions = data.options;
+      const x = data.options;
+      console.log(x);
+      console.log(this.createdOptions);
+    }
   }
 
   ngOnInit(): void {
@@ -44,6 +51,13 @@ export class PropertiesModalComponent implements OnInit {
       if (label == 'label') {
         this.convertToCamelCase(value);
         this.propertiesForm.name = value;
+      } else if (
+        label == 'minlength' &&
+        this.propertiesForm.minlength > this.propertiesForm.maxlength
+      ) {
+        this.minLength = true;
+      } else {
+        this.minLength = false;
       }
     }, 500);
   }
