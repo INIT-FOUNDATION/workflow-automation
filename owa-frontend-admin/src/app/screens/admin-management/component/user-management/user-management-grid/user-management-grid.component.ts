@@ -9,7 +9,7 @@ import Swal from 'sweetalert2';
 @Component({
   selector: 'app-user-management-grid',
   templateUrl: './user-management-grid.component.html',
-  styleUrls: ['./user-management-grid.component.scss']
+  styleUrls: ['./user-management-grid.component.scss'],
 })
 export class UserManagementGridComponent {
   @ViewChild('adminManagementDetails')
@@ -21,7 +21,7 @@ export class UserManagementGridComponent {
   constructor(
     private adminService: AdminManagementService,
     private router: Router,
-    private utilService: UtilityService,
+    private utilService: UtilityService
   ) {}
 
   ngOnInit(): void {
@@ -42,7 +42,7 @@ export class UserManagementGridComponent {
       page_size:
         this.adminManagementDetails && this.adminManagementDetails.rows
           ? this.adminManagementDetails.rows
-          : this.rowsPerPage,        
+          : this.rowsPerPage,
       current_page: this.currentPage,
     };
     this.getUsersDataArray(payload);
@@ -65,26 +65,25 @@ export class UserManagementGridComponent {
       icon: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Yes, delete it!',
-      cancelButtonText: 'No, keep it'
+      cancelButtonText: 'No, keep it',
     }).then((result) => {
       if (result.isConfirmed) {
         this.adminService.deleteUser(userId).subscribe(
-          response => {   
-            console.log(response);       
+          (response) => {
             Swal.fire('Deleted!', 'User has been deleted.', 'success');
             // this.snackBar.open('User deleted successfully', 'Close', {
             //   duration: 3000,
             // });
             this.getAllUsersData();
           },
-          error => {
+          (error) => {
             Swal.fire('Failed!', 'Failed to delete user.', 'error');
             // this.snackBar.open('Failed to delete user', 'Close', {
             //   duration: 3000,
             // });
           }
         );
-      } 
+      }
       // else if (result.dismiss === Swal.DismissReason.cancel) {
       //   Swal.fire('Cancelled');
       // }
@@ -92,8 +91,9 @@ export class UserManagementGridComponent {
   }
 
   onResetPassword(userId: any) {
-    this.adminService.resetPasswordByAdmin(userId).subscribe((response) => {
-      this.utilService.showSuccessMessage('Password reset successfully');
+    this.adminService.resetPasswordByAdmin(userId).subscribe(
+      (response) => {
+        this.utilService.showSuccessMessage('Password reset successfully');
       },
       (error) => {
         console.error('Error resetting password', error);
