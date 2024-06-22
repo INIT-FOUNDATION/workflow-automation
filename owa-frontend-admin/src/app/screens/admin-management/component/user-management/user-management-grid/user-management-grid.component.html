@@ -18,15 +18,15 @@
 
             <ng-template #userManagementEditButton let-gridData="griddata">
               <div class="flex space-x-4 text-sm">
-                <button class="flex items-center hover:text-red-700 text-sm" (click)="onResetPassword(gridData.user_id)">
+                <button class="flex items-center hover:text-red-600 text-sm" (click)="onResetPassword(gridData.user_id)">
                     <img src="assets/images/adminManagement/key_vertical.svg" alt="Key Icon" class="me-2" />
                   Reset Password
                 </button>
-                <button class="flex items-center hover:text-red-700 text-sm" (click)="deleteUserConfirmation(gridData.user_id)">
+                <button class="flex items-center hover:text-red-600 text-sm" (click)="deleteUserConfirmation(gridData.user_id)">
                   <img src="assets/images/adminManagement/delete.svg" alt="Delete Icon" class="me-2" />
                   Delete
                 </button>
-                <button class="flex items-center hover:text-red-700 text-sm" (click)="editManagementDetails(gridData)">
+                <button class="flex items-center hover:text-red-600 text-sm" (click)="editManagementDetails(gridData)">
                   <i class="fa-solid fa-pencil text-red-600 me-2 text-base"></i>
                   Edit
                 </button>
