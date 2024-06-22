@@ -374,11 +374,11 @@ export const usersController = {
             return res.status(STATUS.INTERNAL_SERVER_ERROR).send(USERS.USER00000);
         }
     },
-    deleteUser: async (req: Request, res: Response): Promise<Response> => {
+    updateStatus: async (req: Request, res: Response): Promise<Response> => {
         /*  
                 #swagger.tags = ['Users']
-                #swagger.summary = 'Delete User'
-                #swagger.description = 'Delete User by User Id'
+                #swagger.summary = 'Update User Status'
+                #swagger.description = 'Update User Status by User Id and Status'
                 #swagger.parameters['Authorization'] = {
                     in: 'header',
                     required: true,
@@ -395,22 +395,25 @@ export const usersController = {
         */
         try {
             let userId = req.body.user_id;
-            const deletedBy = req.plainToken.user_id;
+            const status = req.body.status;
+            const updatedBy = req.plainToken.user_id;
 
+            if (!status || ![0,1,2,3].includes(status)) return res.status(STATUS.BAD_REQUEST).send(USERS.USER000014);
             if (!userId) return res.status(STATUS.BAD_REQUEST).send(USERS.USER00006);
+            
             userId = parseInt(decryptPayload(userId));
 
             const user = await usersService.getUserById(userId);
             if (!user) return res.status(STATUS.BAD_REQUEST).send(USERS.USER000011);
 
-            await usersService.deleteUser(user, deletedBy);
+            await usersService.updateUserStatus(user, status, updatedBy);
 
             return res.status(STATUS.OK).send({
                 data: null,
-                message: "User Deleted Successfully",
+                message: "Updated User Status Successfully",
             });
         } catch (error) {
-            logger.error(`usersController :: deleteUser :: ${error.message} :: ${error}`);
+            logger.error(`usersController :: updateStatus :: ${error.message} :: ${error}`);
             return res.status(STATUS.INTERNAL_SERVER_ERROR).send(USERS.USER00000);
         }
     }
