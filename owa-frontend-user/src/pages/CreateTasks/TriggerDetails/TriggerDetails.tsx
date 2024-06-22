@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./TriggerDetails.css";
-import { IonPage, useIonRouter } from "@ionic/react";
+import { IonPage } from "@ionic/react";
 import { ArrowBack } from "@mui/icons-material";
 import { IconButton, Tabs, Tab, Box } from "@mui/material";
 import { useHistory } from "react-router";
@@ -9,14 +9,11 @@ import NotificationTriggerDetails from "./NotificationTriggerDetails/Notificatio
 import ApiTriggerDetails from "./APITriggerDetails/APITriggerDetails";
 
 const TriggerDetails: React.FC = () => {
-  const router = useIonRouter();
+  const history = useHistory();
   const [selectedTab, setSelectedTab] = useState(0);
 
-  const handleBackClick = (tab: string) => {
-    if (selectedTab !== tab) {
-      setSelectedTab(tab);
-      router.push(tab);
-    }
+  const handleBackClick = () => {
+    history.push("/create-tasks");
   };
 
   const handleTabChange = (event: React.ChangeEvent<{}>, newValue: number) => {
