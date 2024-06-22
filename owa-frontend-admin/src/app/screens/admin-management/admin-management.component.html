@@ -1,6 +1,5 @@
-
 <app-title
-  titleName="All Users | {{users.length}}"
+  [titleName]="titleName"
   additionalClass="text-lg font-bold"
   [canGoBack]="false"
 ></app-title>
@@ -10,7 +9,7 @@
     <input
       type="text"
       class="outline-none border-none w-full pr-3 text-sm"
-      placeholder="Search for an existing workflow"
+      [placeholder]="searchText"
     />
     <img
       src="assets/images/workflowCards/searchIcon.svg"
@@ -22,14 +21,14 @@
     type="button"
     class="bg-red-600 text-white rounded-lg px-4 py-2 text-sm"
   >
-    <a href="form-builder/add-form"
-      ><i class="fa-solid fa-plus me-2"></i>Add New User</a
+    <a [routerLink]="buttonRoute"
+      ><i class="fa-solid fa-plus me-2"></i>{{ buttonText }}</a
     >
   </button>
 </div>
 
 <div class="border rounded-lg border-red-500 flex p-4">
-  <mat-tab-group class="mt-4 flex-1">
+  <mat-tab-group class="mt-4 flex-1" #tabGroup>
     <mat-tab label="User Management">
       <div class="overflow-x-auto mt-4">
         <app-user-management-grid></app-user-management-grid>

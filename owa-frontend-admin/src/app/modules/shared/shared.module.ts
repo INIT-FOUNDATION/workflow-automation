@@ -19,6 +19,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatTabsModule } from '@angular/material/tabs';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 /*------------------- MATERIAL COMPONENTS ------------------------*/
 
@@ -97,6 +99,8 @@ const export_material_modules = [
   DragDropModule,
   TableModule,
   DataViewModule,
+  MatDatepickerModule,
+  MatNativeDateModule,
 ];
 
 @NgModule({
