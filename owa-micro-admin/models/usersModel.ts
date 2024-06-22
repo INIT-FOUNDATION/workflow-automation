@@ -1,7 +1,8 @@
 import Joi from "joi";
 import { IUser } from "../types/custom";
 import { USERS } from "../constants/ERRORCODE";
-import { GENDER } from "../constants/CONST";
+import { GENDER, USERS_STATUS } from "../constants/CONST";
+
 class User implements IUser {
   user_id: number;
   user_name: string;
@@ -27,7 +28,7 @@ class User implements IUser {
 
   constructor(user: IUser) {
     this.user_id = user.user_id;
-    this.user_name = user.user_name;
+    this.user_name = user.mobile_number ? user.mobile_number.toString() : "";
     this.display_name = `${user.first_name ? user.first_name : ""} ${user.last_name ? user.last_name : ""}`;
     this.first_name = user.first_name;
     this.last_name = user.last_name;
@@ -104,7 +105,8 @@ const validateUpdateUser = (user: IUser): Joi.ValidationResult => {
     gender: Joi.number().valid(...Object.values(GENDER)).required(),
     role_id: Joi.number().required(),
     department_id: Joi.number().required(),
-    reporting_to_users: Joi.array().items(Joi.number()),
+    reporting_to_users: Joi.array().items(Joi.number()).optional(),
+    status: Joi.number().valid(...Object.values(USERS_STATUS)).required(),
   });
   return userSchema.validate(user);
 };

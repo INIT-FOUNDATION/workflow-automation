@@ -5,6 +5,7 @@ import { Request } from "../types/express";
 import { validateCreateRole, validateUpdateRole, Role, validateUpdateRoleStatus } from "../models/rolesModel";
 import { IRole } from "../types/custom";
 import { ROLES } from "../constants/ERRORCODE";
+import { GRID_DEFAULT_OPTIONS } from "../constants/CONST";
 
 export const rolesController = {
     listRoles: async (req: Request, res: Response): Promise<Response> => {
@@ -19,12 +20,25 @@ export const rolesController = {
                     type: "string",
                     description: "Bearer token for authentication"
                 }
+                #swagger.parameters['body'] = {
+                    in: 'body',
+                    required: true,
+                    schema: {
+                        is_active: true,
+                        page_size: 50,
+                        current_page: 1
+                    }
+                }    
             */
-            const isActive = req.query.isActive === "1";
-            const roles = await rolesService.listRoles(Boolean(isActive));
-            
+            const isActive = req.body.is_active || false;
+            const pageSize = req.body.page_size || 0;
+            const currentPage = req.body.current_page ? (req.body.current_page - 1) * pageSize : 0 ;
+
+            const rolesList = await rolesService.listRoles(isActive, pageSize, currentPage);
+            const rolesCount = await rolesService.listRolesCount(isActive);
+
             return res.status(STATUS.OK).send({
-                data: roles,
+                data: { rolesList, rolesCount },
                 message: "Roles Fetched Successfully",
             });
         } catch (error) {
@@ -117,6 +131,7 @@ export const rolesController = {
                         role_id: 2,
                         role_name: 'Department Head',
                         role_description: 'Head of the Department',
+                        status: 1,
                         level: 'Level of Role',
                         permissions: [
                             {

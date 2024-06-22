@@ -1,7 +1,8 @@
 export const ROLES = {
     listRoles: 'SELECT role_id, role_name, role_description, level, status from m_roles',
+    listRolesCount: 'SELECT count(*) AS count from m_roles',
     addRole: 'INSERT INTO m_roles (role_name, role_description, level, created_by, updated_by) VALUES ($1, $2, $3, $4, $5) RETURNING role_id',
-    updateRole: 'UPDATE m_roles SET role_name = $2, role_description = $3, level = $4, updated_by = $5, date_updated = NOW() WHERE role_id = $1',
+    updateRole: 'UPDATE m_roles SET role_name = $2, role_description = $3, level = $4, updated_by = $5, status = $6, date_updated = NOW() WHERE role_id = $1',
     getRole: 'SELECT role_name, role_description, level, status FROM m_roles WHERE role_id = $1 AND status IN (0, 1)',
     updateRoleStatus: 'UPDATE m_roles SET status = $2, updated_by = $3, date_updated = NOW() WHERE role_id = $1',
     getAccessListByRoleId: `SELECT mm.menu_id, 
@@ -48,9 +49,9 @@ export const USERS = {
     createUser: `INSERT INTO m_users(
         user_name, first_name, last_name, display_name, dob, gender, mobile_number, password, role_id, email_id, created_by, updated_by)
         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) RETURNING user_id`,
-    updateUser: `UPDATE m_users SET first_name = $2, last_name = $3, dob = $4, gender = $5, email_id = $6, updated_by = $7, role_id = $8, date_updated = NOW() WHERE user_id = $1`,
+    updateUser: `UPDATE m_users SET first_name = $2, last_name = $3, dob = $4, gender = $5, email_id = $6, updated_by = $7, role_id = $8, status = $9, date_updated = NOW() WHERE user_id = $1`,
     getUser: `SELECT * from vw_m_users WHERE user_id = $1 AND status NOT IN (0,2)`,
-    updateProfilePic: `UPDATE m_users SET profile_pic_url = $2, updated_by = $1 WHERE user_id = $1`,
+    updateProfilePic: `UPDATE m_users SET profile_pic_url = $2, updated_by = $1, date_updated = NOW() WHERE user_id = $1`,
     getUsersByRoleId: `select user_id, user_name, initcap(display_name) as display_name, mobile_number, initcap(role_name) as role_name  from vw_m_users where role_id = $1`,
     resetPasswordForUserId: `UPDATE m_users SET password = $2, password_last_updated = NOW(), date_updated = NOW() WHERE user_id = $1`,
     usersList: `select * from vw_m_users WHERE role_id <> 1`,
@@ -59,7 +60,7 @@ export const USERS = {
     getReportingUsersList: `SELECT VU.user_id, VU.display_name FROM vw_m_users VU
     INNER JOIN m_roles R ON VU.role_id = R.role_id and R.status=1 and VU.status IN (1, 4, 5)
     WHERE R.level`,
-    deleteUser: `UPDATE m_users SET status = 2, date_updated = NOW() WHERE user_id = $1`,
+    deleteUser: `UPDATE m_users SET status = 2, updated_by = $2, date_updated = NOW() WHERE user_id = $1`,
 }
 
 export const USER_DEPARTMENT_MAPPING = {
@@ -68,7 +69,7 @@ export const USER_DEPARTMENT_MAPPING = {
 }
 
 export const USER_REPORTING_MAPPING = {
-    updateInActiveReportingMapping: `UPDATE m_user_reporting_assoc SET status = 0, date_updated = NOW() WHERE user_id = $1`,
+    updateInActiveReportingMapping: `UPDATE m_user_reporting_assoc SET status = 0, date_updated = NOW() WHERE user_id = $1 RETURNING reporting_to`,
     createUserReportingMapping: `INSERT INTO m_user_reporting_assoc (user_id, reporting_to) VALUES ($1, $2)`
 };
 
