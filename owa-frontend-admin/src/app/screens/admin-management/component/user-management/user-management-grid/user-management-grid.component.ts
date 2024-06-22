@@ -15,7 +15,7 @@ export class UserManagementGridComponent {
   @ViewChild('adminManagementDetails')
   adminManagementDetails: CommonDataTableComponent;
   cols: Colmodel[] = [];
-  rowsPerPage = 4;
+  rowsPerPage = 50;
   currentPage = 1;
 
   constructor(
@@ -42,7 +42,7 @@ export class UserManagementGridComponent {
       page_size:
         this.adminManagementDetails && this.adminManagementDetails.rows
           ? this.adminManagementDetails.rows
-          : 4,        
+          : this.rowsPerPage,        
       current_page: this.currentPage,
     };
     this.getUsersDataArray(payload);

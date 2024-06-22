@@ -24,8 +24,8 @@ export class RoleFormComponent {
   roleForm: FormGroup;
   role_id;
   statusList = [
-    { label: 'Active', value: '1' },
-    { label: 'InActive', value: '0' },
+    { label: 'Active', value: 1 },
+    { label: 'InActive', value: 0 },
   ];
 
   levelList = [];
@@ -102,7 +102,7 @@ export class RoleFormComponent {
     this.roleForm = new FormGroup({
       role_name: new FormControl(null, [Validators.required]),
       level: new FormControl(null, [Validators.required]),
-      status: new FormControl('1', [Validators.required]),
+      status: new FormControl(null, [Validators.required]),
       role_description: new FormControl(null, [Validators.required]),
       permissions: new FormArray([]),
     });

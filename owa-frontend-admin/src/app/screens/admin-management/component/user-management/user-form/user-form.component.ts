@@ -19,6 +19,10 @@ export class UserFormComponent {
   reportingUsers: any[] = [];
   user_id: any;
   editUserInfo: any = [];
+  statusList = [
+    { label: 'Active', value: 1 },
+    { label: 'InActive', value: 0 },
+  ];
 
   constructor(
     public adminManagementService: AdminManagementService,
@@ -37,6 +41,7 @@ export class UserFormComponent {
     role_id: new FormControl('', [Validators.required]),
     department_id: new FormControl('', [Validators.required]),
     reporting_to_users: new FormControl([]), 
+    status: new FormControl(null, [Validators.required]),
     // password: new FormControl(''),
     // confirmPassword: new FormControl('')
   });
@@ -136,6 +141,7 @@ async getSingleUserDetails() {
       role_id: res.data?.role_id,
       department_id: res.data?.department_id,
       reporting_to_users: res.data?.reporting_to_users,
+      status: res.data?.status,
     });
 
     this.getReportingList(res.data?.role_id)
