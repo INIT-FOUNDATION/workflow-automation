@@ -5,15 +5,23 @@ import {
   IonIcon,
   IonSelect,
   IonSelectOption,
+  useIonRouter,
 } from "@ionic/react";
 import { arrowBack } from "ionicons/icons";
 import React, { useState } from "react";
 import "./WorkFlowStarted.css";
-import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from "@mui/material";
+import {
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
+} from "@mui/material";
 
 const WorkFlowStarted: React.FC = () => {
   const [deadline, setDeadline] = useState("");
-  const[assignee,setAssignee] =useState("");
+  const [assignee, setAssignee] = useState("");
+  const router = useIonRouter();
 
   const handleDeadlineChange = (event: SelectChangeEvent) => {
     setDeadline(event.target.value as string);
@@ -23,10 +31,13 @@ const WorkFlowStarted: React.FC = () => {
     setAssignee(event.target.value as string);
   };
 
+  const handleBack = () => {
+    router.push("/workflow-selection");
+  };
   return (
     <div>
       <div className="cursor-pointer rounded-md flex items-center pt-32">
-        <IonIcon icon={arrowBack} className="pl-2" />
+        <IonIcon icon={arrowBack} onClick={handleBack} className="pl-2" />
         <span className="search-text text-black-600 pl-2">
           B2B lead conversion
         </span>
@@ -50,8 +61,7 @@ const WorkFlowStarted: React.FC = () => {
             <span className="text-black deadline-label">Deadline</span>
           </div>
           <form className="mb-4 pt-2">
-            <FormControl fullWidth 
-           >
+            <FormControl fullWidth>
               <InputLabel>Select Deadline</InputLabel>
               <Select
                 label="Select Deadline"
@@ -64,16 +74,15 @@ const WorkFlowStarted: React.FC = () => {
                 <MenuItem value="2024-06-23">2024-06-23</MenuItem>
               </Select>
             </FormControl>
-          <div className="flex items-center mt-2 pb-2">
-            <img
-              src="Assets/images/AssignTasks/profile_icon.svg"
-              alt=""
-              className="calender-img w-4 h-4 mr-2"
-            />
-            <span className="text-black deadline-label">Assignee</span>
-          </div>
-            <FormControl fullWidth 
-           >
+            <div className="flex items-center mt-2 pb-2">
+              <img
+                src="Assets/images/AssignTasks/profile_icon.svg"
+                alt=""
+                className="calender-img w-4 h-4 mr-2"
+              />
+              <span className="text-black deadline-label">Assignee</span>
+            </div>
+            <FormControl fullWidth>
               <InputLabel>Select Assignee</InputLabel>
               <Select
                 label="Select Assignee"
