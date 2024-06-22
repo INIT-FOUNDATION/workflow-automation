@@ -389,7 +389,8 @@ export const usersController = {
                     in: 'body',
                     required: true,
                     schema: {
-                        user_id: 'encryptedHash'
+                        user_id: 'encryptedHash',
+                        status: 1
                     }
                 }
         */
@@ -400,7 +401,7 @@ export const usersController = {
 
             if (!status || ![0,1,2,3].includes(status)) return res.status(STATUS.BAD_REQUEST).send(USERS.USER000014);
             if (!userId) return res.status(STATUS.BAD_REQUEST).send(USERS.USER00006);
-            
+
             userId = parseInt(decryptPayload(userId));
 
             const user = await usersService.getUserById(userId);
