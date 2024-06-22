@@ -114,7 +114,7 @@ export const rolesService = {
     try {
       const _query = {
         text: ROLES.updateRole,
-        values: [role.role_id, role.role_name, role.role_description, role.level, role.updated_by]
+        values: [role.role_id, role.role_name, role.role_description, role.level, role.updated_by, role.status]
       };
       logger.debug(`rolesService :: updateRole :: query :: ${JSON.stringify(_query)}`)
 
