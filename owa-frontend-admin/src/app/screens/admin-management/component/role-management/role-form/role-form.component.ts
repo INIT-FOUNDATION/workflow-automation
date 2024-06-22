@@ -62,9 +62,15 @@ export class RoleFormComponent {
       this.roleForm.patchValue({
         role_name: this.roleDetails.data.role_name,
         level: this.roleDetails.data.level,
-        status: '' + this.roleDetails.data.status,
         role_description: this.roleDetails.data.role_description,
-      });
+        status: this.roleDetails.data.status
+        ? [1, 3, 4, 5].includes(this.roleDetails.data.status)
+          ? 1
+          : 0
+        : 0,
+    });
+       
+      
       if (this.roleDetails.status == '0') {
         this.roleForm.disable();
         this.roleForm.get('status').enable();
