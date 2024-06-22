@@ -8,6 +8,7 @@ import { Router, NavigationExtras } from '@angular/router';
 import { ErrorCodes } from './error-codes.module';
 import { MatDialog } from '@angular/material/dialog';
 import { UtilityService } from '../modules/shared/services/utility.service';
+import { AuthService } from '../screens/auth/services/auth.service';
 
 
 /**
@@ -21,7 +22,8 @@ export class ErrorHandlerInterceptor implements HttpInterceptor {
     private router: Router,
     private appPreferences: AppPreferencesService,
     private dialog:  MatDialog,
-    private utilityService: UtilityService
+    private utilityService: UtilityService,
+    private authService: AuthService
     ) {
   }
 
@@ -48,9 +50,7 @@ export class ErrorHandlerInterceptor implements HttpInterceptor {
     if (response instanceof HttpErrorResponse) {
       switch (response.status) {
         case 401:      // login
-          if (this.appPreferences.getValue('userToken')) {
-            this.router.navigateByUrl('/unauthorized');
-          }
+          this.authService.logout();
           break;
         case 403:     // forbidden
           this.router.navigateByUrl('/forbidden');

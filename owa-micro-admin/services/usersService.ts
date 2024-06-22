@@ -174,6 +174,9 @@ export const usersService = {
         communicationType: "CREATE_USER"
       });
 
+      await redis.deleteRedis(`USERS|USER:1|LIMIT:50`);
+      await redis.deleteRedis(`USERS_COUNT|USER:1`);
+
       if (user.reporting_to_users && user.reporting_to_users.length > 0 ) await usersService.clearGridCache(user.reporting_to_users);
     } catch (error) {
       logger.error(`usersService :: createUser :: ${error.message} :: ${error}`)
@@ -186,7 +189,7 @@ export const usersService = {
         text: USERS.updateUser,
         values: [user.user_id, user.first_name, user.last_name,
         user.dob, user.gender,
-        user.email_id, user.updated_by, user.role_id, user.status
+        user.email_id, user.updated_by, user.role_id, user.status, `${user.first_name} ${user.last_name}`
         ]
       };
       logger.debug(`usersService :: updateUser :: query :: ${JSON.stringify(_query)}`)
@@ -200,8 +203,10 @@ export const usersService = {
         await usersService.updateUserReportingMapping(user.user_id, user.reporting_to_users);
       }
 
-      redis.deleteRedis(`USER:${user.user_id}`);
-      redis.deleteRedis(`User|Username:${user.user_name}`);
+      await redis.deleteRedis(`USERS|USER:1|LIMIT:50`);
+      await redis.deleteRedis(`USERS_COUNT|USER:1`);
+      await redis.deleteRedis(`USER:${user.user_id}`);
+      await redis.deleteRedis(`User|Username:${user.user_name}`);
     } catch (error) {
       logger.error(`usersService :: updateUser :: ${error.message} :: ${error}`)
       throw new Error(error.message);
@@ -492,8 +497,6 @@ export const usersService = {
 
         await redis.deleteRedis(`USERS|USER:${reportingToUser}|LIMIT:50`);
         await redis.deleteRedis(`USERS_COUNT|USER:${reportingToUser}`);
-        await redis.deleteRedis(`USERS|USER:1|LIMIT:50`);
-        await redis.deleteRedis(`USERS_COUNT|USER:1`);
       }
     } catch (error) {
       logger.error(`usersService :: createUserReportingMapping :: ${error.message} :: ${error}`)
@@ -557,8 +560,10 @@ export const usersService = {
       const result = await pg.executeQueryPromise(_query);
       logger.debug(`usersService :: deleteUser :: db result :: ${JSON.stringify(result)}`)
 
-      redis.deleteRedis(`USER:${user.user_id}`);
-      redis.deleteRedis(`User|Username:${user.user_name}`);
+      await redis.deleteRedis(`USER:${user.user_id}`);
+      await redis.deleteRedis(`User|Username:${user.user_name}`);
+      await redis.deleteRedis(`USERS|USER:1|LIMIT:50`);
+      await redis.deleteRedis(`USERS_COUNT|USER:1`);
 
       if (user.reporting_to_users && user.reporting_to_users.length > 0 ) await usersService.clearGridCache(user.reporting_to_users);
     } catch (error) {
@@ -571,8 +576,6 @@ export const usersService = {
       for (const reportingUser of reportingToUsers) {
         await redis.deleteRedis(`USERS|USER:${reportingUser}|LIMIT:50`);
         await redis.deleteRedis(`USERS_COUNT|USER:${reportingUser}`);
-        await redis.deleteRedis(`USERS|USER:1|LIMIT:50`);
-        await redis.deleteRedis(`USERS_COUNT|USER:1`);
       }
     } catch (error) {
       logger.error(`usersService :: clearGridCache :: ${error.message} :: ${error}`)
