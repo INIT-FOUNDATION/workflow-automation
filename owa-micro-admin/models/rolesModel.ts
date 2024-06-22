@@ -70,6 +70,7 @@ const validateUpdateRole = (role: IRole): Joi.ValidationResult => {
         permission_id: Joi.number().required()
       })
     ),
+    status: Joi.number().valid(...Object.values(ROLES_STATUS)),
   });
   return roleSchema.validate(role);
 };

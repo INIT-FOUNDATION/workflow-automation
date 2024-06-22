@@ -2,7 +2,7 @@ export const ROLES = {
     listRoles: 'SELECT role_id, role_name, role_description, level, status from m_roles',
     listRolesCount: 'SELECT count(*) AS count from m_roles',
     addRole: 'INSERT INTO m_roles (role_name, role_description, level, created_by, updated_by) VALUES ($1, $2, $3, $4, $5) RETURNING role_id',
-    updateRole: 'UPDATE m_roles SET role_name = $2, role_description = $3, level = $4, updated_by = $5, date_updated = NOW() WHERE role_id = $1',
+    updateRole: 'UPDATE m_roles SET role_name = $2, role_description = $3, level = $4, updated_by = $5, status = $6, date_updated = NOW() WHERE role_id = $1',
     getRole: 'SELECT role_name, role_description, level, status FROM m_roles WHERE role_id = $1 AND status IN (0, 1)',
     updateRoleStatus: 'UPDATE m_roles SET status = $2, updated_by = $3, date_updated = NOW() WHERE role_id = $1',
     getAccessListByRoleId: `SELECT mm.menu_id, 

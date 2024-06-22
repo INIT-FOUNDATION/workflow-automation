@@ -131,6 +131,7 @@ export const rolesController = {
                         role_id: 2,
                         role_name: 'Department Head',
                         role_description: 'Head of the Department',
+                        status: 1,
                         level: 'Level of Role',
                         permissions: [
                             {
