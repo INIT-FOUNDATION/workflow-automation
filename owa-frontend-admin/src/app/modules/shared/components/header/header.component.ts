@@ -8,13 +8,17 @@ import { AuthService } from 'src/app/screens/auth/services/auth.service';
 })
 export class HeaderComponent {
   showProfileCard: boolean = false;
-  userName: string = 'CK';
+  userData: any = null;
 
   constructor(
     public authService: AuthService,
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.userData = sessionStorage.getItem('userDetails');
+    this.userData = JSON.parse(this.userData)
+    console.log(this.userData)
+  }
 
   logoutUser(): void {
     
