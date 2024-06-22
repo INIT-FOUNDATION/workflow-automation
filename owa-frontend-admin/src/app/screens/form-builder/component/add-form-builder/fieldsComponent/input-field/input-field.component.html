@@ -1,41 +1,49 @@
 <mat-form-field class="w-full relative" appearance="outline">
   <div
     class="absolute right-4 -top-5 cursor-pointer"
-    (click)="editFormField(fieldData?.index)"
+    (click)="editFormField(fieldData?.form_field_assoc_id)"
   >
     <i class="fa-solid fa-pen-to-square text-lg bg-white"></i>
   </div>
   <div
     class="absolute -right-2 -top-5 cursor-pointer"
-    (click)="deleteFormField(fieldData?.index)"
+    (click)="deleteFormField(fieldData?.form_field_assoc_id)"
   >
     <i class="fa-solid fa-circle-xmark text-xl text-red-600 bg-white"></i>
   </div>
-  <mat-label>{{ fieldData?.label }}</mat-label>
+  <mat-label>{{ fieldData?.options[0]?.label }}</mat-label>
   <input
-    *ngIf="fieldData?.type == 'number'"
+    *ngIf="fieldData?.options[0]?.type == 'number'"
     matInput
-    [type]="fieldData?.type"
-    [placeholder]="fieldData?.placeholder ? fieldData?.placeholder : ''"
+    [type]="fieldData?.options[0]?.type"
+    [placeholder]="
+      fieldData?.options[0]?.placeholder
+        ? fieldData?.options[0]?.placeholder
+        : ''
+    "
     class="border rounded-md w-full py-2 ps-2 !outline-none"
-    [attr.maxlength]="fieldData?.maxlength"
-    [attr.minlength]="fieldData?.minlength"
-    [required]="fieldData?.required"
+    [attr.maxlength]="fieldData?.options[0]?.maxlength"
+    [attr.minlength]="fieldData?.options[0]?.minlength"
+    [required]="fieldData?.options[0]?.required"
     appIntegerInput
     appMobileNumber="true"
   />
   <input
-    *ngIf="fieldData?.type !== 'number'"
+    *ngIf="fieldData?.options[0]?.type !== 'number'"
     matInput
-    [type]="fieldData?.type"
-    [placeholder]="fieldData?.placeholder ? fieldData?.placeholder : ''"
+    [type]="fieldData?.options[0]?.type"
+    [placeholder]="
+      fieldData?.options[0]?.placeholder
+        ? fieldData?.options[0]?.placeholder
+        : ''
+    "
     class="border rounded-md w-full py-2 ps-2 !outline-none"
-    [attr.maxlength]="fieldData?.maxlength"
-    [attr.minlength]="fieldData?.minlength"
-    [required]="fieldData?.required"
-    [appInputChar]="fieldData?.type == 'email' ? 'email' : ''"
+    [attr.maxlength]="fieldData?.options[0]?.maxlength"
+    [attr.minlength]="fieldData?.options[0]?.minlength"
+    [required]="fieldData?.options[0]?.required"
+    [appInputChar]="fieldData?.options[0]?.type == 'email' ? 'email' : ''"
   />
 </mat-form-field>
-<!-- <span class="text-red-600 text-sm" *ngIf="fieldData?.required"
-  >Please enter {{ fieldData?.label }}</span
+<!-- <span class="text-red-600 text-sm" *ngIf="fieldData?.options[0]?.required"
+  >Please enter {{ fieldData?.options[0]?.label }}</span
 > -->

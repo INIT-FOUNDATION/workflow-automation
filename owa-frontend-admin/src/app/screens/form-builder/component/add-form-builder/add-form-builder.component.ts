@@ -5,6 +5,11 @@ import { findIndex } from 'rxjs';
 import { PropertiesModalComponent } from 'src/app/modules/shared/components/properties-modal/properties-modal.component';
 import { FormBuilderService } from '../../services/form-builder.service';
 
+interface fieldObject {
+  field_id: number;
+  options: any[];
+  form_field_assoc_id: number;
+}
 @Component({
   selector: 'app-add-form-builder',
   templateUrl: './add-form-builder.component.html',
@@ -12,9 +17,8 @@ import { FormBuilderService } from '../../services/form-builder.service';
 })
 export class AddFormBuilderComponent implements OnInit {
   chooseFromArray: any = [];
-
-  chosenFields: any = [];
-
+  chosenFields: fieldObject[] = [];
+  indexCount: number = 0;
   constructor(
     private dialog: MatDialog,
     private formBuilderService: FormBuilderService
@@ -25,26 +29,32 @@ export class AddFormBuilderComponent implements OnInit {
   }
 
   dropFormField(event: CdkDragDrop<any[]>) {
+    this.indexCount++;
     const selectedItem = event.previousContainer.data[event.previousIndex];
-    this.chosenFields.some((item) => item.id === selectedItem.id);
-    this.chosenFields.push(selectedItem);
-    this.openPropertyModal(selectedItem, this.chosenFields.length - 1);
+    this.chosenFields.push({
+      field_id: selectedItem.field_id,
+      options: [],
+      form_field_assoc_id: this.indexCount,
+    });
+    this.openPropertyModal(selectedItem, this.indexCount);
   }
 
   deleteFormField(index) {
-    const currentIndex = this.chosenFields.findIndex(
-      (item) => item.index === index
-    );
-    if (currentIndex !== -1) {
-      this.chosenFields.splice(index, 1);
-    }
+    // const currentIndex = this.chosenFields.findIndex(
+    //   (item) => item.index === index
+    // );
+    // if (currentIndex !== -1) {
+    //   this.chosenFields.splice(index, 1);
+    // }
   }
 
   editFormField(index) {
     const selectedItem = this.chosenFields.filter(
-      (item) => item.index === index
+      (item) => item.form_field_assoc_id === index
     );
-    this.openPropertyModal(selectedItem[0], index);
+    console.log(selectedItem);
+
+    // this.openPropertyModal(selectedItem[0], index);
   }
 
   openPropertyModal(selectedItem, index) {
@@ -57,13 +67,12 @@ export class AddFormBuilderComponent implements OnInit {
       ],
       position: { right: '0px', top: '0px', bottom: '0px' },
       disableClose: true,
-      data: { ...selectedItem, index },
+      data: { ...selectedItem, index, form_fields: this.chosenFields },
     });
 
     dialogRef.afterClosed().subscribe((res: any) => {
       if (res) {
-        this.chosenFields.some((item) => item.index === index);
-        this.chosenFields[index] = res[0];
+        this.chosenFields.some((item) => item.form_field_assoc_id === index);
       }
     });
   }
@@ -74,7 +83,5 @@ export class AddFormBuilderComponent implements OnInit {
     });
   }
 
-  submitForm(){
-
-  }
+  submitForm() {}
 }

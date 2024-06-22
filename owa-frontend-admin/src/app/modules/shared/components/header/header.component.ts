@@ -17,7 +17,6 @@ export class HeaderComponent {
   ngOnInit(): void {
     this.userData = sessionStorage.getItem('userDetails');
     this.userData = JSON.parse(this.userData)
-    console.log(this.userData)
   }
 
   logoutUser(): void {

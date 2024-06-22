@@ -9,13 +9,13 @@ import { FormBuilderService } from 'src/app/screens/form-builder/services/form-b
 })
 export class PropertiesModalComponent implements OnInit {
   getPropertyFields: any = [];
-  optionArray: any = [];
-  propertiesForm: any = {};
+  optionLabel: string = '';
+  optionValue: any = '';
+  propertiesForm: any = [];
   delayedTime: any;
   createdOptions: any = [];
   generatedName: string = '';
   objectKey: any;
-  objectValues: any;
   minLength: boolean = false;
 
   constructor(
@@ -26,9 +26,6 @@ export class PropertiesModalComponent implements OnInit {
     this.objectKey = Object.keys(data);
     if (data.options) {
       this.createdOptions = data.options;
-      const x = data.options;
-      console.log(x);
-      console.log(this.createdOptions);
     }
   }
 
@@ -44,10 +41,21 @@ export class PropertiesModalComponent implements OnInit {
       });
   }
 
-  getInputFieldValues(label, value) {
+  getInputFieldValues(label, value, id) {
     clearTimeout(this.delayedTime);
     this.delayedTime = setTimeout(() => {
-      this.propertiesForm[label] = value;
+      const fieldProperty = this.propertiesForm.find(
+        (element) => element.field_property_id === id
+      );
+      if (!fieldProperty) {
+        const currentFieldProperty = {
+          field_property_id: id,
+        };
+        currentFieldProperty[label] = value;
+        this.propertiesForm.push(currentFieldProperty);
+      } else {
+        fieldProperty[label] = value;
+      }
       if (label == 'label') {
         this.convertToCamelCase(value);
         this.propertiesForm.name = value;
@@ -63,39 +71,55 @@ export class PropertiesModalComponent implements OnInit {
   }
 
   convertToCamelCase(value: string) {
-    let words = value.split(' ');
-    for (let i = 1; i < words.length; i++) {
-      words[i] = words[i].charAt(0).toUpperCase() + words[i].slice(1);
-    }
-
-    this.generatedName = words.join('');
+    this.generatedName = value
+      .toLowerCase()
+      .replace(/(?:^\w|[A-Z]|\b\w|\s+)/g, function (match, index) {
+        if (+match === 0) return '';
+        return index === 0 ? match.toLowerCase() : match.toUpperCase();
+      });
   }
 
   addNewOptions() {
     this.createdOptions.push({});
   }
 
-  getOptionValues(value) {
+  getOptionValues(label: string, value: any, index: number, id: number) {
+    this.optionLabel = label;
+    this.optionValue = value;
     clearTimeout(this.delayedTime);
 
     this.delayedTime = setTimeout(() => {
-      const options: any = {
-        value: value,
+      this.createdOptions[index] = {
+        label,
+        value,
       };
-      this.optionArray.push(options);
+
+      const fieldProperty = this.propertiesForm.find(
+        (element) => element.field_property_id === id
+      );
+      if (!fieldProperty) {
+        const currentFieldProperty = {
+          field_property_id: id,
+          options: this.createdOptions,
+        };
+        this.propertiesForm.push(currentFieldProperty);
+      } else {
+        fieldProperty['options'] = this.createdOptions;
+      }
     }, 1000);
   }
 
   submitForm() {
-    const formData: any = [];
-    let mergedFormData: any = {};
-    mergedFormData = {
-      ...this.data,
-      options: this.optionArray,
-      ...this.propertiesForm,
-    };
+    const formData: any[] = [];
+    const matchedFields = this.data.form_fields.find(
+      (element) => element.field_id === this.data.field_id
+    );
 
-    formData.push(mergedFormData);
+    matchedFields.options = this.propertiesForm;
+    formData.push(this.data);
+    console.log(matchedFields);
+    console.log(this.data.form_fields);
+
     this.dialogRef.close(formData);
   }
 
