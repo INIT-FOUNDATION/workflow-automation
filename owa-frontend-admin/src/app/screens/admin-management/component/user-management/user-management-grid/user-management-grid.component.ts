@@ -75,6 +75,7 @@ export class UserManagementGridComponent {
             // this.snackBar.open('User deleted successfully', 'Close', {
             //   duration: 3000,
             // });
+            this.getAllUsersData();
           },
           error => {
             Swal.fire('Failed!', 'Failed to delete user.', 'error');

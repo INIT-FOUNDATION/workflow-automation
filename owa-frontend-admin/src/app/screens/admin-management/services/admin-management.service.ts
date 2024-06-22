@@ -47,7 +47,6 @@ export class AdminManagementService {
   }
 
   deleteUser(userId: any) {
-    console.log('Test', userId);
     return this.http.post<any>(`${environment.admin_prefix_url}/users/deleteUser`, {
      user_id: this.encDecService.set('' + userId)
     });
