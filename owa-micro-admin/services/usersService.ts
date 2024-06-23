@@ -549,16 +549,16 @@ export const usersService = {
       throw new Error(error.message);
     }
   },
-  deleteUser: async (user: IUser, deletedBy: number) => {
+  updateUserStatus: async (user: IUser, status: number, updatedBy: number) => {
     try {
       const _query = {
-        text: USERS.deleteUser,
-        values: [user.user_id, deletedBy]
+        text: USERS.updateUserStatus,
+        values: [user.user_id, status, updatedBy]
       };
-      logger.debug(`usersService :: deleteUser :: query :: ${JSON.stringify(_query)}`)
+      logger.debug(`usersService :: updateUserStatus :: query :: ${JSON.stringify(_query)}`)
 
       const result = await pg.executeQueryPromise(_query);
-      logger.debug(`usersService :: deleteUser :: db result :: ${JSON.stringify(result)}`)
+      logger.debug(`usersService :: updateUserStatus :: db result :: ${JSON.stringify(result)}`)
 
       await redis.deleteRedis(`USER:${user.user_id}`);
       await redis.deleteRedis(`User|Username:${user.user_name}`);
@@ -567,7 +567,7 @@ export const usersService = {
 
       if (user.reporting_to_users && user.reporting_to_users.length > 0 ) await usersService.clearGridCache(user.reporting_to_users);
     } catch (error) {
-      logger.error(`usersService :: deleteUser :: ${error.message} :: ${error}`)
+      logger.error(`usersService :: updateUserStatus :: ${error.message} :: ${error}`)
       throw new Error(error.message);
     }
   },

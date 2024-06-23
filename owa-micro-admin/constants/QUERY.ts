@@ -39,7 +39,7 @@ export const USERS = {
     existsByMobileNumber: `SELECT EXISTS (
         SELECT 1
             FROM m_users
-            WHERE mobile_number = $1 AND status <> 2
+            WHERE mobile_number = $1 AND status NOT IN (0, 2)
     )`,
     existsByUserId: `SELECT EXISTS (
         SELECT 1
@@ -60,7 +60,7 @@ export const USERS = {
     getReportingUsersList: `SELECT VU.user_id, VU.display_name FROM vw_m_users VU
     INNER JOIN m_roles R ON VU.role_id = R.role_id and R.status=1 and VU.status IN (1, 4, 5)
     WHERE R.level`,
-    deleteUser: `UPDATE m_users SET status = 2, updated_by = $2, date_updated = NOW() WHERE user_id = $1`,
+    updateUserStatus: `UPDATE m_users SET status = $2, updated_by = $3, date_updated = NOW() WHERE user_id = $1`,
 }
 
 export const USER_DEPARTMENT_MAPPING = {
