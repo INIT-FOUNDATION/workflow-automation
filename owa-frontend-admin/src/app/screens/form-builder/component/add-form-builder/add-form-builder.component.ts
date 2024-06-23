@@ -72,7 +72,8 @@ export class AddFormBuilderComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((res: any) => {
       if (res) {
-        this.chosenFields.some((item) => item.form_field_assoc_id === index);
+        this.chosenFields = res;
+        // this.chosenFields.some((item) => item.form_field_assoc_id === index);
       }
     });
   }

@@ -5,205 +5,88 @@
     (click)="closeModal()"
   ></i>
 </div>
-<form class="h-lvh px-4">
-  <div
-    *ngFor="let item of getPropertyFields"
-    class="mt-3"
-    [ngClass]="[
-      item?.field_property_type == 'boolean'
-        ? 'flex items-center'
-        : 'flex flex-col'
-    ]"
-  >
-    <label
-      [for]="item?.field_property_id"
-      class="text-sm"
-      [ngClass]="[item?.field_property_type == 'boolean' ? 'order-2 ms-2' : '']"
-      >{{ item?.field_property_label_display }}</label
-    >
-    <input
-      *ngIf="
-        item?.field_property_type !== 'select' &&
-        item?.field_property_type !== 'jsonArray'
-      "
-      [id]="item?.field_property_id"
-      [type]="
-        item?.field_property_type == 'boolean'
-          ? 'checkbox'
-          : item?.field_property_type
-      "
-      [value]="
-        objectKey && objectKey.includes(item?.field_property_name)
-          ? data[item?.field_property_name]
-          : item?.field_property_name == 'name'
-          ? generatedName
-          : ''
-      "
-      [checked]="data.required == true"
-      class="border-2 rounded-lg p-2 text-sm"
-      [ngClass]="[
-        item?.field_property_type == 'boolean' ? 'focus:outline-none' : ''
-      ]"
-      (input)="
-        getInputFieldValues(
-          item?.field_property_name,
-          item?.field_property_type == 'boolean'
-            ? $event.target.checked
-            : $event.target.value,
-          item?.field_property_id
-        )
-      "
-    />
-    <span
-      *ngIf="minLength && item?.field_property_name == 'minlength'"
-      class="text-red-600 text-xs"
-      >The minimum length should be shorter than the maximum length.</span
-    >
-    <div
-      class="w-full flex flex-col"
-      *ngIf="
-        item?.field_property_type !== 'select' &&
-        item?.field_property_type == 'jsonArray'
-      "
-    >
-      <div class="flex items-center">
-        <input
-          [id]="item?.field_property_id"
-          [type]="
-            item?.field_property_type == 'boolean'
-              ? 'checkbox'
-              : item?.field_property_type
-          "
-          class="border-2 rounded-lg p-2 text-sm w-full"
-          [ngClass]="[
-            item?.field_property_type == 'boolean' ? 'focus:outline-none' : ''
-          ]"
-          [value]="data.options ? data.options[0].value : ''"
-          (input)="
-            getOptionValues(
-              $event.target.value,
-              optionValue,
-              i,
-              item.field_property_id
-            )
-          "
-        />
-        <input
-          [id]="item?.field_property_id"
-          [type]="
-            item?.field_property_type == 'boolean'
-              ? 'checkbox'
-              : item?.field_property_type
-          "
-          class="border-2 rounded-lg p-2 ms-2 text-sm w-full"
-          [ngClass]="[
-            item?.field_property_type == 'boolean' ? 'focus:outline-none' : ''
-          ]"
-          [value]="data.options ? data.options[0].value : ''"
-          (input)="
-            getOptionValues(
-              optionLabel,
-              $event.target.value,
-              i,
-              item.field_property_id
-            )
-          "
-        />
-        <button
-          *ngIf="createdOptions.length == 0"
-          type="button"
-          class="bg-red-600 text-white px-4 py-2 ms-2 rounded-lg"
-          (click)="addNewOptions(item)"
-        >
-          +
-        </button>
-      </div>
-      <div
-        class="flex items-center mt-2"
-        *ngFor="let item of createdOptions; let i = index"
-      >
-        <input
-          type="text"
-          placeholder="Option {{ i + 1 }}"
-          class="border-2 rounded-lg p-2 text-sm w-full"
-          (input)="
-            getOptionValues(
-              $event.target.value,
-              optionValue,
-              i,
-              item.field_property_id
-            )
-          "
-          [value]="item?.value ? item?.value : ''"
-        />
-        <input
-          type="text"
-          placeholder="Value {{ i + 1 }}"
-          class="border-2 rounded-lg p-2 ms-2 text-sm w-full"
-          (input)="
-            getOptionValues(
-              optionLabel,
-              $event.target.value,
-              i,
-              item.field_property_id
-            )
-          "
-          [value]="item?.value ? item?.value : ''"
-        />
-        <button
-          *ngIf="createdOptions.length == i + 1"
-          type="button"
-          class="bg-red-600 text-white px-4 py-2 ms-2 rounded-lg"
-          (click)="addNewOptions(item)"
-        >
-          +
-        </button>
-      </div>
-    </div>
-
-    <mat-form-field
-      class="w-full border-2 rounded-lg px-2 properties-select"
-      appearance="none"
-      *ngIf="
-        item?.field_property_type == 'select' &&
-        item?.field_property_type !== 'jsonArray'
-      "
-    >
-      <mat-select
-        class="text-sm"
-        (selectionChange)="
-          getInputFieldValues(
-            item?.field_property_name,
-            $event.value,
-            item?.field_property_id
-          )
-        "
-        [(ngModel)]="data[item?.field_property_name]"
-        name="selectOption"
-      >
-        <mat-option
-          *ngFor="let option of item?.options"
-          [value]="option.value"
-          >{{ option?.label }}</mat-option
-        >
-      </mat-select>
-    </mat-form-field>
-  </div>
-
+<form class="h-lvh px-4" [formGroup]="propertiesFormGrp" (ngSubmit)="submitForm()">
+  <ng-container formArrayName="field_properties">
+    <ng-container *ngFor="let control of controls" [formGroup]="control">
+      <ng-container [ngSwitch]="control.get('field_property_type').value">
+        <div class="" *ngSwitchCase="'select'">
+          <label [for]="control.get('field_property_id').value" class="text-sm">
+            {{control.get('field_property_label_display').value}}
+          </label>
+          <mat-form-field class="w-full border-2 rounded-lg px-2 properties-select" appearance="none">
+            <mat-select class="text-sm" formControlName="value" (selectionChange)="onSelect()">
+              <mat-option *ngFor="let option of control.get('options').value" [value]="option.value">
+                {{ option?.label }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="" *ngSwitchCase="'text'">
+          <label [for]="control.get('field_property_id').value" class="text-sm">
+            {{control.get('field_property_label_display').value}}
+          </label>
+          <ng-container *ngIf="control.get('field_property_name').value === 'name' else otherInputs;">
+            <mat-form-field class="w-full border-2 rounded-lg px-2 properties-select" appearance="none">
+              <input matInput class="text-sm" formControlName="value">
+            </mat-form-field>
+          </ng-container>
+          <ng-template #otherInputs>
+            <ng-container *ngIf="control.get('field_property_name').value === 'label' else inputText;">
+              <mat-form-field class="w-full border-2 rounded-lg px-2 properties-select" appearance="none">
+                <input matInput class="text-sm" formControlName="value" (change)="onLabelChange(control)">
+              </mat-form-field>
+            </ng-container>
+            <ng-template #inputText>
+              <mat-form-field class="w-full border-2 rounded-lg px-2 properties-select" appearance="none">
+                <input matInput class="text-sm" formControlName="value">
+              </mat-form-field>
+            </ng-template>
+          </ng-template>
+        </div>
+        <div class="" *ngSwitchCase="'number'">
+          <label [for]="control.get('field_property_id').value" class="text-sm">
+            {{control.get('field_property_label_display').value}}
+          </label>
+          <ng-container *ngIf="control.get('field_property_name').value === 'minlength' else otherNumberInputs;">
+            <mat-form-field class="w-full border-2 rounded-lg px-2 properties-select" appearance="none">
+              <input matInput class="text-sm" type="number" formControlName="value" (change)="onMinimumLengthChange(control)">
+            </mat-form-field>
+          </ng-container>
+          <ng-template #otherNumberInputs>
+            <ng-container *ngIf="control.get('field_property_name').value === 'maxlength' else inputNumberText;">
+              <mat-form-field class="w-full border-2 rounded-lg px-2 properties-select" appearance="none">
+                <input matInput class="text-sm" type="number" formControlName="value">
+              </mat-form-field>
+            </ng-container>
+            <ng-template #inputNumberText>
+              <mat-form-field class="w-full border-2 rounded-lg px-2 properties-select" appearance="none">
+                <input matInput class="text-sm" type="number" formControlName="value">
+              </mat-form-field>
+            </ng-template>
+          </ng-template>
+        </div>
+        <div class="" *ngSwitchCase="'boolean'">
+          <mat-checkbox formControlName="value">{{control.get('field_property_label_display').value}}</mat-checkbox>
+        </div>
+        <ng-container *ngSwitchCase="'jsonArray'">
+          <div class="" formArrayName="values">
+            <ng-container [formGroup]="optionControl" *ngFor="let optionControl of dropDownOptionsControls(control); let i = index;">
+              <input type="text" formControlName="label" placeholder="Label" class="border-2 rounded-lg p-2 text-sm w-full"/>
+              <input type="text" formControlName="value" placeholder="Value" class="border-2 rounded-lg p-2 text-sm w-full" />
+              <button *ngIf="(dropDownOptionsControls(control).length - 1) == i" type="button" class="bg-red-600 text-white px-4 py-2 ms-2 rounded-lg" (click)="addNewOptions(control)">
+                +
+              </button>
+            </ng-container>
+          </div>
+        </ng-container>
+      </ng-container>
+    </ng-container>
+  </ng-container>
   <div class="fixed right-4 bottom-0">
-    <button
-      (click)="closeModal()"
-      type="button"
-      class="border mb-3 px-6 py-2 text-sm border-red-600 rounded text-red-600 rounded-lg me-4 outline-none"
-    >
+    <button (click)="closeModal()" type="button" class="border mb-3 px-6 py-2 text-sm border-red-600 rounded text-red-600 rounded-lg me-4 outline-none">
       Cancel
     </button>
-    <button
-      [disabled]="minLength"
-      (click)="submitForm()"
-      type="button"
-      class="bg-red-600 mb-3 px-6 py-2 text-sm rounded text-white rounded-lg"
-    >
+    <button type="submit" class="bg-red-600 mb-3 px-6 py-2 text-sm rounded text-white rounded-lg">
       Submit
     </button>
   </div>
