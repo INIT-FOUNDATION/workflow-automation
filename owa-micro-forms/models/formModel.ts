@@ -79,7 +79,8 @@ class FormField implements IFormFieldAssoc {
             placeholder: Joi.string().optional(),
             required: Joi.boolean().optional(),
             minlength: Joi.number().integer().min(0).optional(),
-            maxlength: Joi.number().integer().min(0).optional()
+            maxlength: Joi.number().integer().min(0).optional(),
+            value: Joi.string().optional()
         });
         const formFieldAssocSchema = Joi.object({
             form_field_assoc_id: Joi.number().integer().optional(), 
