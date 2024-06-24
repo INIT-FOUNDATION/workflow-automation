@@ -1,8 +1,8 @@
 import { Redirect, Route } from "react-router-dom";
 import { IonApp, IonRouterOutlet, setupIonicReact } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
-import Header from "./pages/Header/Header";
-import Footer from "./pages/Footer/Footer";
+import Header from "./shared/Header/Header";
+import Footer from "./shared/Footer/Footer";
 import "./App.css";
 
 /* Optional: Import Ionic Core and theme styles */
