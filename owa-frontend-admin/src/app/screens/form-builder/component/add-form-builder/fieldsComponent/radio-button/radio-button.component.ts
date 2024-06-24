@@ -8,5 +8,14 @@ import { Component, Input, OnInit } from '@angular/core';
 export class RadioButtonComponent implements OnInit {
   @Input() fieldData: any = {};
 
-  ngOnInit(): void {}
+  labelValue: string;
+  ngOnInit(): void {
+    this.getInputValue();
+  }
+
+  getInputValue() {
+    this.labelValue = this.fieldData.options
+      .filter((element) => element.label)
+      .map((element) => element.label);
+  }
 }

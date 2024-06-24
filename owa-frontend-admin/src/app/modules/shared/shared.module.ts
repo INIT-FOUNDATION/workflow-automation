@@ -49,6 +49,8 @@ import { DataViewModule } from 'primeng/dataview';
 import { CardComponent } from './components/card/card.component';
 import { SidebarMenuComponent } from './components/sidebar-menu/sidebar-menu.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatMenuModule } from '@angular/material/menu';
+import {MatButtonModule} from '@angular/material/button';
 
 /*------------------- DIRECTIVES ------------------------*/
 
@@ -107,6 +109,9 @@ const export_material_modules = [
   MatCheckboxModule,
   MatDatepickerModule,
   MatNativeDateModule,
+  MatButtonModule,
+  MatMenuModule,
+  MatIconModule,
 ];
 
 @NgModule({

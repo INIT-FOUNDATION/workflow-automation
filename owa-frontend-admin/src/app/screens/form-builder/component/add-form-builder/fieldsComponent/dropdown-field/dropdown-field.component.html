@@ -11,8 +11,8 @@
   >
     <i class="fa-solid fa-circle-xmark text-xl text-red-600 bg-white"></i>
   </div>
-  <mat-label>{{ fieldData?.options[0]?.label }}</mat-label>
-  <mat-select>
+  <mat-label>{{ labelValue }}</mat-label>
+  <mat-select disabled>
     <mat-option
       *ngFor="let item of fieldData?.options[0]?.options"
       [value]="item?.value"

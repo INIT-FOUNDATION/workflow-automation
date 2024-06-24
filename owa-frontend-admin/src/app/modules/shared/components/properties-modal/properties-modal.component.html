@@ -9,73 +9,75 @@
   <ng-container formArrayName="field_properties">
     <ng-container *ngFor="let control of controls" [formGroup]="control">
       <ng-container [ngSwitch]="control.get('field_property_type').value">
-        <div class="" *ngSwitchCase="'select'">
-          <label [for]="control.get('field_property_id').value" class="text-sm">
+        <div class="mt-2" *ngSwitchCase="'select'">
+          <label [for]="control.get('field_property_id').value" class="!text-sm">
             {{control.get('field_property_label_display').value}}
           </label>
           <mat-form-field class="w-full border-2 rounded-lg px-2 properties-select" appearance="none">
-            <mat-select class="text-sm" formControlName="value" (selectionChange)="onSelect()">
+            <mat-select class="!text-sm" formControlName="value" (selectionChange)="onSelect()">
               <mat-option *ngFor="let option of control.get('options').value" [value]="option.value">
                 {{ option?.label }}
               </mat-option>
             </mat-select>
           </mat-form-field>
         </div>
-        <div class="" *ngSwitchCase="'text'">
-          <label [for]="control.get('field_property_id').value" class="text-sm">
+        <div class="mt-2" *ngSwitchCase="'text'">
+          <label [for]="control.get('field_property_id').value" class="!text-sm">
             {{control.get('field_property_label_display').value}}
           </label>
           <ng-container *ngIf="control.get('field_property_name').value === 'name' else otherInputs;">
             <mat-form-field class="w-full border-2 rounded-lg px-2 properties-select" appearance="none">
-              <input matInput class="text-sm" formControlName="value">
+              <input matInput class="!text-sm" formControlName="value">
             </mat-form-field>
           </ng-container>
           <ng-template #otherInputs>
             <ng-container *ngIf="control.get('field_property_name').value === 'label' else inputText;">
               <mat-form-field class="w-full border-2 rounded-lg px-2 properties-select" appearance="none">
-                <input matInput class="text-sm" formControlName="value" (change)="onLabelChange(control)">
+                <input matInput class="!text-sm" formControlName="value" (change)="onLabelChange(control)">
               </mat-form-field>
             </ng-container>
             <ng-template #inputText>
               <mat-form-field class="w-full border-2 rounded-lg px-2 properties-select" appearance="none">
-                <input matInput class="text-sm" formControlName="value">
+                <input matInput class="!text-sm" formControlName="value">
               </mat-form-field>
             </ng-template>
           </ng-template>
         </div>
-        <div class="" *ngSwitchCase="'number'">
-          <label [for]="control.get('field_property_id').value" class="text-sm">
+        <div class="mt-2" *ngSwitchCase="'number'">
+          <label [for]="control.get('field_property_id').value" class="!text-sm">
             {{control.get('field_property_label_display').value}}
           </label>
           <ng-container *ngIf="control.get('field_property_name').value === 'minlength' else otherNumberInputs;">
             <mat-form-field class="w-full border-2 rounded-lg px-2 properties-select" appearance="none">
-              <input matInput class="text-sm" type="number" formControlName="value" (change)="onMinimumLengthChange(control)">
+              <input matInput class="!text-sm" type="number" formControlName="value" (change)="onMinimumLengthChange(control)">
             </mat-form-field>
           </ng-container>
           <ng-template #otherNumberInputs>
             <ng-container *ngIf="control.get('field_property_name').value === 'maxlength' else inputNumberText;">
               <mat-form-field class="w-full border-2 rounded-lg px-2 properties-select" appearance="none">
-                <input matInput class="text-sm" type="number" formControlName="value">
+                <input matInput class="!text-sm" type="number" formControlName="value">
               </mat-form-field>
             </ng-container>
             <ng-template #inputNumberText>
               <mat-form-field class="w-full border-2 rounded-lg px-2 properties-select" appearance="none">
-                <input matInput class="text-sm" type="number" formControlName="value">
+                <input matInput class="!text-sm" type="number" formControlName="value">
               </mat-form-field>
             </ng-template>
           </ng-template>
         </div>
-        <div class="" *ngSwitchCase="'boolean'">
-          <mat-checkbox formControlName="value">{{control.get('field_property_label_display').value}}</mat-checkbox>
+        <div class="mt-2" *ngSwitchCase="'boolean'">
+          <mat-checkbox class="!text-sm" formControlName="value">{{control.get('field_property_label_display').value}}</mat-checkbox>
         </div>
         <ng-container *ngSwitchCase="'jsonArray'">
-          <div class="" formArrayName="values">
+          <div class="!text-sm" formArrayName="values">
             <ng-container [formGroup]="optionControl" *ngFor="let optionControl of dropDownOptionsControls(control); let i = index;">
-              <input type="text" formControlName="label" placeholder="Label" class="border-2 rounded-lg p-2 text-sm w-full"/>
-              <input type="text" formControlName="value" placeholder="Value" class="border-2 rounded-lg p-2 text-sm w-full" />
-              <button *ngIf="(dropDownOptionsControls(control).length - 1) == i" type="button" class="bg-red-600 text-white px-4 py-2 ms-2 rounded-lg" (click)="addNewOptions(control)">
-                +
-              </button>
+              <div class="flex items-center mt-2">
+                <input type="text" formControlName="label" placeholder="Label" class="border-2 rounded-lg p-2 !text-sm w-full"/>
+                <input type="text" formControlName="value" placeholder="Value" class="border-2 rounded-lg p-2 !text-sm w-full ms-2" />
+                <button *ngIf="(dropDownOptionsControls(control).length - 1) == i" type="button" class="bg-red-600 text-white px-4 py-2 ms-2 rounded-lg" (click)="addNewOptions(control)">
+                  +
+                </button>
+              </div>
             </ng-container>
           </div>
         </ng-container>

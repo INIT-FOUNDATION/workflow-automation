@@ -10,7 +10,16 @@ export class DropdownFieldComponent implements OnInit {
   @Output() deleteFormFieldIndex = new EventEmitter<number>();
   @Output() editFormFieldIndex = new EventEmitter<number>();
 
-  ngOnInit(): void {}
+  labelValue: string;
+  ngOnInit(): void {
+    this.getInputValue();
+  }
+
+  getInputValue() {
+    this.labelValue = this.fieldData.options
+      .filter((element) => element.label)
+      .map((element) => element.label);
+  }
 
   deleteFormField(index) {
     this.deleteFormFieldIndex.emit(index);

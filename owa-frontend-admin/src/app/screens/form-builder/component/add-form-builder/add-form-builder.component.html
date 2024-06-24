@@ -36,6 +36,7 @@
           type="text"
           class="border-b outline-none w-full font-medium pb-2"
           placeholder="Enter Form Name"
+          (focusout)="getInputFieldName($event.target.value)"
         />
         <i class="fa-solid fa-pencil absolute right-0 cursor-pointer"></i>
       </div>
@@ -58,47 +59,63 @@
           >
             <app-input-field
               [fieldData]="item"
-              *ngIf="item?.field_id == 1"
+              *ngIf="item?.field_id == 1 && enableInputs"
               (deleteFormFieldIndex)="deleteFormField($event)"
               (editFormFieldIndex)="editFormField($event)"
+              disabled="true"
             ></app-input-field>
 
             <app-text-area-field
               [fieldData]="item"
-              *ngIf="item?.field_id == 2"
+              *ngIf="item?.field_id == 2 && enableInputs"
               (deleteFormFieldIndex)="deleteFormField($event)"
               (editFormFieldIndex)="editFormField($event)"
+              disabled="true"
             ></app-text-area-field>
 
             <app-radio-button
               [fieldData]="item"
-              *ngIf="item?.field_id == 3"
+              *ngIf="item?.field_id == 3 && enableInputs"
               (deleteFormFieldIndex)="deleteFormField($event)"
               (editFormFieldIndex)="editFormField($event)"
+              disabled="true"
             ></app-radio-button>
 
             <app-checkbox-button
               [fieldData]="item"
-              *ngIf="item?.field_id == 4"
+              *ngIf="item?.field_id == 4 && enableInputs"
               (deleteFormFieldIndex)="deleteFormField($event)"
               (editFormFieldIndex)="editFormField($event)"
+              disabled="true"
             ></app-checkbox-button>
 
             <app-dropdown-field
               [fieldData]="item"
-              *ngIf="item?.field_id == 5"
+              *ngIf="item?.field_id == 5 && enableInputs"
               (deleteFormFieldIndex)="deleteFormField($event)"
               (editFormFieldIndex)="editFormField($event)"
+              disabled="true"
             ></app-dropdown-field>
           </div>
         </div>
+
+        <div class="flex items-center">
+          <!-- <button
+            (click)="previewScreen()"
+            type="button"
+            class="bg-gray-200 rounded-lg w-full py-2 px-10 me-3"
+          >
+            Preview
+          </button> -->
           <button
             type="button"
+            [disabled]="!fieldName"
             class="bg-red-600 text-white rounded-lg w-full py-2 px-10"
             (click)="submitForm()"
           >
             Save Form
           </button>
+        </div>
       </form>
     </div>
   </div>

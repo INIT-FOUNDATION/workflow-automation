@@ -1,1 +1,42 @@
-<p>form-builder-form works!</p>
+<div class="flex justify-between bg-blue-900 text-white p-4">
+  <span>Preview screen</span>
+  <i
+    class="fa-solid fa-xmark text-white text-xl cursor-pointer"
+    (click)="closeModal()"
+  ></i>
+</div>
+
+<div class="h-lvh px-4">
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div
+      class="text-sm mb-3"
+      *ngFor="let item of data.form_fields; let i = index"
+    >
+      <app-input-field
+        [fieldData]="item"
+        disabled="false"
+        *ngIf="item?.field_id == 1"
+      ></app-input-field>
+
+      <!-- <app-text-area-field
+      [fieldData]="item"
+      *ngIf="item?.field_id == 2"
+    ></app-text-area-field>
+
+    <app-radio-button
+      [fieldData]="item"
+      *ngIf="item?.field_id == 3"
+    ></app-radio-button>
+
+    <app-checkbox-button
+      [fieldData]="item"
+      *ngIf="item?.field_id == 4"
+    ></app-checkbox-button>
+
+    <app-dropdown-field
+      [fieldData]="item"
+      *ngIf="item?.field_id == 5"
+    ></app-dropdown-field> -->
+    </div>
+  </div>
+</div>

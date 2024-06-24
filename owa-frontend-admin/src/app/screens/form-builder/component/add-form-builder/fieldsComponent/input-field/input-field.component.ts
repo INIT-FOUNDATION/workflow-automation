@@ -1,4 +1,12 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+  SimpleChanges,
+} from '@angular/core';
 
 @Component({
   selector: 'app-input-field',
@@ -6,11 +14,21 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
   styleUrls: ['./input-field.component.scss'],
 })
 export class InputFieldComponent implements OnInit {
-  @Input() fieldData: any = {};
+  @Input() fieldData: any;
+  @Input() disabled: boolean = false;
   @Output() deleteFormFieldIndex = new EventEmitter<number>();
   @Output() editFormFieldIndex = new EventEmitter<number>();
 
-  ngOnInit(): void {}
+  labelValue: string;
+  ngOnInit(): void {
+    this.getInputValue();
+  }
+
+  getInputValue() {
+    this.labelValue = this.fieldData.options
+      .filter((element) => element.label)
+      .map((element) => element.label);
+  }
 
   deleteFormField(index) {
     this.deleteFormFieldIndex.emit(index);

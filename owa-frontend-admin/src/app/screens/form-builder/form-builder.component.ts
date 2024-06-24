@@ -1,6 +1,8 @@
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilderService } from './services/form-builder.service';
 import { CommonDataViewComponent } from 'src/app/modules/common-data-view/common-data-view.component';
+import { Router } from '@angular/router';
+import { UtilityService } from 'src/app/modules/shared/services/utility.service';
 
 @Component({
   selector: 'app-form-builder',
@@ -22,7 +24,11 @@ export class FormBuilderComponent implements OnInit {
   ];
   currentPage = 0;
 
-  constructor(private formBuilderService: FormBuilderService) {}
+  constructor(
+    private formBuilderService: FormBuilderService,
+    private router: Router,
+    private utilityService: UtilityService
+  ) {}
 
   ngOnInit(): void {
     this.getGirdData();
@@ -57,9 +63,25 @@ export class FormBuilderComponent implements OnInit {
   }
 
   onPageChangeEvent(event) {
-    console.log(event);
     this.currentPage = event.first == 0 ? 1 : event.first / event.rows + 1;
     this.gridData.rows = event.rows;
     this.getGirdData();
+  }
+
+  updateCard(id: number) {
+    this.router.navigate([`/form-builder/update-form/:${id}`]);
+  }
+
+  updateCardStatus(id: number, status: number) {
+    const payload: any = {
+      form_id: id,
+      status: status,
+    };
+    this.formBuilderService.updateStatus(payload).subscribe((res: any) => {
+      if (res) {
+        this.utilityService.showSuccessMessage(res?.message);
+        this.getGirdData();
+      }
+    });
   }
 }

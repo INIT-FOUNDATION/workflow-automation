@@ -25,4 +25,12 @@ export class FormBuilderService {
   createForm(payload) {
     return this.http.post(`${environment.forms_prefix_url}/create`, payload);
   }
+
+  updateForm(payload) {
+    return this.http.post(`${environment.forms_prefix_url}/update`, payload);
+  }
+
+  updateStatus(payload) {
+    return this.http.post(`${environment.forms_prefix_url}/updateStatus`, payload);
+  }
 }

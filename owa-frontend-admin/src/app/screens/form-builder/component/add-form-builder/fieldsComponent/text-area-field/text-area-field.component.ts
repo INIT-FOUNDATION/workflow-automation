@@ -1,15 +1,25 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 @Component({
   selector: 'app-text-area-field',
   templateUrl: './text-area-field.component.html',
   styleUrls: ['./text-area-field.component.scss'],
 })
-export class TextAreaFieldComponent {
+export class TextAreaFieldComponent implements OnInit {
   @Input() fieldData: any = {};
   @Output() deleteFormFieldIndex = new EventEmitter<number>();
   @Output() editFormFieldIndex = new EventEmitter<number>();
 
+  labelValue: string;
+  ngOnInit(): void {
+    this.getInputValue();
+  }
+
+  getInputValue() {
+    this.labelValue = this.fieldData.options
+      .filter((element) => element.label)
+      .map((element) => element.label);
+  }
   deleteFormField(index) {
     this.deleteFormFieldIndex.emit(index);
   }
