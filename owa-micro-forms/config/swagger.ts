@@ -12,16 +12,7 @@ const doc = {
     },
     servers: [
         {
-            url: 'http://localhost:9005',
-            description: 'Local Server'
-        },
-        {
-            url: 'https://apiowa.dev.orrizonte.in',
-            description: 'Development Server'
-        },
-        {
-            url: 'https://apiowa.orrizonte.in',
-            description: 'Production Server'
+            url: `${scheme}://${apiBaseUrl}`
         }
     ],
     components: {
