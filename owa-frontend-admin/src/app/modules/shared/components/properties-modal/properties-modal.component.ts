@@ -33,6 +33,11 @@ export class PropertiesModalComponent implements OnInit {
         const fieldPropertiesFrmArray = (this.propertiesFormGrp.get('field_properties') as FormArray);
         res.data.forEach(element => {
           let propertyFrmGrp = new FormGroup({});
+          const fieldObj = this.data.form_fields.find(ele => ele.form_field_assoc_id === this.data.index);
+          let savedProperty = null;
+          if (fieldObj) {
+            savedProperty = fieldObj.options.find(ele => ele.field_property_id === element.field_property_id);
+          }
           if (element.field_property_type != "jsonArray") {
             propertyFrmGrp = new FormGroup({
               field_property_id: new FormControl(element.field_property_id),
@@ -40,7 +45,7 @@ export class PropertiesModalComponent implements OnInit {
               field_property_label_display: new FormControl(element.field_property_label_display),
               field_property_type: new FormControl(element.field_property_type),
               options: new FormControl(element.options),
-              value: new FormControl({value: null, disabled: element.field_property_name==='name'}, [Validators.required])
+              value: new FormControl({value: savedProperty ? savedProperty[element.field_property_name] : null, disabled: element.field_property_name==='name'}, [Validators.required])
             });
           } else {
             propertyFrmGrp = new FormGroup({
@@ -49,13 +54,23 @@ export class PropertiesModalComponent implements OnInit {
               field_property_label_display: new FormControl(element.field_property_label_display),
               field_property_type: new FormControl(element.field_property_type),
               options: new FormControl(element.options),
-              values: new FormArray([
-                new FormGroup({
-                  label: new FormControl(null, [Validators.required]),
-                  value: new FormControl(null, [Validators.required]),
-                })
-              ])
+              values: new FormArray([])
             });
+
+            const valuesFormArray = (propertyFrmGrp.get('values') as FormArray);
+            if (savedProperty && savedProperty[element.field_property_name]) {
+              savedProperty[element.field_property_name].forEach(option => {
+                valuesFormArray.push(new FormGroup({
+                  label: new FormControl(option.label, [Validators.required]),
+                  value: new FormControl(option.value, [Validators.required]),
+                }))
+              })
+            } else {
+              valuesFormArray.push(new FormGroup({
+                label: new FormControl(null, [Validators.required]),
+                value: new FormControl(null, [Validators.required]),
+              }))
+            }
           }
 
 
