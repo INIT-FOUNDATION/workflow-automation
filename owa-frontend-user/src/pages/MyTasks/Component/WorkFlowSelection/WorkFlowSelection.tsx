@@ -24,7 +24,7 @@ const WorkFlowSelection: React.FC = () => {
     setWorkflow(event.target.value as string);
   };
   const handleNextClick = () => {
-    router.push("/workflow-started");
+    router.push("/tasks/workflow-started");
   };
 
   const handleBack = () => {

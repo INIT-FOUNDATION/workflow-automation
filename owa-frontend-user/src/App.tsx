@@ -23,12 +23,12 @@ import "@ionic/react/css/palettes/dark.css";
 /* Optional: Import theme variables */
 import "./theme/variables.css";
 
-import WorkFlowSelection from "./pages/WorkFlowSelection/WorkFlowSelection";
+import WorkFlowSelection from "./pages/MyTasks/Component/WorkFlowSelection/WorkFlowSelection";
 import MyTasks from "./pages/MyTasks/MyTasks";
 import Login from "./pages/Login/Login";
 import AssignTasks from "./pages/AssignTask/AssignTasks";
 import TasksReport from "./pages/TasksReport/TasksReport";
-import WorkFlowStarted from "./pages/WorkFlowSelection/Component/WorkFlowStarted/WorkFlowStarted";
+import WorkFlowStarted from "./pages/MyTasks/Component/WorkFlowStarted/WorkFlowStarted";
 import CreateTasks from "./pages/CreateTasks/CreateTasks";
 import Profile from "./pages/Profile/Profile";
 import TriggerDetails from "./pages/CreateTasks/TriggerDetails/TriggerDetails";
@@ -43,8 +43,7 @@ const App: React.FC = () => (
         {/* Footer Avoiding Routes */}
         <Route path="/login" component={Login} exact />
         <Route path="/profile" component={Profile} exact />
-     
-
+      
         {/* Redirect root to login */}
         <Route exact path="/">
           <Redirect to="/login" />
@@ -52,13 +51,13 @@ const App: React.FC = () => (
 
         {/* Routes with Footer */}
         <Footer>
-          <Route path="/workflow-selection" component={WorkFlowSelection} exact />
-          <Route path="/workflow-started" component={WorkFlowStarted} exact />
-          <Route path="/create-tasks" component={CreateTasks} exact />
           <Route path="/tasks" component={MyTasks} />
-          <Route path="/tasks-reports" component={TasksReport} exact/>
-          <Route path="/assigned-tasks" component={AssignTasks} exact/>
-          <Route path="/trigger-details" component={TriggerDetails} exact/>
+           <Route path="/tasks/workflow-selection" component={WorkFlowSelection} exact />
+          <Route path="/tasks/workflow-started" component={WorkFlowStarted} exact /> 
+          <Route path="/create-tasks" component={CreateTasks} exact />
+          <Route path="/tasks-reports" component={TasksReport} exact />
+          <Route path="/assigned-tasks" component={AssignTasks} exact />
+          <Route path="/trigger-details" component={TriggerDetails} exact />
         </Footer>
       </IonRouterOutlet>
     </IonReactRouter>

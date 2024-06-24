@@ -32,7 +32,7 @@ const WorkFlowStarted: React.FC = () => {
   };
 
   const handleBack = () => {
-    router.push("/workflow-selection");
+    router.push("/tasks/workflow-selection");
   };
   return (
     <div>
