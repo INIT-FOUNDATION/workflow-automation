@@ -13,8 +13,12 @@ import {
   InputLabel,
   TextareaAutosize,
 } from "@mui/material";
+import { useLocation } from "react-router";
 
 const NotificationTriggerDetails: React.FC = () => {
+  
+  const location=useLocation();
+  console.log(location.pathname,"path");
   return (
     <div>
       <div className="font-poppins text-base font-normal leading-5 mb-2">

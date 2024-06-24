@@ -43,7 +43,7 @@ const App: React.FC = () => (
         {/* Footer Avoiding Routes */}
         <Route path="/login" component={Login} exact />
         <Route path="/profile" component={Profile} exact />
-      
+
         {/* Redirect root to login */}
         <Route exact path="/">
           <Redirect to="/login" />
@@ -52,12 +52,33 @@ const App: React.FC = () => (
         {/* Routes with Footer */}
         <Footer>
           <Route path="/tasks" component={MyTasks} />
-           <Route path="/tasks/workflow-selection" component={WorkFlowSelection} exact />
-          <Route path="/tasks/workflow-started" component={WorkFlowStarted} exact /> 
+          <Route
+            path="/tasks/workflow-selection"
+            component={WorkFlowSelection}
+            exact
+          />
+          <Route
+            path="/tasks/workflow-started"
+            component={WorkFlowStarted}
+            exact
+          />
           <Route path="/tasks/create-tasks" component={CreateTasks} exact />
           <Route path="/tasks-reports" component={TasksReport} exact />
           <Route path="/assigned-tasks" component={AssignTasks} exact />
-          <Route path="/tasks/trigger-details" component={TriggerDetails} exact />
+
+          {/* <Route
+            path="/tasks/trigger-details/notification"
+            component={TriggerDetails}
+          />
+          <Route
+            path="/tasks/trigger-details/api-trigger"
+            component={TriggerDetails}
+          /> */}
+          <Route
+            path="/tasks/trigger-details"
+            component={TriggerDetails}
+            exact
+          />
         </Footer>
       </IonRouterOutlet>
     </IonReactRouter>

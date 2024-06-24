@@ -1,29 +1,40 @@
 import React, { useState } from "react";
-import "./TriggerDetails.css";
-import { IonContent, IonPage } from "@ionic/react";
-import { ArrowBack } from "@mui/icons-material";
+import {
+  IonContent,
+  IonPage,
+  IonCard,
+  IonCardContent,
+  IonCardHeader,
+  IonIcon,
+  useIonRouter,
+} from "@ionic/react";
+import { arrowBack } from "ionicons/icons";
 import { IconButton, Tabs, Tab, Box } from "@mui/material";
-import { useHistory } from "react-router";
+import { ArrowBack } from "@mui/icons-material";
+import "./TriggerDetails.css";
 
 import NotificationTriggerDetails from "../NotificationTriggerDetails/NotificationTriggerDetails";
 import ApiTriggerDetails from "../APITriggerDetails/APITriggerDetails";
+import { useLocation } from "react-router";
 
 const TriggerDetails: React.FC = () => {
-  const history = useHistory();
+  const router = useIonRouter();
   const [selectedTab, setSelectedTab] = useState(0);
 
   const handleBackClick = () => {
-    history.push("/tasks/create-tasks");
+    router.push("/tasks/create-tasks");
   };
 
   const handleTabChange = (event: React.ChangeEvent<{}>, newValue: number) => {
     setSelectedTab(newValue);
   };
 
+  const location=useLocation();
+  console.log(location.pathname,"path");
+  
   return (
-   
-      <IonPage>
-        <IonContent>
+    <IonPage>
+      <IonContent>
         <div className="flex flex-col p-2 mt-20">
           <div className="cursor-pointer rounded-md flex items-center pt-8">
             <IconButton onClick={handleBackClick}>
@@ -49,9 +60,8 @@ const TriggerDetails: React.FC = () => {
             {selectedTab === 1 && <ApiTriggerDetails />}
           </Box>
         </div>
-        </IonContent>
-      </IonPage>
-   
+      </IonContent>
+    </IonPage>
   );
 };
 

@@ -12,8 +12,12 @@ import {
 import { ArrowBack } from "@mui/icons-material";
 import "./CreateTasks.css";
 import { IonContent, IonIcon, IonInput, useIonRouter } from "@ionic/react";
+import { useLocation } from "react-router";
 
 const CreateTasks: React.FC = () => {
+  
+  const location=useLocation();
+  console.log(location.pathname,"path");
   const router = useIonRouter();
 
   const handleNextClick = () => {
