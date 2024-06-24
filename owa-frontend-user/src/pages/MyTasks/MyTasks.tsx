@@ -21,7 +21,7 @@ const MyTasks: React.FC = () => {
         />
         <span className="search-text text-gray-500">Search</span>
       </div>
-      <IonCard className="custom-card border border-gray-300 rounded p-4 mb-2 bg-gray-100">
+      <IonCard className="custom-card border border-gray-300 rounded p-4 mb-2 bg-neutral-100">
         <IonCardContent>
           <div className="flex items-center">
             <img
@@ -41,7 +41,7 @@ const MyTasks: React.FC = () => {
           </div>
         </IonCardContent>
       </IonCard>
-      <IonCard className="custom-card border border-gray-300 rounded p-4 mb-2 bg-gray-100">
+      <IonCard className="custom-card border border-gray-300 rounded p-4 mb-2 bg-neutral-100">
         <IonCardContent>
           <div className="flex items-center">
             <img
