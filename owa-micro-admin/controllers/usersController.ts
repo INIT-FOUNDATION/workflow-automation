@@ -399,7 +399,7 @@ export const usersController = {
             const status = req.body.status;
             const updatedBy = req.plainToken.user_id;
 
-            if (!status || ![0,1,2,3].includes(status)) return res.status(STATUS.BAD_REQUEST).send(USERS.USER000014);
+            if (![0,1,2,3].includes(status)) return res.status(STATUS.BAD_REQUEST).send(USERS.USER000014);
             if (!userId) return res.status(STATUS.BAD_REQUEST).send(USERS.USER00006);
 
             userId = parseInt(decryptPayload(userId));
