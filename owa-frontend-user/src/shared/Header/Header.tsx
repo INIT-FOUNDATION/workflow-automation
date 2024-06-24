@@ -8,7 +8,7 @@ import {
   useIonRouter,
 } from "@ionic/react";
 import { notificationsOutline, ellipsisVerticalOutline } from "ionicons/icons";
-import { CgProfile } from "react-icons/cg"; // Importing CgProfile
+import { CgProfile } from "react-icons/cg";
 import { AiOutlineLogout } from "react-icons/ai";
 import { useLocation } from "react-router";
 import { SKIP_HEADER_ROUTES } from "../../constants/constant";
