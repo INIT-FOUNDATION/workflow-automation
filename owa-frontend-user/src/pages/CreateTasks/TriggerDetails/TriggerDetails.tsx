@@ -21,9 +21,8 @@ const TriggerDetails: React.FC = () => {
   };
 
   return (
-   
-      <IonPage>
-        <IonContent>
+    <IonPage>
+      <IonContent>
         <div className="flex flex-col p-2 mt-20">
           <div className="cursor-pointer rounded-md flex items-center pt-8">
             <IconButton onClick={handleBackClick}>
@@ -49,9 +48,8 @@ const TriggerDetails: React.FC = () => {
             {selectedTab === 1 && <ApiTriggerDetails />}
           </Box>
         </div>
-        </IonContent>
-      </IonPage>
-   
+      </IonContent>
+    </IonPage>
   );
 };
 

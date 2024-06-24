@@ -41,7 +41,12 @@ const Login: React.FC = () => {
             ></IonInput>
             <div className="pt-2 text-right flex justify-start">
               <img src="Assets/images/LoginPage/lock.svg" alt="" />
-              <a href="#" className="text-red-600 ms-2 text-sm hover:text-red-700">Forgot Password?</a>
+              <a
+                href="#"
+                className="text-red-600 ms-2 text-sm hover:text-red-700"
+              >
+                Forgot Password?
+              </a>
             </div>
           </div>
           <button
@@ -51,9 +56,9 @@ const Login: React.FC = () => {
             Login
           </button>
           <div className="or-container my-4 flex items-center">
-            <hr className="flex-grow border-gray-500"/>
+            <hr className="flex-grow border-gray-500" />
             <span className="mx-4 text-gray-500">OR</span>
-            <hr className="flex-grow border-gray-500"/>
+            <hr className="flex-grow border-gray-500" />
           </div>
           <button
             type="submit"

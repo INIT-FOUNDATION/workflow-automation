@@ -107,19 +107,18 @@ const CreateTasks: React.FC = () => {
               </div>
             </div>
           </div>
-          
-            <div className="flex justify-center fixed bottom-4 inset-x-2">
-              <Button 
-                onClick={() => handleNextClick()}
-                variant="contained"
-                color="error"
-                className="w-full py-2"
-                type="submit"
-              >
-                Next
-              </Button>
-            </div>
-        
+
+          <div className="flex justify-center fixed bottom-4 inset-x-2">
+            <Button
+              onClick={() => handleNextClick()}
+              variant="contained"
+              color="error"
+              className="w-full py-2"
+              type="submit"
+            >
+              Next
+            </Button>
+          </div>
         </form>
       </div>
     </IonContent>

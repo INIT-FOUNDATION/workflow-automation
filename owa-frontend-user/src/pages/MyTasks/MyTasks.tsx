@@ -71,29 +71,29 @@ const MyTasks: React.FC = () => {
           >
             Add Task
           </IonButton>
-         <div>
-           <IonActionSheet
-           className="my-custom-class"
-            isOpen={showActionSheet}
-            onDidDismiss={() => setShowActionSheet(false)}
-            buttons={[
-              {
-                text: "Choose existing workflow",
-                handler: () => {
-                  setShowActionSheet(false);
-                  window.location.href = "/workflow-selection";
+          <div>
+            <IonActionSheet
+              className="my-custom-class"
+              isOpen={showActionSheet}
+              onDidDismiss={() => setShowActionSheet(false)}
+              buttons={[
+                {
+                  text: "Choose existing workflow",
+                  handler: () => {
+                    setShowActionSheet(false);
+                    window.location.href = "/workflow-selection";
+                  },
                 },
-              },
-              {
-                text: "Create new task",
-                handler: () => {
-                  setShowActionSheet(false);
-                  window.location.href = "/create-tasks";
+                {
+                  text: "Create new task",
+                  handler: () => {
+                    setShowActionSheet(false);
+                    window.location.href = "/create-tasks";
+                  },
                 },
-              },
-            ]}
-          />
-         </div>
+              ]}
+            />
+          </div>
         </div>
       </div>
     </>

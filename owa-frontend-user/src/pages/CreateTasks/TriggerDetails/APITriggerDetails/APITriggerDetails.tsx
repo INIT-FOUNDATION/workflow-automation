@@ -2,9 +2,8 @@ import { Box, Button, MenuItem, TextField } from "@mui/material";
 import React, { useState } from "react";
 
 const ApiTriggerDetails: React.FC = () => {
-
-  const [method, setMethod] = useState('GET');
-  const [url, setUrl] = useState('');
+  const [method, setMethod] = useState("GET");
+  const [url, setUrl] = useState("");
 
   const handleMethodChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setMethod(event.target.value);
@@ -17,7 +16,13 @@ const ApiTriggerDetails: React.FC = () => {
   return (
     <div className="font-poppins text-base font-normal leading-5 mb-2">
       <div>Set API Trigger</div>
-      <Box display="flex" alignItems="center" borderRadius={4} borderColor="grey.300" className="mt-4 w-1/3">
+      <Box
+        display="flex"
+        alignItems="center"
+        borderRadius={4}
+        borderColor="grey.300"
+        className="mt-4 w-1/3"
+      >
         <div>
           <TextField
             select
@@ -25,9 +30,9 @@ const ApiTriggerDetails: React.FC = () => {
             value={method}
             onChange={handleMethodChange}
             variant="outlined"
-            style={{ marginRight: '10px' }}
+            style={{ marginRight: "10px" }}
           >
-            {['GET', 'POST', 'PUT', 'DELETE'].map((option) => (
+            {["GET", "POST", "PUT", "DELETE"].map((option) => (
               <MenuItem key={option} value={option}>
                 {option}
               </MenuItem>
@@ -41,7 +46,7 @@ const ApiTriggerDetails: React.FC = () => {
             onChange={handleUrlChange}
             variant="outlined"
             fullWidth
-            style={{ marginRight: '10px' }}
+            style={{ marginRight: "10px" }}
           />
         </div>
         <Button variant="contained" color="primary">
