@@ -88,7 +88,7 @@ const MyTasks: React.FC = () => {
                 text: "Create new task",
                 handler: () => {
                   setShowActionSheet(false);
-                  window.location.href = "/create-tasks";
+                  window.location.href = "/tasks/create-tasks";
                 },
               },
             ]}

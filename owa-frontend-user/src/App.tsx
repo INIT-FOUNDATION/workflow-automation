@@ -29,9 +29,9 @@ import Login from "./pages/Login/Login";
 import AssignTasks from "./pages/AssignTask/AssignTasks";
 import TasksReport from "./pages/TasksReport/TasksReport";
 import WorkFlowStarted from "./pages/MyTasks/Component/WorkFlowStarted/WorkFlowStarted";
-import CreateTasks from "./pages/CreateTasks/CreateTasks";
+import CreateTasks from "./pages/MyTasks/Component/CreateTasks/CreateTasks";
 import Profile from "./pages/Profile/Profile";
-import TriggerDetails from "./pages/CreateTasks/TriggerDetails/TriggerDetails";
+import TriggerDetails from "./pages/MyTasks/Component/TriggerDetails/TriggerDetails";
 
 setupIonicReact();
 
@@ -54,10 +54,10 @@ const App: React.FC = () => (
           <Route path="/tasks" component={MyTasks} />
            <Route path="/tasks/workflow-selection" component={WorkFlowSelection} exact />
           <Route path="/tasks/workflow-started" component={WorkFlowStarted} exact /> 
-          <Route path="/create-tasks" component={CreateTasks} exact />
+          <Route path="/tasks/create-tasks" component={CreateTasks} exact />
           <Route path="/tasks-reports" component={TasksReport} exact />
           <Route path="/assigned-tasks" component={AssignTasks} exact />
-          <Route path="/trigger-details" component={TriggerDetails} exact />
+          <Route path="/tasks/trigger-details" component={TriggerDetails} exact />
         </Footer>
       </IonRouterOutlet>
     </IonReactRouter>
