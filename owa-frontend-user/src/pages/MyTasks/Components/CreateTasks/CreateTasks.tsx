@@ -33,8 +33,8 @@ const CreateTasks: React.FC = () => {
   };
   return (
     <IonContent>
-      <div className="flex flex-col p-2 mt-20">
-        <div className="cursor-pointer rounded-md flex items-center pt-8">
+      <div className="flex flex-col p-2">
+        <div className="cursor-pointer rounded-md flex items-center pt-32">
           <IconButton onClick={handleBackClick}>
             <ArrowBack />
           </IconButton>
@@ -93,7 +93,7 @@ const CreateTasks: React.FC = () => {
               className="flex justify-between items-center mb-4 border-b border-gray-300 pb-2"
               style={{ width: "98%" }}
             >
-              <div className="flex items-center mt-2 p-4">
+              <div className="flex items-center mt-2 p-2">
                 <IonIcon
                   src="Assets/images/CreateTasks/create_task_calender.svg"
                   className="calender-img"
@@ -107,7 +107,7 @@ const CreateTasks: React.FC = () => {
               className="flex justify-between items-center mb-4 border-b border-gray-300 pb-2"
               style={{ width: "98%" }}
             >
-              <div className="flex items-center mt-2 p-4">
+              <div className="flex items-center mt-2 p-2">
                 <IonIcon
                   src="Assets/images/CreateTasks/create_task_profile.svg"
                   className="calender-img"
@@ -119,7 +119,7 @@ const CreateTasks: React.FC = () => {
             </div>
           </div>
 
-          <div className="flex justify-center fixed bottom-4 inset-x-2">
+          <div className="custom-btn flex justify-center pt-28 inset-x-2">
             <IonButton
               color="danger"
               className="rounded w-full "
