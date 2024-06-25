@@ -15,5 +15,5 @@ export const FORMS = {
     getFormFieldsByFormId: `SELECT * FROM m_form_fields_assoc WHERE form_id = $1`,
     getFormFieldPropertiesByFieldId: `SELECT * FROM m_field_properties WHERE field_id = $1 ORDER BY order_id ASC`,
     getFormFieldsList: `SELECT * FROM m_fields`,
-    updateFormStatus: `UPDATE m_forms SET status = $1, updated_by = $2, date_created = $3 WHERE form_id = $4`
+    updateFormStatus: `UPDATE m_forms SET status = $1, updated_by = $2, date_updated = $3 WHERE form_id = $4`
 }
