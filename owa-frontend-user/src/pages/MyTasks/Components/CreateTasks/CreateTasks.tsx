@@ -11,21 +11,26 @@ import {
 } from "@mui/material";
 import { ArrowBack } from "@mui/icons-material";
 import "./CreateTasks.css";
-import { IonContent, IonIcon, IonInput, useIonRouter } from "@ionic/react";
+import {
+  IonButton,
+  IonContent,
+  IonIcon,
+  IonInput,
+  useIonRouter,
+} from "@ionic/react";
 import { useLocation } from "react-router";
 
 const CreateTasks: React.FC = () => {
-  
-  const location=useLocation();
-  console.log(location.pathname,"path");
+  const location = useLocation();
+  console.log(location.pathname, "path");
   const router = useIonRouter();
 
   const handleNextClick = () => {
     router.push("/tasks/trigger-details");
   };
-  const handleBackClick=()=>{
+  const handleBackClick = () => {
     router.push("/tasks");
-  }
+  };
   return (
     <IonContent>
       <div className="flex flex-col p-2 mt-20">
@@ -113,19 +118,17 @@ const CreateTasks: React.FC = () => {
               </div>
             </div>
           </div>
-          
-            <div className="flex justify-center fixed bottom-4 inset-x-2">
-              <Button 
-                onClick={() => handleNextClick()}
-                variant="contained"
-                color="error"
-                className="w-full py-2"
-                type="submit"
-              >
-                Next
-              </Button>
-            </div>
-        
+
+          <div className="flex justify-center fixed bottom-4 inset-x-2">
+            <IonButton
+              color="danger"
+              className="rounded w-full "
+              onClick={() => handleNextClick()}
+              type="submit"
+            >
+              Next
+            </IonButton>
+          </div>
         </form>
       </div>
     </IonContent>

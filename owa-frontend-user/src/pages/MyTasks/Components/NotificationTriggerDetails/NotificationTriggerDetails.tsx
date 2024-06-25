@@ -6,6 +6,7 @@ import {
   IonInput,
   IonTextarea,
   IonContent,
+  IonButton,
 } from "@ionic/react";
 import {
   Button,
@@ -16,9 +17,8 @@ import {
 import { useLocation } from "react-router";
 
 const NotificationTriggerDetails: React.FC = () => {
-  
-  const location=useLocation();
-  console.log(location.pathname,"path");
+  const location = useLocation();
+  console.log(location.pathname, "path");
   return (
     <div>
       <div className="font-poppins text-base font-normal leading-5 mb-2">
@@ -42,7 +42,7 @@ const NotificationTriggerDetails: React.FC = () => {
         <div className="mt-8 w-full">
           <div className="mb-4 ">Enter details for email</div>
           <IonInput
-            label="Task Name *"
+            label="Subject"
             labelPlacement="floating"
             fill="outline"
             // placeholder="Enter here"
@@ -69,7 +69,7 @@ const NotificationTriggerDetails: React.FC = () => {
       <IonItem lines="none" className="mb-4">
         <div className="mt-5 w-full">
           <IonInput
-            label="Task Name *"
+            label="Target Audience"
             labelPlacement="floating"
             fill="outline"
             // placeholder="Enter here"
@@ -83,15 +83,9 @@ const NotificationTriggerDetails: React.FC = () => {
       </IonItem>
       <div className="flex-grow">
         <div className="flex justify-center pb-16">
-          <Button
-            // onClick={() => handleNextClick()}
-            variant="contained"
-            color="error"
-            className="w-full"
-            type="submit"
-          >
+          <IonButton color="danger" className="rounded w-full " type="submit">
             Create Task
-          </Button>
+          </IonButton>
         </div>
       </div>
     </div>
