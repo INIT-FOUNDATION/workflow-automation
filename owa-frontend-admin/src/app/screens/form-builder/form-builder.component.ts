@@ -3,6 +3,7 @@ import { FormBuilderService } from './services/form-builder.service';
 import { CommonDataViewComponent } from 'src/app/modules/common-data-view/common-data-view.component';
 import { Router } from '@angular/router';
 import { UtilityService } from 'src/app/modules/shared/services/utility.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-form-builder',
@@ -69,7 +70,21 @@ export class FormBuilderComponent implements OnInit {
   }
 
   updateCard(id: number) {
-    this.router.navigate([`/form-builder/update-form/:${id}`]);
+    this.router.navigate([`/form-builder/update-form-name/:${id}`]);
+  }
+
+  openSwalModal(id: number, status: number) {
+    Swal.fire({
+      title: `Are you sure?`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes',
+      cancelButtonText: 'No',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.updateCardStatus(id, status);
+      }
+    });
   }
 
   updateCardStatus(id: number, status: number) {
@@ -83,5 +98,10 @@ export class FormBuilderComponent implements OnInit {
         this.getGirdData();
       }
     });
+  }
+
+  redirectToForm() {
+    this.router.navigate(['form-builder/form-name']);
+    localStorage.removeItem('formDetails')
   }
 }

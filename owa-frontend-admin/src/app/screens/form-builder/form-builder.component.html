@@ -22,9 +22,9 @@
     type="button"
     class="bg-red-600 text-white rounded-lg px-4 py-2 text-sm"
   >
-    <a href="form-builder/add-form"
-      ><i class="fa-solid fa-plus me-2"></i>Add New Form</a
-    >
+    <div (click)="redirectToForm()">
+      <i class="fa-solid fa-plus me-2"></i>Add New Form
+    </div>
   </button>
 </div>
 
@@ -60,10 +60,12 @@
           <button
             mat-menu-item
             (click)="
-              updateCardStatus(rowData?.form_id, rowData?.status == 1 ? 2 : 1)
+              rowData?.status == 1
+                ? openSwalModal(rowData?.form_id, 0)
+                : updateCardStatus(rowData?.form_id, 1)
             "
           >
-            <span>Update Status</span>
+            <span>{{ rowData?.status == 1 ? "Inactive" : "Active" }}</span>
           </button>
         </mat-menu>
       </div>

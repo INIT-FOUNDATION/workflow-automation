@@ -135,7 +135,7 @@ export class PropertiesModalComponent implements OnInit {
   }
 
   onSelect() {
-    console.log(this.propertiesFormGrp.getRawValue());
+    // console.log(this.propertiesFormGrp.getRawValue());
   }
 
   onLabelChange(control: FormControl) {

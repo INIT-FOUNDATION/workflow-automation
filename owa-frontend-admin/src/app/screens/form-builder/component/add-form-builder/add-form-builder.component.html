@@ -1,6 +1,6 @@
 <div class="">
   <app-title
-    titleName="Add New Form"
+    [titleName]="formTitle"
     additionalClass="text-lg font-bold"
     [canGoBack]="true"
   ></app-title>
@@ -31,14 +31,15 @@
     </div>
 
     <div class="border-2 px-5 pt-5 rounded-2xl col-span-2">
-      <div class="relative">
+      <div class="relative" [formGroup]="selectedFieldsForm">
         <input
           type="text"
-          class="border-b outline-none w-full font-medium pb-2"
-          placeholder="Enter Form Name"
-          (focusout)="getInputFieldName($event.target.value)"
+          class="border-b outline-none w-full font-medium pb-2 bg-white"
+          formControlName="form_name"
         />
-        <i class="fa-solid fa-pencil absolute right-0 cursor-pointer"></i>
+        <a href="/form-builder/form-name">
+          <i class="fa-solid fa-pencil absolute right-0 cursor-pointer"></i
+        ></a>
       </div>
 
       <form
@@ -100,20 +101,20 @@
         </div>
 
         <div class="flex items-center">
-          <!-- <button
+          <button
+            [disabled]="chosenFields.length == 0"
             (click)="previewScreen()"
             type="button"
             class="bg-gray-200 rounded-lg w-full py-2 px-10 me-3"
           >
             Preview
-          </button> -->
+          </button>
           <button
             type="button"
-            [disabled]="!fieldName"
             class="bg-red-600 text-white rounded-lg w-full py-2 px-10"
-            (click)="submitForm()"
+            (click)="formId ? updateForm() : submitForm()"
           >
-            Save Form
+            {{ formId ? "Update Form" : "Save Form" }}
           </button>
         </div>
       </form>

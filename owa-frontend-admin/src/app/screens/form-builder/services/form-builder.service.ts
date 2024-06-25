@@ -31,6 +31,15 @@ export class FormBuilderService {
   }
 
   updateStatus(payload) {
-    return this.http.post(`${environment.forms_prefix_url}/updateStatus`, payload);
+    return this.http.post(
+      `${environment.forms_prefix_url}/updateStatus`,
+      payload
+    );
+  }
+
+  getFormDetailsById(form_id: number) {
+    return this.http.get(
+      `${environment.forms_prefix_url}/details/${form_id}`
+    );
   }
 }
