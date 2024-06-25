@@ -98,6 +98,10 @@ export const USERS = {
     errorCode: "USER000013",
     errorMessage: "Role Id Invalid!",
   },
+  USER000014:  {
+    errorCode: "USER000014",
+    errorMessage: "Invalid User Status!",
+  },
 };
 
 export const DEPARTMENTS = {
