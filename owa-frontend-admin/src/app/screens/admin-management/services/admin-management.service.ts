@@ -46,9 +46,7 @@ export class AdminManagementService {
     return this.http.post<any>(`${environment.admin_prefix_url}/users/resetPassword/${userId}`,{});
   }
 
-  deleteUser(userId: any) {
-    return this.http.post<any>(`${environment.admin_prefix_url}/users/deleteUser`, {
-     user_id: this.encDecService.set('' + userId)
-    });
+  updateStatus(postParams: any){
+    return this.http.post<any>(`${environment.admin_prefix_url}/users/updateStatus`, postParams);
   }
 }

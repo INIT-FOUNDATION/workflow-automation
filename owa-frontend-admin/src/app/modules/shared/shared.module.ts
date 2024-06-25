@@ -48,6 +48,8 @@ import { DataViewModule } from 'primeng/dataview';
 import { CardComponent } from './components/card/card.component';
 import { SidebarMenuComponent } from './components/sidebar-menu/sidebar-menu.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import {MatSlideToggleModule} from '@angular/material/slide-toggle';
+import {MatButtonToggleModule} from '@angular/material/button-toggle';
 
 /*------------------- DIRECTIVES ------------------------*/
 
@@ -93,6 +95,7 @@ const export_material_modules = [
   MatSelectModule,
   MatTooltipModule,
   MatAutocompleteModule,
+  MatSlideToggleModule,
   NgxSpinnerModule,
   MatExpansionModule,
   MatTabsModule,
@@ -101,6 +104,7 @@ const export_material_modules = [
   DataViewModule,
   MatDatepickerModule,
   MatNativeDateModule,
+  MatButtonToggleModule
 ];
 
 @NgModule({
