@@ -97,9 +97,9 @@ export const usersService = {
         const isSearchStringAMobileNumber = /^\d{10}$/.test(searchQuery);
         if (isSearchStringAMobileNumber) {
           key += `|SEARCH:${isSearchStringAMobileNumber}`;
-          _query.text += ` mobile_number = ${searchQuery}`;
+          _query.text += ` AND mobile_number = ${searchQuery}`;
         } else {
-          _query.text += ` display_name ILIKE '%${searchQuery}%'`;
+          _query.text += ` AND display_name ILIKE '%${searchQuery}%'`;
           key += `|SEARCH:${isSearchStringAMobileNumber}`;
         }
       }
