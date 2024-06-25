@@ -23,11 +23,14 @@ const CreateTasks: React.FC = () => {
   const handleNextClick = () => {
     router.push("/tasks/trigger-details");
   };
+  const handleBackClick=()=>{
+    router.push("/tasks");
+  }
   return (
     <IonContent>
       <div className="flex flex-col p-2 mt-20">
         <div className="cursor-pointer rounded-md flex items-center pt-8">
-          <IconButton>
+          <IconButton onClick={handleBackClick}>
             <ArrowBack />
           </IconButton>
           <span className="text-lg font-medium text-black pl-2">
