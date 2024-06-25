@@ -68,43 +68,43 @@ export class UserManagementGridComponent {
   }
 
   toggleUserStatus(userId: any, currentStatus: any) {
-
+    const secretKey = 'OWA@$#&*(!@%^&';
+    const user_id_string = userId.toString();
+    const encryptedUserId = this.encryptUserId(user_id_string, secretKey);
+  
+    const newStatus = currentStatus === 1 || currentStatus === 4 || currentStatus === 5 ? 0 : 1;
+    const payload = {
+      user_id: encryptedUserId,
+      status: newStatus,
+    };
+  
+    const gridData = this.adminManagementDetails.data.find(item => item.user_id === userId);
+  
     Swal.fire({
-          title: `Are you sure you want to change the status to ${currentStatus === 1 || currentStatus === 4 || currentStatus === 5 ? 'Inactive' : 'Active'} ?`,
-          icon: 'warning',
-          showCancelButton: true,
-          confirmButtonText: 'Yes, change it!',
-          cancelButtonText: 'No, keep it',
-        }).then((result) => {
-          if (result.isConfirmed) {
-            const secretKey = 'OWA@$#&*(!@%^&'; 
-            const user_id_string = userId.toString();
-            const encryptedUserId = this.encryptUserId(user_id_string, secretKey);
-        
-            let newStatus = currentStatus === 1 || currentStatus === 4 || currentStatus === 5 ? 0 : 1;
-            const payload = {
-              user_id: encryptedUserId,
-              status: newStatus,
-            };
-        
-            const gridData = this.adminManagementDetails.data.find(item => item.user_id === userId);
-        
-            this.adminService.updateStatus(payload).subscribe(
-              (res: any) => {
-               
-                gridData.status = newStatus === 1 ? '1' : '0';
-                console.log(gridData.status);
-                this.utilService.showSuccessMessage('User status changed successfully');
-                this.getAllUsersData();
-              },
-              (error) => {
-                gridData.status = currentStatus;
-                console.error('Failed to update status', error);
-              }
-            );
+      title: `Are you sure you want to change the status to ${newStatus === 0 ? 'Inactive' : 'Active'} ?`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, change it!',
+      cancelButtonText: 'No, keep it',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.adminService.updateStatus(payload).subscribe(
+          (res: any) => {
+            gridData.status = newStatus; // Update gridData.status based on the newStatus
+            this.utilService.showSuccessMessage('User status changed successfully');
+            this.getAllUsersData(); // Optionally refresh data from the server
+          },
+          (error) => {
+            gridData.status = currentStatus;
+            console.error('Failed to update status', error);
           }
-        });
+        );
+      } else {
+        this.getAllUsersData();
+      }
+    });
   }
+  
 
   toggleChange(event) {
     console.log(event)

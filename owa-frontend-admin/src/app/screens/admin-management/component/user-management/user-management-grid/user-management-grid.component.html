@@ -29,12 +29,13 @@
                 </button>
 
                 <mat-slide-toggle
-                [checked]="gridData.status !== 0"
-                (click)="toggleUserStatus(gridData.user_id, gridData.status)"
+                [checked]="gridData.status === 1 || gridData.status === 4 || gridData.status === 5"
+                (change)="toggleUserStatus(gridData.user_id, gridData.status)"
                 color="primary"
               >
-                {{ gridData.status === 1 ? 'Active' : 'Inactive' }}
+                {{ gridData.status === 1 || gridData.status === 4 || gridData.status === 5 ? 'Active' : 'Inactive' }}
               </mat-slide-toggle>
+
               </div>
             </ng-template>
 </app-common-data-table>
