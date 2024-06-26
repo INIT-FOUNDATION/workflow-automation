@@ -39,6 +39,10 @@ export const ROLES = {
     errorCode: "ROLE00009",
     errorMessage: "Level Required!",
   },
+  ROLE00010:  {
+    errorCode: "ROLE00010",
+    errorMessage: "Permissions are Required!",
+  },
 };
 
 export const USERS = {
