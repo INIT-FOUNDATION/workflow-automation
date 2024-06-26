@@ -78,18 +78,6 @@ export const USERS = {
     errorCode: "USER00007",
     errorMessage: "Role Id Required!",
   },
-  USER00008:  {
-    errorCode: "USER00008",
-    errorMessage: "Profile Picture Required!",
-  },
-  USER00009:  {
-    errorCode: "USER00009",
-    errorMessage: "Invalid Profile Picture Format, Use File format of either JPEG or PNG!",
-  },
-  USER00010:  {
-    errorCode: "USER00010",
-    errorMessage: "Maximum Upload Size Limit Exceeded for Profile Picture, Please upload it of size less than equal to 5MB!",
-  },
   USER000011:  {
     errorCode: "USER000011",
     errorMessage: "User with Requested Id does not exists!",

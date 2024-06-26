@@ -1,4 +1,4 @@
-import { logger, STATUS, envUtils } from "owa-micro-common";
+import { logger, STATUS } from "owa-micro-common";
 import { Response } from "express";
 import { Request } from "../types/express";
 import { GRID_DEFAULT_OPTIONS, decryptPayload } from "../constants/CONST";
@@ -8,7 +8,6 @@ import { User, validateCreateUser, validateUpdateUser } from "../models/usersMod
 import { departmentsService } from "../services/departmentsService";
 import { DEPARTMENTS, ROLES, USERS } from "../constants/ERRORCODE";
 import { rolesService } from "../services/rolesService";
-import { UploadedFile } from "express-fileupload";
 
 export const usersController = {
     listUsers: async (req: Request, res: Response): Promise<Response> => {
@@ -214,50 +213,6 @@ export const usersController = {
             return res.status(STATUS.INTERNAL_SERVER_ERROR).send(USERS.USER00000);
         }
     },
-    updateProfilePic: async (req: Request, res: Response): Promise<Response> => {
-        try {
-            /*  
-                #swagger.tags = ['Users']
-                #swagger.summary = 'Update Profile Pic'
-                #swagger.description = 'Endpoint to Update Profile Pic'
-                #swagger.parameters['Authorization'] = {
-                    in: 'header',
-                    required: true,
-                    type: 'string',
-                    description: 'Bearer token for authentication'
-                }
-                #swagger.parameters['file'] = {
-                    in: 'formData',
-                    required: true,
-                    type: 'file',
-                    description: 'Profile picture file to upload'
-                }
-            */
-            const plainToken = req.plainToken;
-            const file = req.files.file as UploadedFile;
-
-            if (!file) return res.status(STATUS.BAD_REQUEST).send(USERS.USER00008);
-
-            const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
-            if (!allowedTypes.includes(file.mimetype)) return res.status(STATUS.BAD_REQUEST).send(USERS.USER00009);
-
-            const uploadSizeLimit = envUtils.getNumberEnvVariableOrDefault("OWA_UPLOAD_FILE_SIZE_LIMIT", 5 * 1024 * 1024)
-            if (file.size > uploadSizeLimit) return res.status(STATUS.BAD_REQUEST).send(USERS.USER00010);
-
-            const userExists = await usersService.existsByUserId(plainToken.user_id);
-            if (!userExists) return res.status(STATUS.BAD_REQUEST).send(USERS.USER00005);
-
-            await usersService.updateProfilePic(file, plainToken.user_id);
-
-            return res.status(STATUS.OK).send({
-                data: null,
-                message: "Profile Picture Updated Successfully",
-            });
-        } catch (error) {
-            logger.error(`usersController :: updateProfilePic :: ${error.message} :: ${error}`);
-            return res.status(STATUS.INTERNAL_SERVER_ERROR).send(USERS.USER00000);
-        }
-    },
     listUsersByRoleId: async (req: Request, res: Response): Promise<Response> => {
         try {
             /*  
@@ -299,7 +254,7 @@ export const usersController = {
                 } 
             */
             const userId = req.params.userId;
-            if (!userId) return res.status(STATUS.BAD_REQUEST).send(USERS.USER00008);
+            if (!userId) return res.status(STATUS.BAD_REQUEST).send(USERS.USER00006);
 
             const userExists = await usersService.existsByUserId(parseInt(userId));
             if (!userExists) return res.status(STATUS.BAD_REQUEST).send(USERS.USER000011);
