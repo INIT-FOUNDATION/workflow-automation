@@ -5,13 +5,21 @@ import {
   IonCardContent,
   IonIcon,
   IonActionSheet,
+  useIonRouter,
 } from "@ionic/react";
 import { searchOutline } from "ionicons/icons";
 import "./MyTasks.css";
 
 const MyTasks: React.FC = () => {
   const [showActionSheet, setShowActionSheet] = useState(false);
+  const router = useIonRouter();
 
+  const handleWorkFlow = () => {
+    router.push("/tasks/workflow-selection");
+  };
+  const handleTasks = () => {
+    router.push("/tasks/create-tasks");
+  };
   return (
     <>
       <div className="cursor-pointer rounded-md flex items-center pt-[8rem]">
@@ -21,7 +29,7 @@ const MyTasks: React.FC = () => {
         />
         <span className="search-text text-gray-500">Search</span>
       </div>
-      <IonCard className="custom-card  rounded-lg p-4 mb-2 bg-neutral-100 shadow-md">
+      <IonCard className="custom-card border border-gray-300 rounded p-4 mb-2 bg-neutral-100">
         <IonCardContent>
           <div className="flex items-center">
             <img
@@ -41,7 +49,7 @@ const MyTasks: React.FC = () => {
           </div>
         </IonCardContent>
       </IonCard>
-      <IonCard className="custom-card rounded-lg p-4 mb-2 bg-neutral-100  shadow-md">
+      <IonCard className="custom-card border border-gray-300 rounded p-4 mb-2 bg-neutral-100">
         <IonCardContent>
           <div className="flex items-center">
             <img
@@ -81,14 +89,14 @@ const MyTasks: React.FC = () => {
                   text: "Choose existing workflow",
                   handler: () => {
                     setShowActionSheet(false);
-                    window.location.href = "/workflow-selection";
+                    handleWorkFlow();
                   },
                 },
                 {
                   text: "Create new task",
                   handler: () => {
                     setShowActionSheet(false);
-                    window.location.href = "/create-tasks";
+                    handleTasks();
                   },
                 },
               ]}

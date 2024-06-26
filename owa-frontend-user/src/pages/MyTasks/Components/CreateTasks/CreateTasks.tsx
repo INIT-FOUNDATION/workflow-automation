@@ -1,32 +1,42 @@
 import React from "react";
 import {
-  TextField,
-  Button,
-  IconButton,
   Select,
   MenuItem,
   FormControl,
   InputLabel,
   TextareaAutosize,
 } from "@mui/material";
-import { ArrowBack } from "@mui/icons-material";
 import "./CreateTasks.css";
-import { IonContent, IonIcon, IonInput, useIonRouter } from "@ionic/react";
+import {
+  IonButton,
+  IonContent,
+  IonIcon,
+  IonInput,
+  useIonRouter,
+} from "@ionic/react";
+import { useLocation } from "react-router";
+import { arrowBack } from "ionicons/icons";
 
 const CreateTasks: React.FC = () => {
+  const location = useLocation();
+  console.log(location.pathname, "path");
   const router = useIonRouter();
 
   const handleNextClick = () => {
-    console.log("Create new task clicked");
-    router.push("/trigger-details");
+    router.push("/tasks/trigger-details");
+  };
+  const handleBackClick = () => {
+    router.push("/tasks");
   };
   return (
     <IonContent>
-      <div className="flex flex-col p-2 mt-20">
-        <div className="cursor-pointer rounded-md flex items-center pt-8">
-          <IconButton>
-            <ArrowBack />
-          </IconButton>
+      <div className="flex flex-col p-2">
+        <div className="cursor-pointer rounded-md flex items-center pt-32">
+          <IonIcon
+            icon={arrowBack}
+            onClick={handleBackClick}
+            className="pl-2"
+          />
           <span className="text-lg font-medium text-black pl-2">
             Create New Task
           </span>
@@ -39,12 +49,9 @@ const CreateTasks: React.FC = () => {
               labelPlacement="floating"
               fill="outline"
               // placeholder="Enter here"
-              maxlength={10}
               //  className=" text-black"
-              required
               mode="md"
-              type="tel"
-            ></IonInput>
+             ></IonInput>
             {/* <TextField
             label="Task Name"
             variant="outlined"
@@ -82,7 +89,7 @@ const CreateTasks: React.FC = () => {
               className="flex justify-between items-center mb-4 border-b border-gray-300 pb-2"
               style={{ width: "98%" }}
             >
-              <div className="flex items-center mt-2 p-4">
+              <div className="flex items-center mt-2 p-2">
                 <IonIcon
                   src="Assets/images/CreateTasks/create_task_calender.svg"
                   className="calender-img"
@@ -96,7 +103,7 @@ const CreateTasks: React.FC = () => {
               className="flex justify-between items-center mb-4 border-b border-gray-300 pb-2"
               style={{ width: "98%" }}
             >
-              <div className="flex items-center mt-2 p-4">
+              <div className="flex items-center mt-2 p-2">
                 <IonIcon
                   src="Assets/images/CreateTasks/create_task_profile.svg"
                   className="calender-img"
@@ -108,16 +115,15 @@ const CreateTasks: React.FC = () => {
             </div>
           </div>
 
-          <div className="flex justify-center fixed bottom-4 inset-x-2">
-            <Button
+          <div className="custom-btn flex justify-center pt-28 inset-x-2">
+            <IonButton
+              color="danger"
+              className="rounded w-full "
               onClick={() => handleNextClick()}
-              variant="contained"
-              color="error"
-              className="w-full py-2"
               type="submit"
             >
               Next
-            </Button>
+            </IonButton>
           </div>
         </form>
       </div>

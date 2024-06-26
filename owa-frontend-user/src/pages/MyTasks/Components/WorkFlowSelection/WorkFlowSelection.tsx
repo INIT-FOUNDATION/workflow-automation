@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import {
   IonButton,
-  IonCard,
-  IonCardContent,
   IonIcon,
   useIonRouter,
 } from "@ionic/react";
@@ -24,7 +22,7 @@ const WorkFlowSelection: React.FC = () => {
     setWorkflow(event.target.value as string);
   };
   const handleNextClick = () => {
-    router.push("/workflow-started");
+    router.push("/tasks/workflow-started");
   };
 
   const handleBack = () => {
@@ -36,8 +34,6 @@ const WorkFlowSelection: React.FC = () => {
         <IonIcon icon={arrowBack} onClick={handleBack} className="pl-2" />
         <span className="search-text text-black-600 pl-2">Choose workflow</span>
       </div>
-
-      {/* <IonCard className="border border-gray-300 rounded mb-2 bg-gray-100"> */}
       <form className="mb-4 pt-2">
         <FormControl fullWidth>
           <InputLabel>Select Workflow</InputLabel>
@@ -53,7 +49,6 @@ const WorkFlowSelection: React.FC = () => {
           </Select>
         </FormControl>
       </form>
-      {/* </IonCard>{" "} */}
       <div className="flex-grow"></div>
       <div className="flex justify-center pb-16">
         <IonButton
