@@ -40,11 +40,11 @@ export const usersService = {
       if (searchQuery) {
         const isSearchStringAMobileNumber = /^\d{10}$/.test(searchQuery);
         if (isSearchStringAMobileNumber) {
-          key += `|SEARCH:${isSearchStringAMobileNumber}`;
+          key += `|SEARCH:MOBILE_NUMBER:${searchQuery}`;
           _query.text += ` AND mobile_number = ${searchQuery}`;
         } else {
           _query.text += ` AND display_name ILIKE '%${searchQuery}%'`;
-          key += `|SEARCH:${isSearchStringAMobileNumber}`;
+          key += `|SEARCH:DISPLAY_NAME:${searchQuery}`;
         }
       }
 
@@ -96,11 +96,11 @@ export const usersService = {
       if (searchQuery) {
         const isSearchStringAMobileNumber = /^\d{10}$/.test(searchQuery);
         if (isSearchStringAMobileNumber) {
-          key += `|SEARCH:${isSearchStringAMobileNumber}`;
+          key += `|SEARCH:MOBILE_NUMBER:${searchQuery}`;
           _query.text += ` AND mobile_number = ${searchQuery}`;
         } else {
           _query.text += ` AND display_name ILIKE '%${searchQuery}%'`;
-          key += `|SEARCH:${isSearchStringAMobileNumber}`;
+          key += `|SEARCH:DISPLAY_NAME:${searchQuery}`;
         }
       }
 
