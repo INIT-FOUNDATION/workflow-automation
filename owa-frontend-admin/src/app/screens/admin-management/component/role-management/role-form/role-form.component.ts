@@ -11,6 +11,7 @@ import { forkJoin } from 'rxjs';
 import { RoleManagementService } from '../services/role-management.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from 'src/app/screens/auth/services/auth.service';
+import { UtilityService } from 'src/app/modules/shared/services/utility.service';
 
 @Component({
   selector: 'app-role-form',
@@ -33,7 +34,8 @@ export class RoleFormComponent {
     private roleManagementService: RoleManagementService,
     private router: Router,
     private activeRoute: ActivatedRoute,
-    private authService: AuthService
+    private authService: AuthService,
+    private utilsService: UtilityService
   ) {}
 
   getRoleDetails() {
@@ -100,7 +102,7 @@ export class RoleFormComponent {
 
   initForm() {
     this.roleForm = new FormGroup({
-      role_name: new FormControl(null, [Validators.required]),
+      role_name: new FormControl(null, [Validators.required,Validators.minLength(3),]),
       level: new FormControl(null, [Validators.required]),
       status: new FormControl(this.formType == 'edit' ? null : 1, [
         Validators.required,
@@ -144,6 +146,33 @@ export class RoleFormComponent {
   }
 
   submit() {
+
+    if (!this.roleForm.controls.role_name.valid) {
+      this.utilsService.showErrorMessage(
+        'Role name must be at least 3 characters'
+      );
+      return;
+    }
+    if (!this.roleForm.controls.role_description.valid) {
+      this.utilsService.showErrorMessage('Please mention role description');
+      return;
+    }
+    if (!this.roleForm.controls.level.valid) {
+      this.utilsService.showErrorMessage(
+        'Please select the level'
+      );
+      return;
+    }
+    if (!this.roleForm.controls.status.valid) {
+      this.utilsService.showErrorMessage('Please select status');
+      return;
+    }
+    if (this.formType == 'add') {
+    this.addRole();
+    } else {
+    this.updateRole();
+    }
+
     let formData = this.roleForm.getRawValue();
 
     let access_control = formData.permissions;
@@ -160,20 +189,30 @@ export class RoleFormComponent {
     if (permissions.length > 0) {
       formData.permissions = permissions;
     } else {
-      console.log('Please choose permissions');
+      // this.utilsService.showErrorMessage('Please choose permissions');
       return;
     }
+  }
 
-    if (this.formType == 'add') {
-      this.roleManagementService.addRole(formData).subscribe((res) => {
-        this.backToAdminManagement();
-      });
-    } else {
-      formData.role_id = this.role_id;
-      this.roleManagementService.updateRole(formData).subscribe((res) => {
-        this.backToAdminManagement();
-      });
+  addRole(){
+    let formData = this.roleForm.getRawValue();
+    this.roleManagementService.addRole(formData).subscribe((res) => {
+      this.utilsService.showSuccessMessage('Role added successfully');
+      this.backToAdminManagement();
+    },
+    (error)=>{
+      console.error(error)
     }
+  );
+  }
+
+  updateRole(){
+    let formData = this.roleForm.getRawValue();
+    formData.role_id = this.role_id;
+    this.roleManagementService.updateRole(formData).subscribe((res) => {
+      this.utilsService.showSuccessMessage('Role updated successfully');
+      this.backToAdminManagement();
+    });
   }
 
   backToAdminManagement() {
