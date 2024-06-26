@@ -5,13 +5,21 @@ import {
   IonCardContent,
   IonIcon,
   IonActionSheet,
+  useIonRouter,
 } from "@ionic/react";
 import { searchOutline } from "ionicons/icons";
 import "./MyTasks.css";
 
 const MyTasks: React.FC = () => {
   const [showActionSheet, setShowActionSheet] = useState(false);
+  const router = useIonRouter();
 
+  const handleWorkFlow = () => {
+    router.push("/tasks/workflow-selection");
+  };
+  const handleTasks = () => {
+    router.push("/tasks/create-tasks");
+  };
   return (
     <>
       <div className="cursor-pointer rounded-md flex items-center pt-[8rem]">
@@ -71,29 +79,29 @@ const MyTasks: React.FC = () => {
           >
             Add Task
           </IonButton>
-         <div>
-           <IonActionSheet
-           className="my-custom-class"
-            isOpen={showActionSheet}
-            onDidDismiss={() => setShowActionSheet(false)}
-            buttons={[
-              {
-                text: "Choose existing workflow",
-                handler: () => {
-                  setShowActionSheet(false);
-                  window.location.href = "/tasks/workflow-selection";
+          <div>
+            <IonActionSheet
+              className="my-custom-class"
+              isOpen={showActionSheet}
+              onDidDismiss={() => setShowActionSheet(false)}
+              buttons={[
+                {
+                  text: "Choose existing workflow",
+                  handler: () => {
+                    setShowActionSheet(false);
+                    handleWorkFlow();
+                  },
                 },
-              },
-              {
-                text: "Create new task",
-                handler: () => {
-                  setShowActionSheet(false);
-                  window.location.href = "/tasks/create-tasks";
+                {
+                  text: "Create new task",
+                  handler: () => {
+                    setShowActionSheet(false);
+                    handleTasks();
+                  },
                 },
-              },
-            ]}
-          />
-         </div>
+              ]}
+            />
+          </div>
         </div>
       </div>
     </>

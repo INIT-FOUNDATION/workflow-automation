@@ -1,15 +1,11 @@
 import React from "react";
 import {
-  TextField,
-  Button,
-  IconButton,
   Select,
   MenuItem,
   FormControl,
   InputLabel,
   TextareaAutosize,
 } from "@mui/material";
-import { ArrowBack } from "@mui/icons-material";
 import "./CreateTasks.css";
 import {
   IonButton,
@@ -19,6 +15,7 @@ import {
   useIonRouter,
 } from "@ionic/react";
 import { useLocation } from "react-router";
+import { arrowBack } from "ionicons/icons";
 
 const CreateTasks: React.FC = () => {
   const location = useLocation();
@@ -35,9 +32,11 @@ const CreateTasks: React.FC = () => {
     <IonContent>
       <div className="flex flex-col p-2">
         <div className="cursor-pointer rounded-md flex items-center pt-32">
-          <IconButton onClick={handleBackClick}>
-            <ArrowBack />
-          </IconButton>
+          <IonIcon
+            icon={arrowBack}
+            onClick={handleBackClick}
+            className="pl-2"
+          />
           <span className="text-lg font-medium text-black pl-2">
             Create New Task
           </span>
@@ -50,12 +49,9 @@ const CreateTasks: React.FC = () => {
               labelPlacement="floating"
               fill="outline"
               // placeholder="Enter here"
-              maxlength={10}
               //  className=" text-black"
-              required
               mode="md"
-              type="tel"
-            ></IonInput>
+             ></IonInput>
             {/* <TextField
             label="Task Name"
             variant="outlined"

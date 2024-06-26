@@ -51,7 +51,7 @@ const App: React.FC = () => (
 
         {/* Routes with Footer */}
         <Footer>
-          <Route path="/tasks" component={MyTasks} />
+          <Route path="/tasks" component={MyTasks} exact />
           <Route
             path="/tasks/workflow-selection"
             component={WorkFlowSelection}
