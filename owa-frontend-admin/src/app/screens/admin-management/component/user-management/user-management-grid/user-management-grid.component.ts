@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { CommonDataTableComponent } from 'src/app/modules/common-data-table/common-data-table.component';
 import { Colmodel } from 'src/app/modules/common-data-table/model/colmodel.model';
 import { AdminManagementService } from '../../../services/admin-management.service';
@@ -6,13 +6,16 @@ import { Router } from '@angular/router';
 import { UtilityService } from 'src/app/modules/shared/services/utility.service';
 import Swal from 'sweetalert2';
 import * as CryptoJS from 'crypto-js';
+import { Observable, Subject, Subscription } from 'rxjs';
+import { AdminManagementComponent } from '../../../admin-management.component';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 @Component({
   selector: 'app-user-management-grid',
   templateUrl: './user-management-grid.component.html',
   styleUrls: ['./user-management-grid.component.scss'],
 })
-export class UserManagementGridComponent {
+export class UserManagementGridComponent implements OnInit, OnDestroy  {
   @ViewChild('adminManagementDetails')
   adminManagementDetails: CommonDataTableComponent;
   cols: Colmodel[] = [];
@@ -20,16 +23,28 @@ export class UserManagementGridComponent {
   currentPage = 1;
 
   private keys = 'OWA@$#&*(!@%^&';
+  private searchSubscription: Subscription;
 
   constructor(
     private adminService: AdminManagementService,
     private router: Router,
-    private utilService: UtilityService
+    private utilService: UtilityService,
+    private adminManagementComponent: AdminManagementComponent
   ) {}
 
   ngOnInit(): void {
     this.prepareAssessmentGridCols();
     this.getAllUsersData();
+
+    this.searchSubscription = this.adminService.searchObservable$.subscribe(searchTerm => {
+      this.getAllUsersData(searchTerm);
+    });
+  }
+
+  ngOnDestroy(): void {
+    if (this.searchSubscription) {
+      this.searchSubscription.unsubscribe();
+    }
   }
 
   prepareAssessmentGridCols() {
@@ -40,13 +55,14 @@ export class UserManagementGridComponent {
     ];
   }
 
-  getAllUsersData() {
+  getAllUsersData(searchTerm: string = '') {
     const payload: any = {
       page_size:
         this.adminManagementDetails && this.adminManagementDetails.rows
           ? this.adminManagementDetails.rows
           : this.rowsPerPage,
       current_page: this.currentPage,
+      search_query: searchTerm,
     };
     this.getUsersDataArray(payload);
   }
@@ -55,9 +71,14 @@ export class UserManagementGridComponent {
     this.adminService.getUsersData(payload).subscribe((res) => {
       this.adminManagementDetails.data = res.data.usersList;
       this.adminManagementDetails.totalRecords = res.data.usersCount;
-    });
+      console.log('Filtered Data:', this.adminManagementDetails.data);
+    },
+    (error) => {
+      console.error('Failed to fetch user data', error); // Add error handling
+    }
+  );
   }
-
+  
   editManagementDetails(data) {
     this.router.navigate([`/admin-management/edit-user/${data.user_id}`]);
   }
