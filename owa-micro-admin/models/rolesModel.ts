@@ -43,6 +43,8 @@ const validateCreateRole = (role: IRole): Joi.ValidationResult => {
         menu_id: Joi.number().required(),
         permission_id: Joi.number().required()
       })
+    ).required().error(
+      new Error(JSON.stringify(ROLES.ROLE00010))
     ),
     level: Joi.string().required(),
     status: Joi.number().valid(...Object.values(ROLES_STATUS)),
@@ -69,6 +71,8 @@ const validateUpdateRole = (role: IRole): Joi.ValidationResult => {
         menu_id: Joi.number().required(),
         permission_id: Joi.number().required()
       })
+    ).required().error(
+      new Error(JSON.stringify(ROLES.ROLE00010))
     ),
     status: Joi.number().valid(...Object.values(ROLES_STATUS)),
   });
