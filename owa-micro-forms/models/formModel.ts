@@ -30,10 +30,10 @@ class Form implements IForm {
         const formSchema = Joi.object({
             form_id: Joi.number().integer().optional(),
             form_name: Joi.string().min(3).max(50).required().error(
-                new Error(JSON.stringify(FORMS.FORM00002))
+                new Error(FORMS.FORM00002)
             ),
             form_description: Joi.string().min(3).max(500).required().error(
-                new Error(JSON.stringify(FORMS.FORM00003))
+                new Error(FORMS.FORM00003)
             ),
             status: Joi.number().integer().required(),
             date_created: Joi.string().allow("", null),
