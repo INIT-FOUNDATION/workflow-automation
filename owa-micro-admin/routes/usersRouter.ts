@@ -9,8 +9,6 @@ usersRouter.post("/update", usersController.updateUser);
 
 usersRouter.get("/:userId", usersController.getUserById);
 
-usersRouter.post("/updateProfilePic", usersController.updateProfilePic);
-
 usersRouter.get("/list/:roleId", usersController.listUsersByRoleId);
 
 usersRouter.post("/list", usersController.listUsers);

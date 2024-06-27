@@ -342,27 +342,6 @@ export const usersService = {
       throw new Error(error.message);
     }
   },
-  updateProfilePic: async (profilePicture: UploadedFile, userId: number) => {
-    try {
-      const objectStoragePath = `profile-pictures/PROFILE_PICTURE_${userId}.${profilePicture.mimetype.split("/")[1]}`;
-      const bucketName = envUtils.getStringEnvVariableOrDefault("OWA_OBJECT_STORAGE_BUCKET", "owa-dev");
-      await objectStorageUtility.putObject(bucketName, objectStoragePath, profilePicture.data);
-
-      const _query = {
-        text: USERS.updateProfilePic,
-        values: [userId, objectStoragePath]
-      };
-      logger.debug(`usersService :: updateProfilePic :: query :: ${JSON.stringify(_query)}`);
-
-      const result = await pg.executeQueryPromise(_query);
-      logger.debug(`usersService :: updateProfilePic :: db result :: ${JSON.stringify(result)}`);
-
-      redis.deleteRedis(`USER:${userId}`);
-    } catch (error) {
-      logger.error(`usersService :: updateProfilePic :: ${error.message} :: ${error}`)
-      throw new Error(error.message);
-    }
-  },
   getUsersByRoleId: async (roleId: number): Promise<IUser[]> => {
     try {
       const key = `USERS|ROLE:${roleId}`;
