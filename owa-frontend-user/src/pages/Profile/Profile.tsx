@@ -81,10 +81,10 @@ const Profile: React.FC = () => {
           </div>
         </form>
       </div>
-      <div className="pt-4 pb-8 px-2">
+      <div className="pt-2 pb-8 px-2">
         <IonButton
           color="danger"
-          className="rounded w-full"
+          className="rounded-md w-full"
         >
           Save changes
         </IonButton>
