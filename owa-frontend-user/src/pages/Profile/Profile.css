@@ -24,8 +24,8 @@
 } */
 
 .native-input.sc-ion-input-md {
-    padding-left: 13px;
+    padding-left: 13px !important;
   }
 .native-input.sc-ion-input-ios {
-  padding-left: 13px;
+  padding-left: 13px !important;
 }
