@@ -4,7 +4,7 @@ import "./TasksReport.css";
 const TasksReport: React.FC = () => {
   return (
     <>
-      <div className="mt-[8rem] m-6">
+      <div className="mt-[6rem] m-6">
         <h2 className="text-lg font-normal mb-4">Task Report</h2>
 
         <div

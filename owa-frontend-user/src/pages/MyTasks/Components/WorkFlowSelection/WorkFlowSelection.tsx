@@ -30,7 +30,7 @@ const WorkFlowSelection: React.FC = () => {
   };
   return (
     <div className="flex flex-col h-screen p-2">
-      <div className="cursor-pointer rounded-md flex items-center pt-32">
+      <div className="cursor-pointer rounded-md flex items-center pt-24">
         <IonIcon icon={arrowBack} onClick={handleBack} className="pl-2" />
         <span className="search-text text-black-600 pl-2">Choose workflow</span>
       </div>

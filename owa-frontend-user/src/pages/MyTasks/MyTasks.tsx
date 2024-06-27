@@ -23,7 +23,7 @@ const MyTasks: React.FC = () => {
   };
   return (
     <div>
-      <div className="flex items-center justify-center pt-[8rem]">
+      <div className="flex items-center justify-center pt-[6rem]">
         <div className="flex items-center px-2 bg-neutral-100  border-gray-400 rounded-md w-[300px]">
           <IonIcon
             icon={searchOutline}
