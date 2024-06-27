@@ -25,8 +25,8 @@ const TriggerDetails: React.FC = () => {
 
   return (
     <IonContent>
-      <div className="flex flex-col p-2 mt-20">
-        <div className="cursor-pointer rounded-md flex items-center pt-8">
+      <div className="flex flex-col p-2 pt-28">
+        <div className="cursor-pointer rounded-md flex items-center">
           <IonIcon
             icon={arrowBack}
             onClick={handleBackClick}

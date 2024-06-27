@@ -12,21 +12,21 @@ import "./AssignTasks.css";
 const AssignTasks: React.FC = () => {
   return (
     <>
-           <div className="flex items-center justify-center pt-[8rem]">
-        <div className="flex items-center px-2 bg-neutral-100  border-gray-400 rounded-md w-[300px]">
+      <div className="flex items-center justify-center pt-[6rem] px-4">
+        <div className="flex items-center px-2 bg-neutral-100 border-gray-400 rounded-md w-full">
           <IonIcon
             icon={searchOutline}
             className="w-5 h-5 mr-2 text-gray-500"
           />
-
           <IonInput
             type="text"
             placeholder="Search"
-            className="text-gray-500"
+            className="text-gray-500 w-full"
           />
           {/* <span className="text-gray-500">Search</span> */}
         </div>
       </div>
+
       <div className="ml-4 mt-6 text-sm font-medium text-black ">
         <span>Assigned Tasks</span>
       </div>

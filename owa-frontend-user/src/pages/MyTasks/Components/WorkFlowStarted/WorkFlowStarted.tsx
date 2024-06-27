@@ -28,7 +28,7 @@ const WorkFlowStarted: React.FC = () => {
   };
   return (
     <div>
-      <div className="cursor-pointer rounded-md flex items-center pt-32">
+      <div className="cursor-pointer rounded-md flex items-center pt-28">
         <IonIcon icon={arrowBack} onClick={handleBack} className="pl-2" />
         <span className="search-text text-black-600 pl-2">
           B2B lead conversion

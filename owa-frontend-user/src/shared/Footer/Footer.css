@@ -10,3 +10,7 @@
   .tab-button-red .tab-button-label {
     color: #e71010 !important;
   }
+
+  .custom-iontabbar{
+    padding: 4px;
+  }
