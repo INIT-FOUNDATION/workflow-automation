@@ -37,10 +37,10 @@ const Header: React.FC = () => {
 
   return (
     <div className="flex items-center justify-between px-2 md:px-20 pt-3 pb-1 fixed bg-white z-10 w-full">
-      <div className="flex items-center">
+      <div className="flex items-center mt-2">
         <img
-          src="Assets/images/Header/Header_logo.svg"
-          className="w-16"
+          src="Assets/images/Header/Header_logo.png"
+          className="w-10 h-10 ml-2"
           alt="logo"
         />
       </div>

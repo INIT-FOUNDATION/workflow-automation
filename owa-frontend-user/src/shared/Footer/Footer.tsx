@@ -34,7 +34,7 @@ const Footer: React.FC<FooterProps> = ({ children }) => {
         <Redirect exact path="/" to="/tasks" />
       </IonRouterOutlet>
 
-      <IonTabBar slot="bottom">
+      <IonTabBar slot="bottom" className="custom-iontabbar">
         <IonTabButton
           tab="tasks"
           onClick={() => handleTabClick("/tasks")}
