@@ -40,11 +40,11 @@ export const usersService = {
       if (searchQuery) {
         const isSearchStringAMobileNumber = /^\d{10}$/.test(searchQuery);
         if (isSearchStringAMobileNumber) {
-          key += `|SEARCH:${isSearchStringAMobileNumber}`;
+          key += `|SEARCH:MOBILE_NUMBER:${searchQuery}`;
           _query.text += ` AND mobile_number = ${searchQuery}`;
         } else {
           _query.text += ` AND display_name ILIKE '%${searchQuery}%'`;
-          key += `|SEARCH:${isSearchStringAMobileNumber}`;
+          key += `|SEARCH:DISPLAY_NAME:${searchQuery}`;
         }
       }
 
@@ -96,11 +96,11 @@ export const usersService = {
       if (searchQuery) {
         const isSearchStringAMobileNumber = /^\d{10}$/.test(searchQuery);
         if (isSearchStringAMobileNumber) {
-          key += `|SEARCH:${isSearchStringAMobileNumber}`;
-          _query.text += ` mobile_number = ${searchQuery}`;
+          key += `|SEARCH:MOBILE_NUMBER:${searchQuery}`;
+          _query.text += ` AND mobile_number = ${searchQuery}`;
         } else {
-          _query.text += ` display_name ILIKE '%${searchQuery}%'`;
-          key += `|SEARCH:${isSearchStringAMobileNumber}`;
+          _query.text += ` AND display_name ILIKE '%${searchQuery}%'`;
+          key += `|SEARCH:DISPLAY_NAME:${searchQuery}`;
         }
       }
 
@@ -339,27 +339,6 @@ export const usersService = {
 
     } catch (error) {
       logger.error(`usersService :: updateUserDepartmentMapping :: ${error.message} :: ${error}`)
-      throw new Error(error.message);
-    }
-  },
-  updateProfilePic: async (profilePicture: UploadedFile, userId: number) => {
-    try {
-      const objectStoragePath = `profile-pictures/PROFILE_PICTURE_${userId}.${profilePicture.mimetype.split("/")[1]}`;
-      const bucketName = envUtils.getStringEnvVariableOrDefault("OWA_OBJECT_STORAGE_BUCKET", "owa-dev");
-      await objectStorageUtility.putObject(bucketName, objectStoragePath, profilePicture.data);
-
-      const _query = {
-        text: USERS.updateProfilePic,
-        values: [userId, objectStoragePath]
-      };
-      logger.debug(`usersService :: updateProfilePic :: query :: ${JSON.stringify(_query)}`);
-
-      const result = await pg.executeQueryPromise(_query);
-      logger.debug(`usersService :: updateProfilePic :: db result :: ${JSON.stringify(result)}`);
-
-      redis.deleteRedis(`USER:${userId}`);
-    } catch (error) {
-      logger.error(`usersService :: updateProfilePic :: ${error.message} :: ${error}`)
       throw new Error(error.message);
     }
   },

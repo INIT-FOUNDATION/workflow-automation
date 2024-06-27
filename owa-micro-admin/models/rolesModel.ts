@@ -33,16 +33,18 @@ const validateCreateRole = (role: IRole): Joi.ValidationResult => {
   const roleSchema = Joi.object({
     role_id: Joi.number().allow("", null),
     role_name: Joi.string().min(3).max(20).required().error(
-      new Error(JSON.stringify(ROLES.ROLE00001))
+      new Error(ROLES.ROLE00001.errorMessage)
     ),
     role_description: Joi.string().min(3).max(50).required().error(
-      new Error(JSON.stringify(ROLES.ROLE00002))
+      new Error(ROLES.ROLE00002.errorMessage)
     ),
     permissions: Joi.array().items(
       Joi.object({
         menu_id: Joi.number().required(),
         permission_id: Joi.number().required()
       })
+    ).required().error(
+      new Error(ROLES.ROLE00010.errorMessage)
     ),
     level: Joi.string().required(),
     status: Joi.number().valid(...Object.values(ROLES_STATUS)),
@@ -58,10 +60,10 @@ const validateUpdateRole = (role: IRole): Joi.ValidationResult => {
   const roleSchema = Joi.object({
     role_id: Joi.number().required(),
     role_name: Joi.string().min(3).max(20).required().error(
-      new Error(JSON.stringify(ROLES.ROLE00001))
+      new Error(ROLES.ROLE00001.errorMessage)
     ),
     role_description: Joi.string().min(3).max(50).required().error(
-      new Error(JSON.stringify(ROLES.ROLE00002))
+      new Error(ROLES.ROLE00002.errorMessage)
     ),
     level: Joi.string().required(),
     permissions: Joi.array().items(
@@ -69,6 +71,8 @@ const validateUpdateRole = (role: IRole): Joi.ValidationResult => {
         menu_id: Joi.number().required(),
         permission_id: Joi.number().required()
       })
+    ).required().error(
+      new Error(ROLES.ROLE00010.errorMessage)
     ),
     status: Joi.number().valid(...Object.values(ROLES_STATUS)),
   });
@@ -79,7 +83,7 @@ const validateUpdateRoleStatus = (role: IRole): Joi.ValidationResult => {
   const roleSchema = Joi.object({
     role_id: Joi.number().required(),
     status: Joi.number().valid(...Object.values(ROLES_STATUS)).required().error(
-      new Error(JSON.stringify(ROLES.ROLE00004))
+      new Error(ROLES.ROLE00004.errorMessage)
     )
   });
   return roleSchema.validate(role);

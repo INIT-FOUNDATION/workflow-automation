@@ -55,16 +55,16 @@ const validateCreateUser = (user: IUser): Joi.ValidationResult => {
   const userSchema = Joi.object({
     user_id: Joi.number().allow("", null),
     user_name: Joi.string().min(3).max(20).required().error(
-      new Error(JSON.stringify(USERS.USER00001))
+      new Error(USERS.USER00001.errorMessage)
     ),
     display_name: Joi.string().min(3).max(50).required().error(
-      new Error(JSON.stringify(USERS.USER00002))
+      new Error(USERS.USER00002.errorMessage)
     ),
     first_name: Joi.string().min(3).max(50).required().error(
-      new Error(JSON.stringify(USERS.USER00003))
+      new Error(USERS.USER00003.errorMessage)
     ),
     last_name: Joi.string().min(3).max(50).required().error(
-      new Error(JSON.stringify(USERS.USER00004))
+      new Error(USERS.USER00004.errorMessage)
     ),
     mobile_number: Joi.number().integer().min(6000000000).max(9999999999).required(),
     dob: Joi.date().iso(),
@@ -90,14 +90,14 @@ const validateUpdateUser = (user: IUser): Joi.ValidationResult => {
   const userSchema = Joi.object({
     user_id: Joi.number().required(),
     user_name: Joi.string().min(3).max(20).required().error(
-      new Error(JSON.stringify(USERS.USER00001))
+      new Error(USERS.USER00001.errorMessage)
     ),
     display_name: Joi.string().min(3).max(50),
     first_name: Joi.string().min(3).max(50).required().error(
-      new Error(JSON.stringify(USERS.USER00003))
+      new Error(USERS.USER00003.errorMessage)
     ),
     last_name: Joi.string().min(3).max(50).required().error(
-      new Error(JSON.stringify(USERS.USER00004))
+      new Error(USERS.USER00004.errorMessage)
     ),
     dob: Joi.date().iso(),
     mobile_number: Joi.number().integer().min(6000000000).max(9999999999).required(),
