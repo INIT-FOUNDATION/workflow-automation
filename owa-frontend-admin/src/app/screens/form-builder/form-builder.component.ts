@@ -16,14 +16,14 @@ export class FormBuilderComponent implements OnInit {
   gridData: any = [];
   delayedTime: any;
   @ViewChild('gridViewItem') gridViewItem: TemplateRef<any>;
-  rowsPerPage = 5;
+  rowsPerPage = 6;
   rows = [
     { value: 5, label: '5' },
     { value: 10, label: '10' },
     { value: 15, label: '15' },
     { value: 20, label: '20' },
   ];
-  currentPage = 0;
+  currentPage = 1;
 
   constructor(
     private formBuilderService: FormBuilderService,
@@ -33,13 +33,13 @@ export class FormBuilderComponent implements OnInit {
 
   ngOnInit(): void {
     this.getGirdData();
+    localStorage.removeItem('formDetails');
   }
 
   getGirdData(searchedValue?) {
     try {
       const payload: any = {
-        page_size:
-          this.dataView && this.dataView.rows ? this.dataView.rows : 50,
+        page_size: this.dataView && this.dataView.rows ? this.dataView.rows : 6,
         current_page: this.currentPage,
       };
       if (searchedValue) {
@@ -63,9 +63,9 @@ export class FormBuilderComponent implements OnInit {
     }, 1000);
   }
 
-  onPageChangeEvent(event) {
-    this.currentPage = event.first == 0 ? 1 : event.first / event.rows + 1;
-    this.gridData.rows = event.rows;
+  onCustomPageChangeEvent(event) {
+    this.currentPage = event.currentPage;
+    // this.dataView.rows = event.rows;
     this.getGirdData();
   }
 
@@ -102,6 +102,5 @@ export class FormBuilderComponent implements OnInit {
 
   redirectToForm() {
     this.router.navigate(['form-builder/form-name']);
-    localStorage.removeItem('formDetails')
   }
 }

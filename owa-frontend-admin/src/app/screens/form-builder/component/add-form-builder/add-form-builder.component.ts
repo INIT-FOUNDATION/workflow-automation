@@ -159,9 +159,11 @@ export class AddFormBuilderComponent implements OnInit, AfterViewInit {
   updateForm() {
     const formData = this.selectedFieldsForm.getRawValue();
     formData.form_fields = this.chosenFields;
+    formData.form_id = parseInt(this.formId.substring(1));
     this.formBuilderService.updateForm(formData).subscribe((res: any) => {
       if (res) {
         this.router.navigate(['/form-builder']);
+        localStorage.removeItem('formDetails');
       }
     });
   }

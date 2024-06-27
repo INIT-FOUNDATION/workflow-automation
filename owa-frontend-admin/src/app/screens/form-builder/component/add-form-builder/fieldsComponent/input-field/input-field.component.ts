@@ -15,7 +15,7 @@ import {
 })
 export class InputFieldComponent implements OnInit {
   @Input() fieldData: any;
-  @Input() disabled: boolean = false;
+  @Input() disabled: boolean;
   @Output() deleteFormFieldIndex = new EventEmitter<number>();
   @Output() editFormFieldIndex = new EventEmitter<number>();
 
