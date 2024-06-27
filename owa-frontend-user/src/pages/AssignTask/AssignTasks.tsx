@@ -5,18 +5,27 @@ import {
   IonCardHeader,
   IonCardSubtitle,
   IonIcon,
+  IonInput,
 } from "@ionic/react";
 import { searchOutline } from "ionicons/icons";
 import "./AssignTasks.css";
 const AssignTasks: React.FC = () => {
   return (
     <>
-      <div className="cursor-pointer mx-2 rounded-sm flex items-center pt-[8rem]">
-        <IonIcon
-          icon={searchOutline}
-          className="search-icon mr-2 w-5 h-5 text-gray-500 pl-2"
-        />
-        <span className="search-text text-gray-500">Search</span>
+           <div className="flex items-center justify-center pt-[8rem]">
+        <div className="flex items-center px-2 bg-neutral-100  border-gray-400 rounded-md w-[300px]">
+          <IonIcon
+            icon={searchOutline}
+            className="w-5 h-5 mr-2 text-gray-500"
+          />
+
+          <IonInput
+            type="text"
+            placeholder="Search"
+            className="text-gray-500"
+          />
+          {/* <span className="text-gray-500">Search</span> */}
+        </div>
       </div>
       <div className="ml-4 mt-6 text-sm font-medium text-black ">
         <span>Assigned Tasks</span>

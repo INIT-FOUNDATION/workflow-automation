@@ -6,6 +6,7 @@ import {
   IonIcon,
   IonActionSheet,
   useIonRouter,
+  IonInput,
 } from "@ionic/react";
 import { searchOutline } from "ionicons/icons";
 import "./MyTasks.css";
@@ -21,15 +22,24 @@ const MyTasks: React.FC = () => {
     router.push("/tasks/create-tasks");
   };
   return (
-    <>
-      <div className="cursor-pointer rounded-md flex items-center pt-[8rem]">
-        <IonIcon
-          icon={searchOutline}
-          className="search-icon w-5 h-5 mr-2 text-gray-500 pl-4"
-        />
-        <span className="search-text text-gray-500">Search</span>
+    <div>
+      <div className="flex items-center justify-center pt-[8rem]">
+        <div className="flex items-center px-2 bg-neutral-100  border-gray-400 rounded-md w-[300px]">
+          <IonIcon
+            icon={searchOutline}
+            className="w-5 h-5 mr-2 text-gray-500"
+          />
+
+          <IonInput
+            type="text"
+            placeholder="Search"
+            className="text-gray-500"
+          />
+          {/* <span className="text-gray-500">Search</span> */}
+        </div>
       </div>
-      <IonCard className="custom-card border border-gray-300 rounded p-4 mb-2 bg-neutral-100">
+
+      <IonCard className="custom-card border border-gray-300 rounded p-4 mb-4 bg-neutral-100">
         <IonCardContent>
           <div className="flex items-center">
             <img
@@ -104,7 +114,7 @@ const MyTasks: React.FC = () => {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
