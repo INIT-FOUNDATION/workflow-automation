@@ -17,7 +17,7 @@ export class CommanService {
     private router: Router
   ) {}
 
-  async getUserDetails(token) {
+  async getUserDetails(res?: { token: string; redirect: boolean }) {
     let role_id;
     let user_id;
     let loggedInUserDetails : any
@@ -29,7 +29,7 @@ export class CommanService {
         loggedInUserDetails.menuList = res.data
         sessionStorage.setItem('userDetails',JSON.stringify(loggedInUserDetails))
         this.dataService.permissions = loggedInUserDetails.menuList
-        this.authService.currentUserSubject.next(token);
+        this.authService.currentUserSubject.next(res);
         this.router.navigate([`/admin-management`]);
       })
         

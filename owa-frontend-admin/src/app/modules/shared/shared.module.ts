@@ -10,6 +10,7 @@ import { NgxSpinnerModule } from 'ngx-spinner';
 import { ToastrModule } from 'ngx-toastr';
 import { CommonDataTableComponent } from '../common-data-table/common-data-table.component';
 import { TableModule } from 'primeng/table';
+import { ImageCropperModule } from 'ngx-image-cropper';
 
 /*------------------- MATERIAL COMPONENTS ------------------------*/
 import { MatDialogModule } from '@angular/material/dialog';
@@ -104,7 +105,8 @@ const export_material_modules = [
   DataViewModule,
   MatDatepickerModule,
   MatNativeDateModule,
-  MatButtonToggleModule
+  MatButtonToggleModule,
+  ImageCropperModule
 ];
 
 @NgModule({

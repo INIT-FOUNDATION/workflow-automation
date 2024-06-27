@@ -12,12 +12,12 @@ import { LoaderInterceptor } from './interceptor/loader.interceptor';
 import { ThemeModule } from './modules/shared/theme/theme.module';
 import { NgxGoogleAnalyticsModule } from 'ngx-google-analytics';
 import { environment } from 'src/environments/environment';
-import { ProfileComponent } from './screens/profile/profile.component';
+import { CommonImageUploadComponent } from './modules/shared/components/common-image-upload/common-image-upload.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    ProfileComponent
+    CommonImageUploadComponent
   ],
   imports: [
     BrowserModule,
