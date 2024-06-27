@@ -30,8 +30,8 @@ const CreateTasks: React.FC = () => {
   };
   return (
     <IonContent>
-      <div className="flex flex-col p-2">
-        <div className="cursor-pointer rounded-md flex items-center pt-24">
+      <div className="flex flex-col p-2 pt-28">
+        <div className="cursor-pointer rounded-md flex items-center ">
           <IonIcon
             icon={arrowBack}
             onClick={handleBackClick}
@@ -51,7 +51,7 @@ const CreateTasks: React.FC = () => {
               // placeholder="Enter here"
               //  className=" text-black"
               mode="md"
-             ></IonInput>
+            ></IonInput>
             {/* <TextField
             label="Task Name"
             variant="outlined"

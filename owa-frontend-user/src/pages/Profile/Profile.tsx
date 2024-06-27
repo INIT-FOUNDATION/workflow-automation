@@ -1,15 +1,14 @@
-import { IonIcon, IonInput, IonLabel, useIonRouter } from "@ionic/react";
+import { IonButton, IonIcon, IonInput, IonLabel, useIonRouter } from "@ionic/react";
 import React from "react";
 import "./Profile.css";
 import { arrowBack } from "ionicons/icons";
 import { useForm } from "react-hook-form";
 
 const Profile: React.FC = () => {
-
-  const router =useIonRouter();
- const handleBack=()=>{
-  router.push("/tasks")
- }
+  const router = useIonRouter();
+  const handleBack = () => {
+    router.push("/tasks");
+  };
   const {
     handleSubmit,
     // formState: { errors },
@@ -17,8 +16,8 @@ const Profile: React.FC = () => {
 
   const onSubmit = () => {};
   return (
-    <div className="workflow-selection-container scrollable-content">
-      <div className="cursor-pointer rounded-md flex items-center pt-32 w-full">
+    <div className="workflow-selection-container scrollable-content h-full flex flex-col">
+      <div className="cursor-pointer rounded-md flex items-center pt-28 w-full">
         <IonIcon icon={arrowBack} onClick={handleBack} className="pl-2" />
         <span className="search-text text-black-600 pl-2">Edit Profile</span>
       </div>
@@ -49,7 +48,7 @@ const Profile: React.FC = () => {
 
                 </div>
                 </form>  */}
-      <div className="profile-form-container pt-4 ">
+      <div className="flex-grow">
         <form className="flex flex-col items-center w-full form-profile">
           <div className="input-group mb-4 w-full">
             <IonLabel className="block text-black-600 text-sm">
@@ -81,6 +80,14 @@ const Profile: React.FC = () => {
             <IonInput placeholder="Enter your gender" className="input-field" />
           </div>
         </form>
+      </div>
+      <div className="pt-4 pb-8 px-2">
+        <IonButton
+          color="danger"
+          className="rounded w-full"
+        >
+          Save changes
+        </IonButton>
       </div>
     </div>
   );
