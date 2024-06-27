@@ -29,8 +29,8 @@ const WorkFlowSelection: React.FC = () => {
     router.push("/tasks");
   };
   return (
-    <div className="flex flex-col h-screen p-2">
-      <div className="cursor-pointer rounded-md flex items-center pt-24">
+    <div className="flex flex-col h-screen p-2 pt-28">
+      <div className="cursor-pointer rounded-md flex items-center">
         <IonIcon icon={arrowBack} onClick={handleBack} className="pl-2" />
         <span className="search-text text-black-600 pl-2">Choose workflow</span>
       </div>
