@@ -133,7 +133,7 @@ CREATE TABLE m_forms (
     status INT NOT NULL,
     date_created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     date_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    created_by INT NOT NULL,
+    created_by INT,
     updated_by INT NOT NULL
 );
 
@@ -173,6 +173,150 @@ CREATE TABLE m_form_fields_assoc (
     field_id INT NOT NULL,
     options JSON,
     status INT,
+    date_created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    date_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    created_by INT,
+    updated_by INT
+);
+
+-- Table: m_workflows
+CREATE TABLE m_workflows (
+    workflow_id SERIAL PRIMARY KEY,
+    workflow_name VARCHAR(50) NOT NULL,
+    workflow_description TEXT,
+    status SMALLINT DEFAULT 1,
+    date_created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    date_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    created_by INT,
+    updated_by INT
+);
+
+-- Table: m_workflow_tasks
+CREATE TABLE m_workflow_tasks (
+    task_id SERIAL PRIMARY KEY,
+    workflow_id INT NOT NULL,
+    task_name VARCHAR(50) NOT NULL,
+    task_description TEXT,
+    form_id INT NOT NULL,
+    status SMALLINT DEFAULT 1,
+    date_created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    date_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    created_by INT,
+    updated_by INT
+);
+
+-- Table: m_workflow_notification_tasks
+CREATE TABLE m_workflow_notification_tasks (
+    notification_task_id SERIAL PRIMARY KEY,
+    workflow_id INT NOT NULL,
+    notification_task_name VARCHAR(50) NOT NULL,
+    notification_task_description TEXT,
+    notification_type VARCHAR(50) CHECK (notification_type IN ('SMS', 'WHATSAPP', 'EMAIL')),
+    email_subject TEXT,
+    email_body TEXT,
+    sms_body TEXT,
+    template_id VARCHAR(50),
+    placeholders JSON,
+    recipient_emails VARCHAR(200),
+    recipient_mobilenumber VARCHAR(200),
+    status SMALLINT DEFAULT 1,
+    date_created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    date_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    created_by INT,
+    updated_by INT
+);
+
+-- Table: m_workflow_decision_tasks
+CREATE TABLE m_workflow_decision_tasks (
+    decision_task_id SERIAL PRIMARY KEY,
+    workflow_id INT NOT NULL,
+    decision_task_name VARCHAR(50) NOT NULL,
+    decision_task_description TEXT,
+    status SMALLINT DEFAULT 1,
+    date_created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    date_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    created_by INT,
+    updated_by INT
+);
+
+-- Table: m_workflow_decision_conditions
+CREATE TABLE m_workflow_decision_conditions (
+    condition_id SERIAL PRIMARY KEY,
+    decision_task_id INT NOT NULL,
+    operand_one VARCHAR(50),
+    operator VARCHAR(3),
+    operand_two VARCHAR(50),
+    condition_type VARCHAR(20) CHECK (condition_type IN ('MATCHED', 'NOT-MATCHED')),
+    status SMALLINT DEFAULT 1,
+    date_created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    date_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    created_by INT,
+    updated_by INT
+);
+
+-- Table: m_workflows_transition
+CREATE TABLE m_workflows_transition (
+    transition_id SERIAL PRIMARY KEY,
+    from_task_id INT NOT NULL,
+    to_task_id INT NOT NULL,
+    from_task_type VARCHAR(1) CHECK (from_task_type IN ('D', 'T', 'N')),
+    to_task_type VARCHAR(1) CHECK (to_task_type IN ('D', 'T', 'N')),
+    condition_type VARCHAR(20) CHECK (condition_type IN ('MATCHED', 'NOT-MATCHED')),
+    status SMALLINT DEFAULT 1,
+    date_created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    date_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    created_by INT,
+    updated_by INT
+);
+
+-- Table: tr_workflows_assignment
+CREATE TABLE tr_workflows_assignment (
+    workflow_assignment_id SERIAL PRIMARY KEY,
+    workflow_id INT NOT NULL,
+    workflow_triggered_on TIMESTAMP,
+    workflow_triggered_by INT,
+    workflow_status SMALLINT DEFAULT 1,
+    date_created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    date_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    created_by INT,
+    updated_by INT
+);
+
+-- Table: tr_workflows_task_assignment
+CREATE TABLE tr_workflows_task_assignment (
+    workflow_task_assignment_id SERIAL PRIMARY KEY,
+    workflow_assignment_id INT NOT NULL,
+    task_id INT NOT NULL,
+    assigned_to INT,
+    assigned_on TIMESTAMP,
+    assigned_by INT,
+    task_status SMALLINT DEFAULT 1,
+    date_created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    date_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    created_by INT,
+    updated_by INT
+);
+
+-- Table: tr_workflows_task_form_submission
+CREATE TABLE tr_workflows_task_form_submission (
+    workflows_task_form_submission_id SERIAL PRIMARY KEY,
+    workflow_task_assignment_id INT NOT NULL,
+    form_id INT NOT NULL,
+    form_data JSON,
+    form_submitted_by INT,
+    form_submitted_on TIMESTAMP,
+    form_status SMALLINT DEFAULT 1,
+    date_created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    date_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    created_by INT,
+    updated_by INT
+);
+
+-- Table: tr_workflow_transaction
+CREATE TABLE tr_workflow_transaction (
+    workflow_transaction_id SERIAL PRIMARY KEY,
+    transition_id INT NOT NULL,
+    transaction_status SMALLINT DEFAULT 1,
     date_created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     date_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     created_by INT,
