@@ -12,7 +12,7 @@ import "./AssignTasks.css";
 const AssignTasks: React.FC = () => {
   return (
     <>
-      <div className="flex items-center justify-center pt-[8rem] px-4">
+      <div className="flex items-center justify-center pt-[6rem] px-4">
         <div className="flex items-center px-2 bg-neutral-100 border-gray-400 rounded-md w-full">
           <IonIcon
             icon={searchOutline}
