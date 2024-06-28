@@ -7,14 +7,15 @@ import {
 } from '@angular/common/http';
 
 import { Observable } from 'rxjs';
+import { AppPreferencesService } from '../modules/shared/services/preferences.service';
 @Injectable()
 export class TokenInterceptor implements HttpInterceptor {
-  constructor() {}
+  constructor(private appPreferences: AppPreferencesService) {}
   intercept(
     request: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
-    const userToken = sessionStorage.getItem('userToken');
+    const userToken = this.appPreferences.getValue('userToken');
     if (userToken) {
       request = request.clone({
         setHeaders: {

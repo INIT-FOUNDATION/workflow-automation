@@ -11,6 +11,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { CommonImageUploadComponent } from 'src/app/modules/shared/components/common-image-upload/common-image-upload.component';
 import { of } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
+import { DataService } from 'src/app/modules/shared/services/data.service';
 
 @Component({
   selector: 'app-profile',
@@ -34,6 +35,7 @@ export class ProfileComponent {
     private appPreference: AppPreferencesService,
     private commonService: CommanService,
     private dialog: MatDialog,
+    public dataService: DataService
   ) {}
 
   profileForm = new FormGroup({
@@ -47,11 +49,8 @@ export class ProfileComponent {
   ngOnInit(): void {
     this.fetchUserInfo();
     this.profileForm.get('mobile_number').disable();
-    let details = this.appPreference.getValue('oll_user_details');
-    this.userDetails = JSON.parse(details);
     this.profileForm.updateValueAndValidity();
-    this.userData = sessionStorage.getItem('userDetails');
-    this.userData = JSON.parse(this.userData)
+    this.userData = this.dataService.userDetails;
   }
 
   fetchUserInfo(): void {
@@ -124,8 +123,8 @@ export class ProfileComponent {
         const reader = new FileReader();
         reader.readAsDataURL(this.dilodResponse.image_blob);
         reader.onload = (e) => { 
-          let details = this.appPreference.getValue('oll_user_details');
-          this.userDetails = JSON.parse(details);
+          this.dataService.setProfilePic(this.dilodResponse.image_blob);
+          this.userDetails = this.dataService.userDetails;
           this.utilService.showSuccessMessage('Profile Picture Uploaded Successfully');
         };
       }
