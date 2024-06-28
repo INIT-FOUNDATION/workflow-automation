@@ -92,7 +92,6 @@ export const adminController = {
                         first_name: 'Narsima',
                         last_name: 'Chilkuri',
                         email_id: 'narsimachilkuri237@gmail.com',
-                        mobile_number: '8169104556',
                         dob: '1997-08-16'
                     }
                 }  
