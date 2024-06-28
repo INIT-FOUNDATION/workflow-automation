@@ -1,10 +1,11 @@
 import React from "react";
 import { IonInput } from "@ionic/react";
-import { useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { encrypt } from "../../../../utility/EncrytDecrypt";
 import * as AppPreference from "../../../../utility/AppPreferences";
 import * as authService from "../../../../services/authService";
+import { LinkedCamera } from "@mui/icons-material";
 
 interface LoginProps {
   showSnackbar: (message: string, severity: string) => void;
@@ -34,15 +35,7 @@ const Login: React.FC<LoginProps> = ({ showSnackbar }) => {
       AppPreference.setValue("userToken", loginResponse.data);
       showSnackbar("Login successful!", "success");
       history.push("/tasks");
-    } else {
-      if (
-        loginResponse?.errorMessage.response.data.errorCode === "USRAUT0007"
-      ) {
-        let user_id = loginResponse?.errorMessage.response.data.userId;
-      } else {
-        showSnackbar("Login failed. Please try again.", "error");
-      }
-    }
+    } 
   };
 
   return (
@@ -83,15 +76,15 @@ const Login: React.FC<LoginProps> = ({ showSnackbar }) => {
               type="password"
               {...form.register("password")}
             />
-            <div className="pt-2 text-right flex justify-start">
-              <img src="Assets/images/LoginPage/lock.svg" alt="" />
-              <a
-                href="#"
-                className="text-red-600 ms-2 text-sm hover:text-red-700"
-              >
-                Forgot Password?
-              </a>
-            </div>
+           <div className="pt-2 text-right flex justify-start">
+  <img src="Assets/images/LoginPage/lock.svg" alt="" />
+  <Link
+    to="/forgot-password"
+    className="text-red-600 ms-2 text-sm hover:text-red-700"
+  >
+    Forgot Password?
+  </Link>
+</div>
           </div>
           <button
             type="submit"
