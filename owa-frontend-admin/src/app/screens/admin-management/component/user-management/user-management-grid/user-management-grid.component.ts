@@ -71,7 +71,6 @@ export class UserManagementGridComponent implements OnInit, OnDestroy  {
     this.adminService.getUsersData(payload).subscribe((res) => {
       this.adminManagementDetails.data = res.data.usersList;
       this.adminManagementDetails.totalRecords = res.data.usersCount;
-      console.log('Filtered Data:', this.adminManagementDetails.data);
     },
     (error) => {
       console.error('Failed to fetch user data', error); // Add error handling
@@ -128,7 +127,6 @@ export class UserManagementGridComponent implements OnInit, OnDestroy  {
   
 
   toggleChange(event) {
-    console.log(event)
     const toggle = event.source;
     if (toggle && event.value.some(item => item == toggle.value)) {
         toggle.buttonToggleGroup.value = [toggle.value];
