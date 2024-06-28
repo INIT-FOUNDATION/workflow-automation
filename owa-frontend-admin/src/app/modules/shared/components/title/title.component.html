@@ -1,0 +1,11 @@
+<div class="mb-4 flex items-start">
+  <i
+    *ngIf="canGoBack"
+    class="fa-solid fa-arrow-left text-2xl me-3 font-bolder text-red-600 cursor-pointer"
+    (click)="goToPreviousPage()"
+  ></i>
+  <div class="">
+    <span class="{{ additionalClass }}">{{ titleName }}</span>
+    <div class="border-4 rounded-xl w-10 border-red-600 mt-1"></div>
+  </div>
+</div>

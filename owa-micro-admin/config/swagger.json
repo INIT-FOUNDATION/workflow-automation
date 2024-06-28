@@ -25,6 +25,11 @@
             "required": true,
             "type": "string",
             "description": "Bearer token for authentication"
+          },
+          {
+            "name": "isActive",
+            "in": "query",
+            "type": "string"
           }
         ],
         "responses": {
@@ -63,6 +68,26 @@
                 "role_description": {
                   "type": "string",
                   "example": "Head of the Department"
+                },
+                "level": {
+                  "type": "string",
+                  "example": "Level of Role"
+                },
+                "permissions": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "menu_id": {
+                        "type": "number",
+                        "example": 1
+                      },
+                      "permission_id": {
+                        "type": "number",
+                        "example": 2
+                      }
+                    }
+                  }
                 }
               }
             }
@@ -108,9 +133,103 @@
                 "role_description": {
                   "type": "string",
                   "example": "Head of the Department"
+                },
+                "level": {
+                  "type": "string",
+                  "example": "Level of Role"
+                },
+                "permissions": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "menu_id": {
+                        "type": "number",
+                        "example": 1
+                      },
+                      "permission_id": {
+                        "type": "number",
+                        "example": 2
+                      }
+                    }
+                  }
                 }
               }
             }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/v1/admin/roles/listLevels": {
+      "get": {
+        "tags": [
+          "Roles"
+        ],
+        "summary": "List Levels",
+        "description": "Endpoint to retrieve List Levels",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Bearer token for authentication"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/v1/admin/roles/menusList": {
+      "get": {
+        "tags": [
+          "Roles"
+        ],
+        "summary": "Get Menu List",
+        "description": "Endpoint to retrieve Menu List",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Bearer token for authentication"
+          },
+          {
+            "name": "isActive",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/v1/admin/roles/defaultAccessList": {
+      "get": {
+        "tags": [
+          "Roles"
+        ],
+        "summary": "Get Default Access List",
+        "description": "Endpoint to retrieve Default Access List",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Bearer token for authentication"
           }
         ],
         "responses": {
@@ -219,72 +338,20 @@
         }
       }
     },
-    "/api/v1/admin/roles/menusList/{roleId}": {
+    "/api/v1/admin/roles/listBylevel/{level}": {
       "get": {
         "tags": [
           "Roles"
         ],
-        "summary": "Get Access List By Role Id",
-        "description": "Endpoint to retrieve Access List with Role Id",
+        "summary": "Get Roles by Level",
+        "description": "Endpoint to retrieve Roles List by level",
         "parameters": [
           {
-            "name": "roleId",
+            "name": "level",
             "in": "path",
             "required": true,
             "type": "string"
           },
-          {
-            "name": "Authorization",
-            "in": "header",
-            "required": true,
-            "type": "string",
-            "description": "Bearer token for authentication"
-          }
-        ],
-        "responses": {
-          "default": {
-            "description": ""
-          }
-        }
-      }
-    },
-    "/api/v1/admin/roles/combinedAccessList/{roleId}": {
-      "get": {
-        "tags": [
-          "Roles"
-        ],
-        "summary": "Get Combined Access List By Role Id and User Id",
-        "description": "Endpoint to retrieve Combined Access List with Role Id and User Id",
-        "parameters": [
-          {
-            "name": "roleId",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "Authorization",
-            "in": "header",
-            "required": true,
-            "type": "string",
-            "description": "Bearer token for authentication"
-          }
-        ],
-        "responses": {
-          "default": {
-            "description": ""
-          }
-        }
-      }
-    },
-    "/api/v1/admin/roles/defaultAccessList": {
-      "get": {
-        "tags": [
-          "Roles"
-        ],
-        "summary": "Get Default Access List",
-        "description": "Endpoint to retrieve Default Access List",
-        "parameters": [
           {
             "name": "Authorization",
             "in": "header",
@@ -620,14 +687,6 @@
             "schema": {
               "type": "object",
               "properties": {
-                "user_name": {
-                  "type": "string",
-                  "example": "8169104556"
-                },
-                "display_name": {
-                  "type": "string",
-                  "example": "Narsima Chilkuri"
-                },
                 "first_name": {
                   "type": "string",
                   "example": "Narsima"
@@ -659,6 +718,16 @@
                 "department_id": {
                   "type": "number",
                   "example": 1
+                },
+                "reporting_to_users": {
+                  "type": "array",
+                  "example": [
+                    1,
+                    2
+                  ],
+                  "items": {
+                    "type": "number"
+                  }
                 }
               }
             }
@@ -694,16 +763,8 @@
               "type": "object",
               "properties": {
                 "user_id": {
-                  "type": "number",
-                  "example": 2
-                },
-                "user_name": {
                   "type": "string",
-                  "example": "8169104556"
-                },
-                "display_name": {
-                  "type": "string",
-                  "example": "Narsima Chilkuri"
+                  "example": "encryptedHash"
                 },
                 "first_name": {
                   "type": "string",
@@ -736,6 +797,16 @@
                 "department_id": {
                   "type": "number",
                   "example": 1
+                },
+                "reporting_to_users": {
+                  "type": "array",
+                  "example": [
+                    1,
+                    2
+                  ],
+                  "items": {
+                    "type": "number"
+                  }
                 }
               }
             }
@@ -901,6 +972,80 @@
             "required": true,
             "type": "string",
             "description": "Bearer token for authentication"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/v1/admin/users/reportingUsers/{roleId}/{type}": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Reporting Users List",
+        "description": "Get Reporting Users based on Role Id and Type",
+        "parameters": [
+          {
+            "name": "roleId",
+            "in": "path",
+            "required": true,
+            "type": "number",
+            "description": "Role Id"
+          },
+          {
+            "name": "type",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Type"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Bearer token for authentication"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/v1/admin/users/deleteUser": {
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Delete User",
+        "description": "Delete User by User Id",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Bearer token for authentication"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "user_id": {
+                  "type": "number",
+                  "example": 1
+                }
+              }
+            }
           }
         ],
         "responses": {

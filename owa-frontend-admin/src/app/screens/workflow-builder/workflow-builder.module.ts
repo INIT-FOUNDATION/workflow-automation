@@ -6,12 +6,14 @@ import { AddWorkflowBuilderComponent } from './component/add-workflow-builder/ad
 import { EditWorkflowBuilderComponent } from './component/edit-workflow-builder/edit-workflow-builder.component';
 import { FormWorkflowBuilderComponent } from './component/form-workflow-builder/form-workflow-builder.component';
 import { SharedModule } from 'src/app/modules/shared/shared.module';
+import { WorkflowBuilderComponent } from './workflow-builder.component';
 
 @NgModule({
   declarations: [
     AddWorkflowBuilderComponent,
     EditWorkflowBuilderComponent,
     FormWorkflowBuilderComponent,
+    WorkflowBuilderComponent
   ],
   imports: [CommonModule, WorkflowBuilderRoutingModule, SharedModule],
 })

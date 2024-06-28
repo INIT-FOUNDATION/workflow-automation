@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon --exec ts-node app.ts",
-    "swagger": "npx ts-node config/swagger.ts"
+    "prestart": "npx ts-node config/swagger.ts"
   },
   "keywords": [],
   "author": "",
@@ -27,12 +27,12 @@
     "moment": "^2.30.1",
     "multer": "^1.4.5-lts.1",
     "nodemon": "^3.0.3",
-    "owa-micro-common": "git+https://letslinkai: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@github.com/TechknowkraftAI/init-micro-commons.git#v1.0.13",
     "randexp": "^0.5.3",
     "swagger-autogen": "^2.23.7",
     "swagger-ui-express": "^5.0.1",
     "ts-node": "^10.9.2",
-    "uuid": "^9.0.1"
+    "uuid": "^9.0.1",
+    "owa-micro-common": "git+https://letslinkai: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@github.com/TechknowkraftAI/init-micro-commons.git#v1.0.15"
   },
   "nodemonConfig": {
     "restartable": "rs",
@@ -66,7 +66,11 @@
       "INIT_COMMON_NODEMAILER_PASSWORD": "a1TXJbvXeLpy",
       "INIT_COMMON_NODEMAILER_HOST": "smtppro.zoho.in",
       "INIT_COMMON_NODEMAILER_SERVICE": "ZOHO PRO",
-      "INIT_COMMON_NODEMAILER_PORT": 465
+      "INIT_COMMON_NODEMAILER_PORT": 465,
+      "INIT_COMMON_COMMUNICATION_ENDPOINT": "http://localhost:8081/api/v1/communication",
+      "INIT_COMMON_COMMUNICATION_CLIENT_ID": "OLL_Workflow_Automation_93304",
+      "INIT_COMMON_COMMUNICATION_CLIENT_SECRET": "88feae55-c108-4c10-8d89-da5a22ee08b1",
+      "OWA_WORKFLOW_ADMIN_MODULE_URL": "https://flowautomation.orrizonte.in"
     }
   }
 }

@@ -9,6 +9,7 @@ import { adminService } from "../services/adminService";
 import jwt from "jsonwebtoken";
 import { IUser } from "../types/custom";
 import bcrypt from "bcryptjs";
+import { v4 as uuidv4 } from 'uuid';
 
 export const adminController = {
     validateToken: async (req: Request, res: Response): Promise<Response> => {
@@ -70,7 +71,8 @@ export const adminController = {
                     department_id: existingUser.department_id,
                     role_id: existingUser.role_id,
                     user_name: existingUser.user_name,
-                    email_id: existingUser.email_id
+                    email_id: existingUser.email_id,
+                    level: existingUser.level
                 }
                 const token = await generateToken.generate(existingUser.user_name, tokenDetails, expiryTime, AUTHENTICATION.SECRET_KEY, req);
                 adminService.updateUserLoginStatus(USERS_STATUS.LOGGED_IN, req.body.user_name);
@@ -85,7 +87,7 @@ export const adminController = {
 
                 if (maximumInvalidAttempts > currentInvalidAttempts) {
                     await adminService.incrementInvalidLoginAttempts(user.user_name);
-                    return res.status(STATUS.BAD_REQUEST).send(AUTH.AUTH00012);
+                    return res.status(STATUS.BAD_REQUEST).send(AUTH.AUTH00001);
                 } else {
                     await adminService.setUserInActive(user.user_name);
                     return res.status(STATUS.BAD_REQUEST).send(AUTH.AUTH00003);
@@ -109,11 +111,12 @@ export const adminController = {
                     description: 'Bearer token for authentication'
                 }
             */
-            const userName = req.plainToken.user_name;
+           const userName = req.plainToken.user_name;
+           const user_id = req.plainToken.user_id;
             await adminService.updateUserLoginStatus(USERS_STATUS.LOGGED_OUT, userName);
             redis.deleteRedis(userName);
             redis.deleteRedis(`USER_PERMISSIONS_${userName}`);
-            redis.deleteRedis(`LOGGED_IN_USER_DETAILS_${userName}`);
+            redis.deleteRedis(`LOGGED_IN_USER_INFO|USER:${user_id}`);
             redis.deleteRedis(`User|Username:${userName}`);
             redis.deleteRedis(`COMBINED_ACCESS_LIST|USER:${userName}`);
             return res.status(STATUS.OK).send({
@@ -145,7 +148,10 @@ export const adminController = {
             }
 
             const userExists = await adminService.existsByMobileNumber(mobile_number);
-            if (!userExists) return res.status(STATUS.BAD_REQUEST).send(AUTH.AUTH00005);
+            if (!userExists) {
+                logger.error(`adminController :: getForgetPasswordOtp :: mobile number :: ${mobile_number} :: Password doesn't exist`);
+                return res.status(STATUS.OK).send({data: { txnId: uuidv4() }, message: "Generated Forget Password OTP Successfully"});
+            }
 
             const alreadySent = await adminService.isForgotPasswordOtpAlreadySent(mobile_number);
             if (alreadySent) return res.status(STATUS.BAD_REQUEST).send(AUTH.AUTH00006);

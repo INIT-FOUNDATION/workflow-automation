@@ -25,7 +25,7 @@ class Department implements IDepartment {
     const departmentSchema = Joi.object({
       department_id: Joi.number().allow("", null),
       department_name: Joi.string().min(3).max(20).required().error(
-        new Error(JSON.stringify(DEPARTMENTS.DEPARTMENT001))
+        new Error(DEPARTMENTS.DEPARTMENT001.errorMessage)
       ),
       status: Joi.number().valid(...Object.values(DEPARTMENTS_STATUS)),
       date_created: Joi.string().allow("", null),
@@ -38,7 +38,7 @@ class Department implements IDepartment {
     const departmentSchema = Joi.object({
       department_id: Joi.number().required(),
       department_name: Joi.string().min(3).max(20).required().error(
-        new Error(JSON.stringify(DEPARTMENTS.DEPARTMENT001))
+        new Error(DEPARTMENTS.DEPARTMENT001.errorMessage)
       )
     });
     return departmentSchema.validate(department);
@@ -48,7 +48,7 @@ class Department implements IDepartment {
     const departmentSchema = Joi.object({
       department_id: Joi.number().required(),
       status: Joi.number().valid(...Object.values(DEPARTMENTS_STATUS)).required().error(
-        new Error(JSON.stringify(DEPARTMENTS.DEPARTMENT004))
+        new Error(DEPARTMENTS.DEPARTMENT004.errorMessage)
       )
     });
     return departmentSchema.validate(department);

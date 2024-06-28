@@ -12,7 +12,7 @@ const validateLoginDetails = (user: IUser): Joi.ValidationResult => {
 
 const validateVerifyForgotPassword = (otpDetails: any): Joi.ValidationResult => {
     const verifyForgotPasswordSchema = Joi.object({
-        otp: Joi.number().min(100000).max(999999).required(),
+        otp: Joi.string().required(),
         txnId: Joi.string().required()
     });
     return verifyForgotPasswordSchema.validate(otpDetails);

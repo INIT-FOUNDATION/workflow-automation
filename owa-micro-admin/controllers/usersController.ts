@@ -1,14 +1,13 @@
-import { logger, STATUS, envUtils } from "owa-micro-common";
+import { logger, STATUS } from "owa-micro-common";
 import { Response } from "express";
 import { Request } from "../types/express";
-import { GRID_DEFAULT_OPTIONS } from "../constants/CONST";
+import { GRID_DEFAULT_OPTIONS, decryptPayload } from "../constants/CONST";
 import { usersService } from "../services/usersService";
 import { IUser } from "../types/custom";
 import { User, validateCreateUser, validateUpdateUser } from "../models/usersModel";
 import { departmentsService } from "../services/departmentsService";
 import { DEPARTMENTS, ROLES, USERS } from "../constants/ERRORCODE";
 import { rolesService } from "../services/rolesService";
-import { UploadedFile } from "express-fileupload";
 
 export const usersController = {
     listUsers: async (req: Request, res: Response): Promise<Response> => {
@@ -72,8 +71,6 @@ export const usersController = {
                     in: 'body',
                     required: true,
                     schema: {
-                        user_name: '8169104556',
-                        display_name: 'Narsima Chilkuri',
                         first_name: 'Narsima',
                         last_name: 'Chilkuri',
                         email_id: 'narsimachilkuri237@gmail.com',
@@ -82,12 +79,13 @@ export const usersController = {
                         gender: 1,
                         role_id: 2,
                         department_id: 1,
-                        reporting_to: 1
+                        reporting_to_users: [1, 2]
                     }
                 }    
             */
             const plainToken = req.plainToken;
-            const user: IUser = new User(req.body)
+            const user: IUser = new User(req.body);
+
             const { error } = validateCreateUser(user);
 
             if (error) {
@@ -104,11 +102,6 @@ export const usersController = {
 
             const userExists = await usersService.existsByMobileNumber(user.mobile_number);
             if (userExists) return res.status(STATUS.BAD_REQUEST).send(USERS.USER00005);
-
-            if (user.reporting_to) {
-                const reportingUserExists = await usersService.existsByUserId(user.reporting_to);
-                if (!reportingUserExists) return res.status(STATUS.BAD_REQUEST).send(USERS.USER000012);
-            }
 
             user.created_by = plainToken.user_id;
             user.updated_by = plainToken.user_id;
@@ -140,9 +133,7 @@ export const usersController = {
                     in: 'body',
                     required: true,
                     schema: {
-                        user_id: 2,
-                        user_name: '8169104556',
-                        display_name: 'Narsima Chilkuri',
+                        user_id: 'encryptedHash',
                         first_name: 'Narsima',
                         last_name: 'Chilkuri',
                         email_id: 'narsimachilkuri237@gmail.com',
@@ -151,12 +142,19 @@ export const usersController = {
                         gender: 1,
                         role_id: 2,
                         department_id: 1,
-                        reporting_to: 1
+                        reporting_to_users: [1, 2],
+                        status: 1
                     }
                 }    
             */
             const plainToken = req.plainToken;
+            if (req.body.user_id) req.body.user_id = parseInt(decryptPayload(req.body.user_id));
+
             const user: IUser = req.body;
+
+            if (user.mobile_number) {
+                user.user_name = user.mobile_number.toString();
+            }
 
             const { error } = validateUpdateUser(user);
 
@@ -175,11 +173,6 @@ export const usersController = {
             const userExists = await usersService.existsByUserId(user.user_id);
             if (!userExists) return res.status(STATUS.BAD_REQUEST).send(USERS.USER000011);
 
-            if (user.reporting_to) {
-                const reportingUserExists = await usersService.existsByUserId(user.reporting_to);
-                if (!reportingUserExists) return res.status(STATUS.BAD_REQUEST).send(USERS.USER000012);
-            }
-            
             user.updated_by = plainToken.user_id;
 
             await usersService.updateUser(user);
@@ -217,50 +210,6 @@ export const usersController = {
             });
         } catch (error) {
             logger.error(`usersController :: getUserById :: ${error.message} :: ${error}`);
-            return res.status(STATUS.INTERNAL_SERVER_ERROR).send(USERS.USER00000);
-        }
-    },
-    updateProfilePic: async (req: Request, res: Response): Promise<Response> => {
-        try {
-            /*  
-                #swagger.tags = ['Users']
-                #swagger.summary = 'Update Profile Pic'
-                #swagger.description = 'Endpoint to Update Profile Pic'
-                #swagger.parameters['Authorization'] = {
-                    in: 'header',
-                    required: true,
-                    type: 'string',
-                    description: 'Bearer token for authentication'
-                }
-                #swagger.parameters['file'] = {
-                    in: 'formData',
-                    required: true,
-                    type: 'file',
-                    description: 'Profile picture file to upload'
-                }
-            */
-            const plainToken = req.plainToken;
-            const file = req.files.file as UploadedFile;
-
-            if (!file) return res.status(STATUS.BAD_REQUEST).send(USERS.USER00008);
-
-            const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
-            if (!allowedTypes.includes(file.mimetype)) return res.status(STATUS.BAD_REQUEST).send(USERS.USER00009);
-
-            const uploadSizeLimit = envUtils.getNumberEnvVariableOrDefault("OWA_UPLOAD_FILE_SIZE_LIMIT", 5 * 1024 * 1024 )
-            if (file.size > uploadSizeLimit) return res.status(STATUS.BAD_REQUEST).send(USERS.USER00010);
-
-            const userExists = await usersService.existsByUserId(plainToken.user_id);
-            if (!userExists) return res.status(STATUS.BAD_REQUEST).send(USERS.USER00005);
-
-            await usersService.updateProfilePic(file, plainToken.user_id);
-
-            return res.status(STATUS.OK).send({
-                data: null,
-                message: "Profile Picture Updated Successfully",
-            });
-        } catch (error) {
-            logger.error(`usersController :: updateProfilePic :: ${error.message} :: ${error}`);
             return res.status(STATUS.INTERNAL_SERVER_ERROR).send(USERS.USER00000);
         }
     },
@@ -305,7 +254,7 @@ export const usersController = {
                 } 
             */
             const userId = req.params.userId;
-            if (!userId) return res.status(STATUS.BAD_REQUEST).send(USERS.USER00008);
+            if (!userId) return res.status(STATUS.BAD_REQUEST).send(USERS.USER00006);
 
             const userExists = await usersService.existsByUserId(parseInt(userId));
             if (!userExists) return res.status(STATUS.BAD_REQUEST).send(USERS.USER000011);
@@ -321,4 +270,108 @@ export const usersController = {
             return res.status(STATUS.INTERNAL_SERVER_ERROR).send(USERS.USER00000);
         }
     },
+    reportingUsersList: async (req: Request, res: Response): Promise<Response> => {
+        /*  
+                #swagger.tags = ['Users']
+                #swagger.summary = 'Reporting Users List'
+                #swagger.description = 'Get Reporting Users based on Role Id and Type'
+                #swagger.parameters['Authorization'] = {
+                    in: 'header',
+                    required: true,
+                    type: 'string',
+                    description: 'Bearer token for authentication'
+                }
+                #swagger.parameters['roleId'] = {
+                    in: 'path',
+                    required: true,
+                    type: 'number',
+                    description: 'Role Id'
+                }
+                #swagger.parameters['type'] = {
+                    in: 'path',
+                    required: true,
+                    type: 'string',
+                    description: 'Type'
+                }
+        */
+        try {
+            const roleId = req.params.roleId;
+            const type = req.params.type ? req.params.type : "add";
+            const userId = (type === "edit" ? req.plainToken.user_id : null);
+
+            if (!roleId) return res.status(STATUS.BAD_REQUEST).send(USERS.USER00007);
+
+            const roleDetails = await rolesService.getRoleById(parseInt(roleId));
+
+            if (!roleDetails) return res.status(STATUS.BAD_REQUEST).send(USERS.USER00007);
+
+            const levelDB = roleDetails.level;
+            let levels = [];
+            switch (levelDB) {
+                case 'Admin':
+                    levels = ['Admin'];
+                    break;
+                case 'Department':
+                    levels = ['Admin', 'Department'];
+                    break;
+                case 'Employee':
+                    levels = ['Admin', 'Department', 'Employee'];
+                    break;
+            }
+
+            const listOfUsers = await usersService.getReportingUsersList(levels, userId);
+            return res.status(STATUS.OK).send({
+                data: listOfUsers,
+                message: "List of reporting users fetched Successfully",
+            });
+        } catch (error) {
+            logger.error(`usersController :: reportingUsersList :: ${error.message} :: ${error}`);
+            return res.status(STATUS.INTERNAL_SERVER_ERROR).send(USERS.USER00000);
+        }
+    },
+    updateStatus: async (req: Request, res: Response): Promise<Response> => {
+        /*  
+                #swagger.tags = ['Users']
+                #swagger.summary = 'Update User Status'
+                #swagger.description = 'Update User Status by User Id and Status'
+                #swagger.parameters['Authorization'] = {
+                    in: 'header',
+                    required: true,
+                    type: 'string',
+                    description: 'Bearer token for authentication'
+                }
+                #swagger.parameters['body'] = {
+                    in: 'body',
+                    required: true,
+                    schema: {
+                        user_id: 'encryptedHash',
+                        status: 1
+                    }
+                }
+        */
+        try {
+            let userId = req.body.user_id;
+            const status = req.body.status;
+            const updatedBy = req.plainToken.user_id;
+
+            if (![0,1,2,3].includes(status)) return res.status(STATUS.BAD_REQUEST).send(USERS.USER000014);
+
+            if (!userId) return res.status(STATUS.BAD_REQUEST).send(USERS.USER00006);
+
+            userId = parseInt(decryptPayload(userId));
+
+            const user = await usersService.getUserById(userId);
+            if (!user) return res.status(STATUS.BAD_REQUEST).send(USERS.USER000011);
+
+            await usersService.updateUserStatus(user, status, updatedBy);
+
+            return res.status(STATUS.OK).send({
+                data: null,
+                message: "Updated User Status Successfully",
+            });
+        } catch (error) {
+            logger.error(`usersController :: updateStatus :: ${error.message} :: ${error}`);
+            return res.status(STATUS.INTERNAL_SERVER_ERROR).send(USERS.USER00000);
+        }
+    }
 }

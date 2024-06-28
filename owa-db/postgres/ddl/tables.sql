@@ -27,6 +27,7 @@ CREATE TABLE m_roles (
     role_id serial PRIMARY KEY,
     role_name VARCHAR(30),
     role_description VARCHAR(50),
+    level VARCHAR(20),
     status smallint DEFAULT 1,
     date_created TIMESTAMP DEFAULT now(),
     date_updated TIMESTAMP DEFAULT now(),
@@ -61,7 +62,15 @@ CREATE TABLE m_menus (
 CREATE TABLE m_user_department_assoc (
     user_id INT,
     department_id INT,
+    date_created TIMESTAMP DEFAULT now(),
+    date_updated TIMESTAMP DEFAULT now()
+);
+
+-- Table: m_user_reporting_assoc
+CREATE TABLE m_user_reporting_assoc (
+    user_id INT,
     reporting_to INT,
+    status INT DEFAULT 1,
     date_created TIMESTAMP DEFAULT now(),
     date_updated TIMESTAMP DEFAULT now()
 );
@@ -113,4 +122,59 @@ CREATE TABLE app_version (
     release_date TIMESTAMP DEFAULT now(),
     date_created TIMESTAMP DEFAULT now(),
     date_updated TIMESTAMP DEFAULT now()
+);
+
+
+-- Table: m_forms
+CREATE TABLE m_forms (
+    form_id SERIAL PRIMARY KEY,
+    form_name VARCHAR(50) NOT NULL,
+    form_description TEXT,
+    status INT NOT NULL,
+    date_created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    date_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    created_by INT NOT NULL,
+    updated_by INT NOT NULL
+);
+
+
+-- Table: m_fields
+CREATE TABLE m_fields (
+    field_id SERIAL PRIMARY KEY,
+    field_name VARCHAR(50) NOT NULL,
+    field_label VARCHAR(50) NOT NULL,
+    status INT NOT NULL,
+    date_created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    date_updated TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    created_by INT,
+    updated_by INT
+);
+
+-- Table: m_field_properties
+CREATE TABLE m_field_properties (
+    field_property_id SERIAL PRIMARY KEY,
+    field_id INT NOT NULL,
+    field_property_name VARCHAR(50) NOT NULL,
+    field_property_type VARCHAR(50) NOT NULL,
+    field_property_label_display VARCHAR(50) NOT NULL,
+    options JSON,
+    description TEXT,
+    status INT,
+    date_created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    date_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    created_by INT,
+    updated_by INT
+);
+
+-- Table: m_form_fields_assoc
+CREATE TABLE m_form_fields_assoc (
+    form_field_assoc_id SERIAL PRIMARY KEY,
+    form_id INT NOT NULL,
+    field_id INT NOT NULL,
+    options JSON,
+    status INT,
+    date_created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    date_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    created_by INT,
+    updated_by INT
 );

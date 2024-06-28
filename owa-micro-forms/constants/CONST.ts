@@ -7,3 +7,13 @@
     PAYMENT_LINK: 2 * 60 * 30,
     LONG: 24 * 60 * 60,
   };
+
+  export const GRID_DEFAULT_OPTIONS = {
+    PAGE_SIZE: 50,
+    CURRENT_PAGE: 1
+  }
+
+  export const FORM_STATUS = {
+    ACTIVE: 1,
+    INACTIVE: 0 
+  }

@@ -13,6 +13,7 @@ import bodyParser from "body-parser";
 import { SECURITY, logger, envUtils } from "owa-micro-common";
 import swaggerUi from "swagger-ui-express";
 import swaggerFile from "./config/swagger.json"
+import * as CONST from "./constants/CONST";
 
 dotenv.config();
 
@@ -25,10 +26,7 @@ const resolveCrossDomain = function (
 ): void {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Methods", "GET,POST,OPTIONS");
-  res.header(
-    'Access-Control-Allow-Headers',
-    'Content-Type, Authorization, offline_mode, uo-device-type, uo-os, uo-os-version, uo-is-mobile, uo-is-tablet, uo-is-desktop, uo-browser-version, uo-browser, uo-client-id, uo-client-ip'
-  );
+  res.header('Access-Control-Allow-Headers', CONST.allowed_headers);
   res.header("Access-Control-Expose-Headers", "Version");
   res.header("Access-Control-Allow-Credentials", "true");
   res.header("Strict-Transport-Security", "max-age=15552000");

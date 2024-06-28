@@ -1,1 +1,45 @@
-<p>admin-management works!</p>
+<app-title
+  [titleName]="titleName"
+  additionalClass="text-lg font-bold"
+  [canGoBack]="false"
+></app-title>
+
+<div class="flex justify-between border-b-2 pb-8 mb-8">
+  <div class="border border-gray-300 rounded-full px-4 py-2 w-80 relative">
+    <input
+      type="text"
+      class="outline-none border-none w-full pr-3 text-sm"
+      [placeholder]="searchText"
+      (keydown.enter)="onSearch($event)"
+    />
+    <img
+      src="assets/images/workflowCards/searchIcon.svg"
+      alt=""
+      class="absolute right-3 top-2.5"
+    />
+  </div>
+  <button
+    type="button"
+    class="bg-red-600 text-white rounded-lg px-4 py-2 text-sm"
+  >
+    <a [routerLink]="buttonRoute"
+      ><i class="fa-solid fa-plus me-2"></i>{{ buttonText }}</a
+    >
+  </button>
+</div>
+
+<div class="border rounded-lg border-red-500 flex p-4">
+  <mat-tab-group class="mt-4 flex-1" #tabGroup>
+    <mat-tab label="User Management">
+      <div class="overflow-x-auto mt-4">
+        <app-user-management-grid></app-user-management-grid>
+      </div>
+    </mat-tab>
+          
+    <mat-tab label="Role Management">
+      <div class="overflow-x-auto mt-4">
+        <app-role-management-grid></app-role-management-grid>     
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+</div>

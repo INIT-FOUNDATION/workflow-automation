@@ -1,7 +1,8 @@
 import Joi from "joi";
 import { IUser } from "../types/custom";
 import { USERS } from "../constants/ERRORCODE";
-import { GENDER } from "../constants/CONST";
+import { GENDER, USERS_STATUS } from "../constants/CONST";
+
 class User implements IUser {
   user_id: number;
   user_name: string;
@@ -19,7 +20,7 @@ class User implements IUser {
   status: number;
   profile_pic_url: string;
   last_logged_in: string;
-  reporting_to: number;
+  reporting_to_users: number[];
   date_created: string;
   date_updated: string;
   created_by: number;
@@ -27,8 +28,8 @@ class User implements IUser {
 
   constructor(user: IUser) {
     this.user_id = user.user_id;
-    this.user_name = user.user_name;
-    this.display_name = user.display_name;
+    this.user_name = user.mobile_number ? user.mobile_number.toString() : "";
+    this.display_name = `${user.first_name ? user.first_name : ""} ${user.last_name ? user.last_name : ""}`;
     this.first_name = user.first_name;
     this.last_name = user.last_name;
     this.mobile_number = user.mobile_number;
@@ -42,7 +43,7 @@ class User implements IUser {
     this.status = user.status;
     this.profile_pic_url = user.profile_pic_url;
     this.last_logged_in = user.last_logged_in;
-    this.reporting_to = user.reporting_to;
+    this.reporting_to_users = user.reporting_to_users;
     this.date_created = user.date_created;
     this.date_updated = user.date_updated;
     this.created_by = user.created_by;
@@ -54,16 +55,16 @@ const validateCreateUser = (user: IUser): Joi.ValidationResult => {
   const userSchema = Joi.object({
     user_id: Joi.number().allow("", null),
     user_name: Joi.string().min(3).max(20).required().error(
-      new Error(JSON.stringify(USERS.USER00001))
+      new Error(USERS.USER00001.errorMessage)
     ),
     display_name: Joi.string().min(3).max(50).required().error(
-      new Error(JSON.stringify(USERS.USER00002))
+      new Error(USERS.USER00002.errorMessage)
     ),
     first_name: Joi.string().min(3).max(50).required().error(
-      new Error(JSON.stringify(USERS.USER00003))
+      new Error(USERS.USER00003.errorMessage)
     ),
     last_name: Joi.string().min(3).max(50).required().error(
-      new Error(JSON.stringify(USERS.USER00004))
+      new Error(USERS.USER00004.errorMessage)
     ),
     mobile_number: Joi.number().integer().min(6000000000).max(9999999999).required(),
     dob: Joi.date().iso(),
@@ -76,7 +77,7 @@ const validateCreateUser = (user: IUser): Joi.ValidationResult => {
     status: Joi.number(),
     profile_pic_url: Joi.string().allow("", null),
     last_logged_in: Joi.string().allow("", null),
-    reporting_to: Joi.number(),
+    reporting_to_users: Joi.array().items(Joi.number()).optional(),
     date_created: Joi.string().allow("", null),
     date_updated: Joi.string().allow("", null),
     created_by: Joi.number(),
@@ -89,16 +90,14 @@ const validateUpdateUser = (user: IUser): Joi.ValidationResult => {
   const userSchema = Joi.object({
     user_id: Joi.number().required(),
     user_name: Joi.string().min(3).max(20).required().error(
-      new Error(JSON.stringify(USERS.USER00001))
+      new Error(USERS.USER00001.errorMessage)
     ),
-    display_name: Joi.string().min(3).max(50).required().error(
-      new Error(JSON.stringify(USERS.USER00002))
-    ),
+    display_name: Joi.string().min(3).max(50),
     first_name: Joi.string().min(3).max(50).required().error(
-      new Error(JSON.stringify(USERS.USER00003))
+      new Error(USERS.USER00003.errorMessage)
     ),
     last_name: Joi.string().min(3).max(50).required().error(
-      new Error(JSON.stringify(USERS.USER00004))
+      new Error(USERS.USER00004.errorMessage)
     ),
     dob: Joi.date().iso(),
     mobile_number: Joi.number().integer().min(6000000000).max(9999999999).required(),
@@ -106,7 +105,8 @@ const validateUpdateUser = (user: IUser): Joi.ValidationResult => {
     gender: Joi.number().valid(...Object.values(GENDER)).required(),
     role_id: Joi.number().required(),
     department_id: Joi.number().required(),
-    reporting_to: Joi.number()
+    reporting_to_users: Joi.array().items(Joi.number()).optional(),
+    status: Joi.number().valid(...Object.values(USERS_STATUS)).required(),
   });
   return userSchema.validate(user);
 };

@@ -17,5 +17,7 @@ export const USERS = {
                     LEFT OUTER JOIN m_user_department_assoc UDA ON U.user_id = UDA.user_id
                     LEFT OUTER JOIN m_departments D ON UDA.department_id = D.department_id
                     LEFT OUTER JOIN m_roles R ON U.role_id = R.role_id
-                    WHERE U.user_name= $1 AND U.status=1`
+                    WHERE U.user_id = $1 AND U.status IN (1,4)`,
+    updateProfilePic: `UPDATE m_users SET profile_pic_url = $2, updated_by = $1, date_updated = NOW() WHERE user_id = $1`,
+    updateProfile: `UPDATE m_users SET first_name = $2, last_name = $3, email_id = $4, dob = $5, display_name = $6, updated_by = $1, date_updated = NOW() WHERE user_id = $1`,
 }
