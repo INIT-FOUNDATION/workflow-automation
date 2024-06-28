@@ -1,7 +1,7 @@
 import Swal from "sweetalert2";
 import * as AppPreference from "./AppPreferences";
 import withReactContent from "sweetalert2-react-content";
-import { axiosInstance as axios } from "./AxiosConfig";
+import { axiosInstance as axios } from "./axiosConfig";
 const LoaderSwal = withReactContent(Swal);
 
 interface MakeRequestOptions {
