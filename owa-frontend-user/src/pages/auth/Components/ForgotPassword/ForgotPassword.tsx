@@ -39,10 +39,10 @@ const ForgotPassword: React.FC<ForgotPasswordProps> = ({ showSnackbar }) => {
         setOtpSent(true);
         setTxnId(getOtpRequestResponse?.data?.txnId);
       } else {
-        // showSnackbar("Failed to send OTP. Please try again.", "error");
+        showSnackbar("Failed to send OTP. Please try again.", "error");
       }
     } else {
-      // showSnackbar("Please enter a valid Mobile Number", "error");
+      showSnackbar("Please enter a valid Mobile Number", "error");
     }
   };
 
