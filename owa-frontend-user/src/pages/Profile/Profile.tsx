@@ -29,59 +29,40 @@ const Profile: React.FC = () => {
         />
       </div>
 
-      {/* <div className="mb-1 fw-bold fs-4 text-gray-800 px-4">Login</div>
-                  <form className="form-profile" onSubmit={handleSubmit(onSubmit)}>
-                    <div className="form-group text-start mb-2">
-                      <IonInput
-                        label="Enter your Mobile Number *"
-                        labelPlacement="floating"
-                        fill="outline"
-                        maxlength={10}
-                        className="text-black"
-                        required
-                        // onKeyDown={handleDigits as any}
-                        // onIonChange={handleMobileInput}
-                        mode="md"
-                        // onPaste={handlePaste}
-                        // type="tel"
-                      ></IonInput>
-
-                </div>
-                </form>  */}
       <div className="flex-grow">
         <form className="flex flex-col items-center w-full form-profile">
-          <div className="input-group mb-4 w-full">
+          <div className="input-group mb-4 w-full px-4">
             <IonLabel className="block text-black-600 text-sm">
               Full Name
             </IonLabel>
             <IonInput
               placeholder="Enter your full name"
-              className="input-field"
+              className="input-field w-full"
             />
           </div>
-          <div className="input-group mb-4 w-full">
+          <div className="input-group mb-4 w-full px-4">
             <IonLabel className="block text-black-600 text-sm">
               Email ID
             </IonLabel>
             <IonInput
               type="email"
               placeholder="Enter your email"
-              className="input-field"
+              className="input-field w-full"
             />
           </div>
-          <div className="input-group mb-4 w-full">
+          <div className="input-group mb-4 w-full px-4">
             <IonLabel className="block text-black-600 text-sm">
               Date of Birth
             </IonLabel>
-            <IonInput type="date" className="input-field" />
+            <IonInput type="date" className="input-field w-full" />
           </div>
-          <div className="input-group mb-4 w-full">
+          <div className="input-group mb-4 w-full px-4">
             <IonLabel className="block text-black-600 text-sm">Gender</IonLabel>
-            <IonInput placeholder="Enter your gender" className="input-field" />
+            <IonInput placeholder="Enter your gender" className="input-field w-full" />
           </div>
         </form>
       </div>
-      <div className="pt-2 pb-8 px-2">
+      <div className="pt-2 pb-8 w-full px-4">
         <IonButton
           color="danger"
           className="rounded-md w-full"
