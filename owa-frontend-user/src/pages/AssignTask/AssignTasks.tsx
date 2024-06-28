@@ -52,7 +52,7 @@ const AssignTasks: React.FC = () => {
               src="Assets/images/AssignTasks/profile_icon.svg"
               className="calender-img"
             ></IonIcon>
-            <span className="ml-2 font-medium text-black">Neha</span>
+            <span className="ml-2  font-medium text-black">Neha</span>
           </div>
         </IonCardContent>
       </IonCard>
