@@ -14,10 +14,21 @@ const setupInterceptors = (
   history: any,
   showSnackbar: (message: string, severity: string) => void
 ) => {
-  // Add a request interceptor
   axiosInstance.interceptors.request.use(
-    (config) => {
-      // Add any request headers or modifications here
+    (config: any) => {
+      if (process.env.REACT_APP_ENV === 'local') {
+        if (config.url && config.url.indexOf("/api/v1/auth") !== -1) {
+          config.baseURL = process.env.REACT_APP_AUTH_BASE_URL;
+        } else if (config.url && config.url.indexOf("/api/v1/admin") !== -1) {
+          config.baseURL = process.env.REACT_APP_ADMIN_BASE_URL;
+        } else if (config.url && config.url.indexOf("/api/v1/user") !== -1) {
+          config.baseURL = process.env.REACT_APP_USER_BASE_URL;
+        } else if (config.url && config.url.indexOf("/api/v1/forms") !== -1) {
+          config.baseURL = process.env.REACT_APP_FORMS_BASE_URL;
+        } else if (config.url && config.url.indexOf("/api/v1/workflows") !== -1) {
+          config.baseURL = process.env.REACT_APP_WORKFLOWS_BASE_URL;
+        }
+      }      
       return config;
     },
     (error) => {
@@ -25,26 +36,22 @@ const setupInterceptors = (
     }
   );
 
-  // Add a response interceptor
   axiosInstance.interceptors.response.use(
     (response) => {
-      // Do something with successful responses
       return response;
     },
     (error) => {
       if (error.response && error.response.status === 401) {
-        // Logout the user and redirect to the login page
         setTimeout(() => {
           logout();
         }, 2000);
-        // history.push('/login');
       }
 
       if (error.response && error.response.status === 400) {
         let message = "";
         if (error.response.data instanceof Object) {
           message = error.response.data.error;
-        } else if (error.response.data instanceof String) {
+        } else if (typeof error.response.data === "string") {
           try {
             const data = JSON.parse(error.response.data);
             message = data.error;

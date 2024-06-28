@@ -1,25 +1,48 @@
 import React from "react";
-import "./Login.css";
 import { IonInput } from "@ionic/react";
-import { useAuth } from "../../../../contexts/AuthContext";
-import { Link, RouteProps, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import { encrypt } from "../../../../utility/EncrytDecrypt";
+import * as AppPreference from "../../../../utility/AppPreferences";
+import * as authService from "../../../../services/authService";
 
-
-
-
-type InputProps = {
-  inputMode: string;
-  type: string;
-};
-interface LoginProps extends RouteProps {
-  // You can add additional props if needed
+interface LoginProps {
   showSnackbar: (message: string, severity: string) => void;
 }
 
-const Login: React.FC = () => {  const { login, addUserDetailsToContext } = useAuth();
-const navigate = useNavigate();
+const Login: React.FC<LoginProps> = ({ showSnackbar }) => {
+  const history = useHistory();
 
- 
+  const form = useForm({
+    defaultValues: {
+      mobile_no: "",
+      password: "",
+    },
+    criteriaMode: "all",
+  });
+
+  const onSubmit = async () => {
+    const { mobile_no, password } = form.getValues();
+    const hashedPassword = await encrypt(password);
+    const payload = {
+      user_name: mobile_no,
+      password: hashedPassword,
+    };
+
+    const loginResponse = await authService.loginPassword(payload);
+    if (!loginResponse.error) {
+      AppPreference.setValue("userToken", loginResponse.data);
+      showSnackbar("Login successful!", "success");
+      history.push("/tasks"); 
+    } else {
+      if (loginResponse?.errorMessage.response.data.errorCode === "USRAUT0007") {
+        let user_id = loginResponse?.errorMessage.response.data.userId;
+      } else {
+        showSnackbar("Login failed. Please try again.", "error");
+      }
+    }
+  };
+
   return (
     <div className="flex items-center justify-center min-h-screen">
       <div className="bg-white p-6 w-full max-w-sm">
@@ -33,18 +56,19 @@ const navigate = useNavigate();
             </div>
           </div>
         </div>
-        <form>
+        <form onSubmit={form.handleSubmit(onSubmit)}>
           <div className="mb-4">
             <IonInput
               label="Enter your Mobile Number *"
               labelPlacement="floating"
               fill="outline"
               placeholder="Enter here"
-              maxlength={10}
+              maxLength={10}
               required
               mode="md"
               type="tel"
-            ></IonInput>
+              {...form.register("mobile_no")}
+            />
           </div>
           <div className="mb-4">
             <IonInput
@@ -55,7 +79,8 @@ const navigate = useNavigate();
               required
               mode="md"
               type="password"
-            ></IonInput>
+              {...form.register("password")}
+            />
             <div className="pt-2 text-right flex justify-start">
               <img src="Assets/images/LoginPage/lock.svg" alt="" />
               <a
@@ -78,7 +103,7 @@ const navigate = useNavigate();
             <hr className="flex-grow border-gray-500" />
           </div>
           <button
-            type="submit"
+            type="button"
             className="w-full py-2 rounded-md transition duration-200 otp-button"
           >
             Login using OTP

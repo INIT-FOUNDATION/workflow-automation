@@ -10,13 +10,20 @@ import {
 import { notificationsOutline, ellipsisVerticalOutline } from "ionicons/icons";
 import { CgProfile } from "react-icons/cg";
 import { AiOutlineLogout } from "react-icons/ai";
-import { useLocation } from "react-router";
-import { SKIP_HEADER_ROUTES } from "../../constants/constant";
 
-const Header: React.FC = () => {
+import { SKIP_HEADER_ROUTES } from "../../constants/constant";
+import { useAuth } from "../../contexts/AuthContext";
+import { RouteProps, useLocation } from "react-router";
+
+interface HeaderProps extends RouteProps {
+  showSnackbar: (message: string, severity: string) => void;
+}
+
+const Header: React.FC<HeaderProps> = ({ showSnackbar }) => {
   const location = useLocation();
   const router = useIonRouter();
   const { pathname } = location;
+  const { userDetails, logout } = useAuth();
 
   const skipHeader = SKIP_HEADER_ROUTES.includes(pathname);
   if (skipHeader) return null;
@@ -33,6 +40,11 @@ const Header: React.FC = () => {
     router.push("/profile");
     setShowPopover(false);
     // history.push('/profile');
+  };
+
+  const logOutTrigger = async () => {
+    await logout();
+    showSnackbar("Logged out successfully", "success");
   };
 
   return (
@@ -81,7 +93,7 @@ const Header: React.FC = () => {
           <div
             className="flex justify-start items-center"
             style={{ cursor: "pointer" }}
-            onClick={() => console.log("Logout clicked")}
+            onClick={logOutTrigger}
           >
             <AiOutlineLogout color="black" size={22} />
             <span className="text-black m-0 ml-2" id="pop-over-text">
