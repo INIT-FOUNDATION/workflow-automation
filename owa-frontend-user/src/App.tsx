@@ -25,7 +25,7 @@ import "./theme/variables.css";
 
 import WorkFlowSelection from "./pages/MyTasks/Components/WorkFlowSelection/WorkFlowSelection";
 import MyTasks from "./pages/MyTasks/MyTasks";
-import Login from "./pages/Login/Login";
+import Login from "./pages/auth/Components/Login/Login";
 import AssignTasks from "./pages/AssignTask/AssignTasks";
 import TasksReport from "./pages/TasksReport/TasksReport";
 import WorkFlowStarted from "./pages/MyTasks/Components/WorkFlowStarted/WorkFlowStarted";
