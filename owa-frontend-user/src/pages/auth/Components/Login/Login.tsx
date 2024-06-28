@@ -15,22 +15,18 @@ interface LoginProps extends RouteProps {
 
 const Login: React.FC<LoginProps> = ({ showSnackbar }) => {
   const router = useIonRouter();
-  const { handleSubmit, register } = useForm();
   const [showPassword, setShowPassword] = useState(false);
   const { login, addUserDetailsToContext } = useAuth();
+  const {
+    register,
+    handleSubmit,
+  } = useForm();
 
-  const form = useForm({
-    defaultValues: {
-      mobile_no: "",
-      password: "",
-    },
-    criteriaMode: "all",
-  });
-
-  const onSubmit = async () => {
-    const { mobile_no, password } = form.getValues();
-
+  const onSubmit = async (data: any) => {
+    const { mobile_no, password } = data;
     const hashedPassword = await encrypt(password);
+
+    if (!mobile_no || !password) return;
 
     const payload = {
       user_name: mobile_no,
@@ -71,7 +67,7 @@ const Login: React.FC<LoginProps> = ({ showSnackbar }) => {
             </div>
           </div>
         </div>
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={handleSubmit((data) => onSubmit(data))}>
           <div className="mb-4">
             <IonInput
               label="Enter your Mobile Number *"
@@ -82,7 +78,7 @@ const Login: React.FC<LoginProps> = ({ showSnackbar }) => {
               required
               mode="md"
               type="tel"
-              {...form.register("mobile_no")}
+              {...register("mobile_no")}
             ></IonInput>
           </div>
 
@@ -95,7 +91,7 @@ const Login: React.FC<LoginProps> = ({ showSnackbar }) => {
               required
               mode="md"
               type={showPassword ? "text" : "password"}
-              {...form.register("password")}
+              {...register("password")}
             ></IonInput>
             <IonIcon
               icon={showPassword ? eyeOffOutline : eyeOutline}
