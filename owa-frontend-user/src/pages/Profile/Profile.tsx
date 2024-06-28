@@ -24,7 +24,7 @@ const Profile: React.FC = () => {
       setValue("first_name", userDetails.data.first_name);
       setValue("last_name", userDetails.data.last_name);
       setValue("email_id", userDetails.data.email_id);
-      setValue("dob", moment(userDetails.data.dob).format("YYYY-MM-DD"));
+      setValue("dob", moment(userDetails.data.dob, "DD/MM/YYYY").format("YYYY-MM-DD"));  // Specify the input format
       setValue("mobile_number", userDetails.data.mobile_number);
     }
   }, [userDetails, setValue]);
