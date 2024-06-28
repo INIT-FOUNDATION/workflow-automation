@@ -1,5 +1,11 @@
 import React from "react";
-import { IonButton, IonIcon, IonInput, IonLabel, useIonRouter } from "@ionic/react";
+import {
+  IonButton,
+  IonIcon,
+  IonInput,
+  IonLabel,
+  useIonRouter,
+} from "@ionic/react";
 import { arrowBack } from "ionicons/icons";
 import { useForm } from "react-hook-form";
 import { updateProfile } from "../../services/profileService";
@@ -7,7 +13,7 @@ import "./Profile.css";
 
 const Profile: React.FC = () => {
   const router = useIonRouter();
-  
+
   const handleBack = () => {
     router.push("/tasks");
   };
@@ -16,15 +22,15 @@ const Profile: React.FC = () => {
 
   const onSubmit = async (payload: any) => {
     try {
-      const updatedProfileData = await updateProfile(payload); 
+      const updatedProfileData = await updateProfile(payload);
       if (updatedProfileData) {
         console.log("Profile updated successfully:", updatedProfileData);
-       } else {
+      } else {
         throw new Error("Failed to update profile");
       }
     } catch (error) {
       console.error("Error updating profile:", error);
-       }
+    }
   };
 
   return (
@@ -42,7 +48,10 @@ const Profile: React.FC = () => {
       </div>
 
       <div className="flex-grow">
-        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col items-center w-full form-profile">
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="flex flex-col items-center w-full form-profile"
+        >
           <div className="input-group mb-4 w-full px-4">
             <IonLabel className="block text-black-600 text-sm">
               Full Name
@@ -51,6 +60,16 @@ const Profile: React.FC = () => {
               placeholder="Enter your full name"
               className="input-field w-full"
               {...register("full_name")} // Register each input with react-hook-form
+            />
+          </div>
+          <div className="input-group mb-4 w-full px-4">
+            <IonLabel className="block text-black-600 text-sm">
+              Last Name
+            </IonLabel>
+            <IonInput
+              placeholder="Enter your last name"
+              className="input-field w-full"
+              {...register("last_name")} // Register each input with react-hook-form
             />
           </div>
           <div className="input-group mb-4 w-full px-4">
@@ -75,18 +94,20 @@ const Profile: React.FC = () => {
             />
           </div>
           <div className="input-group mb-4 w-full px-4">
-            <IonLabel className="block text-black-600 text-sm">Gender</IonLabel>
+            <IonLabel className="block text-black-600 text-sm">
+              Mobile no
+            </IonLabel>
             <IonInput
-              placeholder="Enter your gender"
+              placeholder="Enter your mobile no"
               className="input-field w-full"
-              {...register("gender")} // Register each input with react-hook-form
+              {...register("mobile_no")} // Register each input with react-hook-form
             />
           </div>
 
           <IonButton
             type="submit"
             color="danger"
-            className="rounded-md w-full px-4"
+            className="rounded-md w-full px-4 pt-28"
           >
             Save changes
           </IonButton>

@@ -38,6 +38,9 @@
      padding-left: 0px !important; 
 }
 
+.native-input.sc-ion-input-ios {
+  padding-left: 0px !important; 
+}
 .otp-button{
     background: #FFFFFF;
     border: 1px solid #E0E0E0;
