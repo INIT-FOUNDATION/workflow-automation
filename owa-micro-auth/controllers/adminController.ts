@@ -111,11 +111,12 @@ export const adminController = {
                     description: 'Bearer token for authentication'
                 }
             */
-            const userName = req.plainToken.user_name;
+           const userName = req.plainToken.user_name;
+           const user_id = req.plainToken.user_id;
             await adminService.updateUserLoginStatus(USERS_STATUS.LOGGED_OUT, userName);
             redis.deleteRedis(userName);
             redis.deleteRedis(`USER_PERMISSIONS_${userName}`);
-            redis.deleteRedis(`LOGGED_IN_USER_DETAILS_${userName}`);
+            redis.deleteRedis(`LOGGED_IN_USER_INFO|USER:${user_id}`);
             redis.deleteRedis(`User|Username:${userName}`);
             redis.deleteRedis(`COMBINED_ACCESS_LIST|USER:${userName}`);
             return res.status(STATUS.OK).send({
