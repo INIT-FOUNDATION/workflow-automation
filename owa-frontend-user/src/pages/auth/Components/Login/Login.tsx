@@ -93,7 +93,7 @@ const Login: React.FC<LoginProps> = ({ showSnackbar }) => {
               type={showPassword ? "text" : "password"}
               {...register("password")}
             ></IonInput>
-            <IonIcon
+            {/* <IonIcon
               icon={showPassword ? eyeOffOutline : eyeOutline}
               onClick={() => setShowPassword(!showPassword)}
               className="eye-icon"
@@ -104,7 +104,7 @@ const Login: React.FC<LoginProps> = ({ showSnackbar }) => {
                 transform: "translateY(-50%)",
                 cursor: "pointer",
               }}
-            />
+            /> */}
             <div className="pt-2 text-right flex justify-start">
               <img src="Assets/images/LoginPage/lock.svg" alt="Lock" />
               <div
