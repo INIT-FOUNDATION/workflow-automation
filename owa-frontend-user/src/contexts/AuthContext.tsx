@@ -13,7 +13,7 @@ interface AuthContextProps {
   userDetails: any;
   userToken: string | null;
 
-  login: (token: string) => void;
+  login: () => void;
   logout: () => void;
   addUserDetailsToContext: (userDetails: any) => void;
 }
@@ -29,11 +29,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [userDetails, setUserDetails] = useState<any>(null);
   const [userToken, setUserToken] = useState<string | null>(null);
 
-  const login = async (token: string) => {
-    setUserToken(token);
+  const login = async () => {
     setIsAuthenticated(true);
-    await AppPreferences.setValue("userToken", token);
-    await getLoggedInUserDetails(addUserDetailsToContext);
   };
 
   const logout = async () => {
@@ -47,23 +44,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     setUserDetails(userDetails);
     await AppPreferences.setValue("user_details", JSON.stringify(userDetails));
   };
-
-  // useEffect(() => {
-  //   (async () => {
-  //     const storedToken = await AppPreferences.getValue("userToken");
-  //     const storedUserDetails = await AppPreferences.getValue("user_details");
-
-  //     if (storedToken) {
-  //       setUserToken(storedToken);
-  //       setIsAuthenticated(true);
-  //       if (storedUserDetails) {
-  //         setUserDetails(JSON.parse(storedUserDetails));
-  //       } else {
-  //         await getLoggedInUserDetails(addUserDetailsToContext);
-  //       }
-  //     }
-  //   })();
-  // }, []);
 
   useEffect(() => {
     (async () => {

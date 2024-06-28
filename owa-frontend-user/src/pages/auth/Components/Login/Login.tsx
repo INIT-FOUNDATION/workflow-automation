@@ -2,11 +2,12 @@ import React, { useState } from "react";
 import "./Login.css";
 import { IonInput, useIonRouter, IonIcon } from "@ionic/react";
 import { useForm } from "react-hook-form";
-import * as AppPreference from "../../../../utility/AppPreferences";
+import * as AppPreferences from "../../../../utility/AppPreferences";
 import * as authService from "../../../../services/authService";
 import { encrypt } from "../../../../utility/EncrytDecrypt";
 import { RouteProps } from "react-router";
-import { eyeOutline, eyeOffOutline } from 'ionicons/icons';
+import { eyeOutline, eyeOffOutline } from "ionicons/icons";
+import { useAuth } from "../../../../contexts/AuthContext";
 
 interface LoginProps extends RouteProps {
   showSnackbar: (message: string, severity: string) => void;
@@ -14,10 +15,10 @@ interface LoginProps extends RouteProps {
 
 const Login: React.FC<LoginProps> = ({ showSnackbar }) => {
   const router = useIonRouter();
-  const { handleSubmit } = useForm();
+  const { handleSubmit, register } = useForm();
   const [showPassword, setShowPassword] = useState(false);
+  const { login, addUserDetailsToContext } = useAuth();
 
-  // Initialize form with default values and criteria mode
   const form = useForm({
     defaultValues: {
       mobile_no: "",
@@ -26,33 +27,31 @@ const Login: React.FC<LoginProps> = ({ showSnackbar }) => {
     criteriaMode: "all",
   });
 
-  // Handle form submission
   const onSubmit = async () => {
     const { mobile_no, password } = form.getValues();
 
-    // Encrypt password before sending
     const hashedPassword = await encrypt(password);
 
-    // Prepare payload for login request
     const payload = {
       user_name: mobile_no,
       password: hashedPassword,
     };
 
-    // Call login service
     const loginResponse = await authService.loginPassword(payload);
 
     if (!loginResponse.error) {
-  console.log(loginResponse);
-  
-      AppPreference.setValue("userToken", loginResponse.data.data.token);
+      console.log(loginResponse);
+
+      AppPreferences.setValue("userToken", loginResponse.data.data.token);
+      login();
+      await authService.getLoggedInUserDetails(addUserDetailsToContext);
+
       router.push("/tasks");
     } else {
       if (
         loginResponse?.errorMessage.response.data.errorCode === "USRAUT0007"
       ) {
         let user_id = loginResponse?.errorMessage.response.data.userId;
-        // Handle specific error case if needed
       } else {
         showSnackbar("Login failed. Please try again.", "error");
       }
@@ -102,7 +101,13 @@ const Login: React.FC<LoginProps> = ({ showSnackbar }) => {
               icon={showPassword ? eyeOffOutline : eyeOutline}
               onClick={() => setShowPassword(!showPassword)}
               className="eye-icon"
-              style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)', cursor: 'pointer' }}
+              style={{
+                position: "absolute",
+                right: "10px",
+                top: "50%",
+                transform: "translateY(-50%)",
+                cursor: "pointer",
+              }}
             />
             <div className="pt-2 text-right flex justify-start">
               <img src="Assets/images/LoginPage/lock.svg" alt="Lock" />
@@ -122,7 +127,6 @@ const Login: React.FC<LoginProps> = ({ showSnackbar }) => {
             Login
           </button>
 
-          {/* OR Divider */}
           <div className="or-container my-4 flex items-center">
             <hr className="flex-grow border-gray-500" />
             <span className="mx-4 text-gray-500">OR</span>
@@ -130,7 +134,7 @@ const Login: React.FC<LoginProps> = ({ showSnackbar }) => {
           </div>
 
           <button
-            type="button" // Changed to button to prevent default form submit
+            type="button"
             className="w-full py-2 rounded-md transition duration-200 otp-button"
           >
             Login using OTP
