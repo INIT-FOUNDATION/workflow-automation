@@ -1,10 +1,25 @@
 import React from "react";
 import "./Login.css";
-import { IonInput, useIonRouter } from "@ionic/react";
+import { IonInput } from "@ionic/react";
+import { useAuth } from "../../../../contexts/AuthContext";
+import { Link, RouteProps, useHistory } from "react-router-dom";
 
-const Login: React.FC = () => {
-  const router = useIonRouter();
 
+
+
+type InputProps = {
+  inputMode: string;
+  type: string;
+};
+interface LoginProps extends RouteProps {
+  // You can add additional props if needed
+  showSnackbar: (message: string, severity: string) => void;
+}
+
+const Login: React.FC = () => {  const { login, addUserDetailsToContext } = useAuth();
+const navigate = useNavigate();
+
+ 
   return (
     <div className="flex items-center justify-center min-h-screen">
       <div className="bg-white p-6 w-full max-w-sm">
@@ -42,13 +57,13 @@ const Login: React.FC = () => {
               type="password"
             ></IonInput>
             <div className="pt-2 text-right flex justify-start">
-              <img src="Assets/images/LoginPage/lock.svg" alt="Lock" />
-              <div
+              <img src="Assets/images/LoginPage/lock.svg" alt="" />
+              <a
+                href="#"
                 className="text-red-600 ms-2 text-sm hover:text-red-700"
-                onClick={() => router.push("/forgot-password")}
               >
                 Forgot Password?
-              </div>
+              </a>
             </div>
           </div>
           <button
