@@ -25,14 +25,14 @@ const logout = async () => {
 
 const otpRequest = async (payload: any) => {
   const getOtpRequest = await post(
-    "/api/v1/admin/getForgetPasswordOtp",
+    "/api/v1/auth/admin/getForgetPasswordOtp",
     payload
   );
   return getOtpRequest;
 };
 const verifyOtpRequest = async (payload: any) => {
   const getVerifyOtpRequest = await post(
-    "/api/v1/admin/verifyForgetPasswordOtp",
+    "/api/v1/auth/admin/verifyForgetPasswordOtp",
     payload
   );
   return getVerifyOtpRequest;

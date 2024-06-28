@@ -14,24 +14,22 @@ const ForgotPassword: React.FC<ForgotPasswordProps> = ({ showSnackbar }) => {
   const [otpSent, setOtpSent] = useState(false);
   const [txnId, setTxnId] = useState("");
 
-  const { register, handleSubmit, watch } = useForm({
+  const { register, handleSubmit, getValues } = useForm({
     defaultValues: {
       mobile_no: "",
       otp: "",
     },
   });
 
-  const mobileNumber = watch("mobile_no");
-  const otp = watch("otp");
-
   const goBackToLoginPage = () => {
     router.push("/login");
   };
 
   const handleSendOtp = async () => {
+    const { mobile_no } = getValues();
     const mobileNumberPattern = /^[6-9]\d{9}$/;
-    if (mobileNumberPattern.test(mobileNumber)) {
-      const payload = { mobile_number: mobileNumber };
+    if (mobileNumberPattern.test(mobile_no)) {
+      const payload = { mobile_number: mobile_no };
       const getOtpRequestResponse = await authService.otpRequest(payload);
 
       if (!getOtpRequestResponse.error) {
@@ -47,7 +45,8 @@ const ForgotPassword: React.FC<ForgotPasswordProps> = ({ showSnackbar }) => {
   };
 
   const handleVerifyOtp = async () => {
-    const payload = { txnId, otp };
+    const { otp } = getValues();
+    const payload = { txnId: txnId, otp: otp };
     const verifyOtpResponse = await authService.verifyOtpRequest(payload);
 
     if (!verifyOtpResponse.error) {
