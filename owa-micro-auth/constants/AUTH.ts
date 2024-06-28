@@ -7,7 +7,10 @@ export const AUTH = {
          "/api/v1/auth/admin/login",
          "/api/v1/auth/admin/getForgetPasswordOtp",
          "/api/v1/auth/admin/verifyForgetPasswordOtp",
-         "/api/v1/auth/admin/resetForgetPassword"
+         "/api/v1/auth/admin/resetForgetPassword",
+
+         "/api/v1/auth/user/login",
+         "/api/v1/auth/user/generateOTP",
        ]
     }
 }
