@@ -49,8 +49,9 @@
                                 appIntegerInput appMobileNumber="true" [appMin]="6000000000" [appMax]="9999999999"
                                 [appRange]="[6000000000, 9999999999]" />
                         </mat-form-field>
-                        <a href="#" class="text-blue-500 text-sm mt-1 inline-block">Click here to update Mobile
-                            Number</a>
+                        <!-- <a href="#" class="text-blue-500 text-sm mt-1 inline-block"
+                            (click)="openNumberChangeDialog()">Click here to update Mobile
+                            Number</a> -->
                     </div>
                     <div class="grid grid-cols-1">
                         <mat-form-field appearance="outline" class="w-full">
@@ -66,7 +67,6 @@
                         Changes</button>
                 </form>
             </div>
-
         </ng-container>
     </ng-container>
 </ng-template>
