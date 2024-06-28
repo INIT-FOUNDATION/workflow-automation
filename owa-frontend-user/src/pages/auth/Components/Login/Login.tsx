@@ -1,19 +1,20 @@
-import React from "react";
-import { IonInput } from "@ionic/react";
-import { Link, useHistory } from "react-router-dom";
+import React, { useState } from "react";
+import "./Login.css";
+import { IonInput, useIonRouter } from "@ionic/react";
 import { useForm } from "react-hook-form";
-import { encrypt } from "../../../../utility/EncrytDecrypt";
 import * as AppPreference from "../../../../utility/AppPreferences";
 import * as authService from "../../../../services/authService";
-import { LinkedCamera } from "@mui/icons-material";
-
-interface LoginProps {
+import { encrypt } from "../../../../utility/EncrytDecrypt";
+import { RouteProps } from "react-router";
+interface LoginProps extends RouteProps {
   showSnackbar: (message: string, severity: string) => void;
 }
-
 const Login: React.FC<LoginProps> = ({ showSnackbar }) => {
-  const history = useHistory();
+  const router = useIonRouter();
+  const { handleSubmit } = useForm();
+  const [showPassword, setShowPassword] = useState(false);
 
+  // Initialize form with default values and criteria mode
   const form = useForm({
     defaultValues: {
       mobile_no: "",
@@ -22,20 +23,33 @@ const Login: React.FC<LoginProps> = ({ showSnackbar }) => {
     criteriaMode: "all",
   });
 
+  // Handle form submission
   const onSubmit = async () => {
     const { mobile_no, password } = form.getValues();
+
+    // Encrypt password before sending
     const hashedPassword = await encrypt(password);
+
+    // Prepare payload for login request
     const payload = {
       user_name: mobile_no,
       password: hashedPassword,
     };
 
+    // Call login service
     const loginResponse = await authService.loginPassword(payload);
+
     if (!loginResponse.error) {
       AppPreference.setValue("userToken", loginResponse.data);
-      showSnackbar("Login successful!", "success");
-      history.push("/tasks");
-    } 
+      router.push("/tasks");
+    } else {
+      if (
+        loginResponse?.errorMessage.response.data.errorCode === "USRAUT0007"
+      ) {
+        let user_id = loginResponse?.errorMessage.response.data.userId;
+      } else {
+      }
+    }
   };
 
   return (
@@ -51,20 +65,21 @@ const Login: React.FC<LoginProps> = ({ showSnackbar }) => {
             </div>
           </div>
         </div>
-        <form onSubmit={form.handleSubmit(onSubmit)}>
+        <form onSubmit={handleSubmit(onSubmit)}>
           <div className="mb-4">
             <IonInput
               label="Enter your Mobile Number *"
               labelPlacement="floating"
               fill="outline"
               placeholder="Enter here"
-              maxLength={10}
+              maxlength={10}
               required
               mode="md"
               type="tel"
               {...form.register("mobile_no")}
-            />
+            ></IonInput>
           </div>
+
           <div className="mb-4">
             <IonInput
               label="Enter your Password *"
@@ -73,32 +88,37 @@ const Login: React.FC<LoginProps> = ({ showSnackbar }) => {
               placeholder="Enter here"
               required
               mode="md"
-              type="password"
+              type={showPassword ? "text" : "password"}
               {...form.register("password")}
-            />
-           <div className="pt-2 text-right flex justify-start">
-  <img src="Assets/images/LoginPage/lock.svg" alt="" />
-  <Link
-    to="/forgot-password"
-    className="text-red-600 ms-2 text-sm hover:text-red-700"
-  >
-    Forgot Password?
-  </Link>
-</div>
+            ></IonInput>
+
+            <div className="pt-2 text-right flex justify-start">
+              <img src="Assets/images/LoginPage/lock.svg" alt="Lock" />
+              <div
+                className="text-red-600 ms-2 text-sm hover:text-red-700"
+                onClick={() => router.push("/forgot-password")}
+              >
+                Forgot Password?
+              </div>
+            </div>
           </div>
+
           <button
             type="submit"
             className="w-full text-white py-2 rounded-md transition duration-200 submit-button"
           >
             Login
           </button>
+
+          {/* OR Divider */}
           <div className="or-container my-4 flex items-center">
             <hr className="flex-grow border-gray-500" />
             <span className="mx-4 text-gray-500">OR</span>
             <hr className="flex-grow border-gray-500" />
           </div>
+
           <button
-            type="button"
+            type="submit"
             className="w-full py-2 rounded-md transition duration-200 otp-button"
           >
             Login using OTP
