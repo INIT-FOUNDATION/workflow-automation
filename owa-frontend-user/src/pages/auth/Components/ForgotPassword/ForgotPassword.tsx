@@ -1,13 +1,17 @@
-import { IonInput } from "@ionic/react";
+import { IonInput, useIonRouter } from "@ionic/react";
 import React from "react";
 import "./ForgotPassword.css"
 
 const ForgotPassword: React.FC = () => {
+    const router =useIonRouter();
+    const goBackTologinPage=()=>{
+     router.push("/login")
+    }
   return (
     <div className="flex items-center justify-center min-h-screen">
       <div className="bg-white p-6 w-full max-w-sm">
         <div className="flex justify-center mb-8">
-          <img src="Assets/images/Login/ollUserLogo.svg" alt="Login" />
+          <img src="Assets/images/Login/ollUserLogo.svg" alt="Login" onClick={goBackTologinPage} />
         </div>
         <div className="mb-4">
           <div className="border-b border-gray-300" style={{ width: "98%" }}>
