@@ -64,8 +64,10 @@ const App: React.FC = () => {
   return (
     <IonApp>
       <IonReactRouter>
-        <Header showSnackbar={showSnackbar} />
+      
           {isAuthenticated ? (
+            <>
+              <Header showSnackbar={showSnackbar} />
             <Switch>
               <Route
                 path="/profile"
@@ -145,6 +147,7 @@ const App: React.FC = () => {
                 </Switch>
               </Footer>
             </Switch>
+            </>
           ) : (
             <Switch>
               <Route
