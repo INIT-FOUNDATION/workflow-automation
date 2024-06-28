@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   IonButton,
   IonIcon,
@@ -10,26 +10,41 @@ import { arrowBack } from "ionicons/icons";
 import { useForm } from "react-hook-form";
 import { updateProfile } from "../../services/profileService";
 import "./Profile.css";
+import { useAuth } from "../../contexts/AuthContext";
+import moment from "moment";
 
 const Profile: React.FC = () => {
   const router = useIonRouter();
+  const { userDetails } = useAuth();
+  const { handleSubmit, register, setValue } = useForm();
+
+  useEffect(() => {
+    // Populate form fields with user details on component mount
+    if (userDetails) {
+      setValue("first_name", userDetails.data.first_name);
+      setValue("last_name", userDetails.data.last_name);
+      setValue("email_id", userDetails.data.email_id);
+      setValue("dob", moment(userDetails.data.dob).format("YYYY-MM-DD"));
+      setValue("mobile_number", userDetails.data.mobile_number);
+    }
+  }, [userDetails, setValue]);
 
   const handleBack = () => {
     router.push("/tasks");
   };
 
-  const { handleSubmit, register } = useForm();
-
-  const onSubmit = async (payload: any) => {
+  const onSubmit = async (formData: any) => {
     try {
-      const updatedProfileData = await updateProfile(payload);
+      const updatedProfileData = await updateProfile(formData);
       if (updatedProfileData) {
         console.log("Profile updated successfully:", updatedProfileData);
+        // Optionally show success message or update state
       } else {
         throw new Error("Failed to update profile");
       }
     } catch (error) {
       console.error("Error updating profile:", error);
+      // Optionally handle error state or show error message
     }
   };
 
@@ -54,12 +69,12 @@ const Profile: React.FC = () => {
         >
           <div className="input-group mb-4 w-full px-4">
             <IonLabel className="block text-black-600 text-sm">
-              Full Name
+              First Name
             </IonLabel>
             <IonInput
-              placeholder="Enter your full name"
+              placeholder="Enter your first name"
               className="input-field w-full"
-              {...register("full_name")} // Register each input with react-hook-form
+              {...register("first_name")}
             />
           </div>
           <div className="input-group mb-4 w-full px-4">
@@ -69,7 +84,7 @@ const Profile: React.FC = () => {
             <IonInput
               placeholder="Enter your last name"
               className="input-field w-full"
-              {...register("last_name")} // Register each input with react-hook-form
+              {...register("last_name")}
             />
           </div>
           <div className="input-group mb-4 w-full px-4">
@@ -80,7 +95,7 @@ const Profile: React.FC = () => {
               type="email"
               placeholder="Enter your email"
               className="input-field w-full"
-              {...register("email")} // Register each input with react-hook-form
+              {...register("email_id")}
             />
           </div>
           <div className="input-group mb-4 w-full px-4">
@@ -90,17 +105,18 @@ const Profile: React.FC = () => {
             <IonInput
               type="date"
               className="input-field w-full"
-              {...register("dob")} // Register each input with react-hook-form
+              {...register("dob")}
             />
           </div>
           <div className="input-group mb-4 w-full px-4">
             <IonLabel className="block text-black-600 text-sm">
-              Mobile no
+              Mobile Number
             </IonLabel>
             <IonInput
-              placeholder="Enter your mobile no"
+              placeholder="Enter your mobile number"
               className="input-field w-full"
-              {...register("mobile_no")} // Register each input with react-hook-form
+              {...register("mobile_number")}
+              disabled
             />
           </div>
 
@@ -109,7 +125,7 @@ const Profile: React.FC = () => {
             color="danger"
             className="rounded-md w-full px-4 pt-28"
           >
-            Save changes
+            Save Changes
           </IonButton>
         </form>
       </div>
