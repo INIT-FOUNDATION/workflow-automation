@@ -1,4 +1,4 @@
-import { Redirect, Route } from "react-router-dom";
+import { Redirect, Route, Switch } from "react-router-dom";
 import { IonApp, IonRouterOutlet, setupIonicReact } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
 import Header from "./shared/Header/Header";
@@ -32,55 +32,55 @@ import WorkFlowStarted from "./pages/MyTasks/Components/WorkFlowStarted/WorkFlow
 import CreateTasks from "./pages/MyTasks/Components/CreateTasks/CreateTasks";
 import Profile from "./pages/Profile/Profile";
 import TriggerDetails from "./pages/MyTasks/Components/TriggerDetails/TriggerDetails";
+import ForgotPassword from "./pages/auth/Components/ForgotPassword/ForgotPassword";
 
 setupIonicReact();
 
 const App: React.FC = () => (
   <IonApp>
     <IonReactRouter>
-      <Header />
-      <IonRouterOutlet>
-        {/* Footer Avoiding Routes */}
+      {/* Conditionally render Header and Footer */}
+      <Switch>
         <Route path="/login" component={Login} exact />
-        <Route path="/profile" component={Profile} exact />
+        <Route path="/forgot-password" component={ForgotPassword} exact />
 
-        {/* Redirect root to login */}
-        <Route exact path="/">
-          <Redirect to="/login" />
+        {/* Route with Header and Footer */}
+        <Route>
+          <Header />
+          <IonRouterOutlet>
+            {/* Routes without Footer */}
+            <Route path="/profile" component={Profile} exact />
+
+            {/* Redirect root to login */}
+            <Route exact path="/">
+              <Redirect to="/login" />
+            </Route>
+
+            {/* Routes with Footer */}
+            <Footer>
+              <Route path="/tasks" component={MyTasks} exact />
+              <Route
+                path="/tasks/workflow-selection"
+                component={WorkFlowSelection}
+                exact
+              />
+              <Route
+                path="/tasks/workflow-started"
+                component={WorkFlowStarted}
+                exact
+              />
+              <Route path="/tasks/create-tasks" component={CreateTasks} exact />
+              <Route path="/tasks-reports" component={TasksReport} exact />
+              <Route path="/assigned-tasks" component={AssignTasks} exact />
+              <Route
+                path="/tasks/trigger-details"
+                component={TriggerDetails}
+                exact
+              />
+            </Footer>
+          </IonRouterOutlet>
         </Route>
-
-        {/* Routes with Footer */}
-        <Footer>
-          <Route path="/tasks" component={MyTasks} exact />
-          <Route
-            path="/tasks/workflow-selection"
-            component={WorkFlowSelection}
-            exact
-          />
-          <Route
-            path="/tasks/workflow-started"
-            component={WorkFlowStarted}
-            exact
-          />
-          <Route path="/tasks/create-tasks" component={CreateTasks} exact />
-          <Route path="/tasks-reports" component={TasksReport} exact />
-          <Route path="/assigned-tasks" component={AssignTasks} exact />
-
-          {/* <Route
-            path="/tasks/trigger-details/notification"
-            component={TriggerDetails}
-          />
-          <Route
-            path="/tasks/trigger-details/api-trigger"
-            component={TriggerDetails}
-          /> */}
-          <Route
-            path="/tasks/trigger-details"
-            component={TriggerDetails}
-            exact
-          />
-        </Footer>
-      </IonRouterOutlet>
+      </Switch>
     </IonReactRouter>
   </IonApp>
 );

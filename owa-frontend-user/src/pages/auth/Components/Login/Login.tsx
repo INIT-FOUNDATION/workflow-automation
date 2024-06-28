@@ -1,8 +1,10 @@
 import React from "react";
 import "./Login.css";
-import { IonInput } from "@ionic/react";
+import { IonInput, useIonRouter } from "@ionic/react";
 
 const Login: React.FC = () => {
+  const router = useIonRouter();
+
   return (
     <div className="flex items-center justify-center min-h-screen">
       <div className="bg-white p-6 w-full max-w-sm">
@@ -40,13 +42,13 @@ const Login: React.FC = () => {
               type="password"
             ></IonInput>
             <div className="pt-2 text-right flex justify-start">
-              <img src="Assets/images/LoginPage/lock.svg" alt="" />
-              <a
-                href="#"
+              <img src="Assets/images/LoginPage/lock.svg" alt="Lock" />
+              <div
                 className="text-red-600 ms-2 text-sm hover:text-red-700"
+                onClick={() => router.push("/forgot-password")}
               >
                 Forgot Password?
-              </a>
+              </div>
             </div>
           </div>
           <button
