@@ -6,7 +6,6 @@ import "./TriggerDetails.css";
 
 import NotificationTriggerDetails from "../NotificationTriggerDetails/NotificationTriggerDetails";
 import ApiTriggerDetails from "../APITriggerDetails/APITriggerDetails";
-import { useLocation } from "react-router";
 
 const TriggerDetails: React.FC = () => {
   const router = useIonRouter();
@@ -19,9 +18,6 @@ const TriggerDetails: React.FC = () => {
   const handleTabChange = (event: React.ChangeEvent<{}>, newValue: number) => {
     setSelectedTab(newValue);
   };
-
-  const location = useLocation();
-  console.log(location.pathname, "path");
 
   return (
     <IonContent>

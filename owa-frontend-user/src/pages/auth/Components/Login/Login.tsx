@@ -36,7 +36,6 @@ const Login: React.FC<LoginProps> = ({ showSnackbar }) => {
     const loginResponse = await authService.loginPassword(payload);
 
     if (!loginResponse.error) {
-      console.log(loginResponse);
 
       AppPreferences.setValue("userToken", loginResponse.data.data.token);
       login();

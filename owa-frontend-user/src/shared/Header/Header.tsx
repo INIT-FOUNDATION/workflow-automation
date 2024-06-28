@@ -30,7 +30,9 @@ const Header: React.FC<HeaderProps> = ({ showSnackbar }) => {
   const [showPopover, setShowPopover] = useState(false);
   const popoverRef = useRef<HTMLIonPopoverElement>(null);
 
-  const openPopover = (event: React.MouseEvent<HTMLIonButtonElement, MouseEvent>) => {
+  const openPopover = (
+    event: React.MouseEvent<HTMLIonButtonElement, MouseEvent>
+  ) => {
     event.persist();
     setShowPopover(true);
   };
@@ -51,7 +53,7 @@ const Header: React.FC<HeaderProps> = ({ showSnackbar }) => {
     <div className="flex items-center justify-between px-2 md:px-20 pt-4 pb-1 fixed bg-white z-10 w-full">
       <div className="flex items-center mt-2">
         <img
-          src="/Assets/images/Header/Header_logo.png" // Corrected path to assets
+          src="/Assets/images/Header/Header_logo.png"
           className="w-10 h-10 ml-2"
           alt="logo"
         />

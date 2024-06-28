@@ -37,7 +37,6 @@ const ForgotPassword: React.FC<ForgotPasswordProps> = ({ showSnackbar }) => {
         showSnackbar("OTP sent successfully", "success");
         setOtpSent(true);
         setTxnId(getOtpRequestResponse?.data?.data?.txnId);
-        console.log("TxnId after sending OTP:", getOtpRequestResponse?.data?.data?.txnId);
       } else {
         showSnackbar("Failed to send OTP. Please try again.", "error");
       }
@@ -48,17 +47,16 @@ const ForgotPassword: React.FC<ForgotPasswordProps> = ({ showSnackbar }) => {
   const handleVerifyOtp = async () => {
     const { otp } = getValues();
     const payload = { txnId: txnId, otp: encrypt(otp) };
-    
+
     const verifyOtpResponse = await authService.verifyOtpRequest(payload);
-  
+
     if (!verifyOtpResponse.error) {
       showSnackbar("OTP verified successfully", "success");
-      router.push("/reset-password"); 
+      router.push("/reset-password");
     } else {
       showSnackbar("Invalid OTP. Please try again.", "error");
     }
   };
-  
 
   const onSubmit = otpSent ? handleVerifyOtp : handleSendOtp;
 
@@ -91,7 +89,7 @@ const ForgotPassword: React.FC<ForgotPasswordProps> = ({ showSnackbar }) => {
               mode="md"
               type="tel"
               {...register("mobile_no")}
-              disabled={otpSent} // Disable mobile input if OTP has been sent
+              disabled={otpSent}
             ></IonInput>
           </div>
           {otpSent && (

@@ -14,12 +14,9 @@ import {
   IonInput,
   useIonRouter,
 } from "@ionic/react";
-import { useLocation } from "react-router";
 import { arrowBack } from "ionicons/icons";
 
 const CreateTasks: React.FC = () => {
-  const location = useLocation();
-  console.log(location.pathname, "path");
   const router = useIonRouter();
 
   const handleNextClick = () => {
@@ -48,18 +45,8 @@ const CreateTasks: React.FC = () => {
               label="Task Name *"
               labelPlacement="floating"
               fill="outline"
-              // placeholder="Enter here"
-              //  className=" text-black"
               mode="md"
             ></IonInput>
-            {/* <TextField
-            label="Task Name"
-            variant="outlined"
-            // placeholder="Enter task name"
-            className="w-full"
-            InputProps={{ className: "text-black" }}
-            required
-          /> */}
           </div>
           <div className="mb-4">
             <FormControl variant="outlined" className="w-full">

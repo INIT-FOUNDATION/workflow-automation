@@ -38,14 +38,12 @@ const Profile: React.FC = () => {
       const updatedProfileData = await updateProfile(formData);
       if (updatedProfileData) {
         console.log("Profile updated successfully:", updatedProfileData);
-        // Optionally show success message or update state
       } else {
         throw new Error("Failed to update profile");
       }
     } catch (error) {
       console.error("Error updating profile:", error);
-      // Optionally handle error state or show error message
-    }
+     }
   };
 
   return (
