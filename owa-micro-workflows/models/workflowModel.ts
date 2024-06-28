@@ -1,5 +1,5 @@
 import Joi from "joi";
-import { IWorkflow, IWorkflowNotificationTask, IWorkflowDecisionTask, IWorkflowDecisionCondition,
+import { IWorkflow, IWorkflowTask, IWorkflowNotificationTask, IWorkflowDecisionTask, IWorkflowDecisionCondition,
     IWorkflowTransition, IWorkflowAssignment, IWorkflowTaskAssignment, IWorkflowTaskFormSubmission,
     IWorkflowTransaction, 
  } from "../types/custom";
@@ -13,8 +13,6 @@ class Workflow implements IWorkflow {
     workflow_name: string;
     workflow_description: string;
     status: number;
-    date_created: string;
-    date_updated: string;
     created_by: number;
     updated_by: number;
 
@@ -23,8 +21,6 @@ class Workflow implements IWorkflow {
         this.workflow_name = workflow.workflow_name;
         this.workflow_description = workflow.workflow_description;
         this.status = workflow.status || 1;
-        this.date_created = workflow.date_created || moment().toISOString();
-        this.date_updated = workflow.date_updated || moment().toISOString();
         this.created_by = plainToken.user_id;
         this.updated_by = plainToken.user_id;
     }
@@ -39,12 +35,50 @@ class Workflow implements IWorkflow {
                 new Error(`${WORKFLOWS.WORKF0002}`)
             ),
             status: Joi.number().integer().default(1),
-            date_created: Joi.string().allow("", null),
-            date_updated: Joi.string().allow("", null),
             created_by: Joi.number().integer().required(),
             updated_by: Joi.number().integer().required(),
         });
         return workflowSchema.validate(workflow);
+    }
+}
+
+class WorkflowTask implements IWorkflowTask {
+    task_id: number;
+    workflow_id: number;
+    task_name: string;
+    task_description?: string;
+    form_id: number;
+    status: number;
+    created_by: number;
+    updated_by: number;
+
+    constructor(workflowTask: IWorkflowTask, plainToken: PlainToken) {
+        this.task_id = workflowTask.task_id;
+        this.workflow_id = workflowTask.workflow_id;
+        this.task_name = workflowTask.task_name;
+        this.task_description = workflowTask.task_description;
+        this.form_id = workflowTask.form_id;
+        this.status = workflowTask.status || 1;
+        this.created_by = plainToken.user_id;
+        this.updated_by = plainToken.user_id;
+    }
+
+    static validateWorkflowTask = (workflowTask: IWorkflowTask): Joi.ValidationResult => {
+        const workflowTaskSchema = Joi.object({
+            task_id: Joi.number().integer().optional(),
+            workflow_id: Joi.number().integer().required(),
+            task_name: Joi.string().min(3).max(50).required().error(
+                new Error(`${WORKFLOWS.WORKF0001}`)
+            ),
+            task_description: Joi.string().optional().allow(null).error(
+                new Error(`${WORKFLOWS.WORKF0002}`)
+            ),
+            form_id: Joi.number().integer().required(),
+            status: Joi.number().integer().default(1),
+            created_by: Joi.number().integer().required(),
+            updated_by: Joi.number().integer().required(),
+        });
+        return workflowTaskSchema.validate(workflowTask);
     }
 }
 
@@ -54,16 +88,14 @@ class WorkflowNotificationTask implements IWorkflowNotificationTask {
     notification_task_name: string;
     notification_task_description: string;
     notification_type: string;
-    email_subject?: string;
-    email_body?: string;
-    sms_body?: string;
-    template_id?: string;
-    placeholders?: object;
-    recipient_emails?: string;
-    recipient_mobilenumber?: string;
+    email_subject: string;
+    email_body: string;
+    sms_body: string;
+    template_id: string;
+    placeholders: object;
+    recipient_emails: string;
+    recipient_mobilenumber: string;
     status: number;
-    date_created: string;
-    date_updated: string;
     created_by: number;
     updated_by: number;
 
@@ -81,8 +113,6 @@ class WorkflowNotificationTask implements IWorkflowNotificationTask {
         this.recipient_emails = notificationTask.recipient_emails;
         this.recipient_mobilenumber = notificationTask.recipient_mobilenumber;
         this.status = notificationTask.status !== undefined ? notificationTask.status : 1;
-        this.date_created = notificationTask.date_created || moment().toISOString();
-        this.date_updated = notificationTask.date_updated || moment().toISOString();
         this.created_by = notificationTask.created_by || plainToken.user_id;
         this.updated_by = notificationTask.updated_by || plainToken.user_id;
     }
@@ -106,8 +136,6 @@ class WorkflowNotificationTask implements IWorkflowNotificationTask {
             recipient_emails: Joi.string().allow(null, ''),
             recipient_mobilenumber: Joi.string().allow(null, ''),
             status: Joi.number().integer().default(1),
-            date_created: Joi.string().allow("", null).default(() => moment().toISOString(), 'current timestamp'),
-            date_updated: Joi.string().allow("", null).default(() => moment().toISOString(), 'current timestamp'),
             created_by: Joi.number().integer().required(),
             updated_by: Joi.number().integer().required(),
         });
@@ -121,8 +149,6 @@ class WorkflowDecisionTask implements IWorkflowDecisionTask {
     decision_task_name: string;
     decision_task_description: string;
     status: number;
-    date_created: string;
-    date_updated: string;
     created_by: number;
     updated_by: number;
 
@@ -132,8 +158,6 @@ class WorkflowDecisionTask implements IWorkflowDecisionTask {
         this.decision_task_name = decisionTask.decision_task_name;
         this.decision_task_description = decisionTask.decision_task_description;
         this.status = decisionTask.status !== undefined ? decisionTask.status : 1;
-        this.date_created = decisionTask.date_created || moment().toISOString();
-        this.date_updated = decisionTask.date_updated || moment().toISOString();
         this.created_by = decisionTask.created_by || plainToken.user_id;
         this.updated_by = decisionTask.updated_by || plainToken.user_id;
     }
@@ -149,8 +173,6 @@ class WorkflowDecisionTask implements IWorkflowDecisionTask {
                 new Error('DECISION_TASK00003: Decision task description is required.')
             ),
             status: Joi.number().integer().default(1),
-            date_created: Joi.string().allow("", null).default(() => moment().toISOString(), 'current timestamp'),
-            date_updated: Joi.string().allow("", null).default(() => moment().toISOString(), 'current timestamp'),
             created_by: Joi.number().integer().required(),
             updated_by: Joi.number().integer().required(),
         });
@@ -166,8 +188,6 @@ class WorkflowDecisionCondition implements IWorkflowDecisionCondition {
     operand_two: string;
     condition_type: string;
     status: number;
-    date_created: string;
-    date_updated: string;
     created_by: number;
     updated_by: number;
 
@@ -179,8 +199,6 @@ class WorkflowDecisionCondition implements IWorkflowDecisionCondition {
         this.operand_two = decisionCondition.operand_two;
         this.condition_type = decisionCondition.condition_type;
         this.status = decisionCondition.status !== undefined ? decisionCondition.status : 1;
-        this.date_created = decisionCondition.date_created || moment().toISOString();
-        this.date_updated = decisionCondition.date_updated || moment().toISOString();
         this.created_by = decisionCondition.created_by || plainToken.user_id;
         this.updated_by = decisionCondition.updated_by || plainToken.user_id;
     }
@@ -198,8 +216,6 @@ class WorkflowDecisionCondition implements IWorkflowDecisionCondition {
             ),
             condition_type: Joi.string().valid('MATCHED', 'NOT-MATCHED').required(),
             status: Joi.number().integer().default(1),
-            date_created: Joi.string().allow("", null).default(() => moment().toISOString(), 'current timestamp'),
-            date_updated: Joi.string().allow("", null).default(() => moment().toISOString(), 'current timestamp'),
             created_by: Joi.number().integer().required(),
             updated_by: Joi.number().integer().required(),
         });
@@ -216,8 +232,7 @@ class WorkflowTransition implements IWorkflowTransition {
     condition_type: string;
     status: number;
     date_created: string;
-    date_updated: string;
-    created_by: number;
+    date_updated: string;    created_by: number;
     updated_by: number;
 
     constructor(transition: IWorkflowTransition, plainToken: PlainToken) {
@@ -228,8 +243,6 @@ class WorkflowTransition implements IWorkflowTransition {
         this.to_task_type = transition.to_task_type;
         this.condition_type = transition.condition_type;
         this.status = transition.status !== undefined ? transition.status : 1;
-        this.date_created = transition.date_created || moment().toISOString();
-        this.date_updated = transition.date_updated || moment().toISOString();
         this.created_by = transition.created_by || plainToken.user_id;
         this.updated_by = transition.updated_by || plainToken.user_id;
     }
@@ -243,8 +256,6 @@ class WorkflowTransition implements IWorkflowTransition {
             to_task_type: Joi.string().valid('D', 'T', 'N').required(),
             condition_type: Joi.string().valid('MATCHED', 'NOT-MATCHED').required(),
             status: Joi.number().integer().default(1),
-            date_created: Joi.string().allow("", null).default(() => moment().toISOString(), 'current timestamp'),
-            date_updated: Joi.string().allow("", null).default(() => moment().toISOString(), 'current timestamp'),
             created_by: Joi.number().integer().required(),
             updated_by: Joi.number().integer().required(),
         });
@@ -255,11 +266,9 @@ class WorkflowTransition implements IWorkflowTransition {
 class WorkflowAssignment implements IWorkflowAssignment {
     workflow_assignment_id: number;
     workflow_id: number;
-    workflow_triggered_on?: string;
-    workflow_triggered_by?: number;
+    workflow_triggered_on: string;
+    workflow_triggered_by: number;
     workflow_status: number;
-    date_created: string;
-    date_updated: string;
     created_by: number;
     updated_by: number;
 
@@ -269,8 +278,6 @@ class WorkflowAssignment implements IWorkflowAssignment {
         this.workflow_triggered_on = assignment.workflow_triggered_on || moment().toISOString();
         this.workflow_triggered_by = assignment.workflow_triggered_by || plainToken.user_id;
         this.workflow_status = assignment.workflow_status !== undefined ? assignment.workflow_status : 1;
-        this.date_created = assignment.date_created || moment().toISOString();
-        this.date_updated = assignment.date_updated || moment().toISOString();
         this.created_by = assignment.created_by || plainToken.user_id;
         this.updated_by = assignment.updated_by || plainToken.user_id;
     }
@@ -282,8 +289,6 @@ class WorkflowAssignment implements IWorkflowAssignment {
             workflow_triggered_on: Joi.string().allow("", null).default(() => moment().toISOString(), 'current timestamp'),
             workflow_triggered_by: Joi.number().integer().optional(),
             workflow_status: Joi.number().integer().default(1),
-            date_created: Joi.string().allow("", null).default(() => moment().toISOString(), 'current timestamp'),
-            date_updated: Joi.string().allow("", null).default(() => moment().toISOString(), 'current timestamp'),
             created_by: Joi.number().integer().required(),
             updated_by: Joi.number().integer().required(),
         });
@@ -295,12 +300,10 @@ class WorkflowTaskAssignment implements IWorkflowTaskAssignment {
     workflow_task_assignment_id: number;
     workflow_assignment_id: number;
     task_id: number;
-    assigned_to?: number;
+    assigned_to: number;
     assigned_on: string;
-    assigned_by?: number;
+    assigned_by: number;
     task_status: number;
-    date_created: string;
-    date_updated: string;
     created_by: number;
     updated_by: number;
 
@@ -312,8 +315,6 @@ class WorkflowTaskAssignment implements IWorkflowTaskAssignment {
         this.assigned_on = assignment.assigned_on || moment().toISOString();
         this.assigned_by = assignment.assigned_by;
         this.task_status = assignment.task_status !== undefined ? assignment.task_status : 1;
-        this.date_created = assignment.date_created || moment().toISOString();
-        this.date_updated = assignment.date_updated || moment().toISOString();
         this.created_by = assignment.created_by;
         this.updated_by = assignment.updated_by;
     }
@@ -327,8 +328,6 @@ class WorkflowTaskAssignment implements IWorkflowTaskAssignment {
             assigned_on: Joi.string().allow('', null).default(() => moment().toISOString(), 'current timestamp'),
             assigned_by: Joi.number().integer().optional(),
             task_status: Joi.number().integer().default(1),
-            date_created: Joi.string().allow('', null).default(() => moment().toISOString(), 'current timestamp'),
-            date_updated: Joi.string().allow('', null).default(() => moment().toISOString(), 'current timestamp'),
             created_by: Joi.number().integer().required(),
             updated_by: Joi.number().integer().required(),
         });
@@ -344,8 +343,6 @@ class WorkflowTaskFormSubmission implements IWorkflowTaskFormSubmission {
     form_submitted_by: number;
     form_submitted_on: string;
     form_status: number;
-    date_created: string;
-    date_updated: string;
     created_by: number;
     updated_by: number;
 
@@ -357,8 +354,6 @@ class WorkflowTaskFormSubmission implements IWorkflowTaskFormSubmission {
         this.form_submitted_by = taskFormSubmission.form_submitted_by || plainToken.user_id;
         this.form_submitted_on = taskFormSubmission.form_submitted_on || moment().toISOString();
         this.form_status = taskFormSubmission.form_status !== undefined ? taskFormSubmission.form_status : 1;
-        this.date_created = taskFormSubmission.date_created || moment().toISOString();
-        this.date_updated = taskFormSubmission.date_updated || moment().toISOString();
         this.created_by = taskFormSubmission.created_by || plainToken.user_id;
         this.updated_by = taskFormSubmission.updated_by || plainToken.user_id;
     }
@@ -372,8 +367,6 @@ class WorkflowTaskFormSubmission implements IWorkflowTaskFormSubmission {
             form_submitted_by: Joi.number().integer().optional(),
             form_submitted_on: Joi.string().allow("", null).default(() => moment().toISOString(), 'current timestamp'),
             form_status: Joi.number().integer().default(1),
-            date_created: Joi.string().allow("", null).default(() => moment().toISOString(), 'current timestamp'),
-            date_updated: Joi.string().allow("", null).default(() => moment().toISOString(), 'current timestamp'),
             created_by: Joi.number().integer().required(),
             updated_by: Joi.number().integer().required(),
         });
@@ -385,8 +378,6 @@ class WorkflowTransaction implements IWorkflowTransaction {
     workflow_transaction_id: number;
     transition_id: number;
     transaction_status: number;
-    date_created: string;
-    date_updated: string;
     created_by: number;
     updated_by: number;
 
@@ -394,8 +385,6 @@ class WorkflowTransaction implements IWorkflowTransaction {
         this.workflow_transaction_id = transaction.workflow_transaction_id || 0;
         this.transition_id = transaction.transition_id;
         this.transaction_status = transaction.transaction_status !== undefined ? transaction.transaction_status : 1;
-        this.date_created = transaction.date_created || moment().toISOString();
-        this.date_updated = transaction.date_updated || moment().toISOString();
         this.created_by = transaction.created_by || plainToken.user_id;
         this.updated_by = transaction.updated_by || plainToken.user_id;
     }
@@ -405,8 +394,6 @@ class WorkflowTransaction implements IWorkflowTransaction {
             workflow_transaction_id: Joi.number().integer().optional(),
             transition_id: Joi.number().integer().required(),
             transaction_status: Joi.number().integer().default(1),
-            date_created: Joi.string().allow("", null).default(() => moment().toISOString(), 'current timestamp'),
-            date_updated: Joi.string().allow("", null).default(() => moment().toISOString(), 'current timestamp'),
             created_by: Joi.number().integer().required(),
             updated_by: Joi.number().integer().required(),
         });
@@ -416,6 +403,7 @@ class WorkflowTransaction implements IWorkflowTransaction {
 
 export {
     Workflow,
+    WorkflowTask,
     WorkflowNotificationTask,
     WorkflowDecisionTask,
     WorkflowDecisionCondition,
