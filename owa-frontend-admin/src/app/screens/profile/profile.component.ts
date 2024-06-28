@@ -24,7 +24,8 @@ export class ProfileComponent {
   croppedImage;
   personDetails;
   userDetails;
-
+  userData: any = null;
+  
   constructor(
     public adminManagementService: AdminManagementService,
     public authService: AuthService,
@@ -49,6 +50,8 @@ export class ProfileComponent {
     let details = this.appPreference.getValue('oll_user_details');
     this.userDetails = JSON.parse(details);
     this.profileForm.updateValueAndValidity();
+    this.userData = sessionStorage.getItem('userDetails');
+    this.userData = JSON.parse(this.userData)
   }
 
   fetchUserInfo(): void {

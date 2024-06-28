@@ -12,7 +12,7 @@
             <div class="bg-white border border-2 p-8 rounded-2xl shadow-lg max-w-3xl w-full">
                 <div class="flex justify-center mb-4 flex flex-col items-center">
                     <img [src]="
-                    (authService.userInfo | async)?.profile_pic_url ||
+                    userData?.profile_pic_url ||
                     '../../../assets/images/profile/profile.svg'
                   " alt="Profile Image" class="rounded-full h-24 w-24 object-cover" />
                     <input type="file" accept="image/*" #uploadFile style="display: none" />
