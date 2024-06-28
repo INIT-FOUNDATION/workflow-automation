@@ -1,6 +1,4 @@
-
-import  { Suspense } from "react";
-import { Redirect, Route } from "react-router-dom";
+import { Redirect, Route, Switch } from "react-router-dom";
 import { IonApp, IonRouterOutlet, setupIonicReact } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
 import Header from "./shared/Header/Header";
@@ -25,27 +23,27 @@ import "@ionic/react/css/palettes/dark.css";
 /* Optional: Import theme variables */
 import "./theme/variables.css";
 
-import WorkFlowSelection from "./pages/MyTasks/Components/WorkFlowSelection/WorkFlowSelection";
-import MyTasks from "./pages/MyTasks/MyTasks";
-import Login from "./pages/Auth/Components/Login/Login";
-import AssignTasks from "./pages/AssignTask/AssignTasks";
-import TasksReport from "./pages/TasksReport/TasksReport";
-import WorkFlowStarted from "./pages/MyTasks/Components/WorkFlowStarted/WorkFlowStarted";
-import CreateTasks from "./pages/MyTasks/Components/CreateTasks/CreateTasks";
-import Profile from "./pages/Profile/Profile";
-import TriggerDetails from "./pages/MyTasks/Components/TriggerDetails/TriggerDetails";
-import ForgotPassword from "./pages/Auth/Components/ForgotPassword/ForgotPassword";
+import { Suspense, lazy, useState } from "react";
 import { useAuth } from "./contexts/AuthContext";
-import React from "react";
+import ForgotPassword from "./pages/Auth/Components/ForgotPassword/ForgotPassword";
+
+const WorkFlowSelection = lazy(() => import("./pages/MyTasks/Components/WorkFlowSelection/WorkFlowSelection"));
+const MyTasks = lazy(() => import("./pages/MyTasks/MyTasks"));
+const Login = lazy(() => import("./pages/Auth/Components/Login/Login"));
+const AssignTasks = lazy(() => import("./pages/AssignTask/AssignTasks"));
+const TasksReport = lazy(() => import("./pages/TasksReport/TasksReport"));
+const WorkFlowStarted = lazy(() => import("./pages/MyTasks/Components/WorkFlowStarted/WorkFlowStarted"));
+const CreateTasks = lazy(() => import("./pages/MyTasks/Components/CreateTasks/CreateTasks"));
+const Profile = lazy(() => import("./pages/Profile/Profile"));
+const TriggerDetails = lazy(() => import("./pages/MyTasks/Components/TriggerDetails/TriggerDetails"));
 
 setupIonicReact();
 
 const App: React.FC = () => {
   const { isAuthenticated } = useAuth();
-
-  const [snackbarOpen, setSnackbarOpen] = React.useState(false);
-  const [snackbarMessage, setSnackbarMessage] = React.useState("");
-  const [snackbarSeverity, setSnackbarSeverity] = React.useState("success");
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackbarSeverity, setSnackbarSeverity] = useState("success");
 
   const handleSnackbarClose = (
     event?: React.SyntheticEvent | Event,
@@ -67,52 +65,112 @@ const App: React.FC = () => {
     <IonApp>
       <IonReactRouter>
         <Header showSnackbar={showSnackbar} />
-        <IonRouterOutlet>
-          {/* Footer Avoiding Routes */}
-          <Route path="/login" component={Login} exact  render={() => (
-              <Suspense fallback={<div>Loading...</div>}>
-                <Login showSnackbar={showSnackbar} />
-              </Suspense>
-            )}
-            />
-          <Route path="/forgot-password" component={ForgotPassword} exact />
-          <Route path="/profile" component={Profile} exact />
-
-          {/* Redirect root to login */}
-          <Route exact path="/">
-            <Redirect to="/login" />
-          </Route>
-
-          {/* Routes with Footer */}
           {isAuthenticated ? (
-            <Footer>
-              <Route path="/tasks" component={MyTasks} exact />
+            <Switch>
               <Route
-                path="/tasks/workflow-selection"
-                component={WorkFlowSelection}
+                path="/profile"
+                render={() => (
+                  <Suspense fallback={<div>Loading...</div>}>
+                    <Profile />
+                  </Suspense>
+                )}
                 exact
               />
-              <Route
-                path="/tasks/workflow-started"
-                component={WorkFlowStarted}
-                exact
-              />
-              <Route path="/tasks/create-tasks" component={CreateTasks} exact />
-              <Route path="/tasks-reports" component={TasksReport} exact />
-              <Route path="/assigned-tasks" component={AssignTasks} exact />
-              <Route
-                path="/tasks/trigger-details"
-                component={TriggerDetails}
-                exact
-              />
-            </Footer>
+              <Footer>
+                <Switch>
+                  <Route
+                    path="/tasks"
+                    render={() => (
+                      <Suspense fallback={<div>Loading...</div>}>
+                        <MyTasks />
+                      </Suspense>
+                    )}
+                    exact
+                  />
+                  <Route
+                    path="/tasks/workflow-selection"
+                    render={() => (
+                      <Suspense fallback={<div>Loading...</div>}>
+                        <WorkFlowSelection />
+                      </Suspense>
+                    )}
+                    exact
+                  />
+                  <Route
+                    path="/tasks/workflow-started"
+                    render={() => (
+                      <Suspense fallback={<div>Loading...</div>}>
+                        <WorkFlowStarted />
+                      </Suspense>
+                    )}
+                    exact
+                  />
+                  <Route
+                    path="/tasks/create-tasks"
+                    render={() => (
+                      <Suspense fallback={<div>Loading...</div>}>
+                        <CreateTasks />
+                      </Suspense>
+                    )}
+                    exact
+                  />
+                  <Route
+                    path="/tasks-reports"
+                    render={() => (
+                      <Suspense fallback={<div>Loading...</div>}>
+                        <TasksReport />
+                      </Suspense>
+                    )}
+                    exact
+                  />
+                  <Route
+                    path="/assigned-tasks"
+                    render={() => (
+                      <Suspense fallback={<div>Loading...</div>}>
+                        <AssignTasks />
+                      </Suspense>
+                    )}
+                    exact
+                  />
+                  <Route
+                    path="/tasks/trigger-details"
+                    render={() => (
+                      <Suspense fallback={<div>Loading...</div>}>
+                        <TriggerDetails />
+                      </Suspense>
+                    )}
+                    exact
+                  />
+                  <Redirect to="/tasks" />
+                </Switch>
+              </Footer>
+            </Switch>
           ) : (
-            <Redirect to="/login" />
+            <Switch>
+              <Route
+                path="/login"
+                render={() => (
+                  <Suspense fallback={<div>Loading...</div>}>
+                    <Login showSnackbar={showSnackbar} />
+                  </Suspense>
+                )}
+                exact
+              />
+              <Route
+                path="/forgot-password"
+                render={() => (
+                  <Suspense fallback={<div>Loading...</div>}>
+                    <ForgotPassword showSnackbar={showSnackbar} />
+                  </Suspense>
+                )}
+                exact
+              />
+              <Redirect to="/login" />
+            </Switch>
           )}
-        </IonRouterOutlet>
       </IonReactRouter>
     </IonApp>
   );
-};
+}
 
 export default App;
