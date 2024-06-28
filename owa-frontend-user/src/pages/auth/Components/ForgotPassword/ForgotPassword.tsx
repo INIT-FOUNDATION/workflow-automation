@@ -3,6 +3,7 @@ import { IonInput, useIonRouter } from "@ionic/react";
 import { useForm } from "react-hook-form";
 import "./ForgotPassword.css";
 import * as authService from "../../../../services/authService";
+import { encrypt } from "../../../../utility/EncrytDecrypt";
 
 interface ForgotPasswordProps {
   showSnackbar: (message: string, severity: string) => void;
@@ -35,7 +36,8 @@ const ForgotPassword: React.FC<ForgotPasswordProps> = ({ showSnackbar }) => {
       if (!getOtpRequestResponse.error) {
         showSnackbar("OTP sent successfully", "success");
         setOtpSent(true);
-        setTxnId(getOtpRequestResponse?.data?.txnId);
+        setTxnId(getOtpRequestResponse?.data?.data?.txnId);
+        console.log("TxnId after sending OTP:", getOtpRequestResponse?.data?.data?.txnId);
       } else {
         showSnackbar("Failed to send OTP. Please try again.", "error");
       }
@@ -43,20 +45,20 @@ const ForgotPassword: React.FC<ForgotPasswordProps> = ({ showSnackbar }) => {
       showSnackbar("Please enter a valid Mobile Number", "error");
     }
   };
-
   const handleVerifyOtp = async () => {
     const { otp } = getValues();
-    const payload = { txnId: txnId, otp: otp };
+    const payload = { txnId: txnId, otp: encrypt(otp) };
+    
     const verifyOtpResponse = await authService.verifyOtpRequest(payload);
-
+  
     if (!verifyOtpResponse.error) {
       showSnackbar("OTP verified successfully", "success");
-      // Handle successful OTP verification here (e.g., redirect to reset password page)
-      router.push("/reset-password"); // Assuming you have a reset password route
+      router.push("/reset-password"); 
     } else {
       showSnackbar("Invalid OTP. Please try again.", "error");
     }
   };
+  
 
   const onSubmit = otpSent ? handleVerifyOtp : handleSendOtp;
 
