@@ -18,6 +18,11 @@ const loginPassword = async (payload: any) => {
   return loginByMobileRes;
 };
 
+const logout = async () => {
+  const logoutRes = await post("/api/v1/auth/admin/logout", {});
+  return logoutRes;
+};
+
 const otpRequest = async (payload: any) => {
   const getOtpRequest = await post(
     "/api/v1/admin/getForgetPasswordOtp",
@@ -59,4 +64,5 @@ export {
   verifyOtpRequest,
   resetPasswordRequest,
   getLoggedInUserDetails,
+  logout,
 };

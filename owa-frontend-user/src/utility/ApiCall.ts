@@ -2,6 +2,7 @@ import Swal from "sweetalert2";
 import * as AppPreference from "./AppPreferences";
 import withReactContent from "sweetalert2-react-content";
 import { axiosInstance as axios } from "./axiosConfig";
+import * as authService from "../services/authService";
 const LoaderSwal = withReactContent(Swal);
 
 interface MakeRequestOptions {
@@ -66,6 +67,16 @@ const makeRequest = async ({
     Swal.close();
     return { error: false, data: response.data };
   } catch (error: any) {
+
+    
+    if (error.response && error.response.status === 401 && !url.includes("/api/v1/auth/admin/logout")) {
+      await authService.logout();
+        setTimeout(()=>{
+          window.location.href = ""
+        },2000)
+       
+        AppPreference.clearAll()
+    }
     Swal.close();
     if (error?.response?.status === 401) {
       console.log("Unauthorized !!!");
@@ -92,3 +103,5 @@ export const post = async (
 ): Promise<Response> => {
   return await makeRequest({ method: 'POST', url, data, headers, responseType, skipLoader });
 };
+
+
