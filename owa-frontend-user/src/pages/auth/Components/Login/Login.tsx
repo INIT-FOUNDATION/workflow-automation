@@ -33,9 +33,11 @@ const Login: React.FC<LoginProps> = ({ showSnackbar }) => {
     if (!loginResponse.error) {
       AppPreference.setValue("userToken", loginResponse.data);
       showSnackbar("Login successful!", "success");
-      history.push("/tasks"); 
+      history.push("/tasks");
     } else {
-      if (loginResponse?.errorMessage.response.data.errorCode === "USRAUT0007") {
+      if (
+        loginResponse?.errorMessage.response.data.errorCode === "USRAUT0007"
+      ) {
         let user_id = loginResponse?.errorMessage.response.data.userId;
       } else {
         showSnackbar("Login failed. Please try again.", "error");
