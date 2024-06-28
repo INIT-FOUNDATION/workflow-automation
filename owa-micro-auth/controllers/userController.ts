@@ -58,7 +58,7 @@ export const userController = {
 
                 return res.status(STATUS.OK).send({
                     data: { token: token.encoded, expiryTime: `${expiryTime}h` },
-                    message: "Employee User Logged in Successfully"
+                    message: "User Logged in Successfully"
                 })
             } else {
                 const currentInvalidAttempts = await userService.getInvalidLoginAttempts(user.user_name);
@@ -148,8 +148,16 @@ export const userController = {
                     type: 'string',
                     description: 'Bearer token for authentication'
                 }
+                #swagger.parameters['body'] = {
+                    in: 'body',
+                    required: true,
+                    schema: {
+                        otp: 'encryptedHash',
+                        txnId: 'f3a8288c-3c6d-4507-b2cd-b4c9aeaa9752'
+                    }
+                }     
             */
-            const otp = req.body.otp;
+            let otp = req.body.otp;
             const txnId = req.body.txnId;
 
             if (!otp) return res.status(STATUS.BAD_REQUEST).send(AUTH.AUTH00015);
@@ -167,6 +175,8 @@ export const userController = {
             const userData = JSON.parse(result);
             const mobileKey = `Mob_User|Mobile:${userData.mobile_number}`
 
+            otp = decryptPayload(otp);
+
             if (userData.otp != otp) return res.status(STATUS.BAD_REQUEST).send(AUTH.AUTH00017);
             else {
                 const expiryTime = envUtils.getNumberEnvVariableOrDefault("OWA_AUTH_TOKEN_EXPIRY_TIME", 8);
@@ -181,7 +191,10 @@ export const userController = {
                 redis.deleteRedis(key);
                 redis.deleteRedis(mobileKey);
 
-                return res.status(STATUS.OK).send({ token: token.encoded, userObj });
+                return res.status(STATUS.OK).send({
+                    data: { token: token.encoded, expiryTime: `${expiryTime}h` },
+                    message: "User Logged in Successfully"
+                })
             }
         } catch (error) {
             logger.error(`userController :: validateOTP :: ${error.message} :: ${error}`);
@@ -193,7 +206,7 @@ export const userController = {
             /*  
                 #swagger.tags = ['Mobile User']
                 #swagger.summary = 'Logout User'
-                #swagger.description = 'Endpoint to Mobile User'
+                #swagger.description = 'Endpoint to Logout Mobile User'
                 #swagger.parameters['Authorization'] = {
                     in: 'header',
                     required: true,
