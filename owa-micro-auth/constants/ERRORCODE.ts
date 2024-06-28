@@ -57,7 +57,7 @@ export const AUTH = {
     },
     AUTH00014: {
         errorCode: "AUTH00014",
-        errorMessage: "Mobile Number is Required"
+        errorMessage: "Invalid Mobile Number!"
     },
     AUTH00015: {
         errorCode: "AUTH00015",
@@ -65,10 +65,14 @@ export const AUTH = {
     },
     AUTH00016: {
         errorCode: "AUTH00016",
-        errorMessage: "Txnid is Required"
+        errorMessage: "TxnId is Required"
     },
     AUTH00017: {
         errorCode: "AUTH00017",
         errorMessage: "Invalid Otp"
+    },
+    AUTH00018: {
+        errorCode: "AUTH00018",
+        errorMessage: "Unauthenticated Access"
     }
 };

@@ -1,15 +1,12 @@
 import { IUser } from "../types/custom";
-import { redis, logger, pg, nodemailerUtils, ejsUtils } from "owa-micro-common";
+import { redis, logger, pg } from "owa-micro-common";
 import { USERS } from "../constants/QUERY";
-import { v4 as uuidv4 } from 'uuid';
-import bcrypt from "bcryptjs";
 import { CONFIG } from "../constants/CONST";
-import { CACHE_TTL } from "../constants/CONST";
 
 export const userService = {
     getUserInRedisByUserName: async (username: string): Promise<string> => {
         try {
-            let key = `EmployeeUser|Username:${username}`
+            let key = `Mob_User|Username:${username}`
             let result = await redis.GetKeyRedis(key);
             return result;
         } catch (error) {
@@ -128,7 +125,7 @@ export const userService = {
     setUserInRedisByTxnId : async (userData) => {
         if (userData != undefined && userData != null) {
             let txnId = userData.txnId;
-            redis.SetRedis(`User|txnId:${txnId}`, userData, 180)
+            redis.SetRedis(`Mob_User|TxnId:${txnId}`, userData, 180)
                 .then()
                 .catch(err => logger.error(err));
         };
@@ -136,7 +133,7 @@ export const userService = {
     setUserInRedisForReg : async (phoneNo, userData, result) => {
         if (userData != undefined && userData != null) {
             try {
-                let redisKey = `Reg_Mob_${phoneNo}`
+                let redisKey = `Mob_User|Mobile:${phoneNo}`
                 await userService.setOTPInRedis(redisKey, userData);
                 return result(null, 'done');
             } catch (e) {
