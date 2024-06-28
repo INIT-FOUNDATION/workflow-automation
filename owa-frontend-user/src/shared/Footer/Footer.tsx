@@ -18,7 +18,7 @@ interface FooterProps {
 const Footer: React.FC<FooterProps> = ({ children }) => {
   const location = useLocation();
   const router = useIonRouter();
-  const [selectedTab, setSelectedTab] = React.useState(location.pathname);
+  const [selectedTab, setSelectedTab] = React.useState("/tasks");
 
   const handleTabClick = (tab: string) => {
     if (selectedTab !== tab) {
