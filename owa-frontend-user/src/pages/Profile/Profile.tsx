@@ -86,7 +86,7 @@ const Profile: React.FC = () => {
           <IonButton
             type="submit"
             color="danger"
-            className="rounded-md w-full"
+            className="rounded-md w-full px-4"
           >
             Save changes
           </IonButton>

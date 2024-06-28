@@ -26,12 +26,11 @@ const Header: React.FC<HeaderProps> = ({ showSnackbar }) => {
   const { userDetails, logout } = useAuth();
 
   const skipHeader = SKIP_HEADER_ROUTES.includes(pathname);
-  if (skipHeader) return null;
 
   const [showPopover, setShowPopover] = useState(false);
   const popoverRef = useRef<HTMLIonPopoverElement>(null);
 
-  const openPopover = (event: React.MouseEvent<HTMLIonButtonElement>) => {
+  const openPopover = (event: React.MouseEvent<HTMLIonButtonElement, MouseEvent>) => {
     event.persist();
     setShowPopover(true);
   };
@@ -39,7 +38,6 @@ const Header: React.FC<HeaderProps> = ({ showSnackbar }) => {
   const handleProfileClick = () => {
     router.push("/profile");
     setShowPopover(false);
-    // history.push('/profile');
   };
 
   const logOutTrigger = async () => {
@@ -47,11 +45,13 @@ const Header: React.FC<HeaderProps> = ({ showSnackbar }) => {
     showSnackbar("Logged out successfully", "success");
   };
 
+  if (skipHeader) return null;
+
   return (
     <div className="flex items-center justify-between px-2 md:px-20 pt-4 pb-1 fixed bg-white z-10 w-full">
       <div className="flex items-center mt-2">
         <img
-          src="Assets/images/Header/Header_logo.png"
+          src="/Assets/images/Header/Header_logo.png" // Corrected path to assets
           className="w-10 h-10 ml-2"
           alt="logo"
         />
