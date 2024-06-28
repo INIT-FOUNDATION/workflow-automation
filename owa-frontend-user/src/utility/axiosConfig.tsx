@@ -41,11 +41,11 @@ const setupInterceptors = (
       return response;
     },
     (error) => {
-      if (error.response && error.response.status === 401) {
-        setTimeout(() => {
-          logout();
-        }, 2000);
-      }
+      // if (error.response && error.response.status === 401) {
+      //   setTimeout(() => {
+      //     logout();
+      //   }, 2000);
+      // }
 
       if (error.response && error.response.status === 400) {
         let message = "";
