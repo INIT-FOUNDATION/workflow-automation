@@ -1,14 +1,17 @@
 import React, { useState } from "react";
 import "./Login.css";
-import { IonInput, useIonRouter } from "@ionic/react";
+import { IonInput, useIonRouter, IonIcon } from "@ionic/react";
 import { useForm } from "react-hook-form";
 import * as AppPreference from "../../../../utility/AppPreferences";
 import * as authService from "../../../../services/authService";
 import { encrypt } from "../../../../utility/EncrytDecrypt";
 import { RouteProps } from "react-router";
+import { eyeOutline, eyeOffOutline } from 'ionicons/icons';
+
 interface LoginProps extends RouteProps {
   showSnackbar: (message: string, severity: string) => void;
 }
+
 const Login: React.FC<LoginProps> = ({ showSnackbar }) => {
   const router = useIonRouter();
   const { handleSubmit } = useForm();
@@ -40,14 +43,18 @@ const Login: React.FC<LoginProps> = ({ showSnackbar }) => {
     const loginResponse = await authService.loginPassword(payload);
 
     if (!loginResponse.error) {
-      AppPreference.setValue("userToken", loginResponse.data);
+  console.log(loginResponse);
+  
+      AppPreference.setValue("userToken", loginResponse.data.data.token);
       router.push("/tasks");
     } else {
       if (
         loginResponse?.errorMessage.response.data.errorCode === "USRAUT0007"
       ) {
         let user_id = loginResponse?.errorMessage.response.data.userId;
+        // Handle specific error case if needed
       } else {
+        showSnackbar("Login failed. Please try again.", "error");
       }
     }
   };
@@ -80,7 +87,7 @@ const Login: React.FC<LoginProps> = ({ showSnackbar }) => {
             ></IonInput>
           </div>
 
-          <div className="mb-4">
+          <div className="mb-4 relative">
             <IonInput
               label="Enter your Password *"
               labelPlacement="floating"
@@ -91,7 +98,12 @@ const Login: React.FC<LoginProps> = ({ showSnackbar }) => {
               type={showPassword ? "text" : "password"}
               {...form.register("password")}
             ></IonInput>
-
+            <IonIcon
+              icon={showPassword ? eyeOffOutline : eyeOutline}
+              onClick={() => setShowPassword(!showPassword)}
+              className="eye-icon"
+              style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)', cursor: 'pointer' }}
+            />
             <div className="pt-2 text-right flex justify-start">
               <img src="Assets/images/LoginPage/lock.svg" alt="Lock" />
               <div
@@ -118,7 +130,7 @@ const Login: React.FC<LoginProps> = ({ showSnackbar }) => {
           </div>
 
           <button
-            type="submit"
+            type="button" // Changed to button to prevent default form submit
             className="w-full py-2 rounded-md transition duration-200 otp-button"
           >
             Login using OTP

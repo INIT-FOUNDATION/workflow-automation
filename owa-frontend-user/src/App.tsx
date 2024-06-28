@@ -27,14 +27,14 @@ import "./theme/variables.css";
 
 import WorkFlowSelection from "./pages/MyTasks/Components/WorkFlowSelection/WorkFlowSelection";
 import MyTasks from "./pages/MyTasks/MyTasks";
-import Login from "./pages/auth/Components/Login/Login";
+import Login from "./pages/Auth/Components/Login/Login";
 import AssignTasks from "./pages/AssignTask/AssignTasks";
 import TasksReport from "./pages/TasksReport/TasksReport";
 import WorkFlowStarted from "./pages/MyTasks/Components/WorkFlowStarted/WorkFlowStarted";
 import CreateTasks from "./pages/MyTasks/Components/CreateTasks/CreateTasks";
 import Profile from "./pages/Profile/Profile";
 import TriggerDetails from "./pages/MyTasks/Components/TriggerDetails/TriggerDetails";
-import ForgotPassword from "./pages/auth/Components/ForgotPassword/ForgotPassword";
+import ForgotPassword from "./pages/Auth/Components/ForgotPassword/ForgotPassword";
 import { useAuth } from "./contexts/AuthContext";
 import React from "react";
 

@@ -19,15 +19,15 @@ const loginPassword = async (payload: any) => {
   };
 
   const otpRequest=async(payload: any)=>{
-    const getOtpRequest=await post("/api/v1/auth/getForgetPasswordOtp",payload);
+    const getOtpRequest=await post("/api/v1/admin/getForgetPasswordOtp",payload);
     return getOtpRequest;
   }
   const verifyOtpRequest=async(payload: any)=>{
-      const getVerifyOtpRequest=await post("/api/v1/auth/verifyForgetPasswordOtp",payload);
+      const getVerifyOtpRequest=await post("/api/v1/admin/verifyForgetPasswordOtp",payload);
     return getVerifyOtpRequest;
   }
   const ResetPasswordRequest=async(payload: any)=>{
-    const getResetPasswordRequest=await post("/api/v1/auth/resetForgetPassword",payload);
+    const getResetPasswordRequest=await post("/api/v1/admin/resetForgetPassword",payload);
     return getResetPasswordRequest;
   }
    
