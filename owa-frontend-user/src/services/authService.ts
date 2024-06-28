@@ -30,6 +30,11 @@ const loginPassword = async (payload: any) => {
     const getResetPasswordRequest=await post("/api/v1/admin/resetForgetPassword",payload);
     return getResetPasswordRequest;
   }
+
+  const logout = async () => {
+    const logoutRes = await post("/api/v1/auth/admin/logout",{});
+    return logoutRes;
+  };
    
 
-export { loginWithMobile, verifyMobileOtp, loginPassword,otpRequest, verifyOtpRequest, ResetPasswordRequest };
+export { loginWithMobile, verifyMobileOtp, loginPassword,otpRequest, verifyOtpRequest, ResetPasswordRequest, logout };
