@@ -1,6 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { MatTabGroup } from '@angular/material/tabs';
 import { AdminManagementService } from './services/admin-management.service';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-admin-management',
@@ -121,5 +122,18 @@ export class AdminManagementComponent {
   //   });
   // }
 
-  
+  // onSearch(event: any) {
+  //   const searchTerm = event.target.value;
+  //   this.adminService.setSearchTerm(searchTerm);
+  // }
+
+  // onEnter(searchTerm: string) {
+  //   // Emit the search term when Enter is pressed
+  //   this.searchTerms.next(searchTerm);
+  // }
+
+  onSearch(event: any) {
+    const searchTerm = event.target.value;
+    this.adminService.setSearchTerm(searchTerm);
+  }
 }

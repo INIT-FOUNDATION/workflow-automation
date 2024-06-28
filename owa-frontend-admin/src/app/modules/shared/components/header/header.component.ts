@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { AuthService } from 'src/app/screens/auth/services/auth.service';
+import { DataService } from '../../services/data.service';
 
 @Component({
   selector: 'app-header',
@@ -8,20 +10,21 @@ import { AuthService } from 'src/app/screens/auth/services/auth.service';
 })
 export class HeaderComponent {
   showProfileCard: boolean = false;
-  userData: any = null;
 
   constructor(
     public authService: AuthService,
+    public router: Router,
+    public dataService: DataService
   ) {}
 
   ngOnInit(): void {
-    this.userData = sessionStorage.getItem('userDetails');
-    this.userData = JSON.parse(this.userData)
-    console.log(this.userData)
+  }
+
+  userProfile(){
+    this.router.navigate(['/profile']); 
   }
 
   logoutUser(): void {
-    
      this.authService.logout();
   }
 }

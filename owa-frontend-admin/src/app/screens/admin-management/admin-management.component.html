@@ -10,6 +10,7 @@
       type="text"
       class="outline-none border-none w-full pr-3 text-sm"
       [placeholder]="searchText"
+      (keydown.enter)="onSearch($event)"
     />
     <img
       src="assets/images/workflowCards/searchIcon.svg"
