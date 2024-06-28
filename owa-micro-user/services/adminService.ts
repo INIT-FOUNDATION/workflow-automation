@@ -69,7 +69,7 @@ export const adminService = {
             const key = `LOGGED_IN_USER_INFO|USER:${userId}`;
             const _query = {
                 text: USERS.updateProfile,
-                values: [userId, user.first_name, user.last_name, user.email_id, user.mobile_number, user.dob, `${user.first_name} ${user.last_name}`]
+                values: [userId, user.first_name, user.last_name, user.email_id, user.dob, `${user.first_name} ${user.last_name}`]
             };
             logger.debug(`adminService :: updateProfile :: query :: ${JSON.stringify(_query)}`);
 
