@@ -30,7 +30,6 @@ export class ForgotPasswordComponent {
 }
 
   sendOtp() {
-    this.currentScreen = 'enterOtp';
     let mobileNumber = this.forgotPasswordForm.get('mobileNumber').value;
     let payload : any = {
       mobile_number : mobileNumber
@@ -38,12 +37,12 @@ export class ForgotPasswordComponent {
     this.authService.getForgotPasswordOtp(payload).subscribe((res)=>{
       this.forgotPasswordForm.get('txnId').setValue(res.data.txnId);
       console.log(res.txnId)
+      this.currentScreen = 'enterOtp';
     })
 
 }
 
 verifyOtp() {
-    this.currentScreen = 'resetPassword';
     let otp = this.forgotPasswordForm.get('otp').value;
     otp = this.encryptService.set("otp");
     let txnId = this.forgotPasswordForm.get('txnId').value;
@@ -56,6 +55,7 @@ verifyOtp() {
     }
     this.authService.verifyForgotPasswordOtp(payload).subscribe((res)=>{
       console.log(res)
+      this.currentScreen = 'resetPassword';
     })
 }
 
