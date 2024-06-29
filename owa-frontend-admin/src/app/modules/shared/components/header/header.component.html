@@ -2,7 +2,8 @@
   <img src="assets/images/header/headerLogo.svg" class="w-16" />
   <div (click)="showProfileCard = !showProfileCard" class="flex items-center">
     <div class="userImg d-flex align-items-center justify-content-end me-2">
-      <img [src]="(dataService.profilePic | async) || '../../../assets/images/profile/profile.svg'" alt="" class="h-9 w-9 rounded-full" />
+      <img [src]="(dataService.profilePic | async) || '../../../assets/images/profile/profile.svg'" alt=""
+        class="h-9 w-9 rounded-full" />
     </div>
     <span>{{ (dataService.userData | async)?.display_name }}</span>
 
@@ -14,7 +15,7 @@
       <span class="me-4">Logout</span>
     </div> -->
     <i class="fa-solid fa-angle-down arrow-down ms-2"></i>
-    <div class="absolute shadow-sm show-profile bg-white border border-2 d-flex flex-column rounded ms-2 mt-32"
+    <div class="absolute shadow-sm show-profile bg-white border border-2 d-flex flex-column rounded ms-8 mt-32 w-40"
       *ngIf="showProfileCard">
       <span class="custom-arrow absolute"></span>
       <div class="px-3 py-2 border-bottom flex items-center cursor-pointer" (click)="userProfile()">
