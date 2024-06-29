@@ -1,36 +1,70 @@
 <!-- <div class="scrollable-container"> -->
 <app-common-data-table
-        #adminManagementDetails
-        [colModel]="cols"
-        gridId="adminManagementDetails"
-        sField="updatedDate"
-        sOrder="desc"
-        [lazyLoad]="true"
-        selectType="none"
-        [localData]=""
-        idColumn="fac_id"
-        [rowsPerPage]="rowsPerPage"
-        paginationpos="bottom"
-        (onCustomPageAndFilterEvent)="onPageChangeEvent($event)"
-        [actionColumnTemplate]="userManagementEditButton"
-        [actionColumnRequired]="true"
+  #adminManagementDetails
+  [colModel]="cols"
+  gridId="adminManagementDetails"
+  sField="updatedDate"
+  sOrder="desc"
+  [lazyLoad]="true"
+  selectType="none"
+  [localData]=""
+  idColumn="fac_id"
+  [rowsPerPage]="rowsPerPage"
+  paginationpos="bottom"
+  (onCustomPageAndFilterEvent)="onPageChangeEvent($event)"
+  [actionColumnTemplate]="userManagementEditButton"
+  [actionColumnRequired]="true"
+>
+  <ng-template #userManagementEditButton let-gridData="griddata">
+    <div class="flex space-x-4 text-sm">
+      <button
+        class="flex items-center hover:text-red-600 text-sm"
+        (click)="onResetPassword(gridData.user_id)"
       >
+        <img
+          src="assets/images/adminManagement/key_vertical.svg"
+          alt="Key Icon"
+          class="me-2"
+        />
+        Reset Password
+      </button>
+      <button
+        class="flex items-center hover:text-red-600 text-sm"
+        (click)="deleteUserConfirmation(gridData.user_id)"
+      >
+        <img
+          src="assets/images/adminManagement/delete.svg"
+          alt="Delete Icon"
+          class="me-2"
+        />
+        Delete
+      </button>
+      <button
+        class="flex items-center hover:text-red-600 text-sm"
+        (click)="editManagementDetails(gridData)"
+      >
+        <i class="fa-solid fa-pencil text-red-600 me-2 text-base"></i>
+        Edit
+      </button>
 
-            <ng-template #userManagementEditButton let-gridData="griddata">
-              <div class="flex space-x-4 text-sm">
-                <button class="flex items-center hover:text-red-600 text-sm" (click)="onResetPassword(gridData.user_id)">
-                    <img src="assets/images/adminManagement/key_vertical.svg" alt="Key Icon" class="me-2" />
-                  Reset Password
-                </button>
-                <button class="flex items-center hover:text-red-600 text-sm" (click)="deleteUserConfirmation(gridData.user_id)">
-                  <img src="assets/images/adminManagement/delete.svg" alt="Delete Icon" class="me-2" />
-                  Delete
-                </button>
-                <button class="flex items-center hover:text-red-600 text-sm" (click)="editManagementDetails(gridData)">
-                  <i class="fa-solid fa-pencil text-red-600 me-2 text-base"></i>
-                  Edit
-                </button>
-              </div>
-            </ng-template>
+      <mat-slide-toggle
+        [checked]="
+          gridData.status === 1 ||
+          gridData.status === 4 ||
+          gridData.status === 5
+        "
+        (change)="toggleUserStatus(gridData.user_id, gridData.status)"
+        color="primary"
+      >
+        {{
+          gridData.status === 1 ||
+          gridData.status === 4 ||
+          gridData.status === 5
+            ? "Active"
+            : "Inactive"
+        }}
+      </mat-slide-toggle>
+    </div>
+  </ng-template>
 </app-common-data-table>
 <!-- </div> -->

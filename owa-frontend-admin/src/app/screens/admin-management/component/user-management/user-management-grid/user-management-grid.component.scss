@@ -8,3 +8,7 @@
 ::ng-deep .swal2-confirm {
     background-color: #dc2626 !important;
 }
+
+::ng-deep .swal2-popup .swal2-title {
+    font-size: 20px; 
+}

@@ -111,11 +111,12 @@ export const adminController = {
                     description: 'Bearer token for authentication'
                 }
             */
-            const userName = req.plainToken.user_name;
+           const userName = req.plainToken.user_name;
+           const user_id = req.plainToken.user_id;
             await adminService.updateUserLoginStatus(USERS_STATUS.LOGGED_OUT, userName);
             redis.deleteRedis(userName);
             redis.deleteRedis(`USER_PERMISSIONS_${userName}`);
-            redis.deleteRedis(`LOGGED_IN_USER_DETAILS_${userName}`);
+            redis.deleteRedis(`LOGGED_IN_USER_INFO|USER:${user_id}`);
             redis.deleteRedis(`User|Username:${userName}`);
             redis.deleteRedis(`COMBINED_ACCESS_LIST|USER:${userName}`);
             return res.status(STATUS.OK).send({
@@ -148,7 +149,7 @@ export const adminController = {
 
             const userExists = await adminService.existsByMobileNumber(mobile_number);
             if (!userExists) {
-                logger.error(`adminController :: getForgetPasswordOtp :: mobile number :: ${mobile_number} :: Password doesn't exist`);
+                logger.error(`adminController :: getForgetPasswordOtp :: mobile number :: ${mobile_number} :: User doesn't exist`);
                 return res.status(STATUS.OK).send({data: { txnId: uuidv4() }, message: "Generated Forget Password OTP Successfully"});
             }
 

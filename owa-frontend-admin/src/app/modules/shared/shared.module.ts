@@ -10,6 +10,7 @@ import { NgxSpinnerModule } from 'ngx-spinner';
 import { ToastrModule } from 'ngx-toastr';
 import { CommonDataTableComponent } from '../common-data-table/common-data-table.component';
 import { TableModule } from 'primeng/table';
+import { ImageCropperModule } from 'ngx-image-cropper';
 
 /*------------------- MATERIAL COMPONENTS ------------------------*/
 import { MatDialogModule } from '@angular/material/dialog';
@@ -50,7 +51,9 @@ import { CardComponent } from './components/card/card.component';
 import { SidebarMenuComponent } from './components/sidebar-menu/sidebar-menu.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatMenuModule } from '@angular/material/menu';
-import {MatButtonModule} from '@angular/material/button';
+import { MatButtonModule } from '@angular/material/button';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 
 /*------------------- DIRECTIVES ------------------------*/
 
@@ -99,6 +102,7 @@ const export_material_modules = [
   MatSelectModule,
   MatTooltipModule,
   MatAutocompleteModule,
+  MatSlideToggleModule,
   NgxSpinnerModule,
   MatExpansionModule,
   MatTabsModule,
@@ -112,6 +116,8 @@ const export_material_modules = [
   MatButtonModule,
   MatMenuModule,
   MatIconModule,
+  MatButtonToggleModule,
+  ImageCropperModule,
 ];
 
 @NgModule({
