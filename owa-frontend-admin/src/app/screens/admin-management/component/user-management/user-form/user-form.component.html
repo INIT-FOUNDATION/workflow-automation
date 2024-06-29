@@ -1,67 +1,92 @@
-<app-title
-  [titleName]="titleName"
-  additionalClass="text-lg font-bold"
-  [canGoBack]="true"
-></app-title>
+<app-title [titleName]="titleName" additionalClass="text-lg font-bold" [canGoBack]="true"></app-title>
 
 <div class="p-6 mx-auto rounded-xl space-y-4">
-  <form
-    [formGroup]="userForm"
-    class="grid grid-cols-2 gap-4 w-full"
-    (ngSubmit)="submitUserForm()"
-  >
+  <form [formGroup]="userForm" class="grid grid-cols-2 gap-4 w-full" (ngSubmit)="submitUserForm()">
     <div class="grid grid-cols-1">
       <mat-form-field appearance="outline" class="w-full">
         <mat-label>First Name</mat-label>
-        <input
-          matInput
-          placeholder="Enter your first name"
-          formControlName="first_name"
-          name="first_name"
-          autocomplete="off"
-        />
+        <input matInput placeholder="Enter your first name" formControlName="first_name" name="first_name"
+          autocomplete="off" class="form-control userInput"
+          [ngClass]="{'invalid-field': formSubmitted && userForm.get(['first_name']).hasError('required')}"
+          [appRangeLength]="[3, 20]" />
       </mat-form-field>
+      <div class="invalid-feedback text-red-500"
+        *ngIf="userForm.get(['first_name']).hasError('inputcharvalidator') && !userForm.get(['first_name']).hasError('rangeLength')"
+        [tooltip]="'Must contain only English Alphabets (“a-z” and “A-Z”), Dot “.”, Hyphen “-”, Open parenthesis “(“ and Close parenthesis “)”'"
+        placement="bottom">
+        {{'Must contain only English Alphabets (“a-z” and “A-Z”), Dot “.”, Hyphen “-”, Open
+        parenthesis
+        “(“ and Close parenthesis “)”'}}
+      </div>
+      <div class="invalid-feedback text-red-500"
+        *ngIf="userForm.get(['first_name']).hasError('rangeLength') || userForm.get(['first_name']).hasError('trimError')"
+        [tooltip]="'Must be between 3-20 characters'" placement="bottom">
+        Must be between 3-20 characters
+      </div>
+      <div class="invalid-feedback text-red-500"
+        *ngIf="formSubmitted && userForm.get(['first_name']).hasError('required')" tooltip="User Name is required"
+        placement="bottom">
+        First Name is required
+      </div>
     </div>
 
     <div class="grid grid-cols-1">
       <mat-form-field appearance="outline" class="w-full">
         <mat-label>Last Name</mat-label>
-        <input
-          matInput
-          placeholder="Enter your last name"
-          formControlName="last_name"
-          autocomplete="off"
-        />
+        <input matInput placeholder="Enter your last name" formControlName="last_name" autocomplete="off"
+          class="form-control userInput" appInputTrim
+          [ngClass]="{'invalid-field': formSubmitted && userForm.get(['last_name']).hasError('required')}"
+          [appRangeLength]="[3, 30]" />
       </mat-form-field>
+      <div class="invalid-feedback text-red-500"
+        *ngIf="userForm.get(['last_name']).hasError('inputcharvalidator') && !userForm.get(['last_name']).hasError('rangeLength')"
+        [tooltip]="'Must contain only English Alphabets (“a-z” and “A-Z”), Dot “.”, Hyphen “-”, Open parenthesis “(“ and Close parenthesis “)”'"
+        placement="bottom">
+        {{'Must contain only English Alphabets (“a-z” and “A-Z”), Dot “.”, Hyphen “-”, Open
+        parenthesis
+        “(“ and Close parenthesis “)”'}}
+      </div>
+      <div class="invalid-feedback text-red-500"
+        *ngIf="userForm.get(['last_name']).hasError('rangeLength') || userForm.get(['last_name']).hasError('trimError')"
+        [tooltip]="'Must be between 3-30 characters'" placement="bottom">
+        Must be between 3-30 characters
+      </div>
+      <div class="invalid-feedback text-red-500"
+        *ngIf="formSubmitted && userForm.get(['last_name']).hasError('required')" tooltip="User Name is required"
+        placement="bottom">
+        Last Name is required
+      </div>
     </div>
 
     <div class="grid grid-cols-1">
       <mat-form-field appearance="outline" class="w-full">
         <mat-label>Email</mat-label>
-        <input
-          matInput
-          type="email"
-          placeholder="Enter your email"
-          formControlName="email_id"
-          autocomplete="off"
-          appInputChar="email"
-        />
+        <input matInput type="email" placeholder="Enter your email" formControlName="email_id" autocomplete="off"
+          appInputChar="email" class="form-control userInput" appInputTrim
+          [ngClass]="{'invalid-field': formSubmitted && userForm.get(['email_id']).hasError('required')}" />
       </mat-form-field>
+      <div class="invalid-feedback text-red-500" *ngIf="userForm.get(['email_id']).hasError('inputcharvalidator')"
+        [tooltip]="'Email Id is not valid'" placement="bottom">
+        Email Id is not valid
+      </div>
+      <div class="invalid-feedback text-red-500"
+        *ngIf="formSubmitted && userForm.get(['email_id']).hasError('required')" tooltip="Email is required"
+        placement="bottom">
+        Email is required
+      </div>
     </div>
 
     <div class="grid grid-cols-1">
       <mat-form-field appearance="outline" class="w-full">
         <mat-label>Date of Birth</mat-label>
-        <input
-          matInput
-          [matDatepicker]="picker"
-          placeholder="Choose a date"
-          formControlName="dob"
-          autocomplete="off"
-        />
+        <input matInput [matDatepicker]="picker" placeholder="Choose a date" formControlName="dob" autocomplete="off" />
         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-datepicker #picker></mat-datepicker>
       </mat-form-field>
+      <div class="invalid-feedback text-red-500" *ngIf="formSubmitted && userForm.get(['dob']).hasError('required')"
+        tooltip="DOB is required" placement="bottom">
+        DOB is required
+      </div>
     </div>
 
     <div class="grid grid-cols-1">
@@ -73,64 +98,70 @@
           <mat-option [value]="3">Others</mat-option>
         </mat-select>
       </mat-form-field>
+      <div class="invalid-feedback text-red-500" *ngIf="formSubmitted && userForm.get(['gender']).hasError('required')"
+        tooltip="Please select gender" placement="bottom">
+        Please select gender
+      </div>
     </div>
 
     <div class="grid grid-cols-1">
       <mat-form-field appearance="outline" class="w-full">
         <mat-label>Mobile</mat-label>
-        <input
-          matInput
-          type="tel"
-          placeholder="Enter your mobile number"
-          formControlName="mobile_number"
-          maxlength="10"
-          minlength="10"
-          autocomplete="off"
-          appIntegerInput
-          appMobileNumber="true"
-          [appMin]="6000000000"
-          [appMax]="9999999999"
-          [appRange]="[6000000000, 9999999999]"
-        />
+        <input matInput type="tel" placeholder="Enter your mobile number" formControlName="mobile_number" maxlength="10"
+          minlength="10" autocomplete="off" appIntegerInput appMobileNumber="true" [appMin]="6000000000"
+          [appMax]="9999999999" [appRange]="[6000000000, 9999999999]" />
       </mat-form-field>
+      <div class="invalid-feedback text-red-500" *ngIf="userForm.get(['mobile_number']).hasError('range')"
+        tooltip="Must be 10 digits" placement="bottom">
+        Must be 10 digits
+      </div>
+      <div class="invalid-feedback text-red-500"
+        *ngIf="!userForm.get(['mobile_number']).hasError('range') && userForm.get(['mobile_number']).hasError('pattern')"
+        tooltip="Mobile Number must start with 6, 7, 8 or 9" placement="bottom">
+        Mobile Number must start with 6, 7, 8 or 9
+      </div>
+      <div class="invalid-feedback text-red-500"
+        *ngIf="formSubmitted && userForm.get(['mobile_number']).hasError('required')"
+        tooltip="Mobile Number is required" placement="bottom">
+        Mobile Number is required
+      </div>
     </div>
 
     <div class="grid grid-cols-1">
       <mat-form-field appearance="outline" class="w-full">
         <mat-label>Role</mat-label>
-        <mat-select
-          formControlName="role_id"
-          (selectionChange)="onRoleChange($event.value)"
-        >
+        <mat-select formControlName="role_id" (selectionChange)="onRoleChange($event.value)">
           <mat-option *ngFor="let role of roles" [value]="role.role_id">{{
             role.role_name
-          }}</mat-option>
+            }}</mat-option>
         </mat-select>
       </mat-form-field>
+      <div class="invalid-feedback text-red-500" *ngIf="formSubmitted && userForm.get(['role_id']).hasError('required')"
+        tooltip="Please select role" placement="bottom">
+        Please select role
+      </div>
     </div>
 
     <div class="grid grid-cols-1">
       <mat-form-field appearance="outline" class="w-full">
         <mat-label>Department</mat-label>
         <mat-select formControlName="department_id">
-          <mat-option
-            *ngFor="let department of departments"
-            [value]="department.department_id"
-            >{{ department.department_name }}</mat-option
-          >
+          <mat-option *ngFor="let department of departments" [value]="department.department_id">{{
+            department.department_name }}</mat-option>
         </mat-select>
       </mat-form-field>
+      <div class="invalid-feedback text-red-500"
+        *ngIf="formSubmitted && userForm.get(['department_id']).hasError('required')" tooltip="Please select department"
+        placement="bottom">
+        Please select department
+      </div>
     </div>
 
     <div class="grid grid-cols-1">
       <mat-form-field appearance="outline" class="w-full">
         <mat-label>Reporting to</mat-label>
         <mat-select formControlName="reporting_to_users" multiple>
-          <mat-option
-            *ngFor="let user of reportingUsers"
-            [value]="user.user_id"
-            >{{ user.display_name }}</mat-option
-          >
+          <mat-option *ngFor="let user of reportingUsers" [value]="user.user_id">{{ user.display_name }}</mat-option>
         </mat-select>
       </mat-form-field>
     </div>
@@ -139,27 +170,16 @@
       <mat-form-field appearance="outline" class="w-full">
         <mat-label>Status</mat-label>
         <mat-select formControlName="status">
-          <mat-option
-            *ngFor="let status of statusList"
-            [value]="status.value"
-            >{{ status.label }}</mat-option
-          >
+          <mat-option *ngFor="let status of statusList" [value]="status.value">{{ status.label }}</mat-option>
         </mat-select>
       </mat-form-field>
     </div>
 
     <div class="col-span-2 flex justify-center space-x-4 mt-4">
-      <button
-        type="submit"
-        class="bg-red-600 hover:bg-red-700 text-white py-2 px-8 rounded-full"
-      >
+      <button type="submit" class="bg-red-600 hover:bg-red-700 text-white py-2 px-8 rounded-full">
         {{ primaryButtonText }}
       </button>
-      <button
-        type="button"
-        class="bg-gray-500 hover:bg-gray-600 text-white py-2 px-12 rounded-full"
-        (click)="cancel()"
-      >
+      <button type="button" class="bg-gray-500 hover:bg-gray-600 text-white py-2 px-12 rounded-full" (click)="cancel()">
         {{ secondaryButtonText }}
       </button>
     </div>
