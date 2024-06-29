@@ -39,7 +39,7 @@ export const USERS = {
     existsByMobileNumber: `SELECT EXISTS (
         SELECT 1
             FROM m_users
-            WHERE mobile_number = $1 AND status NOT IN (0, 2)
+            WHERE mobile_number = $1
     )`,
     existsByUserId: `SELECT EXISTS (
         SELECT 1

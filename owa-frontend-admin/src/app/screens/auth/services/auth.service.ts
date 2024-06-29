@@ -4,6 +4,7 @@ import { NavigationEnd, Router } from '@angular/router';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { CommanService } from 'src/app/modules/shared/services/comman.service';
 import { DataService } from 'src/app/modules/shared/services/data.service';
+import { AppPreferencesService } from 'src/app/modules/shared/services/preferences.service';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -15,9 +16,10 @@ export class AuthService {
   public currentUser: Observable<any | null>;
   constructor(private http: HttpClient, 
     private router: Router,
-    private dataService: DataService) {
+    private dataService: DataService,
+    private appPreferences: AppPreferencesService) {
     this.currentUserSubject = new BehaviorSubject<any>(
-      JSON.parse(sessionStorage.getItem('userToken'))
+      appPreferences.getValue('userToken') ? JSON.parse(appPreferences.getValue('userToken')) : false
     );
     this.currentUser = this.currentUserSubject.asObservable();
   }
@@ -75,15 +77,13 @@ export class AuthService {
   }
 
   logout() {
-    if (sessionStorage.getItem('userToken')) {
+    if (this.appPreferences.getValue('userToken')) {
       this.http
         .post<any>(`${environment.auth_prefix_url}/admin/logout`, {})
         .subscribe();
-      sessionStorage.removeItem('userToken');
-      sessionStorage.removeItem('userDetails');
-      sessionStorage.clear();
+      this.appPreferences.clearAll();
       this.currentUserSubject.next(null);
-      this.router.navigate(['/login', { outlets: { popup: null } }]);
+      this.router.navigate(['/login']);
       return false;
     }
   }

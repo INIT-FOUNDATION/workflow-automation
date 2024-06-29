@@ -49,8 +49,9 @@
                                 appIntegerInput appMobileNumber="true" [appMin]="6000000000" [appMax]="9999999999"
                                 [appRange]="[6000000000, 9999999999]" />
                         </mat-form-field>
-                        <a href="#" class="text-blue-500 text-sm mt-1 inline-block">Click here to update Mobile
-                            Number</a>
+                        <!-- <a href="#" class="text-blue-500 text-sm mt-1 inline-block"
+                            (click)="openNumberChangeDialog()">Click here to update Mobile
+                            Number</a> -->
                     </div>
                     <div class="grid grid-cols-1">
                         <mat-form-field appearance="outline" class="w-full">
@@ -66,73 +67,6 @@
                         Changes</button>
                 </form>
             </div>
-
         </ng-container>
-
-        <!-- <ng-container *ngSwitchCase="'upload_profile_pic'">
-            <div class="editProfileSection">
-                <i class="fa-solid fa-arrow-left fs-5 me-2" (click)="cancelProfileUpload()" *ngIf="!uploadedFile"></i>
-                <i class="fa-solid fa-arrow-left fs-5 me-2" (click)="cancelProfileUpload()" *ngIf="uploadedFile"></i>
-                <span *ngIf="!uploadedFile" class="fs-5 fw-normal">Upload Profile Image</span>
-                <span *ngIf="uploadedFile" class="fs-5 fw-normal">Profile Image Preview</span>
-            </div>
-
-            <div class="uploadImg" *ngIf="!uploadedFile">
-                <div appDnd (fileDropped)="onFileDropped($event)"
-                    class="uploadProfileSection d-flex align-items-center p-3">
-                    <div class="">
-                        <div class="me-3" style="width: 100px; height: 100px">
-                            <img src="../../../../../assets/images/profile/uploadImg.svg" alt="" class="w-100" />
-                        </div>
-                    </div>
-                    <div>
-                        <div class="dragInfo">
-                            <p>Drag and drop</p>
-                        </div>
-                        <div class="orInfo">
-                            <p>- or -</p>
-                        </div>
-                        <div class="chooseFileBox">
-                            <input type="file" #fileDropRef id="fileDropRef" accept="image/*"
-                                (change)="fileBrowseHandler($event)" class="uploadFileInput" style="display: none" />
-                            <button class="btn uploadBtn pswd" (click)="fileDropRef.click()">
-                                Click here to upload
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="flex items-center justify-center mt-5">
-                    <button class="edit border-0 text-white px-6 py-3 rounded-full w-75 bg-red-600" type="button"
-                        (click)="cancelProfileUpload()">
-                        Cancel
-                    </button>
-                    <button
-                    class="bg-danger text-white border-0 w-100 p-3 rounded-pill"
-                    type="button"
-                  >
-                    Confirm
-                  </button>
-                </div>
-            </div>
-
-            <div class="row mt-3" *ngIf="uploadedFile">
-                <image-cropper [imageChangedEvent]="uploadedFile" [imageFile]="uploadedFile[0]" [cropperMinWidth]="300"
-                    [cropperMinHeight]="300" [maintainAspectRatio]="true" [aspectRatio]="1 / 1" format="png"
-                    (imageCropped)="imageCropped($event)" (imageLoaded)="imageLoaded($event)"
-                    (cropperReady)="cropperReady()" (loadImageFailed)="loadImageFailed()">
-                </image-cropper>
-                <div class="flex items-center justify-center mt-3 mb-3">
-                    <button class="bg-white w-100 p-3 rounded-full text-red-600 border border-red-600 px-6 py-3 me-8"
-                        type="button" (click)="cancelProfilePreviewUpload()">
-                        Cancel
-                    </button>
-                    <button class="text-white border-0 w-100 p-3 rounded-full bg-red-600 px-6 py-3" type="button"
-                        (click)="confirmFileUpload()">
-                        Confirm
-                    </button>
-                </div>
-            </div>
-        </ng-container> -->
     </ng-container>
 </ng-template>

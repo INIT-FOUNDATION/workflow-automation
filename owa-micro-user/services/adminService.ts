@@ -5,9 +5,9 @@ import { CACHE_TTL } from "../constants/CONST";
 import { UploadedFile } from "express-fileupload";
 
 export const adminService = {
-    getLoggedInUserInfo: async (userName: string): Promise<IUser> => {
+    getLoggedInUserInfo: async (user_id: number): Promise<IUser> => {
         try {
-            const key = `LOGGED_IN_USER_INFO|USER:${userName}`;
+            const key = `LOGGED_IN_USER_INFO|USER:${user_id}`;
             const cachedResult = await redis.GetKeyRedis(key);
             if (cachedResult) {
                 return JSON.parse(cachedResult);
@@ -15,7 +15,7 @@ export const adminService = {
 
             const _query = {
                 text: USERS.getLoggedInUserInfo,
-                values: [userName]
+                values: [user_id]
             };
             logger.debug(`adminService :: getLoggedInUserInfo :: query :: ${JSON.stringify(_query)}`)
 
@@ -44,6 +44,7 @@ export const adminService = {
     },
     updateProfilePic: async (profilePicture: UploadedFile, userId: number) => {
         try {
+            const key = `LOGGED_IN_USER_INFO|USER:${userId}`;
             const objectStoragePath = `profile-pictures/PROFILE_PICTURE_${userId}.${profilePicture.mimetype.split("/")[1]}`;
             const bucketName = envUtils.getStringEnvVariableOrDefault("OWA_OBJECT_STORAGE_BUCKET", "owa-dev");
             await objectStorageUtility.putObject(bucketName, objectStoragePath, profilePicture.data);
@@ -57,7 +58,7 @@ export const adminService = {
             const result = await pg.executeQueryPromise(_query);
             logger.debug(`adminService :: updateProfilePic :: db result :: ${JSON.stringify(result)}`);
 
-            redis.deleteRedis(`USER:${userId}`);
+            redis.deleteRedis(key);
         } catch (error) {
             logger.error(`adminService :: updateProfilePic :: ${error.message} :: ${error}`)
             throw new Error(error.message);
@@ -65,16 +66,17 @@ export const adminService = {
     },
     updateProfile: async (user: IUser, userId: number) => {
         try {
+            const key = `LOGGED_IN_USER_INFO|USER:${userId}`;
             const _query = {
                 text: USERS.updateProfile,
-                values: [userId, user.first_name, user.last_name, user.email_id, user.mobile_number, user.dob, `${user.first_name} ${user.last_name}`]
+                values: [userId, user.first_name, user.last_name, user.email_id, user.dob, `${user.first_name} ${user.last_name}`]
             };
             logger.debug(`adminService :: updateProfile :: query :: ${JSON.stringify(_query)}`);
 
             const result = await pg.executeQueryPromise(_query);
             logger.debug(`adminService :: updateProfile :: db result :: ${JSON.stringify(result)}`);
 
-            redis.deleteRedis(`USER:${userId}`);
+            redis.deleteRedis(key);
         } catch (error) {
             logger.error(`adminService :: updateProfile :: ${error.message} :: ${error}`)
             throw new Error(error.message);

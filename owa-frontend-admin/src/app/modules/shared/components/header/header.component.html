@@ -2,12 +2,9 @@
   <img src="assets/images/header/headerLogo.svg" class="w-16" />
   <div (click)="showProfileCard = !showProfileCard" class="flex items-center">
     <div class="userImg d-flex align-items-center justify-content-end me-2">
-      <img [src]="
-          userData?.profile_pic_url ||
-          '../../../assets/images/profile/profile.svg'
-        " alt="" class="h-9 w-9 rounded-full" />
+      <img [src]="(dataService.profilePic | async) || '../../../assets/images/profile/profile.svg'" alt="" class="h-9 w-9 rounded-full" />
     </div>
-    <span>{{ userData.display_name }}</span>
+    <span>{{ (dataService.userData | async)?.display_name }}</span>
 
     <!-- <div
       class="px-3 py-2 flex items-center cursor-pointer"

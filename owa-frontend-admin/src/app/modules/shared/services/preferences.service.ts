@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 
 @Injectable({providedIn: 'root'})
 export class AppPreferencesService {
-  private DICT = "MEETING_APP_PREFERENCES";
+  private DICT = "OWA_APP_PREFERENCES";
   constructor() {
   }
 

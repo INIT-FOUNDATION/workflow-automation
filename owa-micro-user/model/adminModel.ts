@@ -11,7 +11,6 @@ const validateUpdateUser = (user: IUser): Joi.ValidationResult => {
         new Error(ADMIN.ADMIN00005.errorMessage)
       ),
       dob: Joi.date().iso(),
-      mobile_number: Joi.number().integer().min(6000000000).max(9999999999).required(),
       email_id: Joi.string().email().required()
     });
     return userSchema.validate(user);
