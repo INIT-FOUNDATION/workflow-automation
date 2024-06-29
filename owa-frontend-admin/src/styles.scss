@@ -17,7 +17,8 @@ $my-app-theme: mat-light-theme($my-app-primary, $my-app-accent);
 @include angular-material-theme($my-app-theme);
 
 html,
-body {
+body,
+.p-component {
   font-family: "Poppins" !important;
   letter-spacing: 0.04rem;
   scroll-behavior: smooth;
@@ -49,4 +50,23 @@ body {
 
 .mat-form-field-wrapper {
   padding: 0rem;
+}
+
+.mat-form-field-appearance-outline .mat-form-field-outline-thick {
+  color: #0000001f !important;
+}
+
+.p-paginator .p-paginator-pages .p-paginator-page.p-highlight {
+  background-color: #dc2626 !important;
+  color: #fff !important;
+  font-weight: 500;
+  font-size: 0.9rem !important;
+}
+
+.p-paginator {
+  border: none !important;
+  background-color: transparent !important;
+  justify-content: end !important;
+  margin-bottom: 1rem;
+  font-size: 0.9rem !important;
 }

@@ -1,0 +1,167 @@
+<app-title
+  [titleName]="titleName"
+  additionalClass="text-lg font-bold"
+  [canGoBack]="true"
+></app-title>
+
+<div class="p-6 mx-auto rounded-xl space-y-4">
+  <form
+    [formGroup]="userForm"
+    class="grid grid-cols-2 gap-4 w-full"
+    (ngSubmit)="submitUserForm()"
+  >
+    <div class="grid grid-cols-1">
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>First Name</mat-label>
+        <input
+          matInput
+          placeholder="Enter your first name"
+          formControlName="first_name"
+          name="first_name"
+          autocomplete="off"
+        />
+      </mat-form-field>
+    </div>
+
+    <div class="grid grid-cols-1">
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Last Name</mat-label>
+        <input
+          matInput
+          placeholder="Enter your last name"
+          formControlName="last_name"
+          autocomplete="off"
+        />
+      </mat-form-field>
+    </div>
+
+    <div class="grid grid-cols-1">
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Email</mat-label>
+        <input
+          matInput
+          type="email"
+          placeholder="Enter your email"
+          formControlName="email_id"
+          autocomplete="off"
+          appInputChar="email"
+        />
+      </mat-form-field>
+    </div>
+
+    <div class="grid grid-cols-1">
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Date of Birth</mat-label>
+        <input
+          matInput
+          [matDatepicker]="picker"
+          placeholder="Choose a date"
+          formControlName="dob"
+          autocomplete="off"
+        />
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+    </div>
+
+    <div class="grid grid-cols-1">
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Gender</mat-label>
+        <mat-select formControlName="gender">
+          <mat-option [value]="1">Male</mat-option>
+          <mat-option [value]="2">Female</mat-option>
+          <mat-option [value]="3">Others</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="grid grid-cols-1">
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Mobile</mat-label>
+        <input
+          matInput
+          type="tel"
+          placeholder="Enter your mobile number"
+          formControlName="mobile_number"
+          maxlength="10"
+          minlength="10"
+          autocomplete="off"
+          appIntegerInput
+          appMobileNumber="true"
+          [appMin]="6000000000"
+          [appMax]="9999999999"
+          [appRange]="[6000000000, 9999999999]"
+        />
+      </mat-form-field>
+    </div>
+
+    <div class="grid grid-cols-1">
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Role</mat-label>
+        <mat-select
+          formControlName="role_id"
+          (selectionChange)="onRoleChange($event.value)"
+        >
+          <mat-option *ngFor="let role of roles" [value]="role.role_id">{{
+            role.role_name
+          }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="grid grid-cols-1">
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Department</mat-label>
+        <mat-select formControlName="department_id">
+          <mat-option
+            *ngFor="let department of departments"
+            [value]="department.department_id"
+            >{{ department.department_name }}</mat-option
+          >
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="grid grid-cols-1">
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Reporting to</mat-label>
+        <mat-select formControlName="reporting_to_users" multiple>
+          <mat-option
+            *ngFor="let user of reportingUsers"
+            [value]="user.user_id"
+            >{{ user.display_name }}</mat-option
+          >
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="mb-4">
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Status</mat-label>
+        <mat-select formControlName="status">
+          <mat-option
+            *ngFor="let status of statusList"
+            [value]="status.value"
+            >{{ status.label }}</mat-option
+          >
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="col-span-2 flex justify-center space-x-4 mt-4">
+      <button
+        type="submit"
+        class="bg-red-600 hover:bg-red-700 text-white py-2 px-8 rounded-full"
+      >
+        {{ primaryButtonText }}
+      </button>
+      <button
+        type="button"
+        class="bg-gray-500 hover:bg-gray-600 text-white py-2 px-12 rounded-full"
+        (click)="cancel()"
+      >
+        {{ secondaryButtonText }}
+      </button>
+    </div>
+  </form>
+</div>

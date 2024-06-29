@@ -1,0 +1,72 @@
+<app-title titleName="User Profile" additionalClass="text-lg font-bold" [canGoBack]="true"></app-title>
+<div class="flex items-center justify-center h-screen">
+    <ng-container *ngTemplateOutlet="
+      screenTemplate;
+      context: { active_screen: activeScreen }
+    "></ng-container>
+</div>
+
+<ng-template let-activescreen="active_screen" #screenTemplate>
+    <ng-container [ngSwitch]="activescreen">
+        <ng-container *ngSwitchCase="'view_profile'">
+            <div class="bg-white border border-2 p-8 rounded-2xl shadow-lg max-w-3xl w-full">
+                <div class="flex justify-center mb-4 flex flex-col items-center">
+                    <img [src]="
+                    userData?.profile_pic_url ||
+                    '../../../assets/images/profile/profile.svg'
+                  " alt="Profile Image" class="rounded-full h-24 w-24 object-cover" />
+                    <input type="file" accept="image/*" #uploadFile style="display: none" />
+                    <span class="text-blue-500 text-sm mt-1 inline-block cursor-pointer hover:text-blue-700 underline"
+                        (click)="openImageUploadDialog()">Change Profile Image</span>
+                </div>
+                <form [formGroup]="profileForm" (ngSubmit)="submitProfileForm()">
+                    <div class="grid grid-cols-1 mb-3">
+                        <mat-form-field appearance="outline" class="w-full">
+                            <mat-label>First Name</mat-label>
+                            <input matInput placeholder="Enter your first name" formControlName="first_name"
+                                name="first_name" autocomplete="off" />
+                        </mat-form-field>
+                    </div>
+                    <div class="grid grid-cols-1 mb-3">
+                        <mat-form-field appearance="outline" class="w-full">
+                            <mat-label>Last Name</mat-label>
+                            <input matInput placeholder="Enter your last name" formControlName="last_name"
+                                autocomplete="off" />
+                        </mat-form-field>
+                    </div>
+                    <div class="grid grid-cols-1 mb-3">
+                        <mat-form-field appearance="outline" class="w-full">
+                            <mat-label>Email</mat-label>
+                            <input matInput type="email" placeholder="Enter your email" formControlName="email_id"
+                                autocomplete="off" appInputChar="email" />
+                        </mat-form-field>
+                    </div>
+                    <div class="grid grid-cols-1 mb-3">
+                        <mat-form-field appearance="outline" class="w-full">
+                            <mat-label>Mobile</mat-label>
+                            <input matInput type="tel" placeholder="Enter your mobile number"
+                                formControlName="mobile_number" maxlength="10" minlength="10" autocomplete="off"
+                                appIntegerInput appMobileNumber="true" [appMin]="6000000000" [appMax]="9999999999"
+                                [appRange]="[6000000000, 9999999999]" />
+                        </mat-form-field>
+                        <!-- <a href="#" class="text-blue-500 text-sm mt-1 inline-block"
+                            (click)="openNumberChangeDialog()">Click here to update Mobile
+                            Number</a> -->
+                    </div>
+                    <div class="grid grid-cols-1">
+                        <mat-form-field appearance="outline" class="w-full">
+                            <mat-label>Date of Birth</mat-label>
+                            <input matInput [matDatepicker]="picker" placeholder="Choose a date" formControlName="dob"
+                                autocomplete="off" />
+                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                            <mat-datepicker #picker></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+                    <button type="submit"
+                        class="w-full bg-red-600 text-white py-2 hover:bg-red-700 rounded-full mt-4">Save
+                        Changes</button>
+                </form>
+            </div>
+        </ng-container>
+    </ng-container>
+</ng-template>

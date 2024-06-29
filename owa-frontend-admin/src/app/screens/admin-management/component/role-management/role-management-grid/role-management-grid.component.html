@@ -1,0 +1,29 @@
+<app-common-data-table
+        #adminManagementDetails
+        [colModel]="cols"
+        gridId="adminManagementDetails"
+        sField="updatedDate"
+        sOrder="desc"
+        [lazyLoad]="true"
+        selectType="none"
+        [localData]="rolesList"
+        idColumn="fac_id"
+        [rowsPerPage]="rowsPerPage"
+        paginationpos="bottom"
+        [actionColumnTemplate]="assessmentEditButton"
+        [actionColumnRequired]="true"
+      >
+
+            <ng-template #assessmentEditButton let-gridData="griddata">
+              <div class="flex space-x-4 text-sm">
+                <!-- <button class="flex items-center hover:text-red-700 text-sm" (click)="addRole()">
+                      <i class="fa-solid fa-pencil text-red-700 me-2 text-lg"></i>
+                  Edit
+                </button> -->
+                <button class="flex items-center hover:text-red-700 text-sm" (click)="editRole(gridData)">
+                      <i class="fa-solid fa-pencil text-red-700 me-2 text-lg"></i>
+                  Edit
+                </button>
+              </div>
+            </ng-template>
+</app-common-data-table>

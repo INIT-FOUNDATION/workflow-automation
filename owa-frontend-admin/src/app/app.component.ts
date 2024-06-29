@@ -4,6 +4,10 @@ import 'aos/dist/aos.css';
 import { ThemeService } from './modules/shared/theme/theme.service';
 import { CookieService } from './modules/shared/services/cookies.service';
 import { UtilityService } from './modules/shared/services/utility.service';
+import { AuthService } from './screens/auth/services/auth.service';
+import { DataService } from './modules/shared/services/data.service';
+import { Router } from '@angular/router';
+import { AppPreferencesService } from './modules/shared/services/preferences.service';
 
 @Component({
   selector: 'app-root',
@@ -13,32 +17,28 @@ import { UtilityService } from './modules/shared/services/utility.service';
 export class AppComponent implements OnInit, AfterViewInit {
   display = false;
   constructor(
+     public authService : AuthService,
     private themeService: ThemeService,
-    private cookieService: CookieService,
-    public utilityService: UtilityService
-  ) {
-    const theme = cookieService.getCookie('theme');
-    const darkModeMediaQuery = window.matchMedia(
-      '(prefers-color-scheme: dark)'
-    );
-    darkModeMediaQuery.addListener((e) => this.updateTheme(e.matches));
-    if (!theme) {
-      this.updateTheme(darkModeMediaQuery.matches);
-    }
-  }
+    private router: Router,
+    private dataService: DataService,
+    public utilityService: UtilityService,
+    private appPreferences: AppPreferencesService
+  ) {}
 
-  updateTheme(darkMode: boolean) {
-    if (darkMode) {
-      this.themeService.active_theme = 'dark_theme';
-      this.themeService.setActiveThem('dark_theme');
-    } else {
-      this.themeService.active_theme = 'light_theme';
-      this.themeService.setActiveThem('light_theme');
-    }
-  }
 
   ngOnInit(): void {
-    AOS.init();
+    this.authService.currentUser.subscribe(async (res) => {
+      
+      if(res){
+        const loggedInUserDetails =  this.appPreferences.getValue('oll_user_details') ? JSON.parse(this.appPreferences.getValue('oll_user_details')) : {};
+        this.dataService.permissions = loggedInUserDetails.menuList;
+        this.dataService.userDetails = loggedInUserDetails;
+        this.dataService.setProfilePic(loggedInUserDetails.profile_pic_url);
+      }else{
+        this.router.navigate([`/login`]);
+      }
+      
+    })
   }
 
   ngAfterViewInit(): void {}

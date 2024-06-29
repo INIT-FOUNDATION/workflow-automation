@@ -1,0 +1,16 @@
+::ng-deep .mat-tab-labels {
+    display: flex;
+    justify-content: space-around;
+}
+
+::ng-deep .mat-ripple {
+    width: 50% !important;
+}
+
+::ng-deep .p-sortable-column {
+    background-color: #EDEDED !important;
+}
+
+::ng-deep .p-datatable-table {
+    font-size: 0.9rem;
+}

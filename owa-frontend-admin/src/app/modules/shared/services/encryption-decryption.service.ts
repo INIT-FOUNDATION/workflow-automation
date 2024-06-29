@@ -4,7 +4,7 @@ import * as CryptoJS from 'crypto-js';
 @Injectable({providedIn: 'root'})
 export class EncDecService {
 
-  private keys = 'LINK@$#&*(!@%^&';
+  private keys = 'OWA@$#&*(!@%^&';
 
   constructor() {}
 

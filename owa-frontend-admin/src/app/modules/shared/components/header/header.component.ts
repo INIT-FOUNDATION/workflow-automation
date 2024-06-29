@@ -1,4 +1,7 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
+import { AuthService } from 'src/app/screens/auth/services/auth.service';
+import { DataService } from '../../services/data.service';
 
 @Component({
   selector: 'app-header',
@@ -6,5 +9,22 @@ import { Component } from '@angular/core';
   styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent {
-  userName: string = 'CK';
+  showProfileCard: boolean = false;
+
+  constructor(
+    public authService: AuthService,
+    public router: Router,
+    public dataService: DataService
+  ) {}
+
+  ngOnInit(): void {
+  }
+
+  userProfile(){
+    this.router.navigate(['/profile']); 
+  }
+
+  logoutUser(): void {
+     this.authService.logout();
+  }
 }

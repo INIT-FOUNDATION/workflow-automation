@@ -10,9 +10,9 @@ CREATE TABLE m_users (
     gender SMALLINT,
     dob DATE,
     role_id INT,
-    password VARCHAR(50),
+    password VARCHAR(100),
     password_last_updated TIMESTAMP DEFAULT now(),
-    invalid_attempts INT,
+    invalid_attempts INT DEFAULT 0,
     status smallint DEFAULT 1,
     profile_pic_url VARCHAR(100),
     last_logged_in TIMESTAMP DEFAULT now(),
@@ -27,6 +27,7 @@ CREATE TABLE m_roles (
     role_id serial PRIMARY KEY,
     role_name VARCHAR(30),
     role_description VARCHAR(50),
+    level VARCHAR(20),
     status smallint DEFAULT 1,
     date_created TIMESTAMP DEFAULT now(),
     date_updated TIMESTAMP DEFAULT now(),
@@ -35,7 +36,7 @@ CREATE TABLE m_roles (
 );
 
 -- Table: m_department
-CREATE TABLE m_department (
+CREATE TABLE m_departments (
     department_id serial PRIMARY KEY,
     department_name VARCHAR(50),
     status smallint DEFAULT 1,
@@ -65,8 +66,17 @@ CREATE TABLE m_user_department_assoc (
     date_updated TIMESTAMP DEFAULT now()
 );
 
--- Table: password_complexity
-CREATE TABLE password_complexity (
+-- Table: m_user_reporting_assoc
+CREATE TABLE m_user_reporting_assoc (
+    user_id INT,
+    reporting_to INT,
+    status INT DEFAULT 1,
+    date_created TIMESTAMP DEFAULT now(),
+    date_updated TIMESTAMP DEFAULT now()
+);
+
+-- Table: password_policies
+CREATE TABLE password_policies (
     id serial PRIMARY KEY,
     password_expiry SMALLINT,
     password_history SMALLINT,
@@ -112,4 +122,59 @@ CREATE TABLE app_version (
     release_date TIMESTAMP DEFAULT now(),
     date_created TIMESTAMP DEFAULT now(),
     date_updated TIMESTAMP DEFAULT now()
+);
+
+
+-- Table: m_forms
+CREATE TABLE m_forms (
+    form_id SERIAL PRIMARY KEY,
+    form_name VARCHAR(50) NOT NULL,
+    form_description TEXT,
+    status INT NOT NULL,
+    date_created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    date_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    created_by INT NOT NULL,
+    updated_by INT NOT NULL
+);
+
+
+-- Table: m_fields
+CREATE TABLE m_fields (
+    field_id SERIAL PRIMARY KEY,
+    field_name VARCHAR(50) NOT NULL,
+    field_label VARCHAR(50) NOT NULL,
+    status INT NOT NULL,
+    date_created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    date_updated TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    created_by INT,
+    updated_by INT
+);
+
+-- Table: m_field_properties
+CREATE TABLE m_field_properties (
+    field_property_id SERIAL PRIMARY KEY,
+    field_id INT NOT NULL,
+    field_property_name VARCHAR(50) NOT NULL,
+    field_property_type VARCHAR(50) NOT NULL,
+    field_property_label_display VARCHAR(50) NOT NULL,
+    options JSON,
+    description TEXT,
+    status INT,
+    date_created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    date_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    created_by INT,
+    updated_by INT
+);
+
+-- Table: m_form_fields_assoc
+CREATE TABLE m_form_fields_assoc (
+    form_field_assoc_id SERIAL PRIMARY KEY,
+    form_id INT NOT NULL,
+    field_id INT NOT NULL,
+    options JSON,
+    status INT,
+    date_created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    date_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    created_by INT,
+    updated_by INT
 );
