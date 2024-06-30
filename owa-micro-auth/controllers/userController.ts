@@ -119,7 +119,9 @@ export const userController = {
                 user_id: existingUser.user_id,
                 user_name: mobileNumber,
                 email_id: existingUser.email_id,
-                level: existingUser.level
+                level: existingUser.level,
+                txnId: new_txn_id,
+                otp: otp
             };;
             
             userService.setUserInRedisByTxnId(userData);
@@ -176,7 +178,7 @@ export const userController = {
             const mobileKey = `Mob_User|Mobile:${userData.mobile_number}`
 
             otp = decryptPayload(otp);
-
+            
             if (userData.otp != otp) return res.status(STATUS.BAD_REQUEST).send(AUTH.AUTH00017);
             else {
                 const expiryTime = envUtils.getNumberEnvVariableOrDefault("OWA_AUTH_TOKEN_EXPIRY_TIME", 8);

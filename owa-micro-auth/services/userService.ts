@@ -123,7 +123,7 @@ export const userService = {
             throw new Error(error.message);
         }
     },
-    setUserInRedisByTxnId : async (userData) => {
+    setUserInRedisByTxnId : async (userData) => {        
         if (userData != undefined && userData != null) {
             let txnId = userData.txnId;
             await userService.sharePasswordToUser({
