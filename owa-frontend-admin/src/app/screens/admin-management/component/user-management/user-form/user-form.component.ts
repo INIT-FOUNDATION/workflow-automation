@@ -81,7 +81,6 @@ export class UserFormComponent {
 
   async submitUserForm() {
     this.formSubmitted = true;
-   
     if (this.formType != 'edit') {
       this.createUser();
     } else {
