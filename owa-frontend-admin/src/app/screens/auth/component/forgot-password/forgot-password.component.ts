@@ -4,6 +4,7 @@ import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 import { UtilityService } from 'src/app/modules/shared/services/utility.service';
 import { EncDecService } from 'src/app/modules/shared/services/encryption-decryption.service';
+import * as CryptoJS from 'crypto-js';
 
 @Component({
   selector: 'app-forgot-password',
@@ -13,6 +14,7 @@ import { EncDecService } from 'src/app/modules/shared/services/encryption-decryp
 export class ForgotPasswordComponent {
   currentScreen = 'sendOtp';
   forgotPasswordForm: FormGroup;
+  isPasswordVisible: boolean = false;
 
   constructor(private fb: FormBuilder,
               private authService: AuthService,
@@ -43,47 +45,58 @@ export class ForgotPasswordComponent {
 }
 
 verifyOtp() {
-    let otp = this.forgotPasswordForm.get('otp').value;
-    otp = this.encryptService.set("otp");
-    let txnId = this.forgotPasswordForm.get('txnId').value;
-    console.log(typeof otp)
-    console.log(txnId)
-    
-    let payload : any = {
-      otp : otp,
-      txnId : txnId
-    }
-    this.authService.verifyForgotPasswordOtp(payload).subscribe((res)=>{
-      console.log(res)
-      this.currentScreen = 'resetPassword';
-    })
+  let secretKey = 'OWA@$#&*(!@%^&';
+  let otp = this.forgotPasswordForm.get('otp').value;
+  let txnId = this.forgotPasswordForm.get('txnId').value;
+
+  let encryptedOtp = CryptoJS.AES.encrypt(otp, secretKey).toString();
+
+  let payload: any = {
+    otp: encryptedOtp,
+    txnId: txnId
+  };
+
+  this.authService.verifyForgotPasswordOtp(payload).subscribe((res) => {
+    console.log(res);
+    this.currentScreen = 'resetPassword';
+  });
 }
 
 resetPassword() {
     if (this.forgotPasswordForm.valid) {
+      let secretKey = 'OWA@$#&*(!@%^&';
       let newPassword = this.forgotPasswordForm.get('newPassword').value;
-      newPassword = this.encryptService.set('newPassword');
+      let encryptedNewPassword = CryptoJS.AES.encrypt(newPassword, secretKey).toString();
       let confirmPassword = this.forgotPasswordForm.get('confirmPassword').value;
-      confirmPassword = this.encryptService.set("confirmPassword");
+      let encryptedConfirmPassword = CryptoJS.AES.encrypt(confirmPassword, secretKey).toString();
       let txnId = this.forgotPasswordForm.get('txnId').value;
       
       let payload : any = {
         txnId : txnId,
-        newPassword : newPassword,
-        confirmPassword : confirmPassword
+        newPassword : encryptedNewPassword,
+        confirmPassword : encryptedConfirmPassword
       }
 
-      if (newPassword === confirmPassword) {
-        this.authService.resetForgotPassword(payload).subscribe((res) => {
+      this.authService.resetForgotPassword(payload).subscribe((res) => {
+        if(newPassword == confirmPassword){
           this.utilsService.showSuccessMessage('Password updated successfully');
           this.router.navigate(['/login']);
-        });
-    } else {
-        alert('Passwords do not match');
-    }
-
+        } else{
+          this.utilsService.showErrorMessage('Password does not match')
+        }
+      });
 
     } 
 }
+
+get passwordFieldType(): string {
+  return this.isPasswordVisible ? 'text' : 'password';
+}
+
+togglePasswordVisibility(): void {
+  this.isPasswordVisible = !this.isPasswordVisible;
+}
+
+
 
 }
