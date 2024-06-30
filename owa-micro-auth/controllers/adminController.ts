@@ -177,7 +177,7 @@ export const adminController = {
                     in: 'body',
                     required: true,
                     schema: {
-                        otp: 123456,
+                        otp: 'encryptedOtp',
                         txnId: '1b99ee36-4d23-4d0a-9972-606f48bf5e33'
                     }
                 }    
