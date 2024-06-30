@@ -77,11 +77,14 @@ export class RoleFormComponent {
         this.roleForm.disable();
         this.roleForm.get('status').enable();
       }
+
+      const permissionsFormArray = this.roleForm.get('permissions') as FormArray;
+      
       this.roleDetails.moduleJson.data.forEach((menuItem: any) => {
         let readPermission = menuItem.read_permission == '1' ? true : false;
         let writePermission = menuItem.write_permission == '1' ? true : false;
         let disableChkbx = writePermission ? true : false;
-
+    
         let formGroup = new FormGroup({
           menu_id: new FormControl(menuItem.menu_id),
           menu_name: new FormControl(menuItem.menu_name),
@@ -93,8 +96,8 @@ export class RoleFormComponent {
             Validators.required,
           ]),
         });
-
-        (this.roleForm.get('permissions') as FormArray).push(formGroup);
+    
+        permissionsFormArray.push(formGroup); 
       });
     }
     this.buildFormData();
@@ -167,52 +170,59 @@ export class RoleFormComponent {
       this.utilsService.showErrorMessage('Please select status');
       return;
     }
-    if (this.formType == 'add') {
-    this.addRole();
-    } else {
-    this.updateRole();
-    }
-
     let formData = this.roleForm.getRawValue();
 
     let access_control = formData.permissions;
-    let permissions = [];
+    let permissions: any = [];
+    
     _.each(access_control, (access) => {
       if (access.write_permission) {
         permissions.push({ menu_id: access.menu_id, permission_id: 1 });
       }
-
       if (access.read_permission) {
         permissions.push({ menu_id: access.menu_id, permission_id: 2 });
       }
     });
+  
     if (permissions.length > 0) {
-      formData.permissions = permissions;
+      formData.permissions = permissions; 
     } else {
+    
       // this.utilsService.showErrorMessage('Please choose permissions');
       return;
     }
-  }
-
-  addRole(){
-    let formData = this.roleForm.getRawValue();
-    this.roleManagementService.addRole(formData).subscribe((res) => {
-      this.utilsService.showSuccessMessage('Role added successfully');
-      this.backToAdminManagement();
-    },
-    (error)=>{
-      console.error(error)
+  
+    if (this.formType === 'add') {
+      this.addRole(formData);
+    } else {
+      this.updateRole(formData);
     }
-  );
+
   }
 
-  updateRole(){
-    let formData = this.roleForm.getRawValue();
+  addRole(formData: any) {
+    this.roleManagementService.addRole(formData).subscribe(
+      (res) => {
+        this.utilsService.showSuccessMessage('Role added successfully');
+        this.backToAdminManagement();
+      },
+      (error) => {
+        console.error(error);
+      }
+    );
+  }
+  
+  updateRole(formData: any) {
     formData.role_id = this.role_id;
-    this.roleManagementService.updateRole(formData).subscribe((res) => {
-      this.utilsService.showSuccessMessage('Role updated successfully');
-      this.backToAdminManagement();
-    });
+    this.roleManagementService.updateRole(formData).subscribe(
+      (res) => {
+        this.utilsService.showSuccessMessage('Role updated successfully');
+        this.backToAdminManagement();
+      },
+      (error) => {
+        console.error(error);
+      }
+    );
   }
 
   backToAdminManagement() {
