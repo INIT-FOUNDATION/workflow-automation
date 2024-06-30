@@ -1,7 +1,8 @@
 import { IUser } from "../types/custom";
-import { redis, logger, pg } from "owa-micro-common";
+import { redis, logger, pg, nodemailerUtils, ejsUtils, commonCommunication, envUtils } from "owa-micro-common";
 import { USERS } from "../constants/QUERY";
 import { CONFIG } from "../constants/CONST";
+import { SMS, WHATSAPP } from "../constants/Communication";
 
 export const userService = {
     getUserInRedisByUserName: async (username: string): Promise<string> => {
@@ -125,9 +126,13 @@ export const userService = {
     setUserInRedisByTxnId : async (userData) => {
         if (userData != undefined && userData != null) {
             let txnId = userData.txnId;
+            await userService.sharePasswordToUser({
+                otp: userData.otp,
+                displayName: userData.display_name,
+                mobileNumber: userData.mobile_number,
+                communicationType: "USER_LOGIN_OTP"
+              });
             redis.SetRedis(`Mob_User|TxnId:${txnId}`, userData, 180)
-                .then()
-                .catch(err => logger.error(err));
         };
     },
     setUserInRedisForReg : async (phoneNo, userData, result) => {
@@ -155,5 +160,71 @@ export const userService = {
     checkIfOtpExistInRedis : async (key) => {
         let res = await redis.GetKeyRedis(key);
         return res;
-    }
+    },
+    sharePasswordToUser: async (passwordDetails: any) => {
+        try {
+          switch (passwordDetails.communicationType) {
+            case "CREATE_USER":
+              if (passwordDetails.emailId) {
+                const emailTemplateHtml = await ejsUtils.generateHtml('views/sharePasswordEmailTemplate.ejs', passwordDetails);
+                const emailBodyBase64 = Buffer.from(emailTemplateHtml).toString('base64');
+                await commonCommunication.sendEmail(emailBodyBase64, 'OLL WORKFLOW AUTOMATION | LOGIN DETAILS', [passwordDetails.emailId]);
+              }
+    
+              if (passwordDetails.mobileNumber) {
+                const adminUrl = envUtils.getStringEnvVariableOrDefault("OWA_WORKFLOW_USER_MODULE_URL", "http://localhost:4200");
+                const smsBodyTemplate = SMS.USER_CREATION.body;
+                const smsBodyCompiled = smsBodyTemplate.replace("<name>", passwordDetails.displayName)
+                  .replace("<password>", passwordDetails.password)
+                  .replace("<url>", adminUrl);
+                await commonCommunication.sendSms(smsBodyCompiled, passwordDetails.mobileNumber, SMS.USER_CREATION.template_id);
+    
+                await commonCommunication.sendWhatsapp(WHATSAPP.USER_CREATION.template_id, passwordDetails.mobileNumber, [passwordDetails.displayName, passwordDetails.password, adminUrl])
+              }
+              break;
+            case "RESET_PASSWORD":
+              if (passwordDetails.emailId) {
+                const emailTemplateHtml = await ejsUtils.generateHtml('views/sharePasswordEmailTemplate.ejs', passwordDetails);
+                const emailBodyBase64 = Buffer.from(emailTemplateHtml).toString('base64');
+                await commonCommunication.sendEmail(emailBodyBase64, 'OLL WORKFLOW AUTOMATION | LOGIN DETAILS', [passwordDetails.emailId]);
+                // await nodemailerUtils.sendEmail('OLL WORKFLOW AUTOMATION | LOGIN DETAILS', emailTemplateHtml, passwordDetails.emailId);
+              }
+    
+              if (passwordDetails.mobileNumber) {
+                const adminUrl = envUtils.getStringEnvVariableOrDefault("OWA_WORKFLOW_MODULE_URL", "http://localhost:4200");
+                const smsBodyTemplate = SMS.RESET_PASSWORD.body;
+                const smsBodyCompiled = smsBodyTemplate.replace("<name>", passwordDetails.displayName)
+                  .replace("<password>", passwordDetails.password)
+                await commonCommunication.sendSms(smsBodyCompiled, passwordDetails.mobileNumber, SMS.RESET_PASSWORD.template_id);
+    
+                await commonCommunication.sendWhatsapp(WHATSAPP.RESET_PASSWORD.template_id, passwordDetails.mobileNumber, [passwordDetails.displayName, passwordDetails.password])
+              }
+              break;
+            case "USER_LOGIN_OTP":
+              if (passwordDetails.emailId) {
+                const emailTemplateHtml = await ejsUtils.generateHtml('views/sharePasswordEmailTemplate.ejs', passwordDetails);
+                const emailBodyBase64 = Buffer.from(emailTemplateHtml).toString('base64');
+                await commonCommunication.sendEmail(emailBodyBase64, 'OLL WORKFLOW AUTOMATION | LOGIN DETAILS', [passwordDetails.emailId]);
+                // await nodemailerUtils.sendEmail('OLL WORKFLOW AUTOMATION | LOGIN DETAILS', emailTemplateHtml, passwordDetails.emailId);
+              }
+    
+              if (passwordDetails.mobileNumber) {
+                const smsBodyTemplate = SMS.USER_LOGIN_WITH_OTP.body;
+                const smsBodyCompiled = smsBodyTemplate.replace("<otp>", passwordDetails.otp)
+                  .replace("<module>", "OLL Workflow Automation")
+                  .replace("<time>", "3 min");
+                await commonCommunication.sendSms(smsBodyCompiled, passwordDetails.mobileNumber, SMS.USER_LOGIN_WITH_OTP.template_id);
+    
+                await commonCommunication.sendWhatsapp(WHATSAPP.USER_LOGIN_WITH_OTP.template_id, passwordDetails.mobileNumber, ["OLL Workflow Automation", passwordDetails.otp, "3 mins"])
+              }
+              break;
+    
+            default:
+              break;
+          }
+        } catch (error) {
+          logger.error(`adminService :: sharePasswordToUser :: ${error.message} :: ${error}`)
+          throw new Error(error.message);
+        }
+      }
 }

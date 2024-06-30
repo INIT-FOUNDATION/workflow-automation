@@ -11,6 +11,7 @@ export const AUTH = {
 
          "/api/v1/auth/user/login",
          "/api/v1/auth/user/generateOTP",
+         "/api/v1/auth/user/validateOTP"
        ]
     }
 }

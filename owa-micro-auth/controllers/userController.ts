@@ -96,6 +96,12 @@ export const userController = {
             if (!mobileNumber || mobileNumber.toString().length != 10) {
                 return res.status(STATUS.BAD_REQUEST).send(AUTH.AUTH00014);
             }
+            
+            const existingUser: IUser = await userService.getUserByUserName(mobileNumber);
+            if (!existingUser) return res.status(STATUS.BAD_REQUEST).send(AUTH.AUTH00001);
+
+            const levels = ['Employee', 'Department'];
+            if (!levels.includes(existingUser.level)) return res.status(STATUS.BAD_REQUEST).send(AUTH.AUTH00001);
 
             const key = `Mob_User|Mobile:${mobileNumber}`
             const redisResult = await redis.GetKeys(key);
@@ -109,19 +115,13 @@ export const userController = {
             const new_txn_id = uuidv4();
             const otp = Math.floor(100000 + Math.random() * 900000);
 
-            const otpData = {
-                mobile_no: mobileNumber,
-                otp: otp,
-                reason: OTPREASONS.VERIFYMOBNO,
-                is_active: 1,
-                date_created: new Date(),
-                date_modified: new Date()
-            };
-
-            const userData = mobileNumber;
-            userData.otp = otpData.otp;
-            userData.txnId = new_txn_id;
-
+            let userData = {
+                user_id: existingUser.user_id,
+                user_name: mobileNumber,
+                email_id: existingUser.email_id,
+                level: existingUser.level
+            };;
+            
             userService.setUserInRedisByTxnId(userData);
 
             userService.setUserInRedisForReg(mobileNumber, userData, function (err, result) {
@@ -166,7 +166,7 @@ export const userController = {
             const key = `Mob_User|TxnId:${txnId}`;
 
             const redisResult = await redis.GetKeys(key);
-
+            
             if (!redisResult || redisResult.length == 0) {
                 return res.status(STATUS.UNAUTHORIZED).send(AUTH.AUTH00018);
             }
@@ -180,6 +180,7 @@ export const userController = {
             if (userData.otp != otp) return res.status(STATUS.BAD_REQUEST).send(AUTH.AUTH00017);
             else {
                 const expiryTime = envUtils.getNumberEnvVariableOrDefault("OWA_AUTH_TOKEN_EXPIRY_TIME", 8);
+
                 const tokenDetails = {
                     user_id: userData.user_id,
                     user_name: userData.user_name,
