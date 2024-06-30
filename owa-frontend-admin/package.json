@@ -28,6 +28,7 @@
     "angular-star-rating": "~5.1.0",
     "aos": "^2.3.4",
     "crypto-js": "^4.2.0",
+    "drawflow": "^0.0.59",
     "font-awesome": "^4.7.0",
     "gsap": "^3.12.5",
     "jquery": "^3.6.4",

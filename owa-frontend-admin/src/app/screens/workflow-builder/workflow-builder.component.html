@@ -1,38 +1,58 @@
-<div class="container mx-auto p-4">
-    <div class="flex justify-between items-center mb-4">
-        <div>
-      <h1 class="text-xl font-bold">Workflow Builder</h1>
-      <div class="border-4 rounded-xl w-10 border-red-600 mt-1"></div>
-    </div>
-      <button class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded">+ Add New Workflow</button>
-    </div>
-    <div class="mb-4 relative">
-      <input type="text" placeholder="Search for an existing user" class="w-80 p-2 border rounded-full px-4" />
-      <i class="fa-solid fa-magnifying-glass absolute top-3.5 left-72 cursor-pointer" style="color: #a6a6a6;"></i>
-    </div>
+<app-title
+  titleName="Workflow Builder"
+  additionalClass="text-lg font-bold"
+  [canGoBack]="false"
+></app-title>
 
-    <div class="border rounded-xl w-full border-gray-300 my-8"></div>
+<div class="flex items-center justify-between">
+  <mat-form-field appearance="outline" class="w-72">
+    <mat-label>Give your workflow a name</mat-label>
+    <input type="text" matInput class="" />
+  </mat-form-field>
 
-    <div class="mb-4">
-        <h3 class="text-xl">Pre Defined Workflows</h3>
-        <div class="border-4 rounded-xl w-10 border-red-600 mt-1"></div>
-    </div>
+  <div class="flex items-center">
+    <button
+      type="button"
+      class="border border-red-600 text-red-600 px-10 py-2 font-medium rounded-lg text-sm me-3"
+    >
+      Test
+    </button>
 
-  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-    <!-- <div *ngFor="let workflow of workflows" class="p-4 border border-gray-300 rounded">
-      <div class="mb-3 flex items-center">
-        <img src="../assets/images/workflowBuilder/cycle.svg" alt="Cycle svg" class="me-3"/>
-        <h4 class="text-sm font-normal">{{ workflow.name }}</h4>
-      </div>
-      <p class="bg-emerald-500 text-white py-1 px-2 inline-block rounded-lg text-sm mb-3">{{ workflow.type }}</p>
-      <div class="flex items-center">
-      <img src="../assets/images/workflowBuilder/cases.svg" alt="Cases svg" class="me-3"/>
-      <p class="text-gray-600 text-sm">{{ workflow.departments }}</p>
-    </div>
-    </div> -->
-    <div *ngFor="let data of workflows">
-      <app-workflow-cards [name]="data.name" [type]="data.type" [departments]="data.departments"></app-workflow-cards>
-    </div>
+    <button
+      type="button"
+      class="bg-red-600 text-white rounded-lg px-10 py-2 text-sm"
+    >
+      save
+    </button>
   </div>
 </div>
 
+<div class="grid grid-cols-3 gap-4 mt-8 h-full">
+  <div class="">
+    <div
+      class="drag-drawflow mb-3"
+      draggable="true"
+      (dragstart)="drag($event)"
+      data-node="facebook"
+    >
+      <i class="fab fa-facebook"></i><span> Facebook</span>
+    </div>
+    <div
+      class="drag-drawflow"
+      draggable="true"
+      (dragstart)="drag($event)"
+      data-node="slack"
+    >
+      <i class="fab fa-slack"></i><span> Slack recive message</span>
+    </div>
+  </div>
+
+  <div class="col-span-2">
+    <div
+      id="drawflow"
+      class="w-full h-full"
+      (drop)="drop($event)"
+      (dragover)="allowDrop($event)"
+    ></div>
+  </div>
+</div>
