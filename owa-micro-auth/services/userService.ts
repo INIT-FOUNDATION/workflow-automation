@@ -187,7 +187,6 @@ export const userService = {
                 const emailTemplateHtml = await ejsUtils.generateHtml('views/sharePasswordEmailTemplate.ejs', passwordDetails);
                 const emailBodyBase64 = Buffer.from(emailTemplateHtml).toString('base64');
                 await commonCommunication.sendEmail(emailBodyBase64, 'OLL WORKFLOW AUTOMATION | LOGIN DETAILS', [passwordDetails.emailId]);
-                // await nodemailerUtils.sendEmail('OLL WORKFLOW AUTOMATION | LOGIN DETAILS', emailTemplateHtml, passwordDetails.emailId);
               }
     
               if (passwordDetails.mobileNumber) {
@@ -196,7 +195,6 @@ export const userService = {
                 const smsBodyCompiled = smsBodyTemplate.replace("<name>", passwordDetails.displayName)
                   .replace("<password>", passwordDetails.password)
                 await commonCommunication.sendSms(smsBodyCompiled, passwordDetails.mobileNumber, SMS.RESET_PASSWORD.template_id);
-    
                 await commonCommunication.sendWhatsapp(WHATSAPP.RESET_PASSWORD.template_id, passwordDetails.mobileNumber, [passwordDetails.displayName, passwordDetails.password])
               }
               break;
@@ -205,7 +203,6 @@ export const userService = {
                 const emailTemplateHtml = await ejsUtils.generateHtml('views/sharePasswordEmailTemplate.ejs', passwordDetails);
                 const emailBodyBase64 = Buffer.from(emailTemplateHtml).toString('base64');
                 await commonCommunication.sendEmail(emailBodyBase64, 'OLL WORKFLOW AUTOMATION | LOGIN DETAILS', [passwordDetails.emailId]);
-                // await nodemailerUtils.sendEmail('OLL WORKFLOW AUTOMATION | LOGIN DETAILS', emailTemplateHtml, passwordDetails.emailId);
               }
     
               if (passwordDetails.mobileNumber) {
@@ -214,7 +211,6 @@ export const userService = {
                   .replace("<module>", "OLL Workflow Automation")
                   .replace("<time>", "3 min");
                 await commonCommunication.sendSms(smsBodyCompiled, passwordDetails.mobileNumber, SMS.USER_LOGIN_WITH_OTP.template_id);
-    
                 await commonCommunication.sendWhatsapp(WHATSAPP.USER_LOGIN_WITH_OTP.template_id, passwordDetails.mobileNumber, ["OLL Workflow Automation", passwordDetails.otp, "3 mins"])
               }
               break;

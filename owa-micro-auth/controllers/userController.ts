@@ -109,7 +109,7 @@ export const userController = {
             if (redisResult && redisResult.length > 0) {
                 const result = await redis.GetRedis(key);
                 const otpRes = JSON.parse(result);
-                return res.status(STATUS.OK).send({ txnId: otpRes.txnId, otp: otpRes.otp })
+                return res.status(STATUS.OK).send({ txnId: otpRes.txnId })
             }
 
             const new_txn_id = uuidv4();
@@ -130,7 +130,7 @@ export const userController = {
                 if (err) {
                     return res.status(STATUS.BAD_REQUEST).send("OTP Already Sent");
                 } else {
-                    return res.status(STATUS.OK).send({ "txnId": new_txn_id, "otp": otp });
+                    return res.status(STATUS.OK).send({ "txnId": new_txn_id });
                 }
             });
         } catch (error) {
