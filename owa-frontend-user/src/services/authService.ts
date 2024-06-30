@@ -14,12 +14,12 @@ const verifyMobileOtp = async (payload: any) => {
 };
 
 const loginPassword = async (payload: any) => {
-  const loginByMobileRes = await post("/api/v1/auth/admin/login", payload);
+  const loginByMobileRes = await post("/api/v1/auth/user/login", payload);
   return loginByMobileRes;
 };
 
 const logout = async () => {
-  const logoutRes = await post("/api/v1/auth/admin/logout", {});
+  const logoutRes = await post("/api/v1/auth/user/logout", {});
   return logoutRes;
 };
 

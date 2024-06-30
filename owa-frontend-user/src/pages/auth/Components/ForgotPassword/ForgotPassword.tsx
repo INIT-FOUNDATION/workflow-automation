@@ -29,32 +29,50 @@ const ForgotPassword: React.FC<ForgotPasswordProps> = ({ showSnackbar }) => {
   const handleSendOtp = async () => {
     const { mobile_no } = getValues();
     const mobileNumberPattern = /^[6-9]\d{9}$/;
+
     if (mobileNumberPattern.test(mobile_no)) {
       const payload = { mobile_number: mobile_no };
-      const getOtpRequestResponse = await authService.otpRequest(payload);
+      try {
+        const getOtpRequestResponse = await authService.otpRequest(payload);
 
-      if (!getOtpRequestResponse.error) {
-        showSnackbar("OTP sent successfully", "success");
-        setOtpSent(true);
-        setTxnId(getOtpRequestResponse?.data?.data?.txnId);
-      } else {
-        showSnackbar("Failed to send OTP. Please try again.", "error");
+        if (!getOtpRequestResponse.error) {
+          showSnackbar("OTP sent successfully", "success");
+          setOtpSent(true);
+          setTxnId(getOtpRequestResponse?.data?.data?.txnId);
+        } else {
+          showSnackbar("Failed to send OTP. Please try again.", "error");
+        }
+      } catch (error) {
+        console.error("Error in OTP request:", error);
+        showSnackbar("An error occurred. Please try again.", "error");
       }
     } else {
       showSnackbar("Please enter a valid Mobile Number", "error");
     }
   };
+
   const handleVerifyOtp = async () => {
     const { otp } = getValues();
+
+    if (!txnId) {
+      showSnackbar("Transaction ID is missing. Please resend the OTP.", "error");
+      return;
+    }
+
     const payload = { txnId: txnId, otp: encrypt(otp) };
 
-    const verifyOtpResponse = await authService.verifyOtpRequest(payload);
+    try {
+      const verifyOtpResponse = await authService.verifyOtpRequest(payload);
 
-    if (!verifyOtpResponse.error) {
-      showSnackbar("OTP verified successfully", "success");
-      router.push("/reset-password");
-    } else {
-      showSnackbar("Invalid OTP. Please try again.", "error");
+      if (!verifyOtpResponse.error) {
+        showSnackbar("OTP verified successfully", "success");
+        router.push("/tasks");
+      } else {
+        showSnackbar("Invalid OTP. Please try again.", "error");
+      }
+    } catch (error) {
+      console.error("Error in OTP verification:", error);
+      showSnackbar("An error occurred. Please try again.", "error");
     }
   };
 
