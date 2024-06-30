@@ -34,6 +34,7 @@
     "moment": "^2.29.4",
     "ngx-device-detector": "^4.0.1",
     "ngx-google-analytics": "~13.0.1",
+    "ngx-image-cropper": "^6.1.0",
     "ngx-spinner": "~13.1.1",
     "ngx-toastr": "~14.3.0",
     "primeicons": "^7.0.0",

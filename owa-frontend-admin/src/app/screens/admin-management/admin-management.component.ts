@@ -1,6 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { MatTabGroup } from '@angular/material/tabs';
 import { AdminManagementService } from './services/admin-management.service';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-admin-management',
@@ -48,78 +49,8 @@ export class AdminManagementComponent {
     }
   }
 
-  // searchUser(data) {
-  //   if (isNaN(data)) {
-  //     if (data.length > 4) {
-  //       this.searchValue = data;
-  //       this.getUserDetails();
-  //     }
-  //   } else {
-  //     if (data.length > 9) {
-  //       this.searchValue = data;
-  //       this.getUserDetails();
-  //     } else if (data.length == 0) {
-  //       this.searchValue = data;
-  //       this.getUserDetails();
-  //     }
-  //   }
-  // }
-
-  // onSearchInputChange(searchValue: string) {
-  //   if (this.selectedIndex === 0) {
-  //     
-  //     // this.userSearchText = searchValue;
-  //     // this.searchUsers();
-  //   } else {if (isNaN(data)) {
-  //           if (data.length > 4) {
-  //             this.userSearchText = data;
-  //             this.getUsersDataArray(payload);
-  //           }
-  //         }
-  //     this.roleSearchText = searchValue;
-  //     this.searchRoles();
-  //   }
-  // }
-
-  // onSearchInputChange(searchValue: string) {
-  //   if (this.selectedIndex === 0) {
-  //     this.userSearchText = searchValue;
-  //     this.searchUsers();
-  //   } else {
-  //     this.roleSearchText = searchValue;
-  //     this.searchRoles();
-  //   }
-  // }
-
-  // searchUsers() {
-  //   const payload: any = {};
-
-  //   if (isNaN(payload)) {
-  //     if (payload.length > 4) {
-  //       this.getAllUsersData();
-  //     }
-  //   } else if (payload.length == 0) {
-  //     this.getAllUsersData();
-  //   }
-  //   console.log('Searching users with:', this.userSearchText);
-  // }
-
-  // searchRoles() {
-  //   console.log('Searching roles with:', this.roleSearchText);
-  // }
-
-
-  // getAllUsersData() {
-  //   const payload: any = {};
-  //   this.getUsersDataArray(payload);
-  // }
-
-  // getUsersDataArray(payload) {
-  //   this.adminService.getUsersData(payload).subscribe((res) => {
-  //     this.usersData = res.data;
-  //       console.log(res.data);
-  //   });
-  // }
-
-  
+  onSearch(event: any) {
+    const searchTerm = event.target.value;
+    this.adminService.setSearchTerm(searchTerm);
+  }
 }

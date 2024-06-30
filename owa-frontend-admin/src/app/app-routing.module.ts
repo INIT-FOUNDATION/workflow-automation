@@ -10,6 +10,12 @@ const routes: Routes = [
     canActivate: [AuthGuard],
   },
   {
+    path: 'profile',
+    loadChildren: () => import('./screens/profile/profile.module').then(m => m.ProfileModule),
+    canActivate: [AuthGuard],
+    data: { permission: 'Profile' }
+  },
+  {
     path: 'admin-management',
     loadChildren: () =>
       import('./screens/admin-management/admin-management.module').then((m) => m.AdminManagementModule),

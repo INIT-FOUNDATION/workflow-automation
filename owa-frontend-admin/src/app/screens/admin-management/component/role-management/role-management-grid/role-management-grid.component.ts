@@ -7,7 +7,7 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-role-management-grid',
   templateUrl: './role-management-grid.component.html',
-  styleUrls: ['./role-management-grid.component.scss']
+  styleUrls: ['./role-management-grid.component.scss'],
 })
 export class RoleManagementGridComponent {
   @ViewChild('adminManagementDetails')
@@ -18,7 +18,7 @@ export class RoleManagementGridComponent {
 
   constructor(
     private roleManagementService: RoleManagementService,
-    private router: Router,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -42,7 +42,7 @@ export class RoleManagementGridComponent {
       page_size:
         this.adminManagementDetails && this.adminManagementDetails.rows
           ? this.adminManagementDetails.rows
-          : 50,        
+          : 50,
       current_page: this.currentPage,
     };
     this.getRolesList(payload);
@@ -63,14 +63,15 @@ export class RoleManagementGridComponent {
 
   getRolesList(payload) {
     this.roleManagementService.getRolesList(payload).subscribe((res: any) => {
-   console.log(res.data)
-   let reverseTheList = res.data.rolesList.reverse();
-    this.adminManagementDetails.data = reverseTheList;
-    this.adminManagementDetails.totalRecords = res.data.rolesCount;
+      let reverseTheList = res.data.rolesList.reverse();
+      this.adminManagementDetails.data = reverseTheList;
+      this.adminManagementDetails.totalRecords = res.data.rolesCount;
 
-    this.adminManagementDetails.data.forEach((item)=>{
-      item.status == 1 ? item.status = 'Active' : item.status = 'Inactive'
-    })
+      this.adminManagementDetails.data.forEach((item) => {
+        item.status == 1
+          ? (item.status = 'Active')
+          : (item.status = 'Inactive');
+      });
     });
   }
 

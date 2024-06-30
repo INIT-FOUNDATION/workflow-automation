@@ -7,6 +7,7 @@ import { UtilityService } from './modules/shared/services/utility.service';
 import { AuthService } from './screens/auth/services/auth.service';
 import { DataService } from './modules/shared/services/data.service';
 import { Router } from '@angular/router';
+import { AppPreferencesService } from './modules/shared/services/preferences.service';
 
 @Component({
   selector: 'app-root',
@@ -20,7 +21,8 @@ export class AppComponent implements OnInit, AfterViewInit {
     private themeService: ThemeService,
     private router: Router,
     private dataService: DataService,
-    public utilityService: UtilityService
+    public utilityService: UtilityService,
+    private appPreferences: AppPreferencesService
   ) {}
 
 
@@ -28,9 +30,10 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.authService.currentUser.subscribe(async (res) => {
       
       if(res){
-        const loggedInuserDetails =  sessionStorage.getItem('userDetails')
-        let loggedinData = JSON.parse(loggedInuserDetails)
-        this.dataService.permissions = loggedinData.menuList
+        const loggedInUserDetails =  this.appPreferences.getValue('oll_user_details') ? JSON.parse(this.appPreferences.getValue('oll_user_details')) : {};
+        this.dataService.permissions = loggedInUserDetails.menuList;
+        this.dataService.userDetails = loggedInUserDetails;
+        this.dataService.setProfilePic(loggedInUserDetails.profile_pic_url);
       }else{
         this.router.navigate([`/login`]);
       }

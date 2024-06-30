@@ -42,8 +42,7 @@ export class LoginComponent implements OnInit {
       let loginDetails = this.loginform.getRawValue();
       loginDetails.password = this.encDecService.set(loginDetails.password),
         this.authService.login(loginDetails).subscribe((res : any)=>{
-          sessionStorage.setItem('userToken', JSON.stringify(res.data.token))
-          this.commanService.getUserDetails(res.data.token)
+          this.commanService.getUserDetails({token: res.data.token, redirect: true});
         })
     }
   }
