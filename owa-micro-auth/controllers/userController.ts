@@ -39,14 +39,14 @@ export const userController = {
             if (!existingUser) return res.status(STATUS.BAD_REQUEST).send(AUTH.AUTH00001);
 
             const levels = ['Employee', 'Department'];
-            if (!levels.includes(existingUser.level)) return res.status(STATUS.BAD_REQUEST).send(AUTH.AUTH00001);
+            if (!levels.includes(existingUser.level)) return res.status(STATUS.BAD_REQUEST).send(AUTH.AUTH00018);
 
             user.password = decryptPayload(user.password);
             if (user.password == DEFAULT_PASSWORD) return res.status(STATUS.BAD_REQUEST).send(AUTH.AUTH00002);
 
             const isPasswordValid = await bcrypt.compare(user.password, existingUser.password);
             if (isPasswordValid) {
-                const expiryTime = envUtils.getNumberEnvVariableOrDefault("OWA_AUTH_TOKEN_EXPIRY_TIME", 8);
+                const expiryTime = envUtils.getNumberEnvVariableOrDefault("OWA_AUTH_MOBILE_TOKEN_EXPIRY_TIME", 180);
                 const tokenDetails = {
                     user_id: existingUser.user_id,
                     user_name: existingUser.user_name,
@@ -101,7 +101,7 @@ export const userController = {
             if (!existingUser) return res.status(STATUS.BAD_REQUEST).send(AUTH.AUTH00001);
 
             const levels = ['Employee', 'Department'];
-            if (!levels.includes(existingUser.level)) return res.status(STATUS.BAD_REQUEST).send(AUTH.AUTH00001);
+            if (!levels.includes(existingUser.level)) return res.status(STATUS.BAD_REQUEST).send(AUTH.AUTH00018);
 
             const key = `Mob_User|Mobile:${mobileNumber}`
             const redisResult = await redis.GetKeys(key);
@@ -144,12 +144,6 @@ export const userController = {
                 #swagger.tags = ['Mobile User']
                 #swagger.summary = 'Validate Otp'
                 #swagger.description = 'Endpoint to Validate Otp for Mobile User'
-                #swagger.parameters['Authorization'] = {
-                    in: 'header',
-                    required: true,
-                    type: 'string',
-                    description: 'Bearer token for authentication'
-                }
                 #swagger.parameters['body'] = {
                     in: 'body',
                     required: true,
@@ -181,8 +175,7 @@ export const userController = {
             
             if (userData.otp != otp) return res.status(STATUS.BAD_REQUEST).send(AUTH.AUTH00017);
             else {
-                const expiryTime = envUtils.getNumberEnvVariableOrDefault("OWA_AUTH_TOKEN_EXPIRY_TIME", 8);
-
+                const expiryTime = envUtils.getNumberEnvVariableOrDefault("OWA_AUTH_MOBILE_TOKEN_EXPIRY_TIME", 180);
                 const tokenDetails = {
                     user_id: userData.user_id,
                     user_name: userData.user_name,
