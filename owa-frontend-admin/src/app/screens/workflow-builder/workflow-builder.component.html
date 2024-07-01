@@ -27,67 +27,21 @@
   </div>
 </div>
 
-<div class="grid grid-cols-3 gap-4 mt-8 h-full">
-  <div class="">
+<div class="grid grid-cols-4 gap-4 mt-8">
+  <div class="grid grid-cols-2 gap-4 custom-workflow-height overflow-y-auto">
     <div
-      class="drag-drawflow mb-3"
+      *ngFor="let item of preTasksArray"
+      class="drag-drawflow mb-3 bg-white shadow-lg rounded-lg border flex flex-col items-center justify-center cursor-move"
       draggable="true"
       (dragstart)="drag($event)"
-      data-node="facebook"
+      [attr.data-node]="item?.dataNode"
     >
-      <i class="fab fa-facebook"></i><span> Start Task</span>
-    </div>
-    <div
-      class="drag-drawflow"
-      draggable="true"
-      (dragstart)="drag($event)"
-      data-node="slack"
-    >
-      <i class="fab fa-slack"></i><span> End Task</span>
-    </div>
-    <div
-      class="drag-drawflow mb-3"
-      draggable="true"
-      (dragstart)="drag($event)"
-      data-node="facebook"
-    >
-      <i class="fab fa-facebook"></i><span> Add Task</span>
-    </div>
-    <div
-      class="drag-drawflow mb-3"
-      draggable="true"
-      (dragstart)="drag($event)"
-      data-node="facebook"
-    >
-      <i class="fab fa-facebook"></i><span> Email Task</span>
-    </div>
-    <div
-      class="drag-drawflow mb-3"
-      draggable="true"
-      (dragstart)="drag($event)"
-      data-node="facebook"
-    >
-      <i class="fab fa-facebook"></i><span> SMS Task</span>
-    </div>
-    <div
-      class="drag-drawflow mb-3"
-      draggable="true"
-      (dragstart)="drag($event)"
-      data-node="facebook"
-    >
-      <i class="fab fa-facebook"></i><span> Whatsapp Task</span>
-    </div>
-    <div
-      class="drag-drawflow mb-3"
-      draggable="true"
-      (dragstart)="drag($event)"
-      data-node="facebook"
-    >
-      <i class="fab fa-facebook"></i><span> Decision Task</span>
+      <i class="{{ item?.img }} text-red-600 text-2xl"></i
+      ><span class="text-sm"> {{ item?.label }}</span>
     </div>
   </div>
 
-  <div class="col-span-2">
+  <div class="col-span-3">
     <div
       id="drawflow"
       class="w-full h-full"

@@ -7,6 +7,46 @@ import Drawflow from 'drawflow';
   styleUrls: ['./workflow-builder.component.scss'],
 })
 export class WorkflowBuilderComponent implements AfterViewInit {
+  preTasksArray: any = [
+    {
+      id: 1,
+      img: 'fa-solid fa-play',
+      label: 'Start Task',
+      dataNode: 'startTask',
+    },
+    {
+      id: 2,
+      img: 'fa-regular fa-circle-stop',
+      label: 'End Task',
+      dataNode: 'endTask',
+    },
+    { id: 3, img: 'fa-solid fa-plus', label: 'Add Task', dataNode: 'addTask' },
+    {
+      id: 4,
+      img: 'fa-solid fa-envelope',
+      label: 'Email Task',
+      dataNode: 'emailTask',
+    },
+    {
+      id: 5,
+      img: 'fa-solid fa-comment-sms',
+      label: 'SMS Task',
+      dataNode: 'smsTask',
+    },
+    {
+      id: 6,
+      img: 'fa-solid fa-whatsapp',
+      label: 'Whatsapp Task',
+      dataNode: 'whatsappTask',
+    },
+    {
+      id: 7,
+      img: 'fa-solid fa-arrows-split-up-and-left',
+      label: 'Decision Task',
+      dataNode: 'decisionTask',
+    },
+  ];
+
   @Input()
   nodes: any[];
   @Input()
@@ -33,9 +73,9 @@ export class WorkflowBuilderComponent implements AfterViewInit {
   mobile_item_selec: string;
   mobile_last_move: TouchEvent | null;
 
-  constructor() { }
+  constructor() {}
 
-  ngOnInit() { }
+  ngOnInit() {}
 
   ngAfterViewInit(): void {
     this.initDrawingBoard();
@@ -67,12 +107,10 @@ export class WorkflowBuilderComponent implements AfterViewInit {
       const dataToImport = {
         drawflow: {
           Home: {
-            data: {
-            }
+            data: {},
           },
           Other: {
-            data: {
-            },
+            data: {},
           },
         },
       };
@@ -124,7 +162,7 @@ export class WorkflowBuilderComponent implements AfterViewInit {
         }
         this.selectedNode =
           this.editor.drawflow.drawflow.Home.data[
-          `${this.selectedNodeId.slice(5)}`
+            `${this.selectedNodeId.slice(5)}`
           ];
       }
 
@@ -168,9 +206,9 @@ export class WorkflowBuilderComponent implements AfterViewInit {
     });
 
     this.editor.on('mouseMove', (position: any) => {
-      console.log(
-        'Editor Event :>> Position mouse x:' + position.x + ' y:' + position.y
-      );
+      // console.log(
+      //   'Editor Event :>> Position mouse x:' + position.x + ' y:' + position.y
+      // );
     });
 
     this.editor.on('nodeMoved', (id: any) => {
@@ -195,7 +233,7 @@ export class WorkflowBuilderComponent implements AfterViewInit {
         false
       );
       element.addEventListener('touchstart', this.drag.bind(this), false);
-      element.addEventListener('dblclick', (event) => { });
+      element.addEventListener('dblclick', (event) => {});
     });
   }
 
@@ -244,41 +282,48 @@ export class WorkflowBuilderComponent implements AfterViewInit {
   }
 
   private addNodeToDrawFlow(name: string, pos_x: number, pos_y: number) {
+    console.log(name, 'Name');
+
     if (this.editor.editor_mode === 'fixed') {
       return false;
     }
 
     pos_x =
       pos_x *
-      (this.editor.precanvas.clientWidth /
-        (this.editor.precanvas.clientWidth * this.editor.zoom)) -
+        (this.editor.precanvas.clientWidth /
+          (this.editor.precanvas.clientWidth * this.editor.zoom)) -
       this.editor.precanvas.getBoundingClientRect().x *
-      (this.editor.precanvas.clientWidth /
-        (this.editor.precanvas.clientWidth * this.editor.zoom));
+        (this.editor.precanvas.clientWidth /
+          (this.editor.precanvas.clientWidth * this.editor.zoom));
     pos_y =
       pos_y *
-      (this.editor.precanvas.clientHeight /
-        (this.editor.precanvas.clientHeight * this.editor.zoom)) -
+        (this.editor.precanvas.clientHeight /
+          (this.editor.precanvas.clientHeight * this.editor.zoom)) -
       this.editor.precanvas.getBoundingClientRect().y *
-      (this.editor.precanvas.clientHeight /
-        (this.editor.precanvas.clientHeight * this.editor.zoom));
+        (this.editor.precanvas.clientHeight /
+          (this.editor.precanvas.clientHeight * this.editor.zoom));
 
     switch (name) {
-      case 'facebook':
-        var facebook = `
-      <div>
-        <div class="title-box"><i class="fab fa-facebook"></i> Facebook Message</div>
-      </div>
+      case 'startTask':
+        var startTask = `
+        <div>
+          <div class="bg-gray-100 px-3 flex items-center text-sm py-2">
+            <i class="fa-play fa-solid text-2xl text-red-600 me-2"></i> Start Task
+          </div>
+          <div class="box p-2">
+            <input type="text" class="border rounded text-sm w-full py-2 ps-2 outline-none" placeholder="start task">
+          </div>
+        </div>
       `;
         this.editor.addNode(
-          'facebook',
+          'startTask',
           0,
           1,
           pos_x,
           pos_y,
-          'facebook',
+          'startTask',
           {},
-          facebook
+          startTask
         );
         break;
       case 'slack':
