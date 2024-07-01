@@ -5,6 +5,12 @@
 html {
   font-size: 16px;
   font-family: "Poppins" !important;
+  background: #fafafa !important;
+  color: #000 !important;
+}
+
+.MuiBox-root {
+  padding: 15px !important;
 }
 
 ion-app,
@@ -116,7 +122,6 @@ input:focus-visible {
 :not(.btn-check) + .btn:active {
   border-color: #e6790c !important;
 }
-
 
 .custom-scrollbar {
   scrollbar-width: thin;

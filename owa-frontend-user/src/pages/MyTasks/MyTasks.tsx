@@ -80,14 +80,14 @@ const MyTasks: React.FC = () => {
       </IonCard>
       <div>
         <div className="add-task-container">
-          <IonButton
+          <button
             color="danger"
             id="add-task-button"
-            className="rounded w-full add-task"
+            className="rounded w-full add-task create-task-button"
             onClick={() => setShowActionSheet(true)}
           >
             Add Task
-          </IonButton>
+          </button>
           <div>
             <IonActionSheet
               className="my-custom-class"

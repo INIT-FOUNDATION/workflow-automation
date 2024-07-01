@@ -1,9 +1,5 @@
 import React, { useState } from "react";
-import {
-  IonButton,
-  IonIcon,
-  useIonRouter,
-} from "@ionic/react";
+import { IonButton, IonIcon, useIonRouter } from "@ionic/react";
 import { arrowBack } from "ionicons/icons";
 import {
   FormControl,
@@ -51,13 +47,13 @@ const WorkFlowSelection: React.FC = () => {
       </form>
       <div className="flex-grow"></div>
       <div className="flex justify-center pb-16">
-        <IonButton
+        <button
           onClick={() => handleNextClick()}
           color="danger"
-          className="w-full"
+          className="w-full create-task-button"
         >
           Next
-        </IonButton>
+        </button>
       </div>
     </div>
   );

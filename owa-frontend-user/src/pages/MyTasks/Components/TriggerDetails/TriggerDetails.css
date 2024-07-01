@@ -1,0 +1,23 @@
+.tabs {
+  border: 1px solid #002d51 !important;
+  border-radius: 15px !important;
+}
+
+.left-active-tab {
+  background-color: #002d51 !important;
+  border-top-left-radius: 15px;
+  border-bottom-left-radius: 15px;
+  color: #fff !important;
+}
+
+.right-active-tab {
+  background-color: #002d51 !important;
+  border-top-right-radius: 15px;
+  border-bottom-right-radius: 15px;
+  color: #fff !important;
+}
+
+.in-active-tab {
+  color: #000 !important;
+  font-weight: 600 !important;
+}

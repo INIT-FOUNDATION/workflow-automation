@@ -21,7 +21,7 @@ const TriggerDetails: React.FC = () => {
 
   return (
     <IonContent>
-      <div className="flex flex-col p-2 pt-28">
+      <div className="flex flex-col p-2 pt-20">
         <div className="cursor-pointer rounded-md flex items-center">
           <IonIcon
             icon={arrowBack}
@@ -30,7 +30,7 @@ const TriggerDetails: React.FC = () => {
           />
 
           <span className="text-lg font-medium text-black pl-2">
-            Trigger Details
+            Set Triggers
           </span>
         </div>
         <Tabs
@@ -40,9 +40,16 @@ const TriggerDetails: React.FC = () => {
           textColor="primary"
           variant="fullWidth"
           aria-label="tabs"
+          className="mt-3 tabs"
         >
-          <Tab label="Notification" />
-          <Tab label="API Trigger" />
+          <Tab
+            label="Notifications"
+            className={selectedTab === 0 ? "left-active-tab" : "in-active-tab"}
+          />
+          <Tab
+            label="API"
+            className={selectedTab === 1 ? "right-active-tab" : "in-active-tab"}
+          />
         </Tabs>
         <Box p={3}>
           {selectedTab === 0 && <NotificationTriggerDetails />}
