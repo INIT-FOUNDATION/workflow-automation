@@ -17,10 +17,7 @@ const Login: React.FC<LoginProps> = ({ showSnackbar }) => {
   const router = useIonRouter();
   const [showPassword, setShowPassword] = useState(false);
   const { login, addUserDetailsToContext } = useAuth();
-  const {
-    register,
-    handleSubmit,
-  } = useForm();
+  const { register, handleSubmit } = useForm();
 
   const onSubmit = async (data: any) => {
     const { mobile_no, password } = data;
@@ -36,7 +33,6 @@ const Login: React.FC<LoginProps> = ({ showSnackbar }) => {
     const loginResponse = await authService.loginPassword(payload);
 
     if (!loginResponse.error) {
-
       AppPreferences.setValue("userToken", loginResponse.data.data.token);
       login();
       await authService.getLoggedInUserDetails(addUserDetailsToContext);
@@ -78,6 +74,7 @@ const Login: React.FC<LoginProps> = ({ showSnackbar }) => {
               mode="md"
               type="tel"
               {...register("mobile_no")}
+              className="text-black"
             ></IonInput>
           </div>
 
@@ -91,6 +88,7 @@ const Login: React.FC<LoginProps> = ({ showSnackbar }) => {
               mode="md"
               type={showPassword ? "text" : "password"}
               {...register("password")}
+              className="text-black"
             ></IonInput>
             {/* <IonIcon
               icon={showPassword ? eyeOffOutline : eyeOutline}
@@ -130,7 +128,7 @@ const Login: React.FC<LoginProps> = ({ showSnackbar }) => {
 
           <button
             type="button"
-            className="w-full py-2 rounded-md transition duration-200 otp-button"
+            className="w-full py-2 rounded-md transition duration-200 otp-button text-black"
           >
             Login using OTP
           </button>
