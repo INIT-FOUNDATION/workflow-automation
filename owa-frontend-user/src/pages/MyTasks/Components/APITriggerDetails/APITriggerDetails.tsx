@@ -248,14 +248,14 @@ const ApiTriggerDetails: React.FC = () => {
             // labelPlacement="floating"
             placeholder="Enter description here"
             fill="outline"
-            className=" w-full border rounded-md p-2 px-0 text-black h-56 resize-y"
+            className=" w-full border rounded-md p-2 px-0 text-black h-44 resize-y"
             style={{ minHeight: "56px" }}
             required
           ></IonTextarea>
         </>
       )}
-      <div className="flex-grow mt-10">
-        <div className="flex justify-center pb-16">
+      <div className="flex-grow mt-8">
+        <div className="flex justify-center ">
           <button className="rounded w-full create-task-button" type="submit">
             Create Task
           </button>
