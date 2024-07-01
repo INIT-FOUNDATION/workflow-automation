@@ -3,8 +3,11 @@ import { IonInput, useIonRouter } from "@ionic/react";
 import { useForm } from "react-hook-form";
 import "./LoginOtp.css";
 import { encrypt } from "../../../utility/EncrytDecrypt";
-import * as authService from "../../../services/authService"
-// import * as authService from "../../../../";
+import * as authService from "../../../services/authService";
+import { useHistory } from "react-router";
+import { useAuth } from "../../../contexts/AuthContext";
+
+import * as AppPreferences from "../../../utility/AppPreferences";
 
 interface LoginOtpProps {
   showSnackbar: (message: string, severity: string) => void;
@@ -12,9 +15,11 @@ interface LoginOtpProps {
 
 const LoginOtp: React.FC<LoginOtpProps> = ({ showSnackbar }) => {
   const router = useIonRouter();
+  const history = useHistory();
   const [otpSent, setOtpSent] = useState(false);
   const [txnId, setTxnId] = useState("");
 
+  const { login, addUserDetailsToContext } = useAuth();
   const { register, handleSubmit, getValues } = useForm({
     defaultValues: {
       mobile_no: "",
@@ -33,7 +38,9 @@ const LoginOtp: React.FC<LoginOtpProps> = ({ showSnackbar }) => {
     if (mobileNumberPattern.test(mobile_no)) {
       const payload = { mobile_number: mobile_no };
       try {
-        const getOtpRequestResponse = await authService.loginWithMobile(payload);
+        const getOtpRequestResponse = await authService.loginWithMobile(
+          payload
+        );
 
         if (!getOtpRequestResponse.error) {
           showSnackbar("OTP sent successfully", "success");
@@ -55,7 +62,10 @@ const LoginOtp: React.FC<LoginOtpProps> = ({ showSnackbar }) => {
     const { otp } = getValues();
 
     if (!txnId) {
-      showSnackbar("Transaction ID is missing. Please resend the OTP.", "error");
+      showSnackbar(
+        "Transaction ID is missing. Please resend the OTP.",
+        "error"
+      );
       return;
     }
 
@@ -65,7 +75,10 @@ const LoginOtp: React.FC<LoginOtpProps> = ({ showSnackbar }) => {
       const verifyOtpResponse = await authService.verifyMobileOtp(payload);
 
       if (!verifyOtpResponse.error) {
-        showSnackbar("OTP verified successfully", "success");
+        AppPreferences.setValue("userToken", verifyOtpResponse.data.data.token);
+        login();
+        await authService.getLoggedInUserDetails(addUserDetailsToContext);
+
         router.push("/tasks");
       } else {
         showSnackbar("Invalid OTP. Please try again.", "error");
