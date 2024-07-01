@@ -35,7 +35,8 @@ const Profile: React.FC = () => {
 
   const onSubmit = async (formData: any) => {
     try {
-      const updatedProfileData = await updateProfile(formData);
+      const { mobile_number, ...profileData } = formData; // Exclude mobile_number from form data
+      const updatedProfileData = await updateProfile(profileData);
       if (updatedProfileData) {
         console.log("Profile updated successfully:", updatedProfileData);
       } else {
