@@ -17,10 +17,7 @@ const Login: React.FC<LoginProps> = ({ showSnackbar }) => {
   const router = useIonRouter();
   const [showPassword, setShowPassword] = useState(false);
   const { login, addUserDetailsToContext } = useAuth();
-  const {
-    register,
-    handleSubmit,
-  } = useForm();
+  const { register, handleSubmit } = useForm();
 
   const onSubmit = async (data: any) => {
     const { mobile_no, password } = data;
@@ -76,6 +73,7 @@ const Login: React.FC<LoginProps> = ({ showSnackbar }) => {
               mode="md"
               type="tel"
               {...register("mobile_no")}
+              className="text-black"
             ></IonInput>
           </div>
 
@@ -89,6 +87,7 @@ const Login: React.FC<LoginProps> = ({ showSnackbar }) => {
               mode="md"
               type={showPassword ? "text" : "password"}
               {...register("password")}
+              className="text-black"
             ></IonInput>
             <div className="pt-2 text-right flex justify-start">
               <img src="Assets/images/LoginPage/lock.svg" alt="Lock" />
@@ -116,7 +115,7 @@ const Login: React.FC<LoginProps> = ({ showSnackbar }) => {
 
           <button
             type="button"
-            className="w-full py-2 rounded-md transition duration-200 otp-button"
+            className="w-full py-2 rounded-md transition duration-200 otp-button text-black"
             onClick={() => router.push("/login-Otp")}
           >
             Login using OTP

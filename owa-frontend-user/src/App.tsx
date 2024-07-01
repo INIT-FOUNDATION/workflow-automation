@@ -25,18 +25,26 @@ import "./theme/variables.css";
 
 import { Suspense, lazy, useState } from "react";
 import { useAuth } from "./contexts/AuthContext";
-import ForgotPassword from "./pages/Auth/Components/ForgotPassword/ForgotPassword";
-import LoginOtp from "./pages/Auth/LoginOtp/LoginOtp";
+import ForgotPassword from "./pages/auth/Components/ForgotPassword/ForgotPassword";
+import LoginOtp from "./pages/auth/LoginOtp/LoginOtp";
 
-const WorkFlowSelection = lazy(() => import("./pages/MyTasks/Components/WorkFlowSelection/WorkFlowSelection"));
+const WorkFlowSelection = lazy(
+  () => import("./pages/MyTasks/Components/WorkFlowSelection/WorkFlowSelection")
+);
 const MyTasks = lazy(() => import("./pages/MyTasks/MyTasks"));
-const Login = lazy(() => import("./pages/Auth/Components/Login/Login"));
+const Login = lazy(() => import("./pages/auth/Components/Login/Login"));
 const AssignTasks = lazy(() => import("./pages/AssignTask/AssignTasks"));
 const TasksReport = lazy(() => import("./pages/TasksReport/TasksReport"));
-const WorkFlowStarted = lazy(() => import("./pages/MyTasks/Components/WorkFlowStarted/WorkFlowStarted"));
-const CreateTasks = lazy(() => import("./pages/MyTasks/Components/CreateTasks/CreateTasks"));
+const WorkFlowStarted = lazy(
+  () => import("./pages/MyTasks/Components/WorkFlowStarted/WorkFlowStarted")
+);
+const CreateTasks = lazy(
+  () => import("./pages/MyTasks/Components/CreateTasks/CreateTasks")
+);
 const Profile = lazy(() => import("./pages/Profile/Profile"));
-const TriggerDetails = lazy(() => import("./pages/MyTasks/Components/TriggerDetails/TriggerDetails"));
+const TriggerDetails = lazy(
+  () => import("./pages/MyTasks/Components/TriggerDetails/TriggerDetails")
+);
 
 setupIonicReact();
 
@@ -65,10 +73,9 @@ const App: React.FC = () => {
   return (
     <IonApp>
       <IonReactRouter>
-      
-          {isAuthenticated ? (
-            <>
-              <Header showSnackbar={showSnackbar} />
+        {isAuthenticated ? (
+          <>
+            <Header showSnackbar={showSnackbar} />
             <Switch>
               <Route
                 path="/profile"
@@ -148,42 +155,42 @@ const App: React.FC = () => {
                 </Switch>
               </Footer>
             </Switch>
-            </>
-          ) : (
-            <Switch>
-              <Route
-                path="/login"
-                render={() => (
-                  <Suspense fallback={<div>Loading...</div>}>
-                    <Login showSnackbar={showSnackbar} />
-                  </Suspense>
-                )}
-                exact
-              />
-              <Route
-                path="/forgot-password"
-                render={() => (
-                  <Suspense fallback={<div>Loading...</div>}>
-                    <ForgotPassword showSnackbar={showSnackbar} />
-                  </Suspense>
-                )}
-                exact
-              />
-               <Route
-                path="/login-Otp"
-                render={() => (
-                  <Suspense fallback={<div>Loading...</div>}>
-                    <LoginOtp showSnackbar={showSnackbar} />
-                  </Suspense>
-                )}
-                exact
-              />
-              <Redirect to="/login" />
-            </Switch>
-          )}
+          </>
+        ) : (
+          <Switch>
+            <Route
+              path="/login"
+              render={() => (
+                <Suspense fallback={<div>Loading...</div>}>
+                  <Login showSnackbar={showSnackbar} />
+                </Suspense>
+              )}
+              exact
+            />
+            <Route
+              path="/forgot-password"
+              render={() => (
+                <Suspense fallback={<div>Loading...</div>}>
+                  <ForgotPassword showSnackbar={showSnackbar} />
+                </Suspense>
+              )}
+              exact
+            />
+            <Route
+              path="/login-Otp"
+              render={() => (
+                <Suspense fallback={<div>Loading...</div>}>
+                  <LoginOtp showSnackbar={showSnackbar} />
+                </Suspense>
+              )}
+              exact
+            />
+            <Redirect to="/login" />
+          </Switch>
+        )}
       </IonReactRouter>
     </IonApp>
   );
-}
+};
 
 export default App;
