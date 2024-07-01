@@ -54,7 +54,7 @@ const MyTasks: React.FC = () => {
                     <img src="Assets/images/MyTasks/calendar_icon.svg" alt="" className="calendar-img w-5 h-5 mr-2" />
                     <span className="ml-1 calendar-date">June 10, 2024</span>
                   </div>
-                  <button className="ml-2 px-2 py-1 bg-orange-400 text-white text-sm rounded-xl">
+                  <button className="ml-2 px-2 py-1 bg-[#D68812] text-white text-sm rounded-xl">
                     In Progress
                   </button>
                 </div>
@@ -73,7 +73,7 @@ const MyTasks: React.FC = () => {
                     <img src="Assets/images/MyTasks/calendar_icon.svg" alt="" className="calendar-img w-5 h-5 mr-2" />
                     <span className="ml-1 calendar-date">June 10, 2024</span>
                   </div>
-                  <button className="ml-2 px-2 py-1 bg-red-500 text-white text-sm rounded-xl">
+                  <button className="ml-2 px-2 py-1 bg-[#EA2531] text-white text-sm rounded-xl">
                     Failed
                   </button>
                 </div>
@@ -95,7 +95,7 @@ const MyTasks: React.FC = () => {
                     <img src="Assets/images/MyTasks/calendar_icon.svg" alt="" className="calendar-img w-5 h-5 mr-2" />
                     <span className="ml-1 calendar-date">June 10, 2024</span>
                   </div>
-                  <button className="ml-2 px-2 py-1 bg-green-500 text-white text-sm rounded-xl">
+                  <button className="ml-2 px-2 py-1 bg-[#08670C] text-white text-sm rounded-xl">
                     Completed
                   </button>
                 </div>
@@ -114,7 +114,7 @@ const MyTasks: React.FC = () => {
                     <img src="Assets/images/MyTasks/calendar_icon.svg" alt="" className="calendar-img w-5 h-5 mr-2" />
                     <span className="ml-1 calendar-date">June 10, 2024</span>
                   </div>
-                  <button className="ml-2 px-2 py-1 bg-blue-600 text-white text-sm rounded-xl">
+                  <button className="ml-2 px-2 py-1 bg-[#284AA9] text-white text-sm rounded-xl">
                     To Do
                   </button>
                 </div>
