@@ -14,9 +14,12 @@ import {
 } from "@ionic/react";
 import { searchOutline } from "ionicons/icons";
 import "./MyTasks.css";
+import FliterScreen from "../../shared/FliterScreen/FliterScreen";
 
 const MyTasks: React.FC = () => {
   const [showActionSheet, setShowActionSheet] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+
   const router = useIonRouter();
 
   const handleWorkFlow = () => {
@@ -27,17 +30,34 @@ const MyTasks: React.FC = () => {
     router.push("/tasks/create-tasks");
   };
 
+  const filterClick = () => {
+    setIsOpen(!isOpen);
+  };
+
   return (
     <IonContent>
       <div className="flex items-center justify-center pt-[6rem] px-4">
         <div className="flex items-center px-2 bg-neutral-100 border-gray-400 rounded-md w-full">
-          <IonIcon icon={searchOutline} className="w-5 h-5 mr-2 text-gray-500" />
-          <IonInput type="text" placeholder="Search" className="text-gray-500 w-full" />
+          <IonIcon
+            icon={searchOutline}
+            className="w-5 h-5 mr-2 text-gray-500"
+          />
+          <IonInput
+            type="text"
+            placeholder="Search"
+            className="text-gray-500 w-full"
+          />
         </div>
       </div>
       <div className="flex items-center justify-between ml-4 mt-6 text-lg font-medium text-black">
         <span>Assigned Tasks</span>
-        <img src="/Assets/images/MyTasks/filter_alt.svg" alt="filter" className="w-6 h-6 mr-6" />
+        <img
+          src="/Assets/images/MyTasks/filter_alt.svg"
+          alt="filter"
+          className="w-6 h-6 mr-6"
+          onClick={filterClick}
+        />
+        {isOpen && <FliterScreen isOpen={isOpen} setIsOpen={setIsOpen} />}
       </div>
 
       <IonGrid className="ion-no-padding">
@@ -46,12 +66,20 @@ const MyTasks: React.FC = () => {
             <IonCard className="custom-card border border-gray-300 rounded p-4 mb-2 bg-neutral-100">
               <IonCardContent>
                 <div className="flex items-center">
-                  <img src="Assets/images/MyTasks/task_done.svg" alt="" className="task-done-img w-5 h-5 mr-2" />
+                  <img
+                    src="Assets/images/MyTasks/task_done.svg"
+                    alt=""
+                    className="task-done-img w-5 h-5 mr-2"
+                  />
                   <span className="form-title">School Feedback Form</span>
                 </div>
                 <div className="flex items-center mt-2 justify-between">
                   <div className="flex items-center">
-                    <img src="Assets/images/MyTasks/calendar_icon.svg" alt="" className="calendar-img w-5 h-5 mr-2" />
+                    <img
+                      src="Assets/images/MyTasks/calendar_icon.svg"
+                      alt=""
+                      className="calendar-img w-5 h-5 mr-2"
+                    />
                     <span className="ml-1 calendar-date">June 10, 2024</span>
                   </div>
                   <button className="ml-2 px-2 py-1 bg-[#D68812] text-white text-sm rounded-xl">
@@ -65,12 +93,20 @@ const MyTasks: React.FC = () => {
             <IonCard className="custom-card border border-gray-300 rounded p-4 mb-2 bg-neutral-100">
               <IonCardContent>
                 <div className="flex items-center">
-                  <img src="Assets/images/MyTasks/task_done.svg" alt="" className="task-done-img w-5 h-5 mr-2" />
+                  <img
+                    src="Assets/images/MyTasks/task_done.svg"
+                    alt=""
+                    className="task-done-img w-5 h-5 mr-2"
+                  />
                   <span className="form-title">Follow up from school</span>
                 </div>
                 <div className="flex items-center mt-2 justify-between">
                   <div className="flex items-center">
-                    <img src="Assets/images/MyTasks/calendar_icon.svg" alt="" className="calendar-img w-5 h-5 mr-2" />
+                    <img
+                      src="Assets/images/MyTasks/calendar_icon.svg"
+                      alt=""
+                      className="calendar-img w-5 h-5 mr-2"
+                    />
                     <span className="ml-1 calendar-date">June 10, 2024</span>
                   </div>
                   <button className="ml-2 px-2 py-1 bg-[#EA2531] text-white text-sm rounded-xl">
@@ -87,12 +123,20 @@ const MyTasks: React.FC = () => {
             <IonCard className="custom-card border border-gray-300 rounded p-4 mb-2 bg-neutral-100">
               <IonCardContent>
                 <div className="flex items-center">
-                  <img src="Assets/images/MyTasks/task_done.svg" alt="" className="task-done-img w-5 h-5 mr-2" />
+                  <img
+                    src="Assets/images/MyTasks/task_done.svg"
+                    alt=""
+                    className="task-done-img w-5 h-5 mr-2"
+                  />
                   <span className="form-title">B2B lead conversion</span>
                 </div>
                 <div className="flex items-center mt-2 justify-between">
                   <div className="flex items-center">
-                    <img src="Assets/images/MyTasks/calendar_icon.svg" alt="" className="calendar-img w-5 h-5 mr-2" />
+                    <img
+                      src="Assets/images/MyTasks/calendar_icon.svg"
+                      alt=""
+                      className="calendar-img w-5 h-5 mr-2"
+                    />
                     <span className="ml-1 calendar-date">June 10, 2024</span>
                   </div>
                   <button className="ml-2 px-2 py-1 bg-[#08670C] text-white text-sm rounded-xl">
@@ -106,12 +150,20 @@ const MyTasks: React.FC = () => {
             <IonCard className="custom-card border border-gray-300 rounded p-4 mb-2 bg-neutral-100">
               <IonCardContent>
                 <div className="flex items-center">
-                  <img src="Assets/images/MyTasks/task_done.svg" alt="" className="task-done-img w-5 h-5 mr-2" />
+                  <img
+                    src="Assets/images/MyTasks/task_done.svg"
+                    alt=""
+                    className="task-done-img w-5 h-5 mr-2"
+                  />
                   <span className="form-title">Contact Lead</span>
                 </div>
                 <div className="flex items-center mt-2 justify-between">
                   <div className="flex items-center">
-                    <img src="Assets/images/MyTasks/calendar_icon.svg" alt="" className="calendar-img w-5 h-5 mr-2" />
+                    <img
+                      src="Assets/images/MyTasks/calendar_icon.svg"
+                      alt=""
+                      className="calendar-img w-5 h-5 mr-2"
+                    />
                     <span className="ml-1 calendar-date">June 10, 2024</span>
                   </div>
                   <button className="ml-2 px-2 py-1 bg-[#284AA9] text-white text-sm rounded-xl">

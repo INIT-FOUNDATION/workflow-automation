@@ -5,6 +5,8 @@
 html {
   font-size: 16px;
   font-family: "Poppins" !important;
+  background-color: white;
+  color: #000;
 }
 
 ion-app,
@@ -35,7 +37,7 @@ ion-item {
 }
 
 ion-toolbar {
-  --background: #fef8f2;
+  --background: #ffffff;
   /* --color: white; */
 
   --border-color: transparent;
@@ -117,7 +119,6 @@ input:focus-visible {
   border-color: #e6790c !important;
 }
 
-
 .custom-scrollbar {
   scrollbar-width: thin;
   scrollbar-color: #888 #f1f1f1;
@@ -135,4 +136,8 @@ input:focus-visible {
   background-color: #888;
   border-radius: 10px;
   border: 3px solid #f1f1f1;
+}
+
+:host {
+  --border-radius: 0rem !important;
 }
