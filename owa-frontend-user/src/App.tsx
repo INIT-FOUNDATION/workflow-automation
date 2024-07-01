@@ -26,6 +26,7 @@ import "./theme/variables.css";
 import { Suspense, lazy, useState } from "react";
 import { useAuth } from "./contexts/AuthContext";
 import ForgotPassword from "./pages/auth/Components/ForgotPassword/ForgotPassword";
+import LoginOtp from "./pages/auth/LoginOtp/LoginOtp";
 
 const WorkFlowSelection = lazy(
   () => import("./pages/MyTasks/Components/WorkFlowSelection/WorkFlowSelection")
@@ -171,6 +172,15 @@ const App: React.FC = () => {
               render={() => (
                 <Suspense fallback={<div>Loading...</div>}>
                   <ForgotPassword showSnackbar={showSnackbar} />
+                </Suspense>
+              )}
+              exact
+            />
+            <Route
+              path="/login-Otp"
+              render={() => (
+                <Suspense fallback={<div>Loading...</div>}>
+                  <LoginOtp showSnackbar={showSnackbar} />
                 </Suspense>
               )}
               exact

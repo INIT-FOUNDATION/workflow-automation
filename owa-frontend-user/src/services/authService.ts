@@ -1,18 +1,5 @@
 import { get, post } from "../utility/ApiCall";
 
-const loginWithMobile = async (payload: any) => {
-  const loginByMobile = await post("/api/v1/auth/student/getOtp", payload);
-  return loginByMobile;
-};
-
-const verifyMobileOtp = async (payload: any) => {
-  const verifyByMobileOtp = await post(
-    "/api/v1/auth/student/verifyOtp",
-    payload
-  );
-  return verifyByMobileOtp;
-};
-
 const loginPassword = async (payload: any) => {
   const loginByMobileRes = await post("/api/v1/auth/user/login", payload);
   return loginByMobileRes;
@@ -23,20 +10,35 @@ const logout = async () => {
   return logoutRes;
 };
 
-const otpRequest = async (payload: any) => {
-  const getOtpRequest = await post(
+const loginWithMobile = async (payload: any) => {
+  const loginByMobile = await post("/api/v1/auth/user/generateOTP", payload);
+  return loginByMobile;
+};
+
+const verifyMobileOtp = async (payload: any) => {
+  const verifyByMobileOtp = await post(
+    "/api/v1/auth/user/validateOTP",
+    payload
+  );
+  return verifyByMobileOtp;
+};
+
+const ForgotPaaswordRequest = async (payload: any) => {
+  const getForgotPaaswordRequest = await post(
     "/api/v1/auth/admin/getForgetPasswordOtp",
     payload
   );
-  return getOtpRequest;
+  return getForgotPaaswordRequest;
 };
-const verifyOtpRequest = async (payload: any) => {
-  const getVerifyOtpRequest = await post(
+
+const verifyForgotPaaswordRequest = async (payload: any) => {
+  const getVerifyForgotPaaswordRequest = await post(
     "/api/v1/auth/admin/verifyForgetPasswordOtp",
     payload
   );
-  return getVerifyOtpRequest;
+  return getVerifyForgotPaaswordRequest;
 };
+
 const resetPasswordRequest = async (payload: any) => {
   const getResetPasswordRequest = await post(
     "/api/v1/admin/resetForgetPassword",
@@ -60,8 +62,8 @@ export {
   loginWithMobile,
   verifyMobileOtp,
   loginPassword,
-  otpRequest,
-  verifyOtpRequest,
+  ForgotPaaswordRequest,
+  verifyForgotPaaswordRequest,
   resetPasswordRequest,
   getLoggedInUserDetails,
   logout,
