@@ -37,6 +37,14 @@ const MyTasks: React.FC = () => {
           {/* <span className="text-gray-500">Search</span> */}
         </div>
       </div>
+      <div className="flex items-center justify-between ml-4 mt-6 text-lg font-medium text-black">
+        <span>Assigned Tasks</span>
+        <img
+          src="/Assets/images/MyTasks/filter_alt.svg"
+          alt="filter"
+          className="w-6 h-6 mr-6"
+        />
+      </div>
 
       <IonCard className="custom-card border border-gray-300 rounded p-4 mb-4 bg-neutral-100">
         <IonCardContent>
@@ -55,6 +63,9 @@ const MyTasks: React.FC = () => {
               className="calender-img w-5 h-5 mr-2"
             />
             <span className="ml-1 calender-date">June 17, 2024</span>
+            <button className="ml-20 px-2 py-1 bg-orange-400 text-white text-sm rounded-xl">
+              In Progress
+            </button>
           </div>
         </IonCardContent>
       </IonCard>
@@ -75,9 +86,59 @@ const MyTasks: React.FC = () => {
               className="calender-img w-5 h-5 mr-2"
             />
             <span className="ml-1 calender-date">June 10, 2024</span>
+            <button className="ml-20 px-2 py-1 bg-green-500 text-white text-sm rounded-xl">
+              completed
+            </button>
           </div>
         </IonCardContent>
       </IonCard>
+      <IonCard className="custom-card border border-gray-300 rounded p-4 mb-2 bg-neutral-100">
+        <IonCardContent>
+          <div className="flex items-center">
+            <img
+              src="Assets/images/MyTasks/task_done.svg"
+              alt=""
+              className="task-done-img w-5 h-5 mr-2"
+            />
+            <span className="form-title">Follow up from school</span>
+          </div>
+          <div className="flex items-center mt-2">
+            <img
+              src="Assets/images/MyTasks/calendar_icon.svg"
+              alt=""
+              className="calender-img w-5 h-5 mr-2"
+            />
+            <span className="ml-1 calender-date">June 10, 2024</span>
+            <button className="ml-20 px-2 py-1 bg-red-500 text-white text-sm rounded-xl">
+              Failed
+            </button>
+          </div>
+        </IonCardContent>
+      </IonCard>
+      <IonCard className="custom-card border border-gray-300 rounded p-4 mb-2 bg-neutral-100">
+        <IonCardContent>
+          <div className="flex items-center">
+            <img
+              src="Assets/images/MyTasks/task_done.svg"
+              alt=""
+              className="task-done-img w-5 h-5 mr-2"
+            />
+            <span className="form-title">Contact Lead</span>
+          </div>
+          <div className="flex items-center mt-2">
+            <img
+              src="Assets/images/MyTasks/calendar_icon.svg"
+              alt=""
+              className="calender-img w-5 h-5 mr-2"
+            />
+            <span className="ml-1 calender-date">June 10, 2024</span>
+            <button className="ml-20 px-2 py-1 bg-blue-600 text-white text-sm rounded-xl">
+             To Do 
+            </button>
+          </div>
+        </IonCardContent>
+      </IonCard>
+
       <div>
         <div className="add-task-container">
           <IonButton
