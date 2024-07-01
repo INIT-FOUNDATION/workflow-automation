@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { EncDecService } from 'src/app/modules/shared/services/encryption-decryption.service';
 import { environment } from 'src/environments/environment';
 
@@ -8,10 +8,16 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root'
 })
 export class AdminManagementService {
-
+  private searchSubject = new BehaviorSubject<string>('');
+  searchObservable$ = this.searchSubject.asObservable();
+  
   constructor(private http: HttpClient,
     private encDecService: EncDecService
   ) { }
+
+  setSearchTerm(searchTerm: string) {
+    this.searchSubject.next(searchTerm);
+  }
 
   addUser(postParams: any): Observable<any> {
     return this.http.post(`${environment.admin_prefix_url}/users/create`, postParams);
@@ -46,9 +52,7 @@ export class AdminManagementService {
     return this.http.post<any>(`${environment.admin_prefix_url}/users/resetPassword/${userId}`,{});
   }
 
-  deleteUser(userId: any) {
-    return this.http.post<any>(`${environment.admin_prefix_url}/users/deleteUser`, {
-     user_id: this.encDecService.set('' + userId)
-    });
+  updateStatus(postParams: any){
+    return this.http.post<any>(`${environment.admin_prefix_url}/users/updateStatus`, postParams);
   }
 }

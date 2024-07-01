@@ -20,8 +20,8 @@ export const adminService = {
     setForgotPasswordOTPInRedis: async (otpDetails: any) => {
         try {
             if (otpDetails) {
-                redis.SetRedis(`Admin_Forgot_Password|User:${otpDetails.userName}`, otpDetails, CACHE_TTL.SHORT);
-                redis.SetRedis(`Admin_Forgot_Password|TxnId:${otpDetails.txnId}`, otpDetails, CACHE_TTL.SHORT)
+                redis.SetRedis(`Admin_Forgot_Password|User:${otpDetails.userName}`, otpDetails, 3 * 60);
+                redis.SetRedis(`Admin_Forgot_Password|TxnId:${otpDetails.txnId}`, otpDetails, 3 * 60)
             };
         } catch (error) {
             logger.error(`adminService :: setForgotPasswordOTPInRedis :: ${error.message} :: ${error}`);
@@ -210,7 +210,7 @@ export const adminService = {
             const txnId = uuidv4();
             const forgotPasswordUserKey = `Admin_Forgot_Password|User:${userName}`;
             const forgotPasswordChangeKey = `FORGOT_PASSWORD_CHANGE_${txnId}`;
-            const forgotPasswordTxnIdKey = `Admin_Forgot_Password|TxnId:${txnId}`;
+            const forgotPasswordTxnIdKey = `Admin_Forgot_Password|TxnId:${oldTxnId}`;
 
             await redis.deleteRedis(forgotPasswordUserKey);
             await redis.deleteRedis(forgotPasswordTxnIdKey);

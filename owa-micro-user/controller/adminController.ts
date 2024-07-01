@@ -21,8 +21,8 @@ export const adminController = {
                     description: "Bearer token for authentication"
                 }
             */
-            const userName = req.plainToken.user_name;
-            const user = await adminService.getLoggedInUserInfo(userName);
+            const user_id = req.plainToken.user_id;
+            const user = await adminService.getLoggedInUserInfo(user_id);
             return res.status(STATUS.OK).send({
                 data: user,
                 message: "Logged In User Info Fetched Successfully",
@@ -92,7 +92,6 @@ export const adminController = {
                         first_name: 'Narsima',
                         last_name: 'Chilkuri',
                         email_id: 'narsimachilkuri237@gmail.com',
-                        mobile_number: '8169104556',
                         dob: '1997-08-16'
                     }
                 }  

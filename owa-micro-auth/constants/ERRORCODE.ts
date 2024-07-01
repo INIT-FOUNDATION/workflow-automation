@@ -50,5 +50,29 @@ export const AUTH = {
     AUTH00012: {
         errorCode: "AUTH00012",
         errorMessage: "Invalid Password!"
+    },
+    AUTH00013: {
+        errorCode: "AUTH00013",
+        errorMessage: "Please Use Employee login Credentials!"
+    },
+    AUTH00014: {
+        errorCode: "AUTH00014",
+        errorMessage: "Invalid Mobile Number!"
+    },
+    AUTH00015: {
+        errorCode: "AUTH00015",
+        errorMessage: "OTP is Required"
+    },
+    AUTH00016: {
+        errorCode: "AUTH00016",
+        errorMessage: "TxnId is Required"
+    },
+    AUTH00017: {
+        errorCode: "AUTH00017",
+        errorMessage: "Invalid Otp"
+    },
+    AUTH00018: {
+        errorCode: "AUTH00018",
+        errorMessage: "Unauthenticated Access"
     }
 };
