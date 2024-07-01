@@ -1,17 +1,17 @@
 import React, { useState } from "react";
 import { IonInput, useIonRouter } from "@ionic/react";
 import { useForm } from "react-hook-form";
-import "./ForgotPassword.css";
-import * as authService from "../../../../services/authService"
-import { encrypt } from "../../../../utility/EncrytDecrypt";
+import "./LoginOtp.css";
+import { encrypt } from "../../../utility/EncrytDecrypt";
+import * as authService from "../../../services/authService"
+// import * as authService from "../../../../";
 
-interface ForgotPasswordProps {
+interface LoginOtpProps {
   showSnackbar: (message: string, severity: string) => void;
 }
 
-const ForgotPassword: React.FC<ForgotPasswordProps> = ({ showSnackbar }) => {
+const LoginOtp: React.FC<LoginOtpProps> = ({ showSnackbar }) => {
   const router = useIonRouter();
-
   const [otpSent, setOtpSent] = useState(false);
   const [txnId, setTxnId] = useState("");
 
@@ -33,12 +33,12 @@ const ForgotPassword: React.FC<ForgotPasswordProps> = ({ showSnackbar }) => {
     if (mobileNumberPattern.test(mobile_no)) {
       const payload = { mobile_number: mobile_no };
       try {
-        const getOtpRequestResponse = await authService.ForgotPaaswordRequest(payload);
+        const getOtpRequestResponse = await authService.loginWithMobile(payload);
 
         if (!getOtpRequestResponse.error) {
           showSnackbar("OTP sent successfully", "success");
           setOtpSent(true);
-          setTxnId(getOtpRequestResponse?.data?.data?.txnId);
+          setTxnId(getOtpRequestResponse?.data?.txnId);
         } else {
           showSnackbar("Failed to send OTP. Please try again.", "error");
         }
@@ -59,10 +59,10 @@ const ForgotPassword: React.FC<ForgotPasswordProps> = ({ showSnackbar }) => {
       return;
     }
 
-    const payload = { txnId: txnId, otp: encrypt(otp) };
+    const payload = { txnId, otp: encrypt(otp) };
 
     try {
-      const verifyOtpResponse = await authService.verifyForgotPaaswordRequest(payload);
+      const verifyOtpResponse = await authService.verifyMobileOtp(payload);
 
       if (!verifyOtpResponse.error) {
         showSnackbar("OTP verified successfully", "success");
@@ -91,7 +91,7 @@ const ForgotPassword: React.FC<ForgotPasswordProps> = ({ showSnackbar }) => {
         <div className="mb-4">
           <div className="border-b border-gray-300" style={{ width: "98%" }}>
             <div className="ml-2">
-              <h2 className="text-2xl font-medium">Forgot Password</h2>
+              <h2 className="text-2xl font-medium">Login</h2>
             </div>
           </div>
         </div>
@@ -137,4 +137,4 @@ const ForgotPassword: React.FC<ForgotPasswordProps> = ({ showSnackbar }) => {
   );
 };
 
-export default ForgotPassword;
+export default LoginOtp;

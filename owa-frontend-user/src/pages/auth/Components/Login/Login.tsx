@@ -36,11 +36,9 @@ const Login: React.FC<LoginProps> = ({ showSnackbar }) => {
     const loginResponse = await authService.loginPassword(payload);
 
     if (!loginResponse.error) {
-
       AppPreferences.setValue("userToken", loginResponse.data.data.token);
       login();
       await authService.getLoggedInUserDetails(addUserDetailsToContext);
-
       router.push("/tasks");
     } else {
       if (
@@ -92,18 +90,6 @@ const Login: React.FC<LoginProps> = ({ showSnackbar }) => {
               type={showPassword ? "text" : "password"}
               {...register("password")}
             ></IonInput>
-            {/* <IonIcon
-              icon={showPassword ? eyeOffOutline : eyeOutline}
-              onClick={() => setShowPassword(!showPassword)}
-              className="eye-icon"
-              style={{
-                position: "absolute",
-                right: "10px",
-                top: "50%",
-                transform: "translateY(-50%)",
-                cursor: "pointer",
-              }}
-            /> */}
             <div className="pt-2 text-right flex justify-start">
               <img src="Assets/images/LoginPage/lock.svg" alt="Lock" />
               <div
@@ -131,6 +117,7 @@ const Login: React.FC<LoginProps> = ({ showSnackbar }) => {
           <button
             type="button"
             className="w-full py-2 rounded-md transition duration-200 otp-button"
+            onClick={() => router.push("/login-Otp")}
           >
             Login using OTP
           </button>
