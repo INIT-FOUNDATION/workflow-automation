@@ -171,7 +171,7 @@ const ApiTriggerDetails: React.FC = () => {
       </Tabs>
 
       {activeTab === 0 && (
-        <Box mt={2} width="100%">
+        <Box mt={2} width="100%" className="shadow rounded">
           <Grid container spacing={2} alignItems="center">
             <Grid item xs={5}>
               <TextField
@@ -180,7 +180,7 @@ const ApiTriggerDetails: React.FC = () => {
                 value={inputKey}
                 fullWidth
                 onChange={(e) => setInputKey(e.target.value)}
-                style={{ border: "1px solid black", borderRadius: "5px" }}
+                // style={{ border: "1px solid black", borderRadius: "5px" }}
               />
             </Grid>
             <Grid item xs={5}>
@@ -190,7 +190,7 @@ const ApiTriggerDetails: React.FC = () => {
                 fullWidth
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
-                style={{ border: "1px solid black", borderRadius: "5px" }}
+                // style={{ border: "1px solid black", borderRadius: "5px" }}
               />
             </Grid>
             <Grid item xs={2}>
