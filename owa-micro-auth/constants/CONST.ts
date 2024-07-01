@@ -34,3 +34,27 @@ export const USERS_STATUS = {
 }
 
 export const DEFAULT_PASSWORD = "OWA123!@#"
+
+
+export const levels = [{
+                        "id":1,
+                        "name": 'Admin',
+                        "levels": ['Department', 'Employee']
+                      },
+                      {
+                        "id":2,
+                        "name": 'Department',
+                        "levels": ['Employee']
+                      },
+                      {
+                        "id":3,
+                        "name": 'Employee',
+                        "levels": ['Employee']
+                      }];
+
+
+export const OTPREASONS = {
+    FORGOTPASSWORD: "FORGOT PASSWORD",
+    UPDATEMOBNO: "UPDATE MOBILE NUMBER",
+    VERIFYMOBNO: "VERIFY MOBILE NUMBER"
+};
