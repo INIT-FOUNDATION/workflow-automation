@@ -222,21 +222,21 @@ const ApiTriggerDetails: React.FC = () => {
 
       {activeTab === 1 && (
         <>
-          <div className="flex space-x-4 items-center justify-center">
+          <div className="flex space-x-2 items-center justify-center">
             <IonRadioGroup
               value={selectedBodyType}
               onIonChange={(e) => setSelectedBodyType(e.detail.value)}
             >
-              <div className="flex space-x-4 ">
-                <IonItem lines="none" className="flex-1 custom-ion-item">
+              <div className="flex space-x-8 ">
+                <IonItem lines="none" className=" custom-ion-item">
                   <IonRadio slot="start" value="plain" />
-                  <IonLabel className="text-nowrap">Plain</IonLabel>
+                  <IonLabel className="">Plain</IonLabel>
                 </IonItem>
-                <IonItem lines="none" className="flex-1">
+                <IonItem lines="none" className="">
                   <IonRadio slot="start" value="xml" />
                   <IonLabel className="whitespace-nowrap">XML</IonLabel>
                 </IonItem>
-                <IonItem lines="none" className="flex-1 text-nowrap">
+                <IonItem lines="none" className=" ">
                   <IonRadio slot="start" value="json" />
                   <IonLabel>JSON</IonLabel>
                 </IonItem>
