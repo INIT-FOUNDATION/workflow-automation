@@ -16,12 +16,6 @@
   border-bottom-right-radius: 10px !important;
 }
 
-.create-task-button {
-  background-image: linear-gradient(to bottom, #e0001e, #70000f) !important;
-  padding: 10px;
-  color: #fff;
-}
-
 .MuiTypography-root {
   margin-left: 12px !important;
 }

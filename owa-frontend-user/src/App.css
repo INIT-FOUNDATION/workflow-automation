@@ -21,6 +21,12 @@ ion-item {
   --color: #000 !important;
 }
 
+.create-task-button {
+  background-image: linear-gradient(to bottom, #e0001e, #70000f) !important;
+  padding: 10px;
+  color: #fff;
+}
+
 .segment-button-checked {
   --color-checked: #515a63 !important;
 }
