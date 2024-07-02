@@ -1,5 +1,7 @@
 import { Component, AfterViewInit, Input } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import Drawflow from 'drawflow';
+import { FormWorkflowBuilderComponent } from './component/form-workflow-builder/form-workflow-builder.component';
 
 @Component({
   selector: 'app-workflow-builder',
@@ -35,7 +37,7 @@ export class WorkflowBuilderComponent implements AfterViewInit {
     },
     {
       id: 6,
-      img: 'fa-solid fa-whatsapp',
+      img: 'fa-brands fa-whatsapp',
       label: 'Whatsapp Task',
       dataNode: 'whatsappTask',
     },
@@ -73,7 +75,7 @@ export class WorkflowBuilderComponent implements AfterViewInit {
   mobile_item_selec: string;
   mobile_last_move: TouchEvent | null;
 
-  constructor() {}
+  constructor(private dialog: MatDialog) {}
 
   ngOnInit() {}
 
@@ -259,6 +261,8 @@ export class WorkflowBuilderComponent implements AfterViewInit {
 
   drop(ev: any) {
     console.log(ev);
+    
+    // this.openModal();
     if (ev.type === 'touchend' && this.mobile_last_move) {
       var parentdrawflow = document
         .elementFromPoint(
@@ -282,8 +286,6 @@ export class WorkflowBuilderComponent implements AfterViewInit {
   }
 
   private addNodeToDrawFlow(name: string, pos_x: number, pos_y: number) {
-    console.log(name, 'Name');
-
     if (this.editor.editor_mode === 'fixed') {
       return false;
     }
@@ -308,10 +310,11 @@ export class WorkflowBuilderComponent implements AfterViewInit {
         var startTask = `
         <div>
           <div class="bg-gray-100 px-3 flex items-center text-sm py-2">
-            <i class="fa-play fa-solid text-2xl text-red-600 me-2"></i> Start Task
+            <i class="fa-play fa-solid text-xl text-red-600 me-2"></i> Start Task
           </div>
-          <div class="box p-2">
-            <input type="text" class="border rounded text-sm w-full py-2 ps-2 outline-none" placeholder="start task">
+          <div class="box p-2 flex flex-col items-end">
+            <input type="text" class="border rounded text-sm w-full py-2 ps-2 outline-none mb-2" placeholder="Start task">
+            <span class="bg-green-200 text-black ps-3 pe-8 py-1 text-xs rounded-full">Connection task</span>
           </div>
         </div>
       `;
@@ -326,205 +329,272 @@ export class WorkflowBuilderComponent implements AfterViewInit {
           startTask
         );
         break;
-      case 'slack':
-        var slackchat = `
+      case 'endTask':
+        var endTask = `
         <div>
-          <div class="title-box"><i class="fab fa-slack"></i> Slack chat message</div>
+          <div class="bg-gray-100 px-3 flex items-center text-sm py-2">
+            <i class="fa-regular fa-circle-stop text-xl text-red-600 me-2"></i> End Task
+          </div>
+          <div class="box p-2 flex flex-col items-end">
+            <input type="text" class="border rounded text-sm w-full py-2 ps-2 outline-none mb-2" placeholder="End task">
+          </div>
         </div>
-        `;
+      `;
         this.editor.addNode(
-          'slack',
+          'endTask',
           1,
           0,
           pos_x,
           pos_y,
-          'slack',
+          'endTask',
           {},
-          slackchat
+          endTask
         );
         break;
-      case 'github':
-        var githubtemplate = `
+      case 'addTask':
+        var addTask = `
         <div>
-          <div class="title-box"><i class="fab fa-github "></i> Github Stars</div>
-          <div class="box">
-            <p>Enter repository url</p>
-          <input type="text" df-name>
+          <div class="bg-gray-100 px-3 flex items-center text-sm py-2">
+            <i class="fa-solid fa-plus text-xl text-red-600 me-2"></i> Add Task
+          </div>
+          <div class="box p-2 flex flex-col items-end">
+            <input type="text" class="border rounded text-sm w-full py-2 ps-2 outline-none mb-2" placeholder="Add task">
+            <span class="bg-green-200 text-black ps-3 pe-8 py-1 text-xs rounded-full">Connection task</span>
           </div>
         </div>
-        `;
+      `;
         this.editor.addNode(
-          'github',
-          0,
-          1,
-          pos_x,
-          pos_y,
-          'github',
-          { name: '' },
-          githubtemplate
-        );
-        break;
-      case 'telegram':
-        var telegrambot = `
-        <div>
-          <div class="title-box"><i class="fab fa-telegram-plane"></i> Telegram bot</div>
-          <div class="box">
-            <p>Send to telegram</p>
-            <p>select channel</p>
-            <select df-channel>
-              <option value="channel_1">Channel 1</option>
-              <option value="channel_2">Channel 2</option>
-              <option value="channel_3">Channel 3</option>
-              <option value="channel_4">Channel 4</option>
-            </select>
-          </div>
-        </div>
-        `;
-        this.editor.addNode(
-          'telegram',
-          1,
-          0,
-          pos_x,
-          pos_y,
-          'telegram',
-          { channel: 'channel_3' },
-          telegrambot
-        );
-        break;
-      case 'aws':
-        var aws = `
-        <div>
-          <div class="title-box"><i class="fab fa-aws"></i> Aws Save </div>
-          <div class="box">
-            <p>Save in aws</p>
-            <input type="text" df-db-dbname placeholder="DB name"><br><br>
-            <input type="text" df-db-key placeholder="DB key">
-            <p>Output Log</p>
-          </div>
-        </div>
-        `;
-        this.editor.addNode(
-          'aws',
+          'addTask',
           1,
           1,
           pos_x,
           pos_y,
-          'aws',
-          { db: { dbname: '', key: '' } },
-          aws
+          'addTask',
+          {},
+          addTask
         );
         break;
-      case 'log':
-        var log = `
-          <div>
-            <div class="title-box"><i class="fas fa-file-signature"></i> Save log file </div>
+      case 'decisionTask':
+        var decisionTask = `
+           <div>
+          <div class="bg-gray-100 px-3 flex items-center text-sm py-2">
+            <i class="fa-solid fa-arrows-split-up-and-left text-xl text-red-600 me-2"></i> Decision Task
           </div>
-          `;
-        this.editor.addNode('log', 1, 0, pos_x, pos_y, 'log', {}, log);
-        break;
-      case 'google':
-        var google = `
-          <div>
-            <div class="title-box"><i class="fab fa-google-drive"></i> Google Drive save </div>
+          <div class="box p-2 flex flex-col items-end">
+            <input type="text" class="border rounded text-sm w-full py-2 ps-2 outline-none mb-2" placeholder="Decision task">
           </div>
+        </div>
           `;
-        this.editor.addNode('google', 1, 0, pos_x, pos_y, 'google', {}, google);
+        this.editor.addNode(
+          'decisionTask',
+          1,
+          2,
+          pos_x,
+          pos_y,
+          'decisionTask',
+          { decisionTask: 'Write your decisionTask' },
+          decisionTask
+        );
         break;
-      case 'email':
-        var email = `
-          <div>
-            <div class="title-box"><i class="fas fa-at"></i> Send Email </div>
-          </div>
-          `;
-        this.editor.addNode('email', 1, 0, pos_x, pos_y, 'email', {}, email);
-        break;
+      // case 'slack':
+      //   var slackchat = `
+      //   <div>
+      //     <div class="title-box"><i class="fab fa-slack"></i> Slack chat message</div>
+      //   </div>
+      //   `;
+      //   this.editor.addNode(
+      //     'slack',
+      //     1,
+      //     0,
+      //     pos_x,
+      //     pos_y,
+      //     'slack',
+      //     {},
+      //     slackchat
+      //   );
+      //   break;
+      // case 'github':
+      //   var githubtemplate = `
+      //   <div>
+      //     <div class="title-box"><i class="fab fa-github "></i> Github Stars</div>
+      //     <div class="box">
+      //       <p>Enter repository url</p>
+      //     <input type="text" df-name>
+      //     </div>
+      //   </div>
+      //   `;
+      //   this.editor.addNode(
+      //     'github',
+      //     0,
+      //     1,
+      //     pos_x,
+      //     pos_y,
+      //     'github',
+      //     { name: '' },
+      //     githubtemplate
+      //   );
+      //   break;
+      // case 'telegram':
+      //   var telegrambot = `
+      //   <div>
+      //     <div class="title-box"><i class="fab fa-telegram-plane"></i> Telegram bot</div>
+      //     <div class="box">
+      //       <p>Send to telegram</p>
+      //       <p>select channel</p>
+      //       <select df-channel>
+      //         <option value="channel_1">Channel 1</option>
+      //         <option value="channel_2">Channel 2</option>
+      //         <option value="channel_3">Channel 3</option>
+      //         <option value="channel_4">Channel 4</option>
+      //       </select>
+      //     </div>
+      //   </div>
+      //   `;
+      //   this.editor.addNode(
+      //     'telegram',
+      //     1,
+      //     0,
+      //     pos_x,
+      //     pos_y,
+      //     'telegram',
+      //     { channel: 'channel_3' },
+      //     telegrambot
+      //   );
+      //   break;
+      // case 'aws':
+      //   var aws = `
+      //   <div>
+      //     <div class="title-box"><i class="fab fa-aws"></i> Aws Save </div>
+      //     <div class="box">
+      //       <p>Save in aws</p>
+      //       <input type="text" df-db-dbname placeholder="DB name"><br><br>
+      //       <input type="text" df-db-key placeholder="DB key">
+      //       <p>Output Log</p>
+      //     </div>
+      //   </div>
+      //   `;
+      //   this.editor.addNode(
+      //     'aws',
+      //     1,
+      //     1,
+      //     pos_x,
+      //     pos_y,
+      //     'aws',
+      //     { db: { dbname: '', key: '' } },
+      //     aws
+      //   );
+      //   break;
+      // case 'log':
+      //   var log = `
+      //     <div>
+      //       <div class="title-box"><i class="fas fa-file-signature"></i> Save log file </div>
+      //     </div>
+      //     `;
+      //   this.editor.addNode('log', 1, 0, pos_x, pos_y, 'log', {}, log);
+      //   break;
+      // case 'google':
+      //   var google = `
+      //     <div>
+      //       <div class="title-box"><i class="fab fa-google-drive"></i> Google Drive save </div>
+      //     </div>
+      //     `;
+      //   this.editor.addNode('google', 1, 0, pos_x, pos_y, 'google', {}, google);
+      //   break;
+      // case 'email':
+      //   var email = `
+      //     <div>
+      //       <div class="title-box"><i class="fas fa-at"></i> Send Email </div>
+      //     </div>
+      //     `;
+      //   this.editor.addNode('email', 1, 0, pos_x, pos_y, 'email', {}, email);
+      //   break;
 
-      case 'template':
-        var template = `
-          <div>
-            <div class="title-box"><i class="fas fa-code"></i> Template</div>
-            <div class="box">
-              Ger Vars
-              <textarea df-template></textarea>
-              Output template with vars
-            </div>
-          </div>
-          `;
-        this.editor.addNode(
-          'template',
-          1,
-          1,
-          pos_x,
-          pos_y,
-          'template',
-          { template: 'Write your template' },
-          template
-        );
-        break;
-      case 'multiple':
-        var multiple = `
-          <div>
-            <div class="box">
-              Multiple!
-            </div>
-          </div>
-          `;
-        this.editor.addNode(
-          'multiple',
-          3,
-          4,
-          pos_x,
-          pos_y,
-          'multiple',
-          {},
-          multiple
-        );
-        break;
-      case 'personalized':
-        var personalized = `
-          <div>
-            Personalized
-          </div>
-          `;
-        this.editor.addNode(
-          'personalized',
-          1,
-          1,
-          pos_x,
-          pos_y,
-          'personalized',
-          {},
-          personalized
-        );
-        break;
-      case 'dbclick':
-        var dbclick = `
-          <div>
-          <div class="title-box"><i class="fas fa-mouse"></i> Db Click</div>
-            <div class="box dbclickbox" ondblclick="showpopup(event)">
-              Db Click here
-              <div class="modal" style="display:none">
-                <div class="modal-content">
-                  <span class="close" onclick="closemodal(event)">&times;</span>
-                  Change your variable {name} !
-                  <input type="text" df-name>
-                </div>
+      // case 'template':
+      //   var template = `
+      //     <div>
+      //       <div class="title-box"><i class="fas fa-code"></i> Template</div>
+      //       <div class="box">
+      //         Ger Vars
+      //         <textarea df-template></textarea>
+      //         Output template with vars
+      //       </div>
+      //     </div>
+      //     `;
+      //   this.editor.addNode(
+      //     'template',
+      //     1,
+      //     1,
+      //     pos_x,
+      //     pos_y,
+      //     'template',
+      //     { template: 'Write your template' },
+      //     template
+      //   );
+      //   break;
+      // case 'multiple':
+      //   var multiple = `
+      //     <div>
+      //       <div class="box">
+      //         Multiple!
+      //       </div>
+      //     </div>
+      //     `;
+      //   this.editor.addNode(
+      //     'multiple',
+      //     3,
+      //     4,
+      //     pos_x,
+      //     pos_y,
+      //     'multiple',
+      //     {},
+      //     multiple
+      //   );
+      //   break;
+      // case 'personalized':
+      //   var personalized = `
+      //     <div>
+      //       Personalized
+      //     </div>
+      //     `;
+      //   this.editor.addNode(
+      //     'personalized',
+      //     1,
+      //     1,
+      //     pos_x,
+      //     pos_y,
+      //     'personalized',
+      //     {},
+      //     personalized
+      //   );
+      //   break;
+      // case 'dbclick':
+      //   var dbclick = `
+      //     <div>
+      //     <div class="title-box"><i class="fas fa-mouse"></i> Db Click</div>
+      //       <div class="box dbclickbox" ondblclick="showpopup(event)">
+      //         Db Click here
+      //         <div class="modal" style="display:none">
+      //           <div class="modal-content">
+      //             <span class="close" onclick="closemodal(event)">&times;</span>
+      //             Change your variable {name} !
+      //             <input type="text" df-name>
+      //           </div>
 
-              </div>
-            </div>
-          </div>
-          `;
-        this.editor.addNode(
-          'dbclick',
-          1,
-          1,
-          pos_x,
-          pos_y,
-          'dbclick',
-          { name: '' },
-          dbclick
-        );
-        break;
+      //         </div>
+      //       </div>
+      //     </div>
+      //     `;
+      //   this.editor.addNode(
+      //     'dbclick',
+      //     1,
+      //     1,
+      //     pos_x,
+      //     pos_y,
+      //     'dbclick',
+      //     { name: '' },
+      //     dbclick
+      //   );
+      //   break;
 
       default:
     }
@@ -542,5 +612,18 @@ export class WorkflowBuilderComponent implements AfterViewInit {
     if (this.editDivHtml) {
       this.editDivHtml.remove();
     }
+  }
+
+  onClear() {
+    this.editor.clear();
+  }
+
+  openModal() {
+    const dialog = this.dialog.open(FormWorkflowBuilderComponent, {
+      width: 'clamp(20rem, 40vw, 25rem)',
+      panelClass: ['animate__animated', 'animate__slideInRight'],
+      position: { right: '0px', top: '0px', bottom: '0px' },
+      disableClose: true,
+    });
   }
 }

@@ -1,7 +1,7 @@
 @import "../../../../node_modules/drawflow/dist/drawflow.min.css";
 
 .custom-workflow-height {
-  height: calc(100vh - 15rem);
+  height: calc(100vh - 14rem);
 }
 
 #drawflow {
@@ -23,19 +23,38 @@
   padding: 0rem;
   border: 1px solid #f2f2f2;
   border-radius: 0.5rem;
-  overflow: hidden;
+  --tw-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  --tw-shadow-colored: 0 1px 3px 0 var(--tw-shadow-color),
+    0 1px 2px -1px var(--tw-shadow-color);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000),
+    var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+}
+
+::ng-deep .drawflow .drawflow-node .input,
+::ng-deep .drawflow .drawflow-node .output {
+  height: 0.7rem !important;
+  width: 0.7rem !important;
+  border: 2px solid var(--border-color);
+}
+
+::ng-deep .drawflow .drawflow-node .input:hover,
+.drawflow .drawflow-node .output:hover {
+  background: red;
 }
 
 ::ng-deep .drawflow .drawflow-node .output {
-  height: 15px;
-  width: 15px;
-  border: 2px solid #000;
+  right: 2rem;
+  background: green;
+  top: 3rem;
 }
 
-::ng-deep .drawflow .drawflow-node .output:hover {
-  background: #4ea9ff;
+::ng-deep .drawflow .drawflow-node .input {
+  left: -10px;
+  background: white;
+  border: 1px solid #dcdcdc;
 }
 
-::ng-deep .drawflow .drawflow-node .output {
-  right: 10px;
+::ng-deep .drawflow .decisionTask .output {
+  right: 0.3rem;
+  top: unset;
 }

@@ -6,8 +6,8 @@
 
 <div class="flex items-center justify-between">
   <mat-form-field appearance="outline" class="w-72">
-    <mat-label>Give your workflow a name</mat-label>
-    <input type="text" matInput class="" />
+    <mat-label class="text-sm">Give your workflow a name</mat-label>
+    <input type="text" matInput class="text-sm" />
   </mat-form-field>
 
   <div class="flex items-center">
@@ -27,11 +27,13 @@
   </div>
 </div>
 
-<div class="grid grid-cols-4 gap-4 mt-8">
-  <div class="grid grid-cols-2 gap-4 custom-workflow-height overflow-y-auto">
+<div class="grid grid-cols-4 gap-4 mt-4 bg-zinc-100 rounded-lg">
+  <div
+    class="grid grid-cols-2 gap-4 custom-workflow-height overflow-y-auto ps-4 py-4"
+  >
     <div
       *ngFor="let item of preTasksArray"
-      class="drag-drawflow mb-3 bg-white shadow-lg rounded-lg border flex flex-col items-center justify-center cursor-move"
+      class="drag-drawflow bg-white shadow-lg rounded-lg border flex flex-col items-center justify-center cursor-move"
       draggable="true"
       (dragstart)="drag($event)"
       [attr.data-node]="item?.dataNode"
@@ -41,12 +43,19 @@
     </div>
   </div>
 
-  <div class="col-span-3">
+  <div class="col-span-3 bg-white relative">
     <div
       id="drawflow"
       class="w-full h-full"
       (drop)="drop($event)"
       (dragover)="allowDrop($event)"
-    ></div>
+    >
+      <div
+        class="bg-red-600 text-white px-5 py-2 rounded-lg absolute right-6 text-sm top-3"
+        (click)="onClear()"
+      >
+        Clear
+      </div>
+    </div>
   </div>
 </div>
