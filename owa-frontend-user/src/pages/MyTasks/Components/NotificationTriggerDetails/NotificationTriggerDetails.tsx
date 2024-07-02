@@ -149,7 +149,7 @@ const NotificationTriggerDetails: React.FC = () => {
             className="rounded w-full create-task-button"
             type="submit"
           >
-            Create Task
+            CREATE TASK
           </button>
         </div>
       </div>

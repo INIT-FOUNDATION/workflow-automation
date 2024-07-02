@@ -60,7 +60,7 @@ const MyTasks: React.FC = () => {
         {isOpen && <FliterScreen isOpen={isOpen} setIsOpen={setIsOpen} />}
       </div>
 
-      <IonGrid className="ion-no-padding">
+      <IonGrid className="ion-no-padding overflow-y-auto">
         <IonRow>
           <IonCol size="12" size-md="6">
             <IonCard className="custom-card border border-gray-300 rounded-md p-4 mb-2 shadow-md">
