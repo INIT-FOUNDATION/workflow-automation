@@ -83,8 +83,7 @@ const NotificationTriggerDetails: React.FC = () => {
               labelPlacement="floating"
               label="Enter description here"
               fill="outline"
-              className=" w-full border rounded-md p-2 px-0 text-black h-56 resize-y"
-              style={{ minHeight: "56px" }}
+              className=" w-full border rounded-md p-2 px-0 text-black h-48 resize-y"
               required
             ></IonTextarea>
           </div>
