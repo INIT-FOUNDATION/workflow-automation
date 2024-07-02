@@ -156,16 +156,17 @@ const MyTasks: React.FC = () => {
         </IonRow>
       </IonGrid>
 
-      <div className="add-task-container">
-        <IonButton
-          color="danger"
-          id="add-task-button"
-          className="rounded w-full add-task font-semibold flex items-center text-lg"
-          onClick={() => setShowActionSheet(true)}
-        >
-          Add Task
-          <img src="Assets/images/MyTasks/add.svg" className="ml-1" />
-        </IonButton>
+      <div className="">
+        <div className="flex justify-center items-center mb-3 mt-3">
+          <button
+            id="add-task-button"
+            className="rounded w-full add-task create-task-button font-semibold flex justify-center items-center  text-lg"
+            onClick={() => setShowActionSheet(true)}
+          >
+            Add Task
+            <img src="Assets/images/MyTasks/add.svg" className="ml-1" />
+          </button>
+        </div>
         <IonActionSheet
           className="my-custom-class"
           isOpen={showActionSheet}
