@@ -58,7 +58,7 @@ export class ProfileComponent {
     this.authService.getLoggedInUserInfo().subscribe(
       response => {
         const userInfo = response.data;
-        const dob = moment(userInfo.dob, 'YYYY-MM-DD').toDate();
+        const dob = moment(userInfo.dob, 'DD/MM/YYYY').toDate();
         this.profileForm.patchValue({
           first_name: userInfo.first_name,
           last_name: userInfo.last_name,
