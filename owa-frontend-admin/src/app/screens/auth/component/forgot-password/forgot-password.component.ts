@@ -38,7 +38,6 @@ export class ForgotPasswordComponent {
     }
     this.authService.getForgotPasswordOtp(payload).subscribe((res)=>{
       this.forgotPasswordForm.get('txnId').setValue(res.data.txnId);
-      console.log(res.txnId)
       this.currentScreen = 'enterOtp';
     })
 
@@ -57,7 +56,7 @@ verifyOtp() {
   };
 
   this.authService.verifyForgotPasswordOtp(payload).subscribe((res) => {
-    console.log(res);
+    this.forgotPasswordForm.get('txnId').setValue(res.data.txnId);
     this.currentScreen = 'resetPassword';
   });
 }
