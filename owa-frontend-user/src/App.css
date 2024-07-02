@@ -11,7 +11,8 @@ html {
 
 ion-app,
 ion-content,
-ion-item {
+ion-item,
+ion-button {
   font-family: "Poppins" !important;
   --background: #ffff !important;
   --color: #000 !important;

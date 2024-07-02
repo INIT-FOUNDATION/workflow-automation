@@ -8,12 +8,6 @@ import {
   IonContent,
   IonButton,
 } from "@ionic/react";
-import {
-  Button,
-  FormControl,
-  InputLabel,
-  TextareaAutosize,
-} from "@mui/material";
 import { useLocation } from "react-router";
 
 const NotificationTriggerDetails: React.FC = () => {
@@ -45,8 +39,6 @@ const NotificationTriggerDetails: React.FC = () => {
             label="Subject"
             labelPlacement="floating"
             fill="outline"
-            // placeholder="Enter here"
-
             className="w-full"
             required
             mode="md"
@@ -72,8 +64,6 @@ const NotificationTriggerDetails: React.FC = () => {
             label="Target Audience"
             labelPlacement="floating"
             fill="outline"
-            // placeholder="Enter here"
-
             className="w-full"
             required
             mode="md"
@@ -83,7 +73,11 @@ const NotificationTriggerDetails: React.FC = () => {
       </IonItem>
       <div className="flex-grow">
         <div className="flex justify-center pb-16">
-          <IonButton color="danger" className="rounded w-full " type="submit">
+          <IonButton
+            color="danger"
+            className="rounded w-full font-semibold flex items-center text-lg"
+            type="submit"
+          >
             Create Task
           </IonButton>
         </div>

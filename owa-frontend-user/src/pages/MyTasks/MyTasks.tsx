@@ -50,7 +50,7 @@ const MyTasks: React.FC = () => {
         </div>
       </div>
       <div className="flex items-center justify-between ml-4 mt-6 text-lg font-medium text-black">
-        <span>Assigned Tasks</span>
+        <span>My Tasks (4)</span>
         <img
           src="/Assets/images/MyTasks/filter_alt.svg"
           alt="filter"
@@ -63,14 +63,9 @@ const MyTasks: React.FC = () => {
       <IonGrid className="ion-no-padding">
         <IonRow>
           <IonCol size="12" size-md="6">
-            <IonCard className="custom-card border border-gray-300 rounded p-4 mb-2 bg-neutral-100">
-              <IonCardContent>
+            <IonCard className="custom-card border border-gray-300 rounded-md p-4 mb-2 shadow-md">
+              <IonCardContent className="p-0">
                 <div className="flex items-center">
-                  <img
-                    src="Assets/images/MyTasks/task_done.svg"
-                    alt=""
-                    className="task-done-img w-5 h-5 mr-2"
-                  />
                   <span className="form-title">School Feedback Form</span>
                 </div>
                 <div className="flex items-center mt-2 justify-between">
@@ -82,7 +77,7 @@ const MyTasks: React.FC = () => {
                     />
                     <span className="ml-1 calendar-date">June 10, 2024</span>
                   </div>
-                  <button className="ml-2 px-2 py-1 bg-[#D68812] text-white text-sm rounded-xl">
+                  <button className="ml-2 px-3 py-1 bg-[#D68812] text-white text-sm rounded-full">
                     In Progress
                   </button>
                 </div>
@@ -90,14 +85,9 @@ const MyTasks: React.FC = () => {
             </IonCard>
           </IonCol>
           <IonCol size="12" size-md="6">
-            <IonCard className="custom-card border border-gray-300 rounded p-4 mb-2 bg-neutral-100">
-              <IonCardContent>
+            <IonCard className="custom-card border border-gray-300 rounded-md p-4 mb-2 shadow-md">
+              <IonCardContent className="p-0">
                 <div className="flex items-center">
-                  <img
-                    src="Assets/images/MyTasks/task_done.svg"
-                    alt=""
-                    className="task-done-img w-5 h-5 mr-2"
-                  />
                   <span className="form-title">Follow up from school</span>
                 </div>
                 <div className="flex items-center mt-2 justify-between">
@@ -109,7 +99,7 @@ const MyTasks: React.FC = () => {
                     />
                     <span className="ml-1 calendar-date">June 10, 2024</span>
                   </div>
-                  <button className="ml-2 px-2 py-1 bg-[#EA2531] text-white text-sm rounded-xl">
+                  <button className="ml-2 px-3 py-1 bg-[#EA2531] text-white text-sm rounded-full">
                     Failed
                   </button>
                 </div>
@@ -120,14 +110,9 @@ const MyTasks: React.FC = () => {
 
         <IonRow>
           <IonCol size="12" size-md="6">
-            <IonCard className="custom-card border border-gray-300 rounded p-4 mb-2 bg-neutral-100">
-              <IonCardContent>
+            <IonCard className="custom-card border border-gray-300 rounded-md p-4 mb-2 shadow-md">
+              <IonCardContent className="p-0">
                 <div className="flex items-center">
-                  <img
-                    src="Assets/images/MyTasks/task_done.svg"
-                    alt=""
-                    className="task-done-img w-5 h-5 mr-2"
-                  />
                   <span className="form-title">B2B lead conversion</span>
                 </div>
                 <div className="flex items-center mt-2 justify-between">
@@ -139,7 +124,7 @@ const MyTasks: React.FC = () => {
                     />
                     <span className="ml-1 calendar-date">June 10, 2024</span>
                   </div>
-                  <button className="ml-2 px-2 py-1 bg-[#08670C] text-white text-sm rounded-xl">
+                  <button className="ml-2 px-3 py-1 bg-[#08670C] text-white text-sm rounded-full">
                     Completed
                   </button>
                 </div>
@@ -147,14 +132,9 @@ const MyTasks: React.FC = () => {
             </IonCard>
           </IonCol>
           <IonCol size="12" size-md="6">
-            <IonCard className="custom-card border border-gray-300 rounded p-4 mb-2 bg-neutral-100">
-              <IonCardContent>
+            <IonCard className="custom-card border border-gray-300 rounded-md p-4 mb-2 shadow-md">
+              <IonCardContent className="p-0">
                 <div className="flex items-center">
-                  <img
-                    src="Assets/images/MyTasks/task_done.svg"
-                    alt=""
-                    className="task-done-img w-5 h-5 mr-2"
-                  />
                   <span className="form-title">Contact Lead</span>
                 </div>
                 <div className="flex items-center mt-2 justify-between">
@@ -166,7 +146,7 @@ const MyTasks: React.FC = () => {
                     />
                     <span className="ml-1 calendar-date">June 10, 2024</span>
                   </div>
-                  <button className="ml-2 px-2 py-1 bg-[#284AA9] text-white text-sm rounded-xl">
+                  <button className="ml-2 px-3 py-1 bg-[#284AA9] text-white text-sm rounded-full">
                     To Do
                   </button>
                 </div>
@@ -180,10 +160,11 @@ const MyTasks: React.FC = () => {
         <IonButton
           color="danger"
           id="add-task-button"
-          className="rounded w-full add-task"
+          className="rounded w-full add-task font-semibold flex items-center text-lg"
           onClick={() => setShowActionSheet(true)}
         >
           Add Task
+          <img src="Assets/images/MyTasks/add.svg" className="ml-1" />
         </IonButton>
         <IonActionSheet
           className="my-custom-class"

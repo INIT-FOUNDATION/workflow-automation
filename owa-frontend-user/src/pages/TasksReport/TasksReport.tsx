@@ -1,5 +1,6 @@
 import React from "react";
 import "./TasksReport.css";
+import { IonContent } from "@ionic/react";
 
 const TasksReport: React.FC = () => {
   const percentage = 5;
@@ -8,33 +9,41 @@ const TasksReport: React.FC = () => {
   const offset = circumference - (percentage / 100) * circumference;
 
   return (
-    <>
+    <IonContent>
       <div className="mt-[6rem] m-3">
-        <h2 className="text-lg font-normal mb-4">Task Report</h2>
-        <div className="flex justify-between items-center">
+        <div className="flex items-center justify-between my-6 text-lg font-medium text-black">
+          <span>Task Report</span>
+          <select className="px-3 py-1 text-black bg-white text-sm rounded-full border border-gray-400">
+            <option>Week</option>
+            <option>Month</option>
+            <option>Quarter</option>
+            <option>Year</option>
+            <option>All Time</option>
+          </select>
+        </div>
+        <div className="flex items-center mb-6">
           <div
-            className="flex justify-between items-center mb-4 border border-gray-400 p-3 rounded-xl flex-col"
-            style={{ width: "165px" }}
+            className="flex justify-between items-center bg-[#FAF8F9] mr-6 border border-gray-400 p-3 rounded-xl flex-col"
+            style={{ width: "48%" }}
           >
             <div>
               <h3 className="font-normal text-base m-0">Total Tasks</h3>
             </div>
-            <span className="text-[40px] font-normal text-black">10</span>
+            <span className="text-3xl font-semibold text-black mt-1">10</span>
           </div>
 
           <div
-            className="flex justify-between items-center mb-4 border border-gray-400 p-3 rounded-xl flex-col"
-            style={{ width: "165px" }}
+            className="flex justify-between items-center bg-[#FAF8F9]  border border-gray-400 p-3 rounded-xl flex-col"
+            style={{ width: "48%" }}
           >
             <div>
               <h3 className="text-base font-normal m-0">Tasks Completed</h3>
             </div>
-            <span className="text-[40px] font-normal text-black">5</span>
+            <span className="text-3xl font-semibold text-black mt-1">5</span>
           </div>
         </div>
-
         <div
-          className="flex justify-between items-center mb-4 border border-gray-400 p-3 rounded-xl flex-col"
+          className="flex justify-between items-center bg-[#FAF8F9] mb-4 border border-gray-400 p-3 rounded-xl flex-col"
           style={{ width: "98%" }}
         >
           <div>
@@ -69,6 +78,7 @@ const TasksReport: React.FC = () => {
                 dominantBaseline="central"
                 fontWeight="bold"
                 fill="#34B53A"
+                fontSize="24"
               >
                 {percentage}%
               </text>
@@ -76,7 +86,7 @@ const TasksReport: React.FC = () => {
           </div>
         </div>
       </div>
-    </>
+    </IonContent>
   );
 };
 

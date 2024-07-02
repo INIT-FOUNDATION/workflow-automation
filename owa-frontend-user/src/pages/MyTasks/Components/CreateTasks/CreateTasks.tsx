@@ -61,7 +61,7 @@ const CreateTasks: React.FC = () => {
           <div className="mb-4">
             <TextareaAutosize
               placeholder="Enter task description"
-              className="w-full border rounded-md p-2 text-black"
+              className="w-full border rounded-md p-2 text-black bg-white border-gray-400"
               style={{ minHeight: "100px" }}
               required
             />
@@ -105,7 +105,7 @@ const CreateTasks: React.FC = () => {
           <div className="custom-btn flex justify-center pt-28 inset-x-2">
             <IonButton
               color="danger"
-              className="rounded w-full "
+              className="rounded w-full font-semibold flex items-center text-lg"
               onClick={() => handleNextClick()}
               type="submit"
             >

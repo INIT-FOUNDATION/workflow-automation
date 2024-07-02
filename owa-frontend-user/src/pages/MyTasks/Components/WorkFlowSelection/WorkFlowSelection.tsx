@@ -1,9 +1,5 @@
 import React, { useState } from "react";
-import {
-  IonButton,
-  IonIcon,
-  useIonRouter,
-} from "@ionic/react";
+import { IonButton, IonIcon, useIonRouter } from "@ionic/react";
 import { arrowBack } from "ionicons/icons";
 import {
   FormControl,
@@ -54,7 +50,7 @@ const WorkFlowSelection: React.FC = () => {
         <IonButton
           onClick={() => handleNextClick()}
           color="danger"
-          className="w-full"
+          className="w-full font-bold"
         >
           Next
         </IonButton>

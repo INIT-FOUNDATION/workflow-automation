@@ -50,7 +50,7 @@ const FliterScreen: React.FC<FilterProps> = ({ isOpen, setIsOpen }) => {
           <IonRow className="w-full h-full">
             <IonCol
               size="auto"
-              className="border-r-2 border-t-2 border-gray-400 bg-gray-200 p-0"
+              className="border-r-2 border-t-2 border-gray-300 bg-gray-200 p-0"
             >
               <div
                 style={{ width: "150px" }}
@@ -59,7 +59,7 @@ const FliterScreen: React.FC<FilterProps> = ({ isOpen, setIsOpen }) => {
                 Task Status
               </div>
             </IonCol>
-            <IonCol className="border-t-2 border-gray-400 p-0">
+            <IonCol className="border-t-2 border-gray-300 p-0">
               <div className="w-full flex flex-col align-center justify-center pt-2 px-4">
                 <IonCheckbox className="mb-3"> In progress </IonCheckbox>
                 <IonCheckbox className="mb-3"> Completed </IonCheckbox>
@@ -71,7 +71,7 @@ const FliterScreen: React.FC<FilterProps> = ({ isOpen, setIsOpen }) => {
           </IonRow>
         </IonGrid>
       </IonContent>
-      <IonFooter className="w-full border-t-2 border-gray-400">
+      <IonFooter className="w-full border-t-2 border-gray-300">
         <IonGrid className="p-0">
           <IonRow className="p-0">
             <IonCol className="p-0">
