@@ -38,12 +38,12 @@ const NotificationTriggerDetails: React.FC = () => {
       <div className="font-poppins text-base leading-5 mb-2 font-medium">
         Choose Notification Channel
       </div>
-      <div className="flex space-x-4 items-center justify-center">
+      <div className="flex items-center justify-center">
         <IonRadioGroup
           value={selected}
           onIonChange={(e) => setSelected(e.detail.value)}
         >
-          <div className="flex space-x-4 ">
+          <div className="flex space-x-10 ">
             <IonItem lines="none" className="flex-1 custom-ion-item">
               <IonRadio slot="start" value="email" />
               <IonLabel className="text-nowrap">Email</IonLabel>
@@ -143,12 +143,8 @@ const NotificationTriggerDetails: React.FC = () => {
         </IonItem>
       )}
       <div className="flex-grow">
-        <div className="flex justify-center pb-16">
-          <button
-            color="danger"
-            className="rounded w-full create-task-button"
-            type="submit"
-          >
+        <div className="flex justify-center">
+          <button className="rounded w-full create-task-button" type="submit">
             CREATE TASK
           </button>
         </div>

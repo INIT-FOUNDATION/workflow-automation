@@ -227,7 +227,7 @@ const ApiTriggerDetails: React.FC = () => {
               value={selectedBodyType}
               onIonChange={(e) => setSelectedBodyType(e.detail.value)}
             >
-              <div className="flex space-x-8 ">
+              <div className="flex space-x-14 ">
                 <IonItem lines="none" className=" custom-ion-item">
                   <IonRadio slot="start" value="plain" />
                   <IonLabel className="">Plain</IonLabel>
