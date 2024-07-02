@@ -14,8 +14,9 @@
 /* .search-text {
   color: #737373;
 } */
+
 .custom-card {
-  height: 110px;
+  background-color: #faf8f9;
 }
 
 .calender-date {
@@ -28,6 +29,7 @@
   font-weight: 500;
   font-size: 16px;
   font-family: "Poppins" !important;
+  line-height: 24px;
 }
 
 /*.task-done-img {
@@ -52,9 +54,6 @@
 }
 .add-task {
   width: 95%;
-  /* margin: 0 auto;
-  text-transform: none;
-  font-family: "Poppins" !important; */
 }
 
 .custom-popover-text {
@@ -72,7 +71,7 @@ ion-action-sheet.my-custom-class {
 }
 .action-sheet-wrapper.sc-ion-action-sheet-md {
   margin-bottom: 8rem;
-   /* display: flex;
+  /* display: flex;
   justify-content: center; */
 }
 /* @media (any-hover: hover) {

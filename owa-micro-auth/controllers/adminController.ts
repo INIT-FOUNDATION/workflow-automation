@@ -149,7 +149,7 @@ export const adminController = {
 
             const userExists = await adminService.existsByMobileNumber(mobile_number);
             if (!userExists) {
-                logger.error(`adminController :: getForgetPasswordOtp :: mobile number :: ${mobile_number} :: Password doesn't exist`);
+                logger.error(`adminController :: getForgetPasswordOtp :: mobile number :: ${mobile_number} :: User doesn't exist`);
                 return res.status(STATUS.OK).send({data: { txnId: uuidv4() }, message: "Generated Forget Password OTP Successfully"});
             }
 
@@ -177,7 +177,7 @@ export const adminController = {
                     in: 'body',
                     required: true,
                     schema: {
-                        otp: 123456,
+                        otp: 'encryptedOtp',
                         txnId: '1b99ee36-4d23-4d0a-9972-606f48bf5e33'
                     }
                 }    

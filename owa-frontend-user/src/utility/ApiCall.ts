@@ -68,15 +68,15 @@ const makeRequest = async ({
     return { error: false, data: response.data };
   } catch (error: any) {
 
-    
-    if (error.response && error.response.status === 401 && !url.includes("/api/v1/auth/admin/logout")) {
+       if (error.response && error.response.status === 401 && !url.includes("/api/v1/auth/user/logout")) {
       await authService.logout();
         setTimeout(()=>{
           window.location.href = ""
         },2000)
-       
         AppPreference.clearAll()
     }
+
+
     Swal.close();
     if (error?.response?.status === 401) {
       console.log("Unauthorized !!!");

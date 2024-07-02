@@ -12,7 +12,6 @@ import { CommonImageUploadComponent } from 'src/app/modules/shared/components/co
 import { of } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { DataService } from 'src/app/modules/shared/services/data.service';
-
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
@@ -57,10 +56,11 @@ export class ProfileComponent {
     this.authService.getLoggedInUserInfo().subscribe(
       response => {
         const userInfo = response.data;
+        const dob = moment(response.data?.dob, 'YYYY-MM-DD').toDate();
         this.profileForm.patchValue({
           first_name: userInfo.first_name,
           last_name: userInfo.last_name,
-          dob: moment(userInfo.dob, 'DD/MM/YYYY').toDate(),
+          dob: dob,
           mobile_number: userInfo.mobile_number,
           email_id: userInfo.email_id,
         });
@@ -136,12 +136,59 @@ export class ProfileComponent {
     }});
   }
 
+  // openNumberChangeDialog(){
+  //   const dialogRef = this.dialog.open(MobileNumberUpdateModalComponent, {
+  //     data: {
+  //       dialog_title: 'Change Mobile Number',
+  //       width: 300,
+  //       height: 300,
+  //       aspectRatio: true,
+  //       ratio: 1 / 1
+  //     },
+  //     width: '50%',
+  //     height:'600px',
+  //     disableClose: true,
+  //     panelClass: 'my-dialog'
+  //   });
+
+  //   dialogRef.afterClosed().pipe(
+  //     switchMap((res: any) => {
+  //       if (res.type == 'close') {
+  //         return of(null);
+  //       } else {
+  //         const formData = new FormData();
+  //         this.dilodResponse = res;
+  //         formData.append('file',  res.image_blob, 'profile_pic.png');
+  //         return this.profileService.uploadProfilePic(formData);
+  //       }
+  //     })
+  //   ).subscribe(async(response) => {
+  //     if (response) {
+  //       await this.commonService.getUserDetails();
+  //       const reader = new FileReader();
+  //       reader.readAsDataURL(this.dilodResponse.image_blob);
+  //       reader.onload = (e) => { 
+  //         this.dataService.setProfilePic(this.dilodResponse.image_blob);
+  //         this.userDetails = this.dataService.userDetails;
+  //         this.utilService.showSuccessMessage('Mobile Number Changed Successfully');
+  //       };
+  //     }
+  //   }, error => {
+  //   if (error.status === 400){
+  //     // this.util.showErrorToast(this.translate.instant('Format Not Supported'));
+  //   } else {
+  //     this.utilService.showSuccessMessage('Error In Mobile Number Update');
+  //   }});
+  // }
+
   submitProfileForm() {
     let data = this.profileForm.getRawValue();
     // if (!data.password || !data.confirmPassword) {
     //   delete data.password;
     //   delete data.confirmPassword;
     // }
+    data.dob = moment(data.dob).format('YYYY-MM-DD');
+    delete data.mobile_number;
     this.profileService.updateProfile(data).subscribe((res) => {
       // if (data.password && data.confirmPassword) {
       //   this.authService.logout();

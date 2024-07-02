@@ -11,11 +11,14 @@ html {
 
 .MuiBox-root {
   padding: 15px !important;
+  background-color: white;
+  color: #000;
 }
 
 ion-app,
 ion-content,
-ion-item {
+ion-item,
+ion-button {
   font-family: "Poppins" !important;
   --background: #ffff !important;
   --color: #000 !important;
@@ -47,7 +50,7 @@ ion-item {
 }
 
 ion-toolbar {
-  --background: #fef8f2;
+  --background: #ffffff;
   /* --color: white; */
 
   --border-color: transparent;
@@ -146,4 +149,8 @@ input:focus-visible {
   background-color: #888;
   border-radius: 10px;
   border: 3px solid #f1f1f1;
+}
+
+:host {
+  --border-radius: 0rem !important;
 }

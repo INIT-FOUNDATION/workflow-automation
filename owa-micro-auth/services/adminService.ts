@@ -210,7 +210,7 @@ export const adminService = {
             const txnId = uuidv4();
             const forgotPasswordUserKey = `Admin_Forgot_Password|User:${userName}`;
             const forgotPasswordChangeKey = `FORGOT_PASSWORD_CHANGE_${txnId}`;
-            const forgotPasswordTxnIdKey = `Admin_Forgot_Password|TxnId:${txnId}`;
+            const forgotPasswordTxnIdKey = `Admin_Forgot_Password|TxnId:${oldTxnId}`;
 
             await redis.deleteRedis(forgotPasswordUserKey);
             await redis.deleteRedis(forgotPasswordTxnIdKey);

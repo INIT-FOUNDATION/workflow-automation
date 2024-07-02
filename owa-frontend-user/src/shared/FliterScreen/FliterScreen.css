@@ -1,0 +1,25 @@
+.clear-all-btn {
+  --color: #da2128 !important;
+  font-size: small !important;
+  font-weight: 600 !important;
+}
+
+.filter-heading {
+  --color: black !important;
+  font-weight: 600 !important;
+}
+
+.checkbox {
+  border-radius: 0.5rem !important;
+}
+
+.close-btn {
+  color: #c5000f !important;
+  font-weight: 600 !important;
+}
+
+.apply-btn {
+  background-color: #c5000f !important;
+  color: #fff !important;
+  font-weight: 600 !important;
+}
