@@ -50,7 +50,7 @@ const Header: React.FC<HeaderProps> = ({ showSnackbar }) => {
   if (skipHeader) return null;
 
   return (
-    <div className="flex items-center justify-between px-2 md:px-20 pt-2 pb-2 fixed z-10 w-full shadow">
+    <div className="flex items-center justify-between px-2 md:px-20 pt-2 pb-2 fixed z-10 w-full">
       <div className="flex items-center mt-2">
         <img
           src="/Assets/images/Header/Header_logo.png"

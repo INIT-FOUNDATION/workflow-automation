@@ -180,7 +180,7 @@ const ApiTriggerDetails: React.FC = () => {
                 value={inputKey}
                 fullWidth
                 onChange={(e) => setInputKey(e.target.value)}
-                // style={{ border: "1px solid black", borderRadius: "5px" }}
+                // style={{ background: "gray" }}
               />
             </Grid>
             <Grid item xs={5}>
