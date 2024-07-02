@@ -248,7 +248,7 @@ const ApiTriggerDetails: React.FC = () => {
             // labelPlacement="floating"
             placeholder="Enter description here"
             fill="outline"
-            className=" w-full border rounded-md p-2 px-0 text-black h-44 resize-y"
+            className=" w-full rounded-md p-2 px-0 text-black h-44 resize-y"
             style={{ minHeight: "56px" }}
             required
           ></IonTextarea>
