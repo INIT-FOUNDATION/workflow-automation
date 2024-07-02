@@ -104,8 +104,7 @@ const CreateTasks: React.FC = () => {
 
           <div className="custom-btn flex justify-center pt-28 inset-x-2">
             <button
-              color="danger"
-              className="rounded w-full font-semibold flex items-center text-lg"
+              className="rounded w-full create-task-button"
               onClick={() => handleNextClick()}
               type="submit"
             >
