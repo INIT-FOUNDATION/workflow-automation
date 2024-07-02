@@ -9,17 +9,19 @@ VALUES ($1, $2, $3, $4)
 RETURNING workflow_id;`,
     createWorkflowtask: `INSERT INTO m_workflow_tasks (
     workflow_id, 
+    node_id,
     task_name, 
     task_description, 
     form_id,
     created_by, 
     updated_by
 ) 
-VALUES ($1, $2, $3, $4, $5, $6) 
+VALUES ($1, $2, $3, $4, $5, $6, $7) 
 RETURNING task_id;
 `,
     ceateWorkflowNotificationTasks: `INSERT INTO m_workflow_notification_tasks (
     workflow_id, 
+    node_id,
     notification_task_name, 
     notification_task_description, 
     notification_type, 
@@ -33,17 +35,18 @@ RETURNING task_id;
     created_by, 
     updated_by
 ) 
-VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13) 
+VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14) 
 RETURNING notification_task_id;
 `,
     createWorkflowDecisionTasks: `INSERT INTO m_workflow_decision_tasks (
     workflow_id, 
+    node_id,
     decision_task_name, 
     decision_task_description,
     created_by, 
     updated_by
 ) 
-VALUES ($1, $2, $3, $4, $5) 
+VALUES ($1, $2, $3, $4, $5, $6) 
 RETURNING decision_task_id;
 `,
     createWorkflowDecisionConditions: `INSERT INTO m_workflow_decision_conditions (
@@ -61,13 +64,15 @@ RETURNING condition_id;
     createWorkflowTransition: `INSERT INTO m_workflows_transition (
     from_task_id, 
     to_task_id, 
+    from_node_id, 
+    to_node_id, 
     from_task_type, 
     to_task_type, 
     condition_type,
     created_by, 
     updated_by
 ) 
-VALUES ($1, $2, $3, $4, $5, $6, $7) 
+VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) 
 RETURNING transition_id;
 `,
     createWorkflowsAssignment: `INSERT INTO tr_workflows_assignment (
@@ -111,6 +116,17 @@ RETURNING workflows_task_form_submission_id;
 ) 
 VALUES ($1, $2, $3) 
 RETURNING workflow_transaction_id;
-`
-
+`,
+    createNode: `INSERT INTO m_nodes (
+        node_name, 
+        node_description, 
+        node_type, 
+        no_of_input_nodes, 
+        no_of_output_nodes, 
+        created_by, 
+        updated_by
+    ) 
+    VALUES ($1, $2, $3, $4, $5, $6, $7) 
+    RETURNING node_id;`
 }
+    

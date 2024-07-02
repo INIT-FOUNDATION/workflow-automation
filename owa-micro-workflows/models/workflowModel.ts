@@ -1,7 +1,7 @@
 import Joi from "joi";
 import { IWorkflow, IWorkflowTask, IWorkflowNotificationTask, IWorkflowDecisionTask, IWorkflowDecisionCondition,
     IWorkflowTransition, IWorkflowAssignment, IWorkflowTaskAssignment, IWorkflowTaskFormSubmission,
-    IWorkflowTransaction, 
+    IWorkflowTransaction, INode
  } from "../types/custom";
 import moment from "moment";
 import { PlainToken } from "../types/express";
@@ -45,8 +45,9 @@ class Workflow implements IWorkflow {
 class WorkflowTask implements IWorkflowTask {
     task_id: number;
     workflow_id: number;
+    node_id: number;
     task_name: string;
-    task_description?: string;
+    task_description: string;
     form_id: number;
     status: number;
     created_by: number;
@@ -55,6 +56,7 @@ class WorkflowTask implements IWorkflowTask {
     constructor(workflowTask: IWorkflowTask, plainToken: PlainToken) {
         this.task_id = workflowTask.task_id;
         this.workflow_id = workflowTask.workflow_id;
+        this.node_id = workflowTask.node_id;
         this.task_name = workflowTask.task_name;
         this.task_description = workflowTask.task_description;
         this.form_id = workflowTask.form_id;
@@ -67,6 +69,7 @@ class WorkflowTask implements IWorkflowTask {
         const workflowTaskSchema = Joi.object({
             task_id: Joi.number().integer().optional(),
             workflow_id: Joi.number().integer().required(),
+            node_id: Joi.number().integer().required(),
             task_name: Joi.string().min(3).max(50).required().error(
                 new Error(`${WORKFLOWS.WORKF0001}`)
             ),
@@ -85,6 +88,7 @@ class WorkflowTask implements IWorkflowTask {
 class WorkflowNotificationTask implements IWorkflowNotificationTask {
     notification_task_id: number;
     workflow_id: number;
+    node_id: number;
     notification_task_name: string;
     notification_task_description: string;
     notification_type: string;
@@ -102,6 +106,7 @@ class WorkflowNotificationTask implements IWorkflowNotificationTask {
     constructor(notificationTask: IWorkflowNotificationTask, plainToken: PlainToken) {
         this.notification_task_id = notificationTask.notification_task_id || 0;
         this.workflow_id = notificationTask.workflow_id;
+        this.node_id = notificationTask.node_id;
         this.notification_task_name = notificationTask.notification_task_name;
         this.notification_task_description = notificationTask.notification_task_description;
         this.notification_type = notificationTask.notification_type;
@@ -121,6 +126,7 @@ class WorkflowNotificationTask implements IWorkflowNotificationTask {
         const notificationTaskSchema = Joi.object({
             notification_task_id: Joi.number().integer().optional(),
             workflow_id: Joi.number().integer().required(),
+            node_id: Joi.number().integer().required(),
             notification_task_name: Joi.string().min(3).max(50).required().error(
                 new Error('NOTIFICATION_TASK00002: Notification task name must be between 3 and 50 characters.')
             ),
@@ -146,6 +152,7 @@ class WorkflowNotificationTask implements IWorkflowNotificationTask {
 class WorkflowDecisionTask implements IWorkflowDecisionTask {
     decision_task_id: number;
     workflow_id: number;
+    node_id: number;
     decision_task_name: string;
     decision_task_description: string;
     status: number;
@@ -155,6 +162,7 @@ class WorkflowDecisionTask implements IWorkflowDecisionTask {
     constructor(decisionTask: IWorkflowDecisionTask, plainToken: PlainToken) {
         this.decision_task_id = decisionTask.decision_task_id || 0;
         this.workflow_id = decisionTask.workflow_id;
+        this.node_id = decisionTask.node_id;
         this.decision_task_name = decisionTask.decision_task_name;
         this.decision_task_description = decisionTask.decision_task_description;
         this.status = decisionTask.status !== undefined ? decisionTask.status : 1;
@@ -166,6 +174,7 @@ class WorkflowDecisionTask implements IWorkflowDecisionTask {
         const decisionTaskSchema = Joi.object({
             decision_task_id: Joi.number().integer().optional(),
             workflow_id: Joi.number().integer().required(),
+            node_id: Joi.number().integer().required(),
             decision_task_name: Joi.string().min(3).max(50).required().error(
                 new Error('DECISION_TASK00002: Decision task name must be between 3 and 50 characters.')
             ),
@@ -227,6 +236,8 @@ class WorkflowTransition implements IWorkflowTransition {
     transition_id: number;
     from_task_id: number;
     to_task_id: number;
+    from_node_id: number;
+    to_node_id: number;
     from_task_type: string;
     to_task_type: string;
     condition_type: string;
@@ -239,6 +250,8 @@ class WorkflowTransition implements IWorkflowTransition {
         this.transition_id = transition.transition_id || 0;
         this.from_task_id = transition.from_task_id;
         this.to_task_id = transition.to_task_id;
+        this.from_node_id = transition.from_node_id;
+        this.to_node_id = transition.to_node_id;
         this.from_task_type = transition.from_task_type;
         this.to_task_type = transition.to_task_type;
         this.condition_type = transition.condition_type;
@@ -252,6 +265,8 @@ class WorkflowTransition implements IWorkflowTransition {
             transition_id: Joi.number().integer().optional(),
             from_task_id: Joi.number().integer().required(),
             to_task_id: Joi.number().integer().required(),
+            from_node_id: Joi.number().integer().required(),
+            to_node_id: Joi.number().integer().required(),
             from_task_type: Joi.string().valid('D', 'T', 'N').required(),
             to_task_type: Joi.string().valid('D', 'T', 'N').required(),
             condition_type: Joi.string().valid('MATCHED', 'NOT-MATCHED').required(),
@@ -401,6 +416,49 @@ class WorkflowTransaction implements IWorkflowTransaction {
     }
 }
 
+class Node implements INode {
+    node_id: number;
+    node_name: string;
+    node_description: string;
+    node_type: string;
+    no_of_input_nodes: number;
+    no_of_output_nodes: number;
+    status: number;
+    created_by: number;
+    updated_by: number;
+
+    constructor(node: INode, plainToken: PlainToken) {
+        this.node_id = node.node_id;
+        this.node_name = node.node_name;
+        this.node_description = node.node_description;
+        this.node_type = node.node_type;
+        this.no_of_input_nodes = node.no_of_input_nodes;
+        this.no_of_output_nodes = node.no_of_output_nodes;
+        this.status = node.status || 1;
+        this.created_by = plainToken.user_id;
+        this.updated_by = plainToken.user_id;
+    }
+
+    static validateNode = (node: INode): Joi.ValidationResult => {
+        const nodeSchema = Joi.object({
+            node_id: Joi.number().integer().optional(),
+            node_name: Joi.string().min(3).max(50).required().error(
+                new Error(`${WORKFLOWS.WORKF0001}`)
+            ),
+            node_description: Joi.string().optional().allow(null).error(
+                new Error(`${WORKFLOWS.WORKF0001}`)
+            ),
+            node_type: Joi.string().optional().allow(null).max(50),
+            no_of_input_nodes: Joi.number().integer().optional().allow(null),
+            no_of_output_nodes: Joi.number().integer().optional().allow(null),
+            status: Joi.number().integer().default(1),
+            created_by: Joi.number().integer().required(),
+            updated_by: Joi.number().integer().required(),
+        });
+        return nodeSchema.validate(node);
+    }
+}
+
 export {
     Workflow,
     WorkflowTask,
@@ -411,5 +469,6 @@ export {
     WorkflowAssignment,
     WorkflowTaskAssignment,
     WorkflowTaskFormSubmission,
-    WorkflowTransaction
+    WorkflowTransaction,
+    Node
 }

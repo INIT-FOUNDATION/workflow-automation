@@ -195,6 +195,7 @@ CREATE TABLE m_workflows (
 CREATE TABLE m_workflow_tasks (
     task_id SERIAL PRIMARY KEY,
     workflow_id INT NOT NULL,
+    node_id INT NOT NULL,
     task_name VARCHAR(50) NOT NULL,
     task_description TEXT,
     form_id INT NOT NULL,
@@ -212,6 +213,7 @@ CREATE TABLE m_workflow_notification_tasks (
     notification_task_name VARCHAR(50) NOT NULL,
     notification_task_description TEXT,
     notification_type VARCHAR(50) CHECK (notification_type IN ('SMS', 'WHATSAPP', 'EMAIL')),
+    node_id INT NOT NULL,
     email_subject TEXT,
     email_body TEXT,
     sms_body TEXT,
@@ -230,6 +232,7 @@ CREATE TABLE m_workflow_notification_tasks (
 CREATE TABLE m_workflow_decision_tasks (
     decision_task_id SERIAL PRIMARY KEY,
     workflow_id INT NOT NULL,
+    node_id INT NOT NULL,
     decision_task_name VARCHAR(50) NOT NULL,
     decision_task_description TEXT,
     status SMALLINT DEFAULT 1,
@@ -259,6 +262,8 @@ CREATE TABLE m_workflows_transition (
     transition_id SERIAL PRIMARY KEY,
     from_task_id INT NOT NULL,
     to_task_id INT NOT NULL,
+    from_node_id INT NOT NULL,
+    to_node_id INT NOT NULL,
     from_task_type VARCHAR(1) CHECK (from_task_type IN ('D', 'T', 'N')),
     to_task_type VARCHAR(1) CHECK (to_task_type IN ('D', 'T', 'N')),
     condition_type VARCHAR(20) CHECK (condition_type IN ('MATCHED', 'NOT-MATCHED')),
@@ -317,6 +322,21 @@ CREATE TABLE tr_workflow_transaction (
     workflow_transaction_id SERIAL PRIMARY KEY,
     transition_id INT NOT NULL,
     transaction_status SMALLINT DEFAULT 1,
+    date_created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    date_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    created_by INT,
+    updated_by INT
+);
+
+-- Table: m_nodes
+CREATE TABLE m_nodes (
+    node_id SERIAL PRIMARY KEY,
+    node_name VARCHAR(50) NOT NULL,
+    node_description TEXT,
+    node_type VARCHAR(50),
+    no_of_input_nodes INT,
+    no_of_output_nodes INT,
+    status SMALLINT DEFAULT 1,
     date_created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     date_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     created_by INT,

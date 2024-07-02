@@ -2,7 +2,7 @@ import { CACHE_TTL } from "../constants/CONST";
 import { redis, logger, pg } from "owa-micro-common";
 import { IWorkflow, IWorkflowTask, IWorkflowNotificationTask, IWorkflowDecisionTask, IWorkflowDecisionCondition,
     IWorkflowTransition, IWorkflowAssignment, IWorkflowTaskAssignment, IWorkflowTaskFormSubmission,
-    IWorkflowTransaction, 
+    IWorkflowTransaction, INode
  } from "../types/custom";
  import { WORKFLOW } from "../constants/QUERY";
 import moment from "moment";
@@ -32,7 +32,7 @@ export const workflowRepository = {
             logger.info(`workflowRepository :: Inside createWorkflowTask`);
             const _query = {
                 text: WORKFLOW.createWorkflowtask,
-                values: [task.workflow_id, task.task_name, task.task_description, task.form_id, task.created_by, task.updated_by]
+                values: [task.workflow_id, task.node_id, task.task_name, task.task_description, task.form_id, task.created_by, task.updated_by]
             }
     
             const result = await pg.executeQueryPromise(_query);
@@ -49,7 +49,7 @@ export const workflowRepository = {
             logger.info(`workflowRepository :: Inside createWorkflowNotificationTasks`);
             const _query = {
                 text: WORKFLOW.ceateWorkflowNotificationTasks,
-                values: [notificationTask.workflow_id, notificationTask.notification_task_name, notificationTask.notification_task_description, notificationTask.notification_type, notificationTask.email_subject, notificationTask.email_body, notificationTask.sms_body, notificationTask.template_id, notificationTask.placeholders, notificationTask.recipient_emails, notificationTask.recipient_mobilenumber, notificationTask.created_by, notificationTask.updated_by]
+                values: [notificationTask.workflow_id, notificationTask.node_id, notificationTask.notification_task_name, notificationTask.notification_task_description, notificationTask.notification_type, notificationTask.email_subject, notificationTask.email_body, notificationTask.sms_body, notificationTask.template_id, notificationTask.placeholders, notificationTask.recipient_emails, notificationTask.recipient_mobilenumber, notificationTask.created_by, notificationTask.updated_by]
             }
     
             const result = await pg.executeQueryPromise(_query);
@@ -66,7 +66,7 @@ export const workflowRepository = {
             logger.info(`workflowRepository :: Inside createWorkflowDecisionTasks`);
             const _query = {
                 text: WORKFLOW.createWorkflowDecisionTasks,
-                values: [decisionTask.workflow_id, decisionTask.decision_task_name, decisionTask.decision_task_description, decisionTask.created_by, decisionTask.updated_by]
+                values: [decisionTask.workflow_id, decisionTask.node_id, decisionTask.decision_task_name, decisionTask.decision_task_description, decisionTask.created_by, decisionTask.updated_by]
             }
     
             const result = await pg.executeQueryPromise(_query);
@@ -100,7 +100,7 @@ export const workflowRepository = {
             logger.info(`workflowRepository :: Inside createWorkflowTransition`);
             const _query = {
                 text: WORKFLOW.createWorkflowTransition,
-                values: [transition.from_task_id, transition.to_task_id, transition.from_task_type, transition.to_task_type, transition.condition_type, transition.created_by, transition.updated_by]
+                values: [transition.from_task_id, transition.to_task_id, transition.from_node_id, transition.to_node_id, transition.from_task_type, transition.to_task_type, transition.condition_type, transition.created_by, transition.updated_by]
             }
     
             const result = await pg.executeQueryPromise(_query);
@@ -180,14 +180,22 @@ export const workflowRepository = {
         }
     },
     
+    createNode: async(node: INode) : Promise<number> => {
+        try {
+            logger.info(`workflowRepository :: Inside createNode`);
+            const _query = {
+                text: WORKFLOW.createNode,
+                values: [node.node_name, node.node_description, node.node_type, node.no_of_input_nodes, node.no_of_output_nodes, node.created_by, node.updated_by]
+            }
     
-    
-    
-    
-    
-    
-    
-    
+            const result = await pg.executeQueryPromise(_query);
+            logger.info(`workflowRepository :: createNode :: result :: ${JSON.stringify(result)}`);
+            return result[0].node_id;
+        } catch (error) {
+            logger.error(`workflowRepository :: createNode :: ${error.message} :: ${error}`);
+            throw new Error(error.message);
+        }
+    },
 
     executeTransactionQuery: async(query: string) : Promise<void> => {
         try{
