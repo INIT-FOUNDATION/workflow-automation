@@ -9,6 +9,7 @@ export class DropdownFieldComponent implements OnInit {
   @Input() fieldData: any = {};
   @Output() deleteFormFieldIndex = new EventEmitter<number>();
   @Output() editFormFieldIndex = new EventEmitter<number>();
+  @Input() disabled: boolean;
 
   labelValue: string;
   ngOnInit(): void {

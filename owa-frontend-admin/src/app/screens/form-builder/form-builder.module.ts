@@ -13,6 +13,7 @@ import { RadioButtonComponent } from './component/add-form-builder/fieldsCompone
 import { CheckboxButtonComponent } from './component/add-form-builder/fieldsComponent/checkbox-button/checkbox-button.component';
 import { DropdownFieldComponent } from './component/add-form-builder/fieldsComponent/dropdown-field/dropdown-field.component';
 import { CreateFormNameComponent } from './component/create-form-name/create-form-name.component';
+import { FormPreviewScreenComponent } from './component/form-preview-screen/form-preview-screen.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { CreateFormNameComponent } from './component/create-form-name/create-for
     RadioButtonComponent,
     CheckboxButtonComponent,
     DropdownFieldComponent,
-    CreateFormNameComponent
+    CreateFormNameComponent,
+    FormPreviewScreenComponent
   ],
   imports: [CommonModule, FormBuilderRoutingModule, SharedModule],
 })

@@ -7,6 +7,7 @@ import {
   Output,
   SimpleChanges,
 } from '@angular/core';
+import { elementAt } from 'rxjs';
 
 @Component({
   selector: 'app-input-field',
@@ -20,14 +21,20 @@ export class InputFieldComponent implements OnInit {
   @Output() editFormFieldIndex = new EventEmitter<number>();
 
   labelValue: string;
+  placeholderValue: string;
   ngOnInit(): void {
     this.getInputValue();
+    this.getPlaceholder();
   }
 
   getInputValue() {
     this.labelValue = this.fieldData.options
       .filter((element) => element.label)
       .map((element) => element.label);
+  }
+
+  getPlaceholder() {
+    this.placeholderValue = this.fieldData.options.filter((element) => element.placeholder).map((element) => element.placeholder)
   }
 
   deleteFormField(index) {

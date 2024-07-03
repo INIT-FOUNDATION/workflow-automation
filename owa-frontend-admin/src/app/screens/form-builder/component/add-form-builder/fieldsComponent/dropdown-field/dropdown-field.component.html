@@ -1,22 +1,14 @@
 <mat-form-field class="w-full relative" appearance="outline">
-  <div
-    class="absolute right-4 -top-5 cursor-pointer"
-    (click)="editFormField(fieldData?.form_field_assoc_id)"
-  >
+  <div class="absolute right-4 -top-5 cursor-pointer" (click)="editFormField(fieldData?.form_field_assoc_id)"
+    [ngClass]="[!disabled ? 'hidden' : 'block']">
     <i class="fa-solid fa-pen-to-square text-lg bg-white"></i>
   </div>
-  <div
-    class="absolute -right-2 -top-5 cursor-pointer"
-    (click)="deleteFormField(fieldData?.form_field_assoc_id)"
-  >
+  <div *ngIf="disabled" class="absolute -right-2 -top-5 cursor-pointer"
+    (click)="deleteFormField(fieldData?.form_field_assoc_id)">
     <i class="fa-solid fa-circle-xmark text-xl text-red-600 bg-white"></i>
   </div>
   <mat-label>{{ labelValue }}</mat-label>
-  <mat-select disabled>
-    <mat-option
-      *ngFor="let item of fieldData?.options[0]?.options"
-      [value]="item?.value"
-      >{{ item?.value }}</mat-option
-    >
+  <mat-select disabled [disabled]="disabled">
+    <mat-option *ngFor="let item of fieldData?.options[0]?.options" [value]="item?.value">{{ item?.value }}</mat-option>
   </mat-select>
 </mat-form-field>
