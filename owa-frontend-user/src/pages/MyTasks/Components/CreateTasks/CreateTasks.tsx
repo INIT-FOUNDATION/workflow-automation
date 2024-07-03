@@ -104,11 +104,21 @@ const CreateTasks: React.FC = () => {
 
           <div className="custom-btn flex justify-center pt-28 inset-x-2">
             <button
-              className="rounded w-full create-task-button"
+              className="rounded w-full advanced-trigger-button"
               onClick={() => handleNextClick()}
               type="submit"
             >
-              Next
+              Set Advanced Triggers
+            </button>
+          </div>
+
+          <div className="custom-btn flex justify-center pt-5 inset-x-2">
+            <button
+              className="rounded w-full create-task-button"
+              // onClick={() => handleNextClick()}
+              type="submit"
+            >
+              Create Task
             </button>
           </div>
         </form>

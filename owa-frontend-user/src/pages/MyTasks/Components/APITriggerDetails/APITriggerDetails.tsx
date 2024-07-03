@@ -257,7 +257,7 @@ const ApiTriggerDetails: React.FC = () => {
       <div className="flex-grow mt-8">
         <div className="flex justify-center ">
           <button className="rounded w-full create-task-button" type="submit">
-            CREATE TASK
+            Sve API Trigger
           </button>
         </div>
       </div>

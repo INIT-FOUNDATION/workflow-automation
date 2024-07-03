@@ -144,7 +144,7 @@ const NotificationTriggerDetails: React.FC = () => {
       <div className="flex-grow">
         <div className="flex justify-center">
           <button className="rounded w-full create-task-button" type="submit">
-            CREATE TASK
+            Save Notification Trigger
           </button>
         </div>
       </div>

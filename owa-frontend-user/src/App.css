@@ -25,7 +25,7 @@ ion-button {
 }
 
 .create-task-button {
-  background-image: linear-gradient(to bottom, #e0001e, #70000f) !important;
+  background-color: #da2128 !important;
   padding: 10px;
   color: #fff;
 }
