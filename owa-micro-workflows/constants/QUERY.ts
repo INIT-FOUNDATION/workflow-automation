@@ -53,26 +53,21 @@ RETURNING decision_task_id;
     decision_task_id, 
     operand_one, 
     operator, 
-    operand_two, 
-    condition_type,
+    operand_two,
     created_by, 
     updated_by
 ) 
-VALUES ($1, $2, $3, $4, $5, $6, $7) 
+VALUES ($1, $2, $3, $4, $5, $6) 
 RETURNING condition_id;
 `,
-    createWorkflowTransition: `INSERT INTO m_workflows_transition (
+    createWorkflowTransition: `INSERT INTO m_workflow_transition (
     from_task_id, 
-    to_task_id, 
-    from_node_id, 
-    to_node_id, 
-    from_task_type, 
-    to_task_type, 
+    to_task_id,
     condition_type,
     created_by, 
     updated_by
 ) 
-VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) 
+VALUES ($1, $2, $3, $4, $5) 
 RETURNING transition_id;
 `,
     createWorkflowsAssignment: `INSERT INTO tr_workflows_assignment (

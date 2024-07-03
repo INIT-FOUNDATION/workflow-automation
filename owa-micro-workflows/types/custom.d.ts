@@ -42,6 +42,7 @@ export interface IWorkflowDecisionTask {
     decision_task_id: number;
     workflow_id: number;
     node_id: number;
+    conditions: IWorkflowDecisionCondition[];
     decision_task_name: string;
     decision_task_description: string;
     status: number;
@@ -55,7 +56,6 @@ export interface IWorkflowDecisionCondition {
     operand_one: string;
     operator: string;
     operand_two: string;
-    condition_type: string;
     status: number;
     created_by: number | undefined;
     updated_by: number | undefined;
@@ -63,12 +63,9 @@ export interface IWorkflowDecisionCondition {
 
 export interface IWorkflowTransition {
     transition_id: number;
+    workflow_id: number;
     from_task_id: number;
     to_task_id: number;
-    from_node_id: number;
-    to_node_id: number;
-    from_task_type: string;
-    to_task_type: string;
     condition_type: string;
     status: number;
     created_by: number;

@@ -68,7 +68,7 @@ class WorkflowTask implements IWorkflowTask {
     static validateWorkflowTask = (workflowTask: IWorkflowTask): Joi.ValidationResult => {
         const workflowTaskSchema = Joi.object({
             task_id: Joi.number().integer().optional(),
-            workflow_id: Joi.number().integer().required(),
+            workflow_id: Joi.number().integer().optional(),
             node_id: Joi.number().integer().required(),
             task_name: Joi.string().min(3).max(50).required().error(
                 new Error(`${WORKFLOWS.WORKF0001}`)
@@ -104,7 +104,7 @@ class WorkflowNotificationTask implements IWorkflowNotificationTask {
     updated_by: number;
 
     constructor(notificationTask: IWorkflowNotificationTask, plainToken: PlainToken) {
-        this.notification_task_id = notificationTask.notification_task_id || 0;
+        this.notification_task_id = notificationTask.notification_task_id
         this.workflow_id = notificationTask.workflow_id;
         this.node_id = notificationTask.node_id;
         this.notification_task_name = notificationTask.notification_task_name;
@@ -125,7 +125,7 @@ class WorkflowNotificationTask implements IWorkflowNotificationTask {
     static validateNotificationTask = (notificationTask: IWorkflowNotificationTask): Joi.ValidationResult => {
         const notificationTaskSchema = Joi.object({
             notification_task_id: Joi.number().integer().optional(),
-            workflow_id: Joi.number().integer().required(),
+            workflow_id: Joi.number().integer().optional(),
             node_id: Joi.number().integer().required(),
             notification_task_name: Joi.string().min(3).max(50).required().error(
                 new Error('NOTIFICATION_TASK00002: Notification task name must be between 3 and 50 characters.')
@@ -155,16 +155,18 @@ class WorkflowDecisionTask implements IWorkflowDecisionTask {
     node_id: number;
     decision_task_name: string;
     decision_task_description: string;
+    conditions: IWorkflowDecisionCondition[];
     status: number;
     created_by: number;
     updated_by: number;
 
     constructor(decisionTask: IWorkflowDecisionTask, plainToken: PlainToken) {
-        this.decision_task_id = decisionTask.decision_task_id || 0;
+        this.decision_task_id = decisionTask.decision_task_id
         this.workflow_id = decisionTask.workflow_id;
         this.node_id = decisionTask.node_id;
         this.decision_task_name = decisionTask.decision_task_name;
         this.decision_task_description = decisionTask.decision_task_description;
+        this.conditions = decisionTask.conditions;
         this.status = decisionTask.status !== undefined ? decisionTask.status : 1;
         this.created_by = decisionTask.created_by || plainToken.user_id;
         this.updated_by = decisionTask.updated_by || plainToken.user_id;
@@ -173,7 +175,7 @@ class WorkflowDecisionTask implements IWorkflowDecisionTask {
     static validateDecisionTask = (decisionTask: IWorkflowDecisionTask): Joi.ValidationResult => {
         const decisionTaskSchema = Joi.object({
             decision_task_id: Joi.number().integer().optional(),
-            workflow_id: Joi.number().integer().required(),
+            workflow_id: Joi.number().integer().optional(),
             node_id: Joi.number().integer().required(),
             decision_task_name: Joi.string().min(3).max(50).required().error(
                 new Error('DECISION_TASK00002: Decision task name must be between 3 and 50 characters.')
@@ -181,6 +183,7 @@ class WorkflowDecisionTask implements IWorkflowDecisionTask {
             decision_task_description: Joi.string().required().error(
                 new Error('DECISION_TASK00003: Decision task description is required.')
             ),
+            conditions: Joi.array().optional(),
             status: Joi.number().integer().default(1),
             created_by: Joi.number().integer().required(),
             updated_by: Joi.number().integer().required(),
@@ -195,18 +198,16 @@ class WorkflowDecisionCondition implements IWorkflowDecisionCondition {
     operand_one: string;
     operator: string;
     operand_two: string;
-    condition_type: string;
     status: number;
     created_by: number;
     updated_by: number;
 
     constructor(decisionCondition: IWorkflowDecisionCondition, plainToken: PlainToken) {
-        this.condition_id = decisionCondition.condition_id || 0;
+        this.condition_id = decisionCondition.condition_id
         this.decision_task_id = decisionCondition.decision_task_id;
         this.operand_one = decisionCondition.operand_one;
         this.operator = decisionCondition.operator;
         this.operand_two = decisionCondition.operand_two;
-        this.condition_type = decisionCondition.condition_type;
         this.status = decisionCondition.status !== undefined ? decisionCondition.status : 1;
         this.created_by = decisionCondition.created_by || plainToken.user_id;
         this.updated_by = decisionCondition.updated_by || plainToken.user_id;
@@ -215,7 +216,7 @@ class WorkflowDecisionCondition implements IWorkflowDecisionCondition {
     static validateDecisionCondition = (decisionCondition: IWorkflowDecisionCondition): Joi.ValidationResult => {
         const decisionConditionSchema = Joi.object({
             condition_id: Joi.number().integer().optional(),
-            decision_task_id: Joi.number().integer().required(),
+            decision_task_id: Joi.number().integer().optional(),
             operand_one: Joi.string().required().error(
                 new Error('DECISION_CONDITION00001: Operand one is required.')
             ),
@@ -223,7 +224,6 @@ class WorkflowDecisionCondition implements IWorkflowDecisionCondition {
             operand_two: Joi.string().required().error(
                 new Error('DECISION_CONDITION00002: Operand two is required.')
             ),
-            condition_type: Joi.string().valid('MATCHED', 'NOT-MATCHED').required(),
             status: Joi.number().integer().default(1),
             created_by: Joi.number().integer().required(),
             updated_by: Joi.number().integer().required(),
@@ -234,26 +234,19 @@ class WorkflowDecisionCondition implements IWorkflowDecisionCondition {
 
 class WorkflowTransition implements IWorkflowTransition {
     transition_id: number;
+    workflow_id: number;
     from_task_id: number;
     to_task_id: number;
-    from_node_id: number;
-    to_node_id: number;
-    from_task_type: string;
-    to_task_type: string;
     condition_type: string;
     status: number;
-    date_created: string;
-    date_updated: string;    created_by: number;
+    created_by: number;
     updated_by: number;
 
     constructor(transition: IWorkflowTransition, plainToken: PlainToken) {
-        this.transition_id = transition.transition_id || 0;
+        this.transition_id = transition.transition_id
+        this.workflow_id = transition.workflow_id;
         this.from_task_id = transition.from_task_id;
         this.to_task_id = transition.to_task_id;
-        this.from_node_id = transition.from_node_id;
-        this.to_node_id = transition.to_node_id;
-        this.from_task_type = transition.from_task_type;
-        this.to_task_type = transition.to_task_type;
         this.condition_type = transition.condition_type;
         this.status = transition.status !== undefined ? transition.status : 1;
         this.created_by = transition.created_by || plainToken.user_id;
@@ -263,13 +256,10 @@ class WorkflowTransition implements IWorkflowTransition {
     static validateTransition = (transition: IWorkflowTransition): Joi.ValidationResult => {
         const transitionSchema = Joi.object({
             transition_id: Joi.number().integer().optional(),
+            workflow_id: Joi.number().integer().optional(),
             from_task_id: Joi.number().integer().required(),
             to_task_id: Joi.number().integer().required(),
-            from_node_id: Joi.number().integer().required(),
-            to_node_id: Joi.number().integer().required(),
-            from_task_type: Joi.string().valid('D', 'T', 'N').required(),
-            to_task_type: Joi.string().valid('D', 'T', 'N').required(),
-            condition_type: Joi.string().valid('MATCHED', 'NOT-MATCHED').required(),
+            condition_type: Joi.string().valid('MATCHED', 'NOT-MATCHED').optional().allow(null, ''),
             status: Joi.number().integer().default(1),
             created_by: Joi.number().integer().required(),
             updated_by: Joi.number().integer().required(),
@@ -288,7 +278,7 @@ class WorkflowAssignment implements IWorkflowAssignment {
     updated_by: number;
 
     constructor(assignment: IWorkflowAssignment, plainToken: PlainToken) {
-        this.workflow_assignment_id = assignment.workflow_assignment_id || 0;
+        this.workflow_assignment_id = assignment.workflow_assignment_id
         this.workflow_id = assignment.workflow_id;
         this.workflow_triggered_on = assignment.workflow_triggered_on || moment().toISOString();
         this.workflow_triggered_by = assignment.workflow_triggered_by || plainToken.user_id;
@@ -323,7 +313,7 @@ class WorkflowTaskAssignment implements IWorkflowTaskAssignment {
     updated_by: number;
 
     constructor(assignment: IWorkflowTaskAssignment) {
-        this.workflow_task_assignment_id = assignment.workflow_task_assignment_id || 0;
+        this.workflow_task_assignment_id = assignment.workflow_task_assignment_id
         this.workflow_assignment_id = assignment.workflow_assignment_id;
         this.task_id = assignment.task_id;
         this.assigned_to = assignment.assigned_to;
@@ -362,7 +352,7 @@ class WorkflowTaskFormSubmission implements IWorkflowTaskFormSubmission {
     updated_by: number;
 
     constructor(taskFormSubmission: IWorkflowTaskFormSubmission, plainToken: PlainToken) {
-        this.workflows_task_form_submission_id = taskFormSubmission.workflows_task_form_submission_id || 0;
+        this.workflows_task_form_submission_id = taskFormSubmission.workflows_task_form_submission_id
         this.workflow_task_assignment_id = taskFormSubmission.workflow_task_assignment_id;
         this.form_id = taskFormSubmission.form_id;
         this.form_data = taskFormSubmission.form_data || {};
@@ -397,7 +387,7 @@ class WorkflowTransaction implements IWorkflowTransaction {
     updated_by: number;
 
     constructor(transaction: IWorkflowTransaction, plainToken: PlainToken) {
-        this.workflow_transaction_id = transaction.workflow_transaction_id || 0;
+        this.workflow_transaction_id = transaction.workflow_transaction_id
         this.transition_id = transaction.transition_id;
         this.transaction_status = transaction.transaction_status !== undefined ? transaction.transaction_status : 1;
         this.created_by = transaction.created_by || plainToken.user_id;

@@ -191,9 +191,11 @@ CREATE TABLE m_workflows (
     updated_by INT
 );
 
+CREATE SEQUENCE workflow_tasks_sequence START WITH 100 INCREMENT BY 3;
+
 -- Table: m_workflow_tasks
 CREATE TABLE m_workflow_tasks (
-    task_id SERIAL PRIMARY KEY,
+    task_id INT PRIMARY KEY DEFAULT nextval('workflow_tasks_sequence'),
     workflow_id INT NOT NULL,
     node_id INT NOT NULL,
     task_name VARCHAR(50) NOT NULL,
@@ -206,9 +208,11 @@ CREATE TABLE m_workflow_tasks (
     updated_by INT
 );
 
+CREATE SEQUENCE workflow_notification_tasks_sequence START WITH 101 INCREMENT BY 3;
+
 -- Table: m_workflow_notification_tasks
 CREATE TABLE m_workflow_notification_tasks (
-    notification_task_id SERIAL PRIMARY KEY,
+    notification_task_id INT PRIMARY KEY DEFAULT nextval('workflow_notification_tasks_sequence'),
     workflow_id INT NOT NULL,
     notification_task_name VARCHAR(50) NOT NULL,
     notification_task_description TEXT,
@@ -228,9 +232,11 @@ CREATE TABLE m_workflow_notification_tasks (
     updated_by INT
 );
 
+CREATE SEQUENCE workflow_decision_tasks_sequence START WITH 102 INCREMENT BY 3;
+
 -- Table: m_workflow_decision_tasks
 CREATE TABLE m_workflow_decision_tasks (
-    decision_task_id SERIAL PRIMARY KEY,
+    decision_task_id INT PRIMARY KEY DEFAULT nextval('workflow_decision_tasks_sequence'),
     workflow_id INT NOT NULL,
     node_id INT NOT NULL,
     decision_task_name VARCHAR(50) NOT NULL,
@@ -257,15 +263,11 @@ CREATE TABLE m_workflow_decision_conditions (
     updated_by INT
 );
 
--- Table: m_workflows_transition
-CREATE TABLE m_workflows_transition (
+-- Table: m_workflow_transition
+CREATE TABLE m_workflow_transition (
     transition_id SERIAL PRIMARY KEY,
     from_task_id INT NOT NULL,
     to_task_id INT NOT NULL,
-    from_node_id INT NOT NULL,
-    to_node_id INT NOT NULL,
-    from_task_type VARCHAR(1) CHECK (from_task_type IN ('D', 'T', 'N')),
-    to_task_type VARCHAR(1) CHECK (to_task_type IN ('D', 'T', 'N')),
     condition_type VARCHAR(20) CHECK (condition_type IN ('MATCHED', 'NOT-MATCHED')),
     status SMALLINT DEFAULT 1,
     date_created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

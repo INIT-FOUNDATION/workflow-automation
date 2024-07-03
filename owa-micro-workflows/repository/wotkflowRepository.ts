@@ -20,7 +20,7 @@ export const workflowRepository = {
 
             const result = await pg.executeQueryPromise(_query);
             logger.info(`workflowRepository :: createWorkflow :: result :: ${JSON.stringify(result)}`);
-            return result[0].form_id;
+            return result[0].workflow_id;
         } catch (error) {
             logger.error(`workflowRepository :: createWorkflow :: ${error.message} :: ${error}`)
             throw new Error(error.message);
@@ -83,7 +83,7 @@ export const workflowRepository = {
             logger.info(`workflowRepository :: Inside createWorkflowDecisionConditions`);
             const _query = {
                 text: WORKFLOW.createWorkflowDecisionConditions,
-                values: [decisionCondition.decision_task_id, decisionCondition.operand_one, decisionCondition.operator, decisionCondition.operand_two, decisionCondition.condition_type, decisionCondition.created_by, decisionCondition.updated_by]
+                values: [decisionCondition.decision_task_id, decisionCondition.operand_one, decisionCondition.operator, decisionCondition.operand_two, decisionCondition.created_by, decisionCondition.updated_by]
             }
     
             const result = await pg.executeQueryPromise(_query);
@@ -100,7 +100,7 @@ export const workflowRepository = {
             logger.info(`workflowRepository :: Inside createWorkflowTransition`);
             const _query = {
                 text: WORKFLOW.createWorkflowTransition,
-                values: [transition.from_task_id, transition.to_task_id, transition.from_node_id, transition.to_node_id, transition.from_task_type, transition.to_task_type, transition.condition_type, transition.created_by, transition.updated_by]
+                values: [transition.from_task_id, transition.to_task_id, transition.condition_type, transition.created_by, transition.updated_by]
             }
     
             const result = await pg.executeQueryPromise(_query);
