@@ -74,12 +74,19 @@ export const workflowController = {
                             },
                             {
                                 "task_id": 3,
-                                "node_id": 1,
-                                "node_type": "T",
+                                "node_id": 3,
+                                "node_type": "N",
                                 "is_new": true,
-                                "task_name": "noraml task",
-                                "task_description": "noraml task",
-                                "form_id": 2
+                                "notification_task_name": "notification task",
+                                "notification_task_description": "notification task",
+                                "notification_type": "SMS|WHATSAPP|EMAIL",
+                                "email_subject": "subject",
+                                "email_body": "email_body",
+                                "sms_body": "sms_body",
+                                "template_id": "template_id",
+                                "placeholders": [{"one", "two", "three"}],
+                                "recipient_emails": "abc@gmail.com",
+                                "recipient_mobilenumber": "9979459453"
                             }
                         ],
                         "transitions": [
@@ -180,7 +187,7 @@ export const workflowController = {
 
         return res.status(STATUS.OK).send({
             data: workflowId,
-            message: "Workflow Service is Healthy",
+            message: "Workflow created Successfully",
         });
     }
 }
