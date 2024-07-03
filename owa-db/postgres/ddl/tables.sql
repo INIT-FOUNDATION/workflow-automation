@@ -267,6 +267,7 @@ CREATE TABLE m_workflow_decision_conditions (
 CREATE TABLE m_workflow_transition (
     transition_id SERIAL PRIMARY KEY,
     from_task_id INT NOT NULL,
+    workflow_id INT NOT NULL,
     to_task_id INT NOT NULL,
     condition_type VARCHAR(20) CHECK (condition_type IN ('MATCHED', 'NOT-MATCHED')),
     status SMALLINT DEFAULT 1,

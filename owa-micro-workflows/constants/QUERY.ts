@@ -61,13 +61,14 @@ VALUES ($1, $2, $3, $4, $5, $6)
 RETURNING condition_id;
 `,
     createWorkflowTransition: `INSERT INTO m_workflow_transition (
+    workflow_id,
     from_task_id, 
     to_task_id,
     condition_type,
     created_by, 
     updated_by
 ) 
-VALUES ($1, $2, $3, $4, $5) 
+VALUES ($1, $2, $3, $4, $5, 46) 
 RETURNING transition_id;
 `,
     createWorkflowsAssignment: `INSERT INTO tr_workflows_assignment (
@@ -122,6 +123,17 @@ RETURNING workflow_transaction_id;
         updated_by
     ) 
     VALUES ($1, $2, $3, $4, $5, $6, $7) 
-    RETURNING node_id;`
+    RETURNING node_id;`,    
+    latestUpdatedCheck: `SELECT COUNT(*) as count FROM m_workflows WHERE date_updated >= NOW() - INTERVAL '5 minutes'`,
+    workflowsTotalCount: `SELECT COUNT(*) as count FROM m_workflows WHERE 1=1`,
+    listWorkflows: `SELECT workflow_id, workflow_name, workflow_description, status, created_by, updated_by FROM m_workflows WHERE 1=1`,
+    listNodes: `SELECT node_id, node_name, node_description, node_type, no_of_input_nodes, 
+        no_of_output_nodes, status, created_by, updated_by FROM m_nodes WHERE 1=1`,
+    getWorkflow: `SELECT workflow_id, workflow_name, workflow_description, status, created_by, updated_by FROM m_workflows WHERE workflow_id = $1`,
+    getWorkflowTasks: `SELECT * FROM m_workflow_tasks WHERE workflow_id = $1`,
+    getWorkflowNotificationTasks: `SELECT * FROM m_workflow_notification_tasks WHERE workflow_id = $1`,
+    getWorkflowDecisionTasks: `SELECT * FROM m_workflow_decision_tasks WHERE workflow_id = $1`,
+    getWorkflowDecisionCondition: `SELECT * FROM m_workflow_decision_conditions WHERE decision_task_id = $1`,
+    getWorkflowTransitions: `SELECT * FROM m_workflow_transition WHERE workflow_id = $1`,
 }
     

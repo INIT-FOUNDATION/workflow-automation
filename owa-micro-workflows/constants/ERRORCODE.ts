@@ -12,6 +12,10 @@ export const WORKFLOWS = {
   WORKF0003: {
     errorCode: "WORKF0002",
     errorMessage: " Workflow description is required.",
+  },
+  WORKF0004: {
+    errorCode: "WORKF0004",
+    errorMessage: " Workflow Id required.",
   }
 };
 

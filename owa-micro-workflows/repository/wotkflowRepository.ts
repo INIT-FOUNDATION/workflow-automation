@@ -100,7 +100,7 @@ export const workflowRepository = {
             logger.info(`workflowRepository :: Inside createWorkflowTransition`);
             const _query = {
                 text: WORKFLOW.createWorkflowTransition,
-                values: [transition.from_task_id, transition.to_task_id, transition.condition_type, transition.created_by, transition.updated_by]
+                values: [transition.workflow_id, transition.from_task_id, transition.to_task_id, transition.condition_type, transition.created_by, transition.updated_by]
             }
     
             const result = await pg.executeQueryPromise(_query);
@@ -193,6 +193,202 @@ export const workflowRepository = {
             return result[0].node_id;
         } catch (error) {
             logger.error(`workflowRepository :: createNode :: ${error.message} :: ${error}`);
+            throw new Error(error.message);
+        }
+    },
+
+    workflowsUpdatedWithinFiveMints: async() : Promise<boolean> => {
+        try {
+            logger.info("workflowRepository :: Inside workflowsUpdatedWithinFiveMints");
+
+            const _queryToCheckLatestUpdated = {
+                text: WORKFLOW.latestUpdatedCheck
+            };
+
+            logger.debug(`workflowRepository :: latestUpdated :: query :: ${JSON.stringify(_queryToCheckLatestUpdated)}`)
+            const latestUpdatedInForm = await pg.executeQueryPromise(_queryToCheckLatestUpdated);
+            const isWorkflowsUpdatedWithin5mins = (latestUpdatedInForm[0].count > 0);
+            logger.info(`workflowRepository :: latestUpdated :: result :: ${JSON.stringify(latestUpdatedInForm)} :: isWorkflowsUpdatedWithin5mins :: ${isWorkflowsUpdatedWithin5mins}`);
+
+            return isWorkflowsUpdatedWithin5mins;
+        } catch (error) {
+            logger.error(`workflowRepository :: workflowsUpdatedWithinFiveMints :: ${error.message} :: ${error}`)
+            throw new Error(error.message);
+        }
+    },
+
+    listWorkflows: async(pageSize: number, currentPage: number, searchQuery: string) : Promise<{workflowList: IWorkflow[], total_count: number}> => {
+        try {
+            const _queryForListOfWorkflows = {
+                text: WORKFLOW.listWorkflows
+            };
+
+            const _queryForTotalCountWorkflows = {
+                text: WORKFLOW.workflowsTotalCount
+            };
+
+            if (searchQuery) {
+                _queryForListOfWorkflows.text += ` AND workflow_name ILIKE '%${searchQuery}%'`;
+                _queryForTotalCountWorkflows.text += ` AND workflow_name ILIKE '%${searchQuery}%'`;
+            }
+            
+            if (pageSize) {
+                _queryForListOfWorkflows.text += ` LIMIT ${pageSize}`;
+            }
+        
+            if (currentPage) {
+                _queryForListOfWorkflows.text += ` OFFSET ${currentPage}`;
+            }
+
+            const workflowsListResponse = {
+                workflowList: [],
+                total_count: 0
+            }
+
+
+            logger.debug(`workflowRepository :: listWorkflowsCount :: query :: ${JSON.stringify(_queryForTotalCountWorkflows)}`);
+
+            const totalCountRes = await pg.executeQueryPromise(_queryForTotalCountWorkflows);
+            logger.debug(`usersService :: listUsersCount :: db result :: ${JSON.stringify(totalCountRes)}`)
+
+            if (totalCountRes.length > 0) {
+                workflowsListResponse.total_count = totalCountRes[0].count;
+            };
+
+            const workflowResult: IWorkflow[] = await pg.executeQueryPromise(_queryForListOfWorkflows);
+            logger.debug(`workflowRepository :: listWorkflows :: db result :: ${JSON.stringify(workflowResult)}`);
+            
+            if (workflowResult && workflowResult.length > 0) {
+                workflowsListResponse.workflowList = workflowResult;
+            }
+            return workflowsListResponse;
+        } catch (error) {
+            logger.error(`workflowRepository :: listWorkflows :: ${error.message} :: ${error}`)
+            throw new Error(error.message);
+        }
+    },
+
+    listNodes: async() : Promise<{nodeList: INode[]}> => {
+        try {
+            const _queryForListOfNodes = {
+                text: WORKFLOW.listNodes
+            };
+
+            const nodesListResponse = {
+                nodeList: []
+            }
+
+            const nodeResult: IWorkflow[] = await pg.executeQueryPromise(_queryForListOfNodes);
+            logger.debug(`workflowRepository :: listnodes :: db result :: ${JSON.stringify(nodeResult)}`);
+            
+            if (nodeResult && nodeResult.length > 0) {
+                nodesListResponse.nodeList = nodeResult;
+            }
+            return nodesListResponse;
+        } catch (error) {
+            logger.error(`workflowRepository :: listWorkflows :: ${error.message} :: ${error}`)
+            throw new Error(error.message);
+        }
+    },
+
+    getWorkflow: async(workflowId: Number) : Promise<IWorkflow> => {
+        try {
+            const _queryForGetWorkflow = {
+                text: WORKFLOW.getWorkflow,
+                values: [workflowId]
+            };
+
+            const workflowResult: IWorkflow[] = await pg.executeQueryPromise(_queryForGetWorkflow);
+            logger.debug(`workflowRepository :: getWorkflow :: db result :: ${JSON.stringify(workflowResult)}`);
+            
+            return workflowResult[0];
+        } catch (error) {
+            logger.error(`workflowRepository :: getWorkflow :: ${error.message} :: ${error}`)
+            throw new Error(error.message);
+        }
+    },
+
+    getWorkflowTasks: async(workflowId: Number) : Promise<IWorkflowTask[]> => {
+        try {
+            const _queryForGetWorkflowTasks = {
+                text: WORKFLOW.getWorkflowTasks,
+                values: [workflowId]
+            };
+
+            const workflowTasksResult: IWorkflowTask[] = await pg.executeQueryPromise(_queryForGetWorkflowTasks);
+            logger.debug(`workflowRepository :: getWorkflowTasks :: db result :: ${JSON.stringify(workflowTasksResult)}`);
+            
+            return workflowTasksResult;
+        } catch (error) {
+            logger.error(`workflowRepository :: getWorkflowTasks :: ${error.message} :: ${error}`)
+            throw new Error(error.message);
+        }
+    },
+
+    getWorkflowNotificationTasks: async(workflowId: Number) : Promise<IWorkflowNotificationTask[]> => {
+        try {
+            const _queryForGetWorkflowNotificationTasks = {
+                text: WORKFLOW.getWorkflowNotificationTasks,
+                values: [workflowId]
+            };
+
+            const workflowNotificationTaskResult: IWorkflowNotificationTask[] = await pg.executeQueryPromise(_queryForGetWorkflowNotificationTasks);
+            logger.debug(`workflowRepository :: getWorkflowNotificationTasks :: db result :: ${JSON.stringify(workflowNotificationTaskResult)}`);
+            
+            return workflowNotificationTaskResult;
+        } catch (error) {
+            logger.error(`workflowRepository :: getWorkflowNotificationTasks :: ${error.message} :: ${error}`)
+            throw new Error(error.message);
+        }
+    },
+
+    getWorkflowDecisionTasks: async(workflowId: Number) : Promise<IWorkflowDecisionTask[]> => {
+        try {
+            const _queryForGetWorkflowDecisionTasks = {
+                text: WORKFLOW.getWorkflowDecisionTasks,
+                values: [workflowId]
+            };
+
+            const workflowDecisionTasksResult: IWorkflowDecisionTask[] = await pg.executeQueryPromise(_queryForGetWorkflowDecisionTasks);
+            logger.debug(`workflowRepository :: getWorkflowDecisionTasks :: db result :: ${JSON.stringify(workflowDecisionTasksResult)}`);
+            
+            return workflowDecisionTasksResult;
+        } catch (error) {
+            logger.error(`workflowRepository :: getWorkflowDecisionTasks :: ${error.message} :: ${error}`)
+            throw new Error(error.message);
+        }
+    },
+
+    getWorkflowTransitions: async(workflowId: Number) : Promise<IWorkflowTransition[]> => {
+        try {
+            const _queryForGetWorkflowTasks = {
+                text: WORKFLOW.getWorkflowTransitions,
+                values: [workflowId]
+            };
+
+            const workflowTransitionsResult: IWorkflowTransition[] = await pg.executeQueryPromise(_queryForGetWorkflowTasks);
+            logger.debug(`workflowRepository :: getWorkflowTransitions :: db result :: ${JSON.stringify(workflowTransitionsResult)}`);
+            
+            return workflowTransitionsResult;
+        } catch (error) {
+            logger.error(`workflowRepository :: getWorkflowTransitions :: ${error.message} :: ${error}`)
+            throw new Error(error.message);
+        }
+    },
+
+    getWorkflowDecisionCondition: async(decisionTaskId: Number) : Promise<IWorkflowDecisionCondition[]> => {
+        try {
+            const _queryForGetWorkflowDecisionCondition = {
+                text: WORKFLOW.getWorkflowDecisionCondition,
+                values: [decisionTaskId]
+            };
+
+            const workflowTasksResult: IWorkflowDecisionCondition[] = await pg.executeQueryPromise(_queryForGetWorkflowDecisionCondition);
+            logger.debug(`workflowRepository :: getWorkflowDecisionCondition :: db result :: ${JSON.stringify(workflowTasksResult)}`);
+            
+            return workflowTasksResult;
+        } catch (error) {
+            logger.error(`workflowRepository :: getWorkflowDecisionCondition :: ${error.message} :: ${error}`)
             throw new Error(error.message);
         }
     },

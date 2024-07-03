@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { logger, STATUS, envUtils } from "owa-micro-common";
-import { } from "../constants/CONST";
+import { GRID_DEFAULT_OPTIONS } from "../constants/CONST";
 import { workflowService } from "../services/workflowService";
 import { WORKFLOWS } from "../constants/ERRORCODE";
 import {
@@ -20,7 +20,7 @@ export const workflowController = {
         /*  
                 #swagger.tags = ['Health']
                 #swagger.summary = 'Health Check API'
-                #swagger.description = 'Endpoint to health check Form Service'
+                #swagger.description = 'Endpoint to health check Workflow Service'
         */
         return res.status(STATUS.OK).send({
             data: null,
@@ -110,7 +110,7 @@ export const workflowController = {
         const workflowTasks: IWorkflowTask[] = [];
         const workflowNotificationTasks: IWorkflowNotificationTask[] = [];
         const workflowDecisionTasks: IWorkflowDecisionTask[] = [];
-        const IWorkflowTransitions: IWorkflowTransition[] = [];
+        const workflowTransitions: IWorkflowTransition[] = [];
 
         const workflowData: IWorkflow = new Workflow(workflow, req.plainToken);
         const { error } = Workflow.validateWorkflow(workflowData);
@@ -145,8 +145,8 @@ export const workflowController = {
                 workflowNotificationTasks.push(workflowNotificationTaskData);
 
             } else if (task.node_type == "D") {
-                const WorkflowDecisionTaskData: IWorkflowDecisionTask = new WorkflowDecisionTask(task, req.plainToken);
-                const { error } = WorkflowDecisionTask.validateDecisionTask(WorkflowDecisionTaskData);
+                const workflowDecisionTaskData: IWorkflowDecisionTask = new WorkflowDecisionTask(task, req.plainToken);
+                const { error } = WorkflowDecisionTask.validateDecisionTask(workflowDecisionTaskData);
                 if (error) {
                     logger.error(`workflowController :: create :: Workflow Decision Task validation failed :: error :: ${JSON.stringify(error)}`);
                     if (error.details != null)
@@ -155,7 +155,7 @@ export const workflowController = {
                 }
 
                 const conditions = task.conditions;
-                WorkflowDecisionTaskData.conditions = [];
+                workflowDecisionTaskData.conditions = [];
                 for (const condition of conditions) {
                     const WorkflowDecisionConditionData: IWorkflowDecisionCondition = new WorkflowDecisionCondition(condition, req.plainToken);
                     const { error } = WorkflowDecisionCondition.validateDecisionCondition(WorkflowDecisionConditionData);
@@ -165,9 +165,9 @@ export const workflowController = {
                             return res.status(STATUS.BAD_REQUEST).send({ errorCode: WORKFLOWS.WORKF0001, errorMessage: error.details[0].message });
                         else return res.status(STATUS.BAD_REQUEST).send({ errorCode: WORKFLOWS.WORKF0001, errorMessage: error.message });
                     }
-                    WorkflowDecisionTaskData.conditions.push(WorkflowDecisionConditionData);
+                    workflowDecisionTaskData.conditions.push(WorkflowDecisionConditionData);
                 }
-                workflowDecisionTasks.push(WorkflowDecisionTaskData);
+                workflowDecisionTasks.push(workflowDecisionTaskData);
             }
         }
 
@@ -180,14 +180,89 @@ export const workflowController = {
                     return res.status(STATUS.BAD_REQUEST).send({ errorCode: WORKFLOWS.WORKF0001, errorMessage: error.details[0].message });
                 else return res.status(STATUS.BAD_REQUEST).send({ errorCode: WORKFLOWS.WORKF0001, errorMessage: error.message });
             }
-            IWorkflowTransitions.push(workflowTransitionData);
+            workflowTransitions.push(workflowTransitionData);
         }
 
-        const workflowId = await workflowService.save(workflowData, workflowTasks, workflowNotificationTasks, workflowDecisionTasks, IWorkflowTransitions);
+        const workflowId = await workflowService.save(workflowData, workflowTasks, workflowNotificationTasks, workflowDecisionTasks, workflowTransitions);
 
         return res.status(STATUS.OK).send({
             data: workflowId,
             message: "Workflow created Successfully",
+        });
+    },
+
+    listWorkflows: async(req: Request, res: Response): Promise<Response> => {
+        /*  
+                #swagger.tags = ['Workflow']
+                #swagger.summary = 'List of workflow'
+                #swagger.description = 'Endpoint to list workflow'
+                #swagger.parameters['Authorization'] = {
+                    in: 'header',
+                    required: true,
+                    type: 'string',
+                    description: 'Bearer token for authentication'
+                }
+        */
+        logger.info(`workflowController :: Inside listWorkflows`);
+        const pageSize = req.body.page_size || GRID_DEFAULT_OPTIONS.PAGE_SIZE;
+        let currentPage = req.body.current_page || GRID_DEFAULT_OPTIONS.CURRENT_PAGE;
+        const searchQuery = req.body.search_query || "";
+
+        if (currentPage > 1) {
+            currentPage = (currentPage - 1) * pageSize;
+        } else {
+            currentPage = 0;
+        }
+
+        logger.info(`workflowController :: listWorkflows :: pageSize :: ${pageSize} :: currentPage :: ${currentPage} :: searchQuery :: ${searchQuery}`);
+
+        const workflowsGridData = await workflowService.listWorkflows(pageSize, currentPage, searchQuery);
+
+        logger.info(`workflowController :: listWorkflows :: response :: ${JSON.stringify(workflowsGridData)}`);
+        return res.status(STATUS.OK).send({
+            data: workflowsGridData,
+            message: "Listed Workflows Successfully",
+        });
+    },
+
+    getByworkflowId: async(req: Request, res: Response): Promise<Response> => {
+        /*  
+                #swagger.tags = ['Workflow']
+                #swagger.summary = 'Get By Workflow Id'
+                #swagger.description = 'Endpoint to health check Workflow Service'
+        */
+       const workflowId = req.params.workflowId ? parseInt(req.params.workflowId) : null;
+
+        if (!workflowId) {
+            return res.status(STATUS.BAD_REQUEST).send(WORKFLOWS.WORKF0004);
+        }
+        
+       const workflow = await workflowService.getByworkflowId(workflowId);
+        return res.status(STATUS.OK).send({
+            data: workflow,
+            message: "Workflow Fetched SuccessFully",
+        });
+    },
+    
+    nodesList: async(req: Request, res: Response): Promise<Response> => {
+        /*  
+                #swagger.tags = ['Workflow']
+                #swagger.summary = 'List of nodes'
+                #swagger.description = 'Endpoint to list nodes'
+                #swagger.parameters['Authorization'] = {
+                    in: 'header',
+                    required: true,
+                    type: 'string',
+                    description: 'Bearer token for authentication'
+                }
+        */
+        logger.info(`workflowController :: Inside nodesList`);
+        const nodesGridData = await workflowService.listNodes();
+
+        logger.info(`workflowController :: listNodes :: response :: ${JSON.stringify(nodesGridData)}`);
+        return res.status(STATUS.OK).send({
+            data: nodesGridData,
+            message: "Listed nodes Successfully",
         });
     }
 }
