@@ -49,15 +49,24 @@ const MyTasks: React.FC = () => {
           />
         </div>
       </div>
-      <div className="flex items-center justify-between ml-4 mt-6 text-lg font-medium text-black">
+      <div className="flex items-center justify-between mx-4 mt-6 text-lg font-medium text-black">
         <span>My Tasks (4)</span>
-        <img
-          src="/Assets/images/MyTasks/filter_alt.svg"
-          alt="filter"
-          className="w-6 h-6 mr-6"
-          onClick={filterClick}
-        />
-        {isOpen && <FliterScreen isOpen={isOpen} setIsOpen={setIsOpen} />}
+        <div className="flex items-center">
+          <select className="px-3 py-1 text-black bg-white text-sm rounded-full border border-gray-400 mr-4">
+            <option> All Tasks </option>
+            <option> In Progress </option>
+            <option> Completed </option>
+            <option> Failed </option>
+            <option> To Do </option>
+          </select>
+          <img
+            src="/Assets/images/MyTasks/filter_alt.svg"
+            alt="filter"
+            className="w-6 h-6"
+            onClick={filterClick}
+          />
+          {isOpen && <FliterScreen isOpen={isOpen} setIsOpen={setIsOpen} />}
+        </div>
       </div>
 
       <IonGrid className="ion-no-padding">
