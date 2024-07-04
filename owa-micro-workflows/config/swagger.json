@@ -1,0 +1,168 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "owa-micro-workflows",
+    "description": "API Swagger for owa-micro-workflows"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:9004",
+      "description": "Local Server"
+    },
+    {
+      "url": "https://apiowa.dev.orrizonte.in",
+      "description": "Development Server"
+    },
+    {
+      "url": "https://apiowa.orrizonte.in",
+      "description": "Production Server"
+    }
+  ],
+  "paths": {
+    "/api/v1/workflow/health": {
+      "get": {
+        "tags": [
+          "Health"
+        ],
+        "summary": "Health Check API",
+        "description": "Endpoint to health check Workflow Service",
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/v1/workflow/create": {
+      "post": {
+        "tags": [
+          "Workflow"
+        ],
+        "summary": "Create workflow",
+        "description": "Endpoint to create workflow",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "description": "Bearer token for authentication",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "workflow": {
+                    "example": "any"
+                  },
+                  "tasks": {
+                    "example": "any"
+                  },
+                  "transitions": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/workflow/update": {
+      "post": {
+        "tags": [
+          "Workflow"
+        ],
+        "summary": "Create workflow",
+        "description": "Endpoint to create workflow",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "description": "Bearer token for authentication",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "workflow": {
+                    "example": "any"
+                  },
+                  "tasks": {
+                    "example": "any"
+                  },
+                  "transitions": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/workflow/list": {
+      "post": {
+        "description": "",
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/v1/workflow/id/{workflowId}": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "workflowId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/v1/workflow/nodesList": {
+      "get": {
+        "description": "",
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    }
+  }
+}

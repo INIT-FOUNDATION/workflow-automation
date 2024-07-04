@@ -7,6 +7,8 @@ import express, {
 import helmet from "helmet";
 import fileUpload from "express-fileupload";
 import dotenv from "dotenv";
+import swaggerUi from 'swagger-ui-express';
+import swaggerFile from './config/swagger.json';
 import routes from "./startup/routes";
 import { AUTH } from "./constants/AUTH";
 
@@ -69,6 +71,8 @@ app.use(function applyXFrame(req: Request, res: Response, next: NextFunction) {
   res.set("X-Frame-Options", "DENY");
   next();
 });
+
+app.use('/api/v1/workflow/docs', swaggerUi.serve, swaggerUi.setup(swaggerFile))
 
 SECURITY(app, AUTH);
 routes(app);
