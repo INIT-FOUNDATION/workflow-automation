@@ -69,14 +69,14 @@ const Header: React.FC<HeaderProps> = ({ showSnackbar }) => {
         <IonButton onClick={notifications}>
           <IonIcon
             icon={notificationsOutline}
-            size="medium"
+            size="large"
             className="text-gray-500"
           />
         </IonButton>
         <IonButton id="click-trigger" onClick={openPopover}>
           <IonIcon
             icon={ellipsisVerticalOutline}
-            size="medium"
+            size="large"
             className="text-gray-500"
           />
         </IonButton>
