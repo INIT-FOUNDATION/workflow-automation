@@ -12,10 +12,14 @@ html {
 ion-app,
 ion-content,
 ion-item,
-ion-button {
+ion-title {
   font-family: "Poppins" !important;
   --background: #ffff !important;
   --color: #000 !important;
+}
+
+ion-button {
+  font-family: "Poppins" !important;
 }
 
 .segment-button-checked {
