@@ -24,8 +24,8 @@
 } */
 
 .native-input.sc-ion-input-md {
-    padding-left: 8px !important;
-  }
+  padding-left: 8px !important;
+}
 .native-input.sc-ion-input-ios {
   padding-left: 8px !important;
 }
@@ -34,9 +34,13 @@
   overflow-y: auto;
 }
 
+.save-change-button {
+  padding-bottom: 15px !important;
+}
+
 @media (min-width: 768px) {
   .workflow-selection-container {
-    max-height: calc(100vh - 130px); 
+    max-height: calc(100vh - 130px);
     overflow: hidden;
   }
 }

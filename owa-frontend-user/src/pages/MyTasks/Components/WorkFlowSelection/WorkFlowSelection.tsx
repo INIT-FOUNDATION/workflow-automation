@@ -47,13 +47,13 @@ const WorkFlowSelection: React.FC = () => {
       </form>
       <div className="flex-grow"></div>
       <div className="flex justify-center pb-16">
-        <IonButton
+        <button
           onClick={() => handleNextClick()}
           color="danger"
-          className="w-full font-bold"
+          className="w-full create-task-button"
         >
           Next
-        </IonButton>
+        </button>
       </div>
     </div>
   );

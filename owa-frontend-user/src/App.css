@@ -5,6 +5,12 @@
 html {
   font-size: 16px;
   font-family: "Poppins" !important;
+  background: #fafafa !important;
+  color: #000 !important;
+}
+
+.MuiBox-root {
+  padding: 15px !important;
   background-color: white;
   color: #000;
 }
@@ -20,6 +26,12 @@ ion-title {
 
 ion-button {
   font-family: "Poppins" !important;
+}
+
+.create-task-button {
+  background-color: #da2128 !important;
+  padding: 10px;
+  color: #fff;
 }
 
 .segment-button-checked {

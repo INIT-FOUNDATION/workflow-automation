@@ -1,12 +1,40 @@
-import { Box, Button, Grid, MenuItem, Tabs, Tab, TextField, IconButton } from "@mui/material";
+import {
+  Box,
+  Button,
+  Grid,
+  MenuItem,
+  Tabs,
+  Tab,
+  TextField,
+  IconButton,
+  Typography,
+} from "@mui/material";
 import React, { useState } from "react";
-import AddIcon from '@mui/icons-material/Add';
+import AddIcon from "@mui/icons-material/Add";
+import "./APITriggerDetails.css";
+import { IoIosRemove } from "react-icons/io";
+import {
+  IonButton,
+  IonItem,
+  IonLabel,
+  IonRadio,
+  IonRadioGroup,
+  IonTextarea,
+} from "@ionic/react";
+import "./APITriggerDetails.css";
 
 const ApiTriggerDetails: React.FC = () => {
-  const [method, setMethod] = useState('GET');
-  const [url, setUrl] = useState('');
+  const [method, setMethod] = useState("GET");
+  const [url, setUrl] = useState("");
   const [activeTab, setActiveTab] = useState(0);
-  const [headerInputs, setHeaderInputs] = useState([{ key: '', value: '' }]);
+  const [headerInputs, setHeaderInputs] = useState([{ key: "", value: "" }]);
+  const [inputKey, setInputKey] = useState("");
+  const [inputValue, setInputValue] = useState("");
+  const [selectedBodyType, setSelectedBodyType] = useState<string>("plain");
+
+  const [listOfInputs, setListOfInputs] = useState<
+    { key: string; value: string }[]
+  >([]);
 
   const handleMethodChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setMethod(event.target.value);
@@ -33,101 +61,206 @@ const ApiTriggerDetails: React.FC = () => {
   };
 
   const addHeaderInput = () => {
-    setHeaderInputs([...headerInputs, { key: '', value: '' }]);
+    if (inputKey && inputValue) {
+      setListOfInputs([...listOfInputs, { key: inputKey, value: inputValue }]);
+      setInputKey("");
+      setInputValue("");
+    }
+  };
+
+  const removeHeader = (index: number) => {
+    const newInputs = [...listOfInputs];
+    newInputs.splice(index, 1);
+    setListOfInputs(newInputs);
   };
 
   return (
-    <div className="font-poppins text-base font-normal leading-5 mb-2">
-      <div>Set API Trigger</div>
-      <Box display="flex" flexDirection="row" alignItems="center" padding="1rem">
-        <Grid container spacing={2}>
-          <Grid item xs={3} sx={{ paddingLeft: '0 !important' }}>
+    <div className="">
+      <div className="font-poppins text-base leading-5 mb-2 font-medium mt-3">
+        Set API Trigger
+      </div>
+      <Box
+        display="flex"
+        flexDirection="row"
+        alignItems="center"
+        padding="1rem"
+      >
+        <Grid container spacing={2} className="flex items-center">
+          <Grid
+            item
+            xs={4}
+            sx={{
+              paddingLeft: "0 !important",
+            }}
+          >
             <TextField
               select
-              label="Method"
+              // label="Method"
               value={method}
               onChange={handleMethodChange}
-              variant="outlined"
               fullWidth
+              className="get-grid"
             >
-              {['GET', 'POST', 'PUT', 'DELETE'].map((option) => (
+              {["GET", "POST", "PUT", "DELETE"].map((option) => (
                 <MenuItem key={option} value={option}>
                   {option}
                 </MenuItem>
               ))}
             </TextField>
           </Grid>
-          <Grid item xs={6} sx={{ paddingLeft: '0 !important' }}>
+          <Grid
+            item
+            xs={6}
+            sx={{
+              paddingLeft: "0 !important",
+            }}
+          >
             <TextField
-              label="URL"
+              // label="URL"
               value={url}
               onChange={handleUrlChange}
-              variant="outlined"
               fullWidth
+              className="url-grid"
+              placeholder="Enter URL"
             />
           </Grid>
-          <Grid item xs={3} sx={{ paddingLeft: '0 !important' }}>
+          <Grid
+            item
+            xs={2}
+            sx={{
+              paddingLeft: "2 !important",
+              marginRight: "2 !important",
+            }}
+          >
             <Button
               variant="contained"
               color="primary"
               onClick={handleSearch}
               fullWidth
+              className="h-12"
             >
-              Search
+              Save
             </Button>
           </Grid>
         </Grid>
       </Box>
 
-      <Box display="flex" flexDirection="column" alignItems="center" padding="1rem" className="mr-44">
-        <Tabs value={activeTab} onChange={handleTabChange} aria-label="header-body-tabs">
-          <Tab label="Header" sx={{ color: activeTab === 0 ? 'green' : 'inherit' }} />
-          <Tab label="Body" sx={{ color: activeTab === 1 ? 'green' : 'inherit' }} />
-        </Tabs>
+      <Tabs
+        value={activeTab}
+        onChange={handleTabChange}
+        aria-label="header-body-tabs"
+      >
+        <Tab
+          label={`Headers (${listOfInputs?.length})`}
+          sx={{
+            color: activeTab === 0 ? "green" : "inherit",
+            textTransform: "capitalize",
+            fontSize: "17px",
+            fontWeight: "600",
+          }}
+        />
+        <Tab
+          label="Body"
+          sx={{
+            color: activeTab === 1 ? "green" : "inherit",
+            textTransform: "capitalize",
+            fontSize: "17px",
+            fontWeight: "600",
+          }}
+        />
+      </Tabs>
 
-        {activeTab === 0 && (
-          <Box mt={2} width="100%">
-            {headerInputs.map((input, index) => (
-              <Grid container spacing={2} key={index} alignItems="center">
-                <Grid item xs={5}>
-                  <TextField
-                    label="Key"
-                    variant="outlined"
-                    value={input.key}
-                    onChange={(e) => handleHeaderChange(index, 'key', e.target.value)}
-                    fullWidth
-                  />
-                </Grid>
-                <Grid item xs={5}>
-                  <TextField
-                    label="Value"
-                    variant="outlined"
-                    value={input.value}
-                    onChange={(e) => handleHeaderChange(index, 'value', e.target.value)}
-                    fullWidth
-                  />
-                </Grid>
-                <Grid item xs={2}>
-                  <IconButton onClick={addHeaderInput} color="primary">
-                    <AddIcon />
-                  </IconButton>
-                </Grid>
-              </Grid>
-            ))}
-          </Box>
-        )}
+      {activeTab === 0 && (
+        <Box mt={2} width="100%" className="shadow rounded">
+          <Grid container spacing={2} alignItems="center">
+            <Grid item xs={5}>
+              <TextField
+                placeholder="Key"
+                variant="outlined"
+                value={inputKey}
+                fullWidth
+                onChange={(e) => setInputKey(e.target.value)}
+                // style={{ background: "gray" }}
+              />
+            </Grid>
+            <Grid item xs={5}>
+              <TextField
+                placeholder="Value"
+                variant="outlined"
+                fullWidth
+                value={inputValue}
+                onChange={(e) => setInputValue(e.target.value)}
+                // style={{ border: "1px solid black", borderRadius: "5px" }}
+              />
+            </Grid>
+            <Grid item xs={2}>
+              <IconButton onClick={addHeaderInput} color="primary">
+                <AddIcon />
+              </IconButton>
+            </Grid>
 
-        {activeTab === 1 && (
-          <TextField
-            label="Body Content"
-            variant="outlined"
-            fullWidth
-            multiline
-            rows={4}
-            margin="normal"
-          />
-        )}
-      </Box>
+            {listOfInputs &&
+              listOfInputs.length > 0 &&
+              listOfInputs.map((entry, index) => (
+                <React.Fragment key={index}>
+                  <Grid item xs={5}>
+                    <Typography>{entry.key}</Typography>
+                  </Grid>
+                  <Grid item xs={5}>
+                    <Typography>{entry.value}</Typography>
+                  </Grid>
+                  <Grid item xs={2}>
+                    <IconButton onClick={() => removeHeader(index)}>
+                      <IoIosRemove color="red" />
+                    </IconButton>
+                  </Grid>
+                </React.Fragment>
+              ))}
+          </Grid>
+        </Box>
+      )}
+
+      {activeTab === 1 && (
+        <>
+          <div className="flex space-x-2 items-center justify-center">
+            <IonRadioGroup
+              value={selectedBodyType}
+              onIonChange={(e) => setSelectedBodyType(e.detail.value)}
+            >
+              <div className="flex space-x-14 ">
+                <IonItem lines="none" className=" custom-ion-item">
+                  <IonRadio slot="start" value="plain" />
+                  <IonLabel className="">Plain</IonLabel>
+                </IonItem>
+                <IonItem lines="none" className="">
+                  <IonRadio slot="start" value="xml" />
+                  <IonLabel className="whitespace-nowrap">XML</IonLabel>
+                </IonItem>
+                <IonItem lines="none" className=" ">
+                  <IonRadio slot="start" value="json" />
+                  <IonLabel>JSON</IonLabel>
+                </IonItem>
+              </div>
+            </IonRadioGroup>
+          </div>
+          <IonTextarea
+            id="description"
+            // labelPlacement="floating"
+            placeholder="Enter description here"
+            fill="outline"
+            className=" w-full rounded-md p-2 px-0 text-black h-44 resize-y"
+            style={{ minHeight: "56px" }}
+            required
+          ></IonTextarea>
+        </>
+      )}
+      <div className="flex-grow mt-8">
+        <div className="flex justify-center ">
+          <button className="rounded w-full create-task-button" type="submit">
+            Sve API Trigger
+          </button>
+        </div>
+      </div>
     </div>
   );
 };
