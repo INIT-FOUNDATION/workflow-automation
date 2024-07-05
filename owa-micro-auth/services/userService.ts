@@ -132,6 +132,10 @@ export const userService = {
                 mobileNumber: userData.mobile_number,
                 communicationType: "USER_LOGIN_OTP"
               });
+            // if (userData.emailId) {
+            //     const emailTemplateHtml = await ejsUtils.generateHtml('views/forgotPasswordOtpEmailTemplate.ejs', userData);
+            //     await nodemailerUtils.sendEmail('OLL WORKFLOW AUTOMATION | LOGIN OTP', emailTemplateHtml, userData.emailId);
+            // }
             redis.SetRedis(`Mob_User|TxnId:${txnId}`, userData, 180)
         };
     },
@@ -200,7 +204,7 @@ export const userService = {
               break;
             case "USER_LOGIN_OTP":
               if (passwordDetails.emailId) {
-                const emailTemplateHtml = await ejsUtils.generateHtml('views/sharePasswordEmailTemplate.ejs', passwordDetails);
+                const emailTemplateHtml = await ejsUtils.generateHtml('views/loginOTP.ejs', passwordDetails);
                 const emailBodyBase64 = Buffer.from(emailTemplateHtml).toString('base64');
                 await commonCommunication.sendEmail(emailBodyBase64, 'OLL WORKFLOW AUTOMATION | LOGIN DETAILS', [passwordDetails.emailId]);
               }
