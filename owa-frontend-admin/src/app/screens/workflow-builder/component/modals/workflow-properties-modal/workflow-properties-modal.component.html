@@ -1,0 +1,14 @@
+<div class="h-lvh">
+  <div class="flex justify-between bg-blue-900 text-white p-4">
+    <span>{{ data?.class }}</span>
+    <i
+      class="fa-solid fa-xmark text-white text-xl cursor-pointer"
+      (click)="closeModal()"
+    ></i>
+  </div>
+
+  <app-add-task-modal *ngIf="data?.name == 'addTask'"></app-add-task-modal>
+  <app-email-task *ngIf="data?.name == 'emailTask'"></app-email-task>
+  <app-sms-task *ngIf="data?.name == 'smsTask'"></app-sms-task>
+  <app-whatsapp-task *ngIf="data?.name == 'whatsappTask'"></app-whatsapp-task>
+</div>
