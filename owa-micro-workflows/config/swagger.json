@@ -164,5 +164,20 @@
         }
       }
     }
+  },
+  "components": {
+    "securitySchemes": {
+      "apiKeyAuth": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "Authorization",
+        "description": "Enter your token"
+      }
+    },
+    "security": [
+      {
+        "apiKeyAuth": []
+      }
+    ]
   }
 }

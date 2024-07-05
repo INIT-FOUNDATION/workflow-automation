@@ -23,8 +23,23 @@ const doc = {
             url: 'https://apiowa.orrizonte.in',
             description: 'Production Server'
         }
-    ]
+    ],
+    components: {
+        securitySchemes: {
+            apiKeyAuth: {
+                type: 'apiKey',
+                in: 'header',
+                name: 'Authorization',
+                description: 'Enter your token',
+            },
+        },
+        security: [{
+            apiKeyAuth: []
+        }]
+    },
+
 };
+
 
 const outputFile = './swagger.json';
 const endpointsFiles = ['../startup/routes.ts'];
