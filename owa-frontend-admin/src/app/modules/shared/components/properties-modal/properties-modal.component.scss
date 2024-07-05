@@ -1,3 +1,18 @@
-::ng-deep .mat-dialog-container {
-  padding: 0rem !important;
+input[type="checkbox"] {
+  width: 1rem;
+  height: 1rem;
+  accent-color: #ef4444;
+}
+
+.properties-select ::ng-deep .mat-form-field-infix {
+  padding: 0.73rem 0rem !important;
+  border-top: 0rem !important;
+}
+
+.properties-select ::ng-deep .mat-select-panel {
+  border-radius: 0.75rem !important;
+}
+
+.properties-select ::ng-deep .mat-select-trigger {
+  border-radius: 0.75rem !important;
 }

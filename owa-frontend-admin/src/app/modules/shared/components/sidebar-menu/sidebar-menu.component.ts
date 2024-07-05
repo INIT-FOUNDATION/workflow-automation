@@ -10,7 +10,7 @@ import { NavigationEnd, Router } from '@angular/router';
 export class SidebarMenuComponent implements OnInit {
   menu_items = [];
   isOpen = false;
-  currentEndPoint;
+  currentEndPoint: string = '/admin-management';
   constructor(private dataService: DataService, private router: Router) {}
 
   ngOnInit(): void {
@@ -45,6 +45,7 @@ export class SidebarMenuComponent implements OnInit {
       }
     });
   }
+
   toggleMenu() {
     this.isOpen = !this.isOpen;
   }
