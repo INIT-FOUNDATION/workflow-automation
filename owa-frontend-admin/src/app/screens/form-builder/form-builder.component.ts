@@ -1,6 +1,9 @@
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilderService } from './services/form-builder.service';
 import { CommonDataViewComponent } from 'src/app/modules/common-data-view/common-data-view.component';
+import { Router } from '@angular/router';
+import { UtilityService } from 'src/app/modules/shared/services/utility.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-form-builder',
@@ -13,26 +16,30 @@ export class FormBuilderComponent implements OnInit {
   gridData: any = [];
   delayedTime: any;
   @ViewChild('gridViewItem') gridViewItem: TemplateRef<any>;
-  rowsPerPage = 5;
+  rowsPerPage = 6;
   rows = [
     { value: 5, label: '5' },
     { value: 10, label: '10' },
     { value: 15, label: '15' },
     { value: 20, label: '20' },
   ];
-  currentPage = 0;
+  currentPage = 1;
 
-  constructor(private formBuilderService: FormBuilderService) {}
+  constructor(
+    private formBuilderService: FormBuilderService,
+    private router: Router,
+    private utilityService: UtilityService
+  ) {}
 
   ngOnInit(): void {
     this.getGirdData();
+    localStorage.removeItem('formDetails');
   }
 
   getGirdData(searchedValue?) {
     try {
       const payload: any = {
-        page_size:
-          this.dataView && this.dataView.rows ? this.dataView.rows : 50,
+        page_size: this.dataView && this.dataView.rows ? this.dataView.rows : 6,
         current_page: this.currentPage,
       };
       if (searchedValue) {
@@ -56,10 +63,44 @@ export class FormBuilderComponent implements OnInit {
     }, 1000);
   }
 
-  onPageChangeEvent(event) {
-    console.log(event);
-    this.currentPage = event.first == 0 ? 1 : event.first / event.rows + 1;
-    this.gridData.rows = event.rows;
+  onCustomPageChangeEvent(event) {
+    this.currentPage = event.currentPage;
+    // this.dataView.rows = event.rows;
     this.getGirdData();
+  }
+
+  updateCard(id: number) {
+    this.router.navigate([`/form-builder/update-form-name/:${id}`]);
+  }
+
+  openSwalModal(id: number, status: number) {
+    Swal.fire({
+      title: `Are you sure?`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes',
+      cancelButtonText: 'No',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.updateCardStatus(id, status);
+      }
+    });
+  }
+
+  updateCardStatus(id: number, status: number) {
+    const payload: any = {
+      form_id: id,
+      status: status,
+    };
+    this.formBuilderService.updateStatus(payload).subscribe((res: any) => {
+      if (res) {
+        this.utilityService.showSuccessMessage(res?.message);
+        this.getGirdData();
+      }
+    });
+  }
+
+  redirectToForm() {
+    this.router.navigate(['form-builder/form-name']);
   }
 }
