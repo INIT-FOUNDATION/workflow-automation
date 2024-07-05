@@ -65,6 +65,87 @@ export const workflowService = {
         }
     },
 
+    update: async (workflowData: IWorkflow, workflowTasks: IWorkflowTask[],
+        workflowNotificationTasks: IWorkflowNotificationTask[], workflowDecisionTasks: IWorkflowDecisionTask[],
+        workflowTransitions: IWorkflowTransition[]): Promise<number> => {
+
+        try {
+            const taskIdsMapping = {};
+            const workflowId = workflowData.workflow_id;
+            await workflowRepository.executeTransactionQuery("BEGIN");
+
+            await workflowRepository.updateWorkflow(workflowData);
+
+            for (const workflowTask of workflowTasks) {
+                workflowTask.workflow_id = workflowId;
+
+                if (workflowTask.is_new) {
+                    const taskId = await workflowRepository.createWorkflowTask(workflowTask);
+                    taskIdsMapping[workflowTask.task_id] = taskId;
+                } else {
+                    await workflowRepository.updateWorkflowTask(workflowTask);
+                }
+            }
+
+            for (const workflowNotificationTask of workflowNotificationTasks) {
+                workflowNotificationTask.workflow_id = workflowId;
+
+                if (workflowNotificationTask.is_new) {
+                    const taskId = await workflowRepository.createWorkflowNotificationTasks(workflowNotificationTask);
+                    taskIdsMapping[workflowNotificationTask.notification_task_id] = taskId;
+                } else {
+                    await workflowRepository.updateWorkflowNotificationTasks(workflowNotificationTask);
+                }
+            }
+
+            for (const workflowDecisionTask of workflowDecisionTasks) {
+                const conditions = workflowDecisionTask.conditions;
+                workflowDecisionTask.workflow_id = workflowId;
+
+                if (workflowDecisionTask.is_new) {
+                    const taskId = await workflowRepository.createWorkflowDecisionTasks(workflowDecisionTask);
+                    taskIdsMapping[workflowDecisionTask.decision_task_id] = taskId;
+
+                    for (const condition of conditions) {
+                        condition.decision_task_id = taskId;
+                        await workflowRepository.createWorkflowDecisionConditions(condition);
+                    }
+                } else {
+                    await workflowRepository.updateWorkflowDecisionTasks(workflowDecisionTask);
+
+                    for (const condition of conditions) {
+                        if (condition.is_new) {
+                            await workflowRepository.createWorkflowDecisionConditions(condition);
+                        } else {
+                            await workflowRepository.updateWorkflowDecisionConditions(condition);
+                        }
+                    }
+                }
+            }
+
+            await workflowRepository.deleteWorkflowTransition(workflowId);
+            for (const workflowTransition of workflowTransitions) {
+                workflowTransition.workflow_id = workflowId;
+
+                workflowTransition.from_task_id = taskIdsMapping[workflowTransition.from_task_id] ?
+                    taskIdsMapping[workflowTransition.from_task_id] : workflowTransition.from_task_id;
+
+                workflowTransition.to_task_id = taskIdsMapping[workflowTransition.to_task_id] ?
+                    taskIdsMapping[workflowTransition.to_task_id] : workflowTransition.to_task_id;
+
+                await workflowRepository.createWorkflowTransition(workflowTransition);
+            }
+
+            await workflowRepository.executeTransactionQuery("COMMIT");
+            return workflowId;
+
+        } catch (error) {
+            await workflowRepository.executeTransactionQuery("ROLLBACK");
+            logger.error(`workflowService :: save :: ${error.message} :: ${error}`)
+            throw new Error(error.message);
+        }
+    },
+
     listWorkflows: async (pageSize: number, currentPage: number, searchQuery: string): Promise<{ workflowList: IWorkflow[], total_count: number }> => {
         try {
             let workflowListRedisKey = "WORKFLOWS"

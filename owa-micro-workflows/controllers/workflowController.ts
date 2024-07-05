@@ -31,13 +31,13 @@ export const workflowController = {
     create: async (req: Request, res: Response): Promise<Response> => {
         /*  
                 #swagger.tags = ['Workflow']
-                #swagger.summary = 'Create workflow'
+                #swagger.summary = 'Create/Update workflow'
                 #swagger.description = 'Endpoint to create workflow'
                 #swagger.parameters['Authorization'] = {
                     in: 'header',
                     required: true,
                     type: 'string',
-                    description: 'Bearer token for authentication'
+                    description: 'Token for authentication'
                 }
                 #swagger.parameters['body'] = {
                     in: 'body',
@@ -183,12 +183,22 @@ export const workflowController = {
             workflowTransitions.push(workflowTransitionData);
         }
 
-        const workflowId = await workflowService.save(workflowData, workflowTasks, workflowNotificationTasks, workflowDecisionTasks, workflowTransitions);
+        if(workflow.workflow_id){
+            const workflowId = await workflowService.update(workflowData, workflowTasks, workflowNotificationTasks, workflowDecisionTasks, workflowTransitions);
 
-        return res.status(STATUS.OK).send({
-            data: workflowId,
-            message: "Workflow created Successfully",
-        });
+            return res.status(STATUS.OK).send({
+                data: workflowId,
+                message: "Workflow updated Successfully",
+            });
+
+        }else{
+            const workflowId = await workflowService.save(workflowData, workflowTasks, workflowNotificationTasks, workflowDecisionTasks, workflowTransitions);
+
+            return res.status(STATUS.OK).send({
+                data: workflowId,
+                message: "Workflow created Successfully",
+            });
+        }
     },
 
     listWorkflows: async(req: Request, res: Response): Promise<Response> => {
@@ -200,7 +210,7 @@ export const workflowController = {
                     in: 'header',
                     required: true,
                     type: 'string',
-                    description: 'Bearer token for authentication'
+                    description: 'Token for authentication'
                 }
         */
         logger.info(`workflowController :: Inside listWorkflows`);
@@ -230,6 +240,12 @@ export const workflowController = {
                 #swagger.tags = ['Workflow']
                 #swagger.summary = 'Get By Workflow Id'
                 #swagger.description = 'Endpoint to health check Workflow Service'
+                #swagger.parameters['Authorization'] = {
+                    in: 'header',
+                    required: true,
+                    type: 'string',
+                    description: 'Token for authentication'
+                }
         */
        const workflowId = req.params.workflowId ? parseInt(req.params.workflowId) : null;
 
@@ -253,7 +269,7 @@ export const workflowController = {
                     in: 'header',
                     required: true,
                     type: 'string',
-                    description: 'Bearer token for authentication'
+                    description: 'Token for authentication'
                 }
         */
         logger.info(`workflowController :: Inside nodesList`);

@@ -46,6 +46,7 @@ class WorkflowTask implements IWorkflowTask {
     task_id: number;
     workflow_id: number;
     node_id: number;
+    is_new: boolean;
     task_name: string;
     task_description: string;
     form_id: number;
@@ -89,6 +90,7 @@ class WorkflowNotificationTask implements IWorkflowNotificationTask {
     notification_task_id: number;
     workflow_id: number;
     node_id: number;
+    is_new: boolean;
     notification_task_name: string;
     notification_task_description: string;
     notification_type: string;
@@ -153,6 +155,7 @@ class WorkflowDecisionTask implements IWorkflowDecisionTask {
     decision_task_id: number;
     workflow_id: number;
     node_id: number;
+    is_new: boolean;
     decision_task_name: string;
     decision_task_description: string;
     conditions: IWorkflowDecisionCondition[];
@@ -195,6 +198,7 @@ class WorkflowDecisionTask implements IWorkflowDecisionTask {
 class WorkflowDecisionCondition implements IWorkflowDecisionCondition {
     condition_id: number;
     decision_task_id: number;
+    is_new: boolean;
     operand_one: string;
     operator: string;
     operand_two: string;

@@ -39,14 +39,14 @@
         "tags": [
           "Workflow"
         ],
-        "summary": "Create workflow",
+        "summary": "Create/Update workflow",
         "description": "Endpoint to create workflow",
         "parameters": [
           {
             "name": "Authorization",
             "in": "header",
             "required": true,
-            "description": "Bearer token for authentication",
+            "description": "Token for authentication",
             "schema": {
               "type": "string"
             }
@@ -84,14 +84,14 @@
         "tags": [
           "Workflow"
         ],
-        "summary": "Create workflow",
+        "summary": "Create/Update workflow",
         "description": "Endpoint to create workflow",
         "parameters": [
           {
             "name": "Authorization",
             "in": "header",
             "required": true,
-            "description": "Bearer token for authentication",
+            "description": "Token for authentication",
             "schema": {
               "type": "string"
             }
