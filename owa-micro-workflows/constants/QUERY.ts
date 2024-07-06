@@ -134,18 +134,19 @@ RETURNING workflow_transaction_id;
     createNode: `INSERT INTO m_nodes (
         node_name, 
         node_description, 
+        node_icon,
         node_type, 
         no_of_input_nodes, 
         no_of_output_nodes, 
         created_by, 
         updated_by
     ) 
-    VALUES ($1, $2, $3, $4, $5, $6, $7) 
+    VALUES ($1, $2, $3, $4, $5, $6, $7, $8) 
     RETURNING node_id;`,
     latestUpdatedCheck: `SELECT COUNT(*) as count FROM m_workflows WHERE date_updated >= NOW() - INTERVAL '5 minutes'`,
     workflowsTotalCount: `SELECT COUNT(*) as count FROM m_workflows WHERE 1=1`,
     listWorkflows: `SELECT workflow_id, workflow_name, workflow_description, status, created_by, updated_by FROM m_workflows WHERE 1=1`,
-    listNodes: `SELECT node_id, node_name, node_description, node_type, no_of_input_nodes, 
+    listNodes: `SELECT node_id, node_name, node_description, node_icon, node_type, no_of_input_nodes, 
         no_of_output_nodes, status, created_by, updated_by FROM m_nodes WHERE 1=1`,
     getWorkflow: `SELECT workflow_id, workflow_name, workflow_description, status, created_by, updated_by FROM m_workflows WHERE workflow_id = $1`,
     getWorkflowTasks: `SELECT task_id, workflow_id, node_id, task_name, task_description, form_id, status

@@ -414,6 +414,7 @@ class Node implements INode {
     node_id: number;
     node_name: string;
     node_description: string;
+    node_icon: string;
     node_type: string;
     no_of_input_nodes: number;
     no_of_output_nodes: number;
@@ -425,6 +426,7 @@ class Node implements INode {
         this.node_id = node.node_id;
         this.node_name = node.node_name;
         this.node_description = node.node_description;
+        this.node_icon = node.node_icon;
         this.node_type = node.node_type;
         this.no_of_input_nodes = node.no_of_input_nodes;
         this.no_of_output_nodes = node.no_of_output_nodes;
@@ -442,6 +444,7 @@ class Node implements INode {
             node_description: Joi.string().optional().allow(null).error(
                 new Error(`${WORKFLOWS.WORKF0001}`)
             ),
+            node_icon: Joi.string().required(),
             node_type: Joi.string().optional().allow(null).max(50),
             no_of_input_nodes: Joi.number().integer().optional().allow(null),
             no_of_output_nodes: Joi.number().integer().optional().allow(null),

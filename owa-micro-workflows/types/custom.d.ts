@@ -122,6 +122,7 @@ export interface INode {
     node_id: number;
     node_name: string;
     node_description: string;
+    node_icon: string;
     node_type: string;
     no_of_input_nodes: number;
     no_of_output_nodes: number;

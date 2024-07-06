@@ -299,7 +299,7 @@ export const workflowRepository = {
             logger.info(`workflowRepository :: Inside createNode`);
             const _query = {
                 text: WORKFLOW.createNode,
-                values: [node.node_name, node.node_description, node.node_type, node.no_of_input_nodes, node.no_of_output_nodes, node.created_by, node.updated_by]
+                values: [node.node_name, node.node_description, node.node_icon, node.node_type, node.no_of_input_nodes, node.no_of_output_nodes, node.created_by, node.updated_by]
             }
     
             const result = await pg.executeQueryPromise(_query);
