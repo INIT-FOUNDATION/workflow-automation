@@ -336,6 +336,7 @@ CREATE TABLE m_nodes (
     node_id SERIAL PRIMARY KEY,
     node_name VARCHAR(50) NOT NULL,
     node_description TEXT,
+    node_icon VARCHAR(50),
     node_type VARCHAR(50),
     no_of_input_nodes INT,
     no_of_output_nodes INT,

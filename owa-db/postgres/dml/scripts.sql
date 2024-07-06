@@ -62,11 +62,11 @@ INSERT INTO access_control VALUES
     (1, 4, 1, NOW(), NOW(), 1, 1);
 
 INSERT INTO public.m_nodes(
-	node_name, node_description, node_type, no_of_input_nodes, no_of_output_nodes, created_by, updated_by)
-	VALUES ('Start Task', 'Start Task', 'T', 0, 1, 1, 1),
-			('End Task', 'End Task', 'T', 1, 0, 1, 1),
-			('Add Task', 'Add Task', 'T', 1, 1, 1, 1),
-			('Email Task', 'Email Task', 'N', 1, 1, 1, 1),
-			('SMS Task', 'Start Task', 'N', 1, 1, 1, 1),
-			('Whatsapp Task', 'Whatsapp Task', 'N', 1, 1, 1, 1),
-			('Decision Task', 'Decision Task', 'D', 1, 3, 1, 1);
+	node_name, node_description, node_icon, node_type, no_of_input_nodes, no_of_output_nodes, created_by, updated_by)
+	VALUES ('Start Task', 'Start Task', 'fa-solid fa-play','T', 0, 1, 1, 1),
+			('End Task', 'End Task', 'fa-solid fa-circle-stop', 'T', 1, 0, 1, 1),
+			('Add Task', 'Add Task', 'fa-solid fa-plus', 'T', 1, 1, 1, 1),
+			('Email Task', 'Email Task', 'fa-solid fa-envelope', 'N', 1, 1, 1, 1),
+			('SMS Task', 'Start Task', 'fa-solid fa-comment-sms', 'N', 1, 1, 1, 1),
+			('Whatsapp Task', 'Whatsapp Task', 'fa-brands fa-whatsapp', 'N', 1, 1, 1, 1),
+			('Decision Task', 'Decision Task', 'fa-solid fa-arrows-split-up-and-left', 'D', 1, 3, 1, 1);
