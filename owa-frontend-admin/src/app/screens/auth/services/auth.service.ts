@@ -69,9 +69,23 @@ export class AuthService {
     ); 
   }
 
+  generateOtp(payload){
+    return this.http.post<any>(
+      `${environment.auth_prefix_url}/user/generateOTP`,
+      payload
+    );
+  }
+
   resetForgotPassword(payload){
     return this.http.post<any>(
       `${environment.auth_prefix_url}/admin/resetForgetPassword`,
+      payload
+    ); 
+  }
+
+  validateOtp(payload){
+    return this.http.post<any>(
+      `${environment.auth_prefix_url}/user/validateOTP`,
       payload
     ); 
   }
