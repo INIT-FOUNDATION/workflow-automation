@@ -1,0 +1,37 @@
+<app-title
+  [titleName]="formTitle"
+  additionalClass="text-lg font-bold"
+  [canGoBack]="true"
+></app-title>
+
+<form [formGroup]="detailsForm" (ngSubmit)="submitForm()">
+  <div class="flex items-center mb-6">
+    <mat-form-field appearance="outline" class="w-full me-3">
+      <mat-label>Form Name</mat-label>
+      <input
+        type="text"
+        matInput
+        class="border rounded-md w-full py-2 ps-2 !outline-none !text-sm"
+        formControlName="form_name"
+      />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Description</mat-label>
+      <input
+        type="text"
+        matInput
+        class="border-2 rounded-md w-full py-2 ps-2 !outline-none !text-sm"
+        formControlName="form_description"
+      />
+    </mat-form-field>
+  </div>
+  <div class="flex justify-end">
+    <button
+      class="bg-red-600 text-white rounded-lg w-40 py-2 text-center"
+      type="submit"
+    >
+      Next
+    </button>
+  </div>
+</form>

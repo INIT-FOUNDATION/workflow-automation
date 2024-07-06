@@ -17,14 +17,13 @@ export class HeaderComponent {
     public dataService: DataService
   ) {}
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
-  userProfile(){
-    this.router.navigate(['/profile']); 
+  userProfile() {
+    this.router.navigate(['/profile']);
   }
 
   logoutUser(): void {
-     this.authService.logout();
+    this.authService.logout();
   }
 }

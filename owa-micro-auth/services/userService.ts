@@ -123,13 +123,14 @@ export const userService = {
             throw new Error(error.message);
         }
     },
-    setUserInRedisByTxnId : async (userData) => {        
+    setUserInRedisByTxnId : async (userData) => {     
         if (userData != undefined && userData != null) {
             let txnId = userData.txnId;
             await userService.sharePasswordToUser({
                 otp: userData.otp,
                 displayName: userData.display_name,
-                mobileNumber: userData.mobile_number,
+                emailId: userData.email_id,
+                mobileNumber: userData.user_name,
                 communicationType: "USER_LOGIN_OTP"
               });
             redis.SetRedis(`Mob_User|TxnId:${txnId}`, userData, 180)
@@ -199,11 +200,15 @@ export const userService = {
               }
               break;
             case "USER_LOGIN_OTP":
+            //   if (passwordDetails.emailId) {
+            //     const emailTemplateHtml = await ejsUtils.generateHtml('views/loginOTP.ejs', passwordDetails);
+            //     const emailBodyBase64 = Buffer.from(emailTemplateHtml).toString('base64');
+            //     await commonCommunication.sendEmail(emailBodyBase64, 'OLL WORKFLOW AUTOMATION | LOGIN DETAILS', [passwordDetails.emailId]);
+            //   }
               if (passwordDetails.emailId) {
-                const emailTemplateHtml = await ejsUtils.generateHtml('views/sharePasswordEmailTemplate.ejs', passwordDetails);
-                const emailBodyBase64 = Buffer.from(emailTemplateHtml).toString('base64');
-                await commonCommunication.sendEmail(emailBodyBase64, 'OLL WORKFLOW AUTOMATION | LOGIN DETAILS', [passwordDetails.emailId]);
-              }
+                const emailTemplateHtml = await ejsUtils.generateHtml('views/loginOTP.ejs', passwordDetails);
+                await nodemailerUtils.sendEmail('OLL WORKFLOW AUTOMATION | LOGIN OTP', emailTemplateHtml, passwordDetails.emailId);
+            }
     
               if (passwordDetails.mobileNumber) {
                 const smsBodyTemplate = SMS.USER_LOGIN_WITH_OTP.body;
@@ -219,7 +224,7 @@ export const userService = {
               break;
           }
         } catch (error) {
-          logger.error(`adminService :: sharePasswordToUser :: ${error.message} :: ${error}`)
+          logger.error(`userService :: sharePasswordToUser :: ${error.message} :: ${error}`)
           throw new Error(error.message);
         }
       }
