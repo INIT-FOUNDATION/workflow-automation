@@ -1,10 +1,11 @@
 import { IUser } from "../types/custom";
-import { redis, logger, pg, nodemailerUtils, ejsUtils } from "owa-micro-common";
+import { redis, logger, pg, nodemailerUtils, ejsUtils, commonCommunication } from "owa-micro-common";
 import { USERS } from "../constants/QUERY";
 import { v4 as uuidv4 } from 'uuid';
 import bcrypt from "bcryptjs";
 import { CONFIG } from "../constants/CONST";
 import { CACHE_TTL } from "../constants/CONST";
+import { SMS, WHATSAPP } from "../constants/Communication";
 
 export const adminService = {
     getUserInRedisByUserName: async (username: string): Promise<string> => {
@@ -183,7 +184,8 @@ export const adminService = {
                 txnId,
                 userName: user.user_name,
                 displayName: user.display_name,
-                emailId: user.email_id
+                emailId: user.email_id,
+                mobileNumber: mobileNumber
             }
 
             adminService.setForgotPasswordOTPInRedis(otpDetails);
@@ -200,6 +202,14 @@ export const adminService = {
                 const emailTemplateHtml = await ejsUtils.generateHtml('views/forgotPasswordOtpEmailTemplate.ejs', otpDetails);
                 await nodemailerUtils.sendEmail('OLL WORKFLOW AUTOMATION | FORGOT PASSWORD OTP', emailTemplateHtml, otpDetails.emailId);
             }
+            if (otpDetails.mobileNumber) {
+                const smsBodyTemplate = SMS.USER_LOGIN_WITH_OTP.body;
+                const smsBodyCompiled = smsBodyTemplate.replace("<otp>", otpDetails.otp)
+                  .replace("<module>", "OLL Workflow Automation")
+                  .replace("<time>", "3 min");
+                await commonCommunication.sendSms(smsBodyCompiled, otpDetails.mobileNumber, SMS.USER_LOGIN_WITH_OTP.template_id);
+                await commonCommunication.sendWhatsapp(WHATSAPP.USER_LOGIN_WITH_OTP.template_id, otpDetails.mobileNumber, ["OLL Workflow Automation", otpDetails.otp, "3 mins"])
+              }
         } catch (error) {
             logger.error(`adminService :: shareForgotOTPUserDetails :: ${error.message} :: ${error}`)
             throw new Error(error.message);
