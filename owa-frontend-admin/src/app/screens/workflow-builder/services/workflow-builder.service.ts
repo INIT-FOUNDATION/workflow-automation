@@ -11,4 +11,20 @@ export class WorkflowBuilderService {
   getTaskList() {
     return this.http.get(`${environment.workflow_prefix_url}/nodesList`);
   }
+
+  getGridData(payload) {
+    return this.http.post(`${environment.workflow_prefix_url}/list`, payload);
+  }
+
+  createWorkflow(payload) {
+    return this.http.post(`${environment.workflow_prefix_url}/create`, payload);
+  }
+
+  updateWorkflow(payload) {
+    return this.http.post(`${environment.workflow_prefix_url}/update`, payload);
+  }
+
+  getWorkflowById(workflowId: any) {
+    return this.http.get(`${environment.workflow_prefix_url}/id/${workflowId}`);
+  }
 }

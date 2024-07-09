@@ -8,15 +8,18 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 })
 export class WorkflowPropertiesModalComponent implements OnInit {
   constructor(
-    @Inject(MAT_DIALOG_DATA) public data: any,
+    @Inject(MAT_DIALOG_DATA) public nodes: any,
     private dialogRef: MatDialogRef<WorkflowPropertiesModalComponent>
   ) {}
 
-  ngOnInit(): void {
-    console.log(this.data);
-  }
+  ngOnInit(): void {}
 
   closeModal() {
     this.dialogRef.close();
+  }
+
+  getNodeProperties(value: any) {
+    this.nodes.data.tasks.push(value);
+    this.dialogRef.close(this.nodes.data);
   }
 }

@@ -1,17 +1,31 @@
-<form class="px-4 pt-4">
+<form class="px-4 pt-4" [formGroup]="smsTaskForm" (ngSubmit)="submitForm()">
   <mat-form-field class="w-full" appearance="outline">
     <mat-label class="text-sm">Template Id</mat-label>
-    <input matInput type="text" class="outline-none text-sm" />
+    <input
+      matInput
+      type="text"
+      class="outline-none text-sm"
+      formControlName="template_id"
+    />
   </mat-form-field>
 
   <mat-form-field class="w-full my-4" appearance="outline">
     <mat-label class="text-sm">SMS Body</mat-label>
-    <textarea matInput class="outline-none text-sm"></textarea>
+    <textarea
+      matInput
+      class="outline-none text-sm"
+      formControlName="sms_body"
+    ></textarea>
   </mat-form-field>
 
   <mat-form-field class="w-full" appearance="outline">
     <mat-label class="text-sm">Receiver's Mobile Number</mat-label>
-    <input matInput type="text" class="outline-none text-sm" />
+    <input
+      matInput
+      type="text"
+      class="outline-none text-sm"
+      formControlName="mobile_number"
+    />
   </mat-form-field>
 
   <button

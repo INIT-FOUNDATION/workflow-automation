@@ -5,18 +5,45 @@
 ></app-title>
 
 <div class="flex items-center justify-between">
-  <div class="flex items-center">
+  <form class="flex items-center" [formGroup]="workflowForm">
     <mat-form-field appearance="outline" class="w-72 me-4">
-      <mat-label class="text-sm tracking-wide">Give your workflow a name</mat-label>
-      <input type="text" matInput class="text-sm" />
+      <mat-label class="text-sm tracking-wide"
+        >Give your workflow a name</mat-label
+      >
+      <input
+        type="text"
+        matInput
+        class="!text-sm tracking-wider"
+        formControlName="workflow_name"
+      />
     </mat-form-field>
+    <mat-error
+      *ngIf="
+        workflowForm.get('workflow_name').dirty &&
+        workflowForm.get('workflow_name').invalid
+      "
+      >Please enter workflow name</mat-error
+    >
 
-    <mat-form-field appearance="outline" class="w-80">
+    <mat-form-field appearance="outline" class="w-96">
       <mat-label class="text-sm tracking-wide">Description</mat-label>
-      <input type="text" matInput class="text-sm" />
+      <input
+        type="text"
+        matInput
+        class="!text-sm tracking-wider"
+        formControlName="workflow_description"
+      />
     </mat-form-field>
-  </div>
+    <mat-error
+      *ngIf="
+        workflowForm.get('workflow_description').dirty &&
+        workflowForm.get('workflow_description').invalid
+      "
+      >Please enter workflow description</mat-error
+    >
+  </form>
   <button
+    (click)="submitForm()"
     type="button"
     class="bg-red-600 text-white rounded-lg px-10 py-2 text-sm"
   >
@@ -35,7 +62,7 @@
       (dragstart)="drag($event, item)"
       [attr.data-node]="item?.node_name"
     >
-      <i class="{{ item?.img }} text-red-600 text-2xl"></i
+      <i class="{{ item?.node_icon }} text-red-600 text-2xl"></i
       ><span class="text-sm"> {{ item?.node_name }}</span>
     </div>
   </div>
@@ -48,17 +75,17 @@
       (dragover)="allowDrop($event)"
     >
       <div
-        class="bg-red-600 text-white px-5 py-2 rounded-lg absolute right-28 text-sm top-3 cursor-pointer z-10"
+        class="bg-red-600 text-white px-5 py-2 rounded-lg absolute right-4 text-sm top-3 cursor-pointer z-10"
         (click)="onClear()"
       >
         Clear
       </div>
-      <div
+      <!-- <div
         class="bg-blue-600 text-white px-5 py-2 rounded-lg absolute right-4 text-sm top-3 cursor-pointer z-10"
         (click)="export()"
       >
         Export
-      </div>
+      </div> -->
 
       <div
         class="bg-white py-2 px-5 rounded-full absolute bottom-3 right-4 border z-10"

@@ -3,6 +3,15 @@ import { MatDialog } from '@angular/material/dialog';
 import Drawflow from 'drawflow';
 import { WorkflowPropertiesModalComponent } from '../modals/workflow-properties-modal/workflow-properties-modal.component';
 import { WorkflowBuilderService } from '../../services/workflow-builder.service';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { UtilityService } from 'src/app/modules/shared/services/utility.service';
+import { ActivatedRoute, Router } from '@angular/router';
+
+interface workflowObject {
+  workflow: any;
+  tasks: any[];
+  transitions: any[];
+}
 
 @Component({
   selector: 'app-workflow-form',
@@ -11,7 +20,20 @@ import { WorkflowBuilderService } from '../../services/workflow-builder.service'
 })
 export class WorkflowFormComponent implements AfterViewInit {
   preTasksArray: any = [];
-
+  chosenNodes: workflowObject = {
+    workflow: {},
+    tasks: [],
+    transitions: [],
+  };
+  workflowForm: FormGroup;
+  transitionForm: FormGroup;
+  node_details: {
+    name: any;
+    node_id: number;
+    node_type: any;
+    is_new: boolean;
+    task_id: number;
+  };
   @Input() formType: string;
   @Input() nodes: any[];
   @Input() drawingData: string;
@@ -33,13 +55,36 @@ export class WorkflowFormComponent implements AfterViewInit {
   mobile_item_selec: string;
   mobile_last_move: TouchEvent | null;
 
+  nodeName: any = [];
+  workflow_id: any;
+
   constructor(
     private dialog: MatDialog,
-    private workflowService: WorkflowBuilderService
+    private workflowService: WorkflowBuilderService,
+    private utilityService: UtilityService,
+    private router: Router,
+    private activatedRoute: ActivatedRoute
   ) {}
 
   ngOnInit() {
+    this.initForm();
     this.getNodeList();
+    if (this.formType == 'edit') {
+      this.workflow_id = this.activatedRoute.snapshot.params['id'].substring(1);
+      this.getWorkflowById();
+    }
+  }
+
+  initForm() {
+    this.workflowForm = new FormGroup({
+      workflow_name: new FormControl(null, [Validators.required]),
+      workflow_description: new FormControl(null, [Validators.required]),
+    });
+
+    this.transitionForm = new FormGroup({
+      from_task_id: new FormControl(null),
+      to_task_id: new FormControl(null),
+    });
   }
 
   ngAfterViewInit(): void {
@@ -111,14 +156,6 @@ export class WorkflowFormComponent implements AfterViewInit {
         this.editor.getNodeFromId(id)
       );
       this.selectedNode = this.editor.drawflow.drawflow.Home.data[`${id}`];
-      console.log(
-        'Editor Event :>> Node selected :>> this.selectedNode :>> ',
-        this.selectedNode
-      );
-      console.log(
-        'Editor Event :>> Node selected :>> this.selectedNode :>> ',
-        this.selectedNode.data
-      );
     });
 
     this.editor.on('click', (e: any) => {
@@ -162,6 +199,14 @@ export class WorkflowFormComponent implements AfterViewInit {
 
     this.editor.on('connectionCreated', (connection: any) => {
       console.log('Editor Event :>> Connection created ', connection);
+      this.transitionForm
+        .get('from_task_id')
+        .setValue(parseInt(connection.input_id));
+      this.transitionForm
+        .get('to_task_id')
+        .setValue(parseInt(connection.output_id));
+
+      // this.chosenNodes.transitions.push(this.transitionForm.getRawValue());
     });
 
     this.editor.on('connectionRemoved', (connection: any) => {
@@ -213,8 +258,6 @@ export class WorkflowFormComponent implements AfterViewInit {
   }
 
   private positionMobile(ev: any) {
-    console.log(ev);
-
     this.mobile_last_move = ev;
   }
 
@@ -222,21 +265,22 @@ export class WorkflowFormComponent implements AfterViewInit {
     ev.preventDefault();
   }
 
-  drag(ev: any) {
+  drag(ev: any, data) {
     if (ev.type === 'touchstart') {
       this.selectedNode = ev.target
         .closest('.drag-drawflow')
         .getAttribute('data-node');
     } else {
-      ev.dataTransfer.setData('node', ev.target.getAttribute('data-node'));
+      ev.dataTransfer.setData('node', JSON.stringify(data));
     }
   }
 
   drop(ev: any) {
     this.editor.on('nodeCreated', (id: any) => {
       const data = this.editor.getNodeFromId(id);
-      if (!'startTask, endTask'.includes(data.name)) {
-        this.openModal(data);
+      this.nodeName.push(data.name);
+      if (!'Start Task, End Task'.includes(data.name)) {
+        this.openModal(data.id);
       }
     });
     if (ev.type === 'touchend' && this.mobile_last_move) {
@@ -261,7 +305,33 @@ export class WorkflowFormComponent implements AfterViewInit {
     }
   }
 
-  private addNodeToDrawFlow(name: string, pos_x: number, pos_y: number) {
+  private addNodeToDrawFlow(name: any, pos_x: number, pos_y: number) {
+    let data = JSON.parse(name);
+    this.node_details = {
+      name: data.node_name,
+      node_id: data?.node_id,
+      node_type: data?.node_type,
+      is_new: true,
+      task_id: null,
+    };
+
+    if (
+      data.node_name.includes('Start Task') ||
+      data.node_name.includes('End Task')
+    ) {
+      let obj: any = {
+        name: data.node_name,
+        node_id: data?.node_id,
+        node_type: data?.node_type,
+        is_new: true,
+        task_id: data?.node_id + 1,
+        task_name: data?.node_name,
+        task_description: data?.node_name,
+        form_id: 11,
+      };
+      this.chosenNodes.tasks.push(obj);
+    }
+
     if (this.editor.editor_mode === 'fixed') {
       return false;
     }
@@ -281,167 +351,49 @@ export class WorkflowFormComponent implements AfterViewInit {
         (this.editor.precanvas.clientHeight /
           (this.editor.precanvas.clientHeight * this.editor.zoom));
 
-    switch (name) {
-      case 'startTask':
-        var startTask = `
+    if (data.node_name !== 'Decision Task') {
+      var nodeTemplate = `
         <div>
           <div class="bg-gray-100 px-3 flex items-center text-sm py-2">
-            <i class="fa-play fa-solid text-xl text-red-600 me-2"></i> Start Task
+            <i class="${data.node_icon} text-xl text-red-600 me-2"></i> ${data.node_name}
           </div>
           <div class="box p-2 flex flex-col items-end">
-            <input type="text" class="border rounded text-sm w-full py-2 ps-2 outline-none mb-2" placeholder="Start task">
+            <input type="text" class="border rounded text-sm w-full py-2 ps-2 outline-none mb-2" placeholder="${data.node_name}">
             <span class="bg-green-200 text-black ps-3 pe-8 py-1 text-xs rounded-full">Connection task</span>
           </div>
         </div>
-      `;
-        this.editor.addNode(
-          'startTask',
-          0,
-          1,
-          pos_x,
-          pos_y,
-          'startTask',
-          {},
-          startTask
-        );
-        break;
-      case 'endTask':
-        var endTask = `
+            `;
+      this.editor.addNode(
+        data.node_name,
+        data.no_of_input_nodes,
+        data.no_of_output_nodes,
+        pos_x,
+        pos_y,
+        data.node_name,
+        {},
+        nodeTemplate
+      );
+    } else {
+      var decisionTemplate = `
         <div>
           <div class="bg-gray-100 px-3 flex items-center text-sm py-2">
-            <i class="fa-regular fa-circle-stop text-xl text-red-600 me-2"></i> End Task
+            <i class="${data.node_icon} text-xl text-red-600 me-2"></i>  ${data.node_name}
           </div>
           <div class="box p-2 flex flex-col items-end">
-            <input type="text" class="border rounded text-sm w-full py-2 ps-2 outline-none mb-2" placeholder="End task">
-          </div>
-        </div>
-      `;
-        this.editor.addNode(
-          'endTask',
-          1,
-          0,
-          pos_x,
-          pos_y,
-          'endTask',
-          {},
-          endTask
-        );
-        break;
-      case 'addTask':
-        var addTask = `
-        <div>
-          <div class="bg-gray-100 px-3 flex items-center text-sm py-2">
-            <i class="fa-solid fa-plus text-xl text-red-600 me-2"></i> Add Task
-          </div>
-          <div class="box p-2 flex flex-col items-end">
-            <input type="text" disabled class="border rounded text-sm w-full py-2 ps-2 outline-none mb-2" placeholder="Add task">
-            <span class="bg-green-200 text-black ps-3 pe-8 py-1 text-xs rounded-full">Connection task</span>
-          </div>
-        </div>
-      `;
-        this.editor.addNode(
-          'addTask',
-          1,
-          1,
-          pos_x,
-          pos_y,
-          'Add Task',
-          {},
-          addTask
-        );
-        break;
-      case 'emailTask':
-        var emailTask = `
-        <div>
-          <div class="bg-gray-100 px-3 flex items-center text-sm py-2">
-            <i class="fa-solid fa-envelope text-xl text-red-600 me-2"></i> Email Task
-          </div>
-          <div class="box p-2 flex flex-col items-end">
-            <input type="text" disabled class="border rounded text-sm w-full py-2 ps-2 outline-none mb-2" placeholder="Email task">
-            <span class="bg-green-200 text-black ps-3 pe-8 py-1 text-xs rounded-full">Connection task</span>
-          </div>
-        </div>
-      `;
-        this.editor.addNode(
-          'emailTask',
-          1,
-          1,
-          pos_x,
-          pos_y,
-          'Email Task',
-          {},
-          emailTask
-        );
-        break;
-      case 'smsTask':
-        var smsTask = `
-          <div>
-            <div class="bg-gray-100 px-3 flex items-center text-sm py-2">
-              <i class="fa-solid fa-comment-sms text-xl text-red-600 me-2"></i> SMS Task
-            </div>
-            <div class="box p-2 flex flex-col items-end">
-              <input type="text" disabled class="border rounded text-sm w-full py-2 ps-2 outline-none mb-2" placeholder="sms task">
-              <span class="bg-green-200 text-black ps-3 pe-8 py-1 text-xs rounded-full">Connection task</span>
-            </div>
-          </div>
-        `;
-        this.editor.addNode(
-          'smsTask',
-          1,
-          1,
-          pos_x,
-          pos_y,
-          'SMS Task',
-          {},
-          smsTask
-        );
-        break;
-      case 'whatsappTask':
-        var whatsappTask = `
-          <div>
-            <div class="bg-gray-100 px-3 flex items-center text-sm py-2">
-              <i class="fa-brands fa-whatsapp text-xl text-red-600 me-2"></i> Whatsapp Task
-            </div>
-            <div class="box p-2 flex flex-col items-end">
-              <input type="text" disabled class="border rounded text-sm w-full py-2 ps-2 outline-none mb-2" placeholder="Whatsapp task">
-              <span class="bg-green-200 text-black ps-3 pe-8 py-1 text-xs rounded-full">Connection task</span>
-            </div>
-          </div>
-        `;
-        this.editor.addNode(
-          'whatsappTask',
-          1,
-          1,
-          pos_x,
-          pos_y,
-          'Whatsapp Task',
-          {},
-          whatsappTask
-        );
-        break;
-      case 'decisionTask':
-        var decisionTask = `
-           <div>
-          <div class="bg-gray-100 px-3 flex items-center text-sm py-2">
-            <i class="fa-solid fa-arrows-split-up-and-left text-xl text-red-600 me-2"></i> Decision Task
-          </div>
-          <div class="box p-2 flex flex-col items-end">
-            <input type="text" class="border rounded text-sm w-full py-2 ps-2 outline-none mb-2" placeholder="Decision task">
+            <input type="text" class="border rounded text-sm w-full py-2 ps-2 outline-none mb-2" placeholder=" ${data.node_name}">
           </div>
         </div>
           `;
-        this.editor.addNode(
-          'decisionTask',
-          1,
-          2,
-          pos_x,
-          pos_y,
-          'decisionTask',
-          { decisionTask: 'Write your decisionTask' },
-          decisionTask
-        );
-        break;
-      default:
+      this.editor.addNode(
+        data.node_name,
+        data.no_of_input_nodes,
+        data.no_of_output_nodes,
+        pos_x,
+        pos_y,
+        data.node_name,
+        {},
+        decisionTemplate
+      );
     }
 
     return true;
@@ -479,13 +431,58 @@ export class WorkflowFormComponent implements AfterViewInit {
     this.editor.zoom_reset();
   }
 
-  openModal(data: any) {
+  getWorkflowById() {
+    this.workflowService
+      .getWorkflowById(this.workflow_id)
+      .subscribe((res: any) => {
+        this.chosenNodes = res.data;
+        console.log(this.chosenNodes);
+
+        this.workflowForm.patchValue({
+          workflow_name: this.chosenNodes.workflow.workflow_name,
+          workflow_description: this.chosenNodes.workflow.workflow_description,
+        });
+      });
+  }
+
+  openModal(id: number) {
+    this.node_details.task_id = id;
     const dialog = this.dialog.open(WorkflowPropertiesModalComponent, {
       width: 'clamp(20rem, 60vw, 35rem)',
       panelClass: ['animate__animated', 'animate__slideInRight'],
       position: { right: '0px', top: '0px', bottom: '0px' },
       disableClose: true,
-      data: { ...data },
+      data: { node_details: this.node_details, data: this.chosenNodes },
     });
+
+    dialog.afterClosed().subscribe((res) => console.log(res));
+  }
+
+  submitForm() {
+    this.chosenNodes.workflow = this.workflowForm.getRawValue();
+
+    try {
+      if (
+        this.nodeName.includes('Start Task') &&
+        this.nodeName.includes('End Task')
+      ) {
+        if (this.workflowForm.valid) {
+          this.workflowService
+            .createWorkflow(this.chosenNodes)
+            .subscribe((res: any) => {
+              this.utilityService.showSuccessMessage(
+                'Workflow created successfully!'
+              );
+              this.router.navigate(['workflow-builder']);
+            });
+        }
+      } else {
+        this.utilityService.showErrorMessage(
+          'Please add Start Task and End Task'
+        );
+      }
+    } catch (error) {
+      console.log(error);
+    }
   }
 }
