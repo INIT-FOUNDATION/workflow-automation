@@ -27,5 +27,13 @@
 
   <app-whatsapp-task
     *ngIf="nodes?.node_details?.name == 'Whatsapp Task'"
+    [node_details]="nodes?.node_details"
+    (getNodeDetails)="getNodeProperties($event)"
   ></app-whatsapp-task>
+
+  <app-decision-task
+    *ngIf="nodes?.node_details?.name == 'Decision Task'"
+    [node_details]="nodes?.node_details"
+    (getNodeDetails)="getNodeProperties($event)"
+  ></app-decision-task>
 </div>

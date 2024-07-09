@@ -1,17 +1,54 @@
-<form class="px-4 pt-4">
+<form
+  class="px-4 pt-4"
+  [formGroup]="whatsappTaskForm"
+  (ngSubmit)="submitForm()"
+>
+  <mat-form-field class="w-full" appearance="outline">
+    <mat-label class="text-sm">Task Name</mat-label>
+    <input
+      matInput
+      type="text"
+      class="outline-none !text-sm tracking-wider"
+      formControlName="notification_task_name"
+    />
+  </mat-form-field>
+
+  <mat-form-field class="w-full" appearance="outline">
+    <mat-label class="text-sm">Task Description</mat-label>
+    <textarea
+      matInput
+      class="outline-none !text-sm tracking-wider"
+      formControlName="notification_task_description"
+    ></textarea>
+  </mat-form-field>
+
   <mat-form-field class="w-full" appearance="outline">
     <mat-label class="text-sm">Template Id</mat-label>
-    <input matInput type="text" class="outline-none text-sm" />
+    <input
+      matInput
+      type="text"
+      class="outline-none !text-sm tracking-wider"
+      formControlName="email_subject"
+    />
   </mat-form-field>
 
   <mat-form-field class="w-full my-4" appearance="outline">
     <mat-label class="text-sm">Placeholders</mat-label>
-    <textarea matInput class="outline-none text-sm"></textarea>
+    <textarea
+      matInput
+      class="outline-none !text-sm tracking-wider"
+      formControlName="email_body"
+    ></textarea>
   </mat-form-field>
 
   <mat-form-field class="w-full" appearance="outline">
     <mat-label class="text-sm">Receiver Mobile Number</mat-label>
-    <input matInput type="text" class="outline-none text-sm" />
+    <input
+      matInput
+      type="text"
+      class="outline-none !text-sm tracking-wider"
+      formControlName="recipient_emails"
+    />
   </mat-form-field>
 
   <button

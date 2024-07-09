@@ -18,9 +18,14 @@ export class EmailTaskComponent implements OnInit {
 
   ininitForm() {
     this.emailTaskForm = new FormGroup({
+      notification_task_name: new FormControl(null, [Validators.required]),
+      notification_task_description: new FormControl(null, [
+        Validators.required,
+      ]),
       email_subject: new FormControl(null, [Validators.required]),
       email_body: new FormControl(null, [Validators.required]),
       recipient_emails: new FormControl(null, [Validators.required]),
+      notification_type: new FormControl(null),
     });
   }
 
@@ -31,6 +36,7 @@ export class EmailTaskComponent implements OnInit {
       node_type: this.node_details.node_type,
       is_new: this.node_details.is_new,
       task_id: this.node_details.task_id,
+      notification_type: 'EMAIL',
     };
 
     this.getNodeDetails.emit(formData);

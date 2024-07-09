@@ -17,9 +17,14 @@ export class SmsTaskComponent implements OnInit {
 
   initForm() {
     this.smsTaskForm = new FormGroup({
+      notification_task_name: new FormControl(null, [Validators.required]),
+      notification_task_description: new FormControl(null, [
+        Validators.required,
+      ]),
       template_id: new FormControl(null, [Validators.required]),
       sms_body: new FormControl(null, [Validators.required]),
-      mobile_number: new FormControl(null, [Validators.required]),
+      recipient_mobilenumber: new FormControl(null, [Validators.required]),
+      notification_type: new FormControl(null),
     });
   }
 
@@ -31,6 +36,7 @@ export class SmsTaskComponent implements OnInit {
         node_type: this.node_details.node_type,
         is_new: this.node_details.is_new,
         task_id: this.node_details.task_id,
+        notification_type: 'SMS',
       };
 
       this.getNodeDetails.emit(formData);

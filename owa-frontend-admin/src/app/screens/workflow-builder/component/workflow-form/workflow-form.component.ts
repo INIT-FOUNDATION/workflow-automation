@@ -33,6 +33,7 @@ export class WorkflowFormComponent implements AfterViewInit {
     node_type: any;
     is_new: boolean;
     task_id: number;
+    form_id: number;
   };
   @Input() formType: string;
   @Input() nodes: any[];
@@ -307,12 +308,18 @@ export class WorkflowFormComponent implements AfterViewInit {
 
   private addNodeToDrawFlow(name: any, pos_x: number, pos_y: number) {
     let data = JSON.parse(name);
+    let form_id: number;
+    this.chosenNodes.tasks.forEach((res: any) => {
+      form_id = res?.form_id;
+    });
+
     this.node_details = {
       name: data.node_name,
       node_id: data?.node_id,
       node_type: data?.node_type,
       is_new: true,
       task_id: null,
+      form_id: form_id,
     };
 
     if (
@@ -466,16 +473,16 @@ export class WorkflowFormComponent implements AfterViewInit {
         this.nodeName.includes('Start Task') &&
         this.nodeName.includes('End Task')
       ) {
-        if (this.workflowForm.valid) {
-          this.workflowService
-            .createWorkflow(this.chosenNodes)
-            .subscribe((res: any) => {
-              this.utilityService.showSuccessMessage(
-                'Workflow created successfully!'
-              );
-              this.router.navigate(['workflow-builder']);
-            });
-        }
+        // if (this.workflowForm.valid) {
+        //   this.workflowService
+        //     .createWorkflow(this.chosenNodes)
+        //     .subscribe((res: any) => {
+        //       this.utilityService.showSuccessMessage(
+        //         'Workflow created successfully!'
+        //       );
+        //       this.router.navigate(['workflow-builder']);
+        //     });
+        // }
       } else {
         this.utilityService.showErrorMessage(
           'Please add Start Task and End Task'

@@ -1,11 +1,15 @@
-<form class="px-4 pt-4" [formGroup]="emailTaskForm" (ngSubmit)="submitForm()">
+<form
+  class="px-4 pt-4"
+  [formGroup]="decisionTaskForm"
+  (ngSubmit)="submitForm()"
+>
   <mat-form-field class="w-full" appearance="outline">
     <mat-label class="text-sm">Task Name</mat-label>
     <input
       matInput
       type="text"
       class="outline-none !text-sm tracking-wider"
-      formControlName="notification_task_name"
+      formControlName="decision_task_name"
     />
   </mat-form-field>
 
@@ -14,36 +18,42 @@
     <textarea
       matInput
       class="outline-none !text-sm tracking-wider"
-      formControlName="notification_task_description"
+      formControlName="decision_task_description"
     ></textarea>
   </mat-form-field>
 
   <mat-form-field class="w-full" appearance="outline">
-    <mat-label class="text-sm">Subject</mat-label>
-    <input
-      matInput
-      type="text"
-      class="outline-none !text-sm tracking-wider"
-      formControlName="email_subject"
-    />
+    <mat-label class="text-sm">Operand One*</mat-label>
+    <mat-select
+      class="!text-sm tracking-wider"
+      (selectionChange)="selectedOperand($event.value)"
+    >
+      <mat-option
+        *ngFor="let item of formDetails"
+        [value]="item?.label"
+        class="!text-sm tracking-wider"
+        >{{ item?.label }}</mat-option
+      >
+    </mat-select>
   </mat-form-field>
 
   <mat-form-field class="w-full my-4" appearance="outline">
-    <mat-label class="text-sm">Body</mat-label>
-    <textarea
-      matInput
-      class="outline-none !text-sm tracking-wider"
-      formControlName="email_body"
-    ></textarea>
-  </mat-form-field>
-
-  <mat-form-field class="w-full" appearance="outline">
-    <mat-label class="text-sm">Receiver Email Id's</mat-label>
+    <mat-label class="text-sm">Operator</mat-label>
     <input
       matInput
       type="text"
       class="outline-none !text-sm tracking-wider"
-      formControlName="recipient_emails"
+      formControlName="operator"
+    />
+  </mat-form-field>
+
+  <mat-form-field class="w-full" appearance="outline">
+    <mat-label class="text-sm">Operand Two</mat-label>
+    <input
+      matInput
+      type="text"
+      class="outline-none !text-sm tracking-wider"
+      formControlName="operand_two"
     />
   </mat-form-field>
 

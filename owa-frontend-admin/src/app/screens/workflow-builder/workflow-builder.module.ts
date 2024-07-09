@@ -12,6 +12,7 @@ import { AddTaskModalComponent } from './component/modals/add-task-modal/add-tas
 import { EmailTaskComponent } from './component/modals/email-task/email-task.component';
 import { SmsTaskComponent } from './component/modals/sms-task/sms-task.component';
 import { WhatsappTaskComponent } from './component/modals/whatsapp-task/whatsapp-task.component';
+import { DecisionTaskComponent } from './component/modals/decision-task/decision-task.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { WhatsappTaskComponent } from './component/modals/whatsapp-task/whatsapp
     AddTaskModalComponent,
     EmailTaskComponent,
     SmsTaskComponent,
-    WhatsappTaskComponent
+    WhatsappTaskComponent,
+    DecisionTaskComponent
   ],
   imports: [CommonModule, WorkflowBuilderRoutingModule, SharedModule],
 })

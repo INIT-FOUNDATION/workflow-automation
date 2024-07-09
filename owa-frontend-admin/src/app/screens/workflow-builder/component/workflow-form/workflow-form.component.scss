@@ -58,3 +58,7 @@
   right: 0.3rem;
   top: unset;
 }
+
+::ng-deep .drawflow .End .bg-green-200{
+  display: none;
+}
