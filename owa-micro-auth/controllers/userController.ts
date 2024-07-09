@@ -183,7 +183,7 @@ export const userController = {
                     level: userData.level
                 }
                 const token = await generateToken.generate(userData.user_name, tokenDetails, expiryTime, AUTHENTICATION.SECRET_KEY, req);
-
+                await userService.updateUserLoginStatus(USERS_STATUS.LOGGED_IN, userData.user_name);
                 redis.deleteRedis(key);
                 redis.deleteRedis(mobileKey);
 
