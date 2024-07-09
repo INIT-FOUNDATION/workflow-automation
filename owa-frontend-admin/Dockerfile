@@ -1,5 +1,5 @@
 ### STAGE 1: Build ###
-FROM ghcr.io/techknowkraftai/node:12.22 AS build
+FROM ghcr.io/techknowkraftai/node
 WORKDIR /usr/src/app
 COPY package*.json ./
 RUN npm install --force
