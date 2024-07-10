@@ -206,8 +206,6 @@ export class WorkflowFormComponent implements AfterViewInit {
       this.transitionForm
         .get('to_task_id')
         .setValue(parseInt(connection.output_id));
-
-      // this.chosenNodes.transitions.push(this.transitionForm.getRawValue());
     });
 
     this.editor.on('connectionRemoved', (connection: any) => {
@@ -279,6 +277,8 @@ export class WorkflowFormComponent implements AfterViewInit {
   drop(ev: any) {
     this.editor.on('nodeCreated', (id: any) => {
       const data = this.editor.getNodeFromId(id);
+      console.log(data);
+
       this.nodeName.push(data.name);
       if (!'Start Task, End Task'.includes(data.name)) {
         this.openModal(data.id);
@@ -467,22 +467,23 @@ export class WorkflowFormComponent implements AfterViewInit {
 
   submitForm() {
     this.chosenNodes.workflow = this.workflowForm.getRawValue();
+    this.chosenNodes.transitions.push(this.transitionForm.getRawValue());
 
     try {
       if (
         this.nodeName.includes('Start Task') &&
         this.nodeName.includes('End Task')
       ) {
-        // if (this.workflowForm.valid) {
-        //   this.workflowService
-        //     .createWorkflow(this.chosenNodes)
-        //     .subscribe((res: any) => {
-        //       this.utilityService.showSuccessMessage(
-        //         'Workflow created successfully!'
-        //       );
-        //       this.router.navigate(['workflow-builder']);
-        //     });
-        // }
+        if (this.workflowForm.valid) {
+          this.workflowService
+            .createWorkflow(this.chosenNodes)
+            .subscribe((res: any) => {
+              this.utilityService.showSuccessMessage(
+                'Workflow created successfully!'
+              );
+              this.router.navigate(['workflow-builder']);
+            });
+        }
       } else {
         this.utilityService.showErrorMessage(
           'Please add Start Task and End Task'
