@@ -1,6 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { FormBuilderService } from 'src/app/screens/form-builder/services/form-builder.service';
 
 @Component({
   selector: 'app-properties-modal',
@@ -8,74 +9,149 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
   styleUrls: ['./properties-modal.component.scss'],
 })
 export class PropertiesModalComponent implements OnInit {
-  propertiesForm: FormGroup;
-  fieldSize: any = [
-    {
-      id: 1,
-      fieldName: 'Small',
-    },
-    {
-      id: 2,
-      fieldName: 'Medium',
-    },
-    {
-      id: 3,
-      fieldName: 'Large',
-    },
-  ];
+  fieldProperties: any = [];
+  propertiesFormGrp: FormGroup;
 
-  formatRangeList: any = [
-    { id: 1, label: 'character' },
-    { id: 2, label: 'number' },
-    { id: 3, label: 'text' },
-    { id: 4, label: 'email' },
-    { id: 5, label: 'date' },
-  ];
-  selectedFieldId: number;
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private dialogRef: MatDialogRef<PropertiesModalComponent>
+    private dialogRef: MatDialogRef<PropertiesModalComponent>,
+    private formBuilderService: FormBuilderService
   ) {}
 
   ngOnInit(): void {
-    this.initForm();
-  }
-
-  initForm() {
-    this.propertiesForm = new FormGroup({
-      fieldLabel: new FormControl(null),
-      instructionText: new FormControl(null),
-      fieldSize: new FormControl(null),
-      placeholderText: new FormControl(null),
-      minRange: new FormControl(null),
-      maxRange: new FormControl(null),
-      rangeFormat: new FormControl(null),
-      hideFieldLabel: new FormControl(false),
-      showCharacterCount: new FormControl(false),
-      mandatoryField: new FormControl(false),
-      hideField: new FormControl(false),
-      disabledField: new FormControl(false),
+    this.getPropertyForFields();
+    this.propertiesFormGrp = new FormGroup({
+      field_properties: new FormArray([])
     });
   }
 
-  selectedField(id) {
-    this.selectedFieldId = id;
-    this.propertiesForm.get('fieldSize').setValue(id);
+  getPropertyForFields() {
+    this.formBuilderService
+      .getPropertiesFormFields(this.data?.field_id)
+      .subscribe((res: any) => {
+        this.fieldProperties = res.data;
+        const fieldPropertiesFrmArray = (this.propertiesFormGrp.get('field_properties') as FormArray);
+        res.data.forEach(element => {
+          let propertyFrmGrp = new FormGroup({});
+          const fieldObj = this.data.form_fields.find(ele => ele.form_field_assoc_id === this.data.index);
+          let savedProperty = null;
+          if (fieldObj) {
+            savedProperty = fieldObj.options.find(ele => ele.field_property_id === element.field_property_id);
+          }
+          if (element.field_property_type != "jsonArray") {
+            propertyFrmGrp = new FormGroup({
+              field_property_id: new FormControl(element.field_property_id),
+              field_property_name: new FormControl(element.field_property_name),
+              field_property_label_display: new FormControl(element.field_property_label_display),
+              field_property_type: new FormControl(element.field_property_type),
+              options: new FormControl(element.options),
+              value: new FormControl({value: savedProperty ? savedProperty[element.field_property_name] : null, disabled: element.field_property_name==='name'}, [Validators.required])
+            });
+          } else {
+            propertyFrmGrp = new FormGroup({
+              field_property_id: new FormControl(element.field_property_id),
+              field_property_name: new FormControl(element.field_property_name),
+              field_property_label_display: new FormControl(element.field_property_label_display),
+              field_property_type: new FormControl(element.field_property_type),
+              options: new FormControl(element.options),
+              values: new FormArray([])
+            });
+
+            const valuesFormArray = (propertyFrmGrp.get('values') as FormArray);
+            if (savedProperty && savedProperty[element.field_property_name]) {
+              savedProperty[element.field_property_name].forEach(option => {
+                valuesFormArray.push(new FormGroup({
+                  label: new FormControl(option.label, [Validators.required]),
+                  value: new FormControl(option.value, [Validators.required]),
+                }))
+              })
+            } else {
+              valuesFormArray.push(new FormGroup({
+                label: new FormControl(null, [Validators.required]),
+                value: new FormControl(null, [Validators.required]),
+              }))
+            }
+          }
+
+
+          if (element.field_property_name === 'minlength' || element.field_property_name === 'maxlength') {
+            propertyFrmGrp.get('value').addValidators([Validators.min(3)]);
+          }
+
+
+          fieldPropertiesFrmArray.push(propertyFrmGrp);
+        });
+      });
   }
 
-  selectedFormat(value) {
-    this.propertiesForm.get('rangeFormat').setValue(value);
+  convertToCamelCase(value: string) {
+    return value.replace(/(?:^\w|[A-Z]|\b\w)/g, function(word, index) {
+      return index === 0 ? word.toLowerCase() : word.toUpperCase();
+    }).replace(/\s+/g, '');
+  }
+
+  addNewOptions(control: FormControl) {
+    const optionsArray = (control.get('values') as FormArray);
+    optionsArray.push(
+      new FormGroup({
+        label: new FormControl(null, [Validators.required]),
+        value: new FormControl(null, [Validators.required]),
+      })
+    );
   }
 
   submitForm() {
-    const formData: any = [];
+    if (this.propertiesFormGrp.valid) {
+      const formFields = this.propertiesFormGrp.getRawValue();
+      const field_properties = formFields.field_properties;
+      const propertyOptions = [];
+      field_properties.forEach((property) => {
+        let obj = {};
+        obj['field_property_id'] = property.field_property_id;
+        if (property.field_property_type === 'jsonArray') {
+          obj[property.field_property_name] = property.values
+        } else {
+          obj[property.field_property_name] = property.value;
+        }
+        propertyOptions.push(obj);
+      });
+      
+      const matchedFields = this.data.form_fields.find(
+        (element) => (element.field_id === this.data.field_id && element.form_field_assoc_id === this.data.index)
+      );
 
-    const mergedFormData = {
-      ...this.propertiesForm.getRawValue(),
-      ...this.data,
-    };
-    formData.push(mergedFormData);
-    this.dialogRef.close(formData);
+      matchedFields.options = propertyOptions;
+      this.dialogRef.close(this.data.form_fields);
+    }
+  }
+
+
+  get controls() {
+    return (this.propertiesFormGrp.get("field_properties") as FormArray).controls;
+  }
+
+  dropDownOptionsControls(control: FormControl) {
+    return (control.get("values") as FormArray).controls;
+  }
+
+  onSelect() {
+    // console.log(this.propertiesFormGrp.getRawValue());
+  }
+
+  onLabelChange(control: FormControl) {
+    const value = control.get("value").value;
+    const nameControl = this.controls.find(cntrl => cntrl.get("field_property_name").value === "name");
+    const camelCaseValue = this.convertToCamelCase((value ? value : ""));
+    nameControl.get("value").setValue(camelCaseValue);
+  }
+
+  onMinimumLengthChange(control: FormControl) {
+    const value = control.get("value").value;
+    const maxLengthControl = this.controls.find(cntrl => cntrl.get("field_property_name").value === "maxlength");
+    const minmumLengthForMaxInp = value ? parseInt(value) : 3
+    maxLengthControl.get("value").clearValidators();
+    maxLengthControl.get("value").addValidators([Validators.required, Validators.min(minmumLengthForMaxInp)]);
+    maxLengthControl.get("value").updateValueAndValidity();
   }
 
   closeModal() {

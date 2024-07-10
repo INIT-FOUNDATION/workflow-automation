@@ -28,8 +28,8 @@
   </button>
 </div>
 
-<div class="border rounded-lg border-red-500 flex p-4">
-  <mat-tab-group class="mt-4 flex-1" #tabGroup (selectedTabChange)="onTabChange($event.tab.textLabel)">
+<div class="border rounded-lg border-red-600 flex p-4">
+  <mat-tab-group class="mt-4 flex-1" #tabGroup>
     <mat-tab label="User Management">
       <div class="overflow-x-auto mt-4">
         <app-user-management-grid></app-user-management-grid>

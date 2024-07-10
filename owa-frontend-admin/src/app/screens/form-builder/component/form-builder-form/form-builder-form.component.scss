@@ -1,0 +1,10 @@
+.custom-scroll-bar {
+    @media (min-width: 768px) {
+        overflow-y: auto;
+        height: calc(100vh - 14rem);
+    }
+}
+
+.custom-form-height {
+    height: calc(100vh - 17.5rem);
+}

@@ -1,1 +1,69 @@
-<p>form-builder-form works!</p>
+<div class="">
+  <app-title [titleName]="formType === 'edit' ? 'Update Form' : 'Add New Form'" additionalClass="text-lg font-bold"
+    [canGoBack]="true"></app-title>
+
+  <div cdkDropListGroup class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+    <div class="border-2 p-5 rounded-2xl">
+      <div class="font-medium mb-2">Choose form fields</div>
+      <div class="custom-scroll-bar">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4" cdkDropList [cdkDropListData]="chooseFromArray"
+          (cdkDropListDropped)="dropFormField($event)">
+          <div class="border rounded-md p-3 text-sm flex items-center cursor-grab bg-white"
+            *ngFor="let item of chooseFromArray" cdkDrag>
+            <!-- <img
+            src="/assets/images/addNewForm/{{ item.img }}.svg"
+            class="me-2 w-4"
+          /> -->
+            <span>{{ item.field_label }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="border-2 px-5 pt-5 rounded-2xl col-span-2">
+      <div class="relative" [formGroup]="selectedFieldsForm">
+        <input type="text" class="border-b outline-none w-full font-medium pb-2 bg-white" formControlName="form_name" />
+        <a href="/form-builder/form-name">
+          <i class="fa-solid fa-pencil absolute right-0 cursor-pointer"></i></a>
+      </div>
+
+      <form action="" class="custom-scroll-bar flex flex-col justify-between pt-2">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4" cdkDropList [cdkDropListData]="chosenFields"
+          (cdkDropListDropped)="dropFormField($event)">
+          <div class="text-sm mb-3" *ngFor="let item of chosenFields; let i = index" [cdkDragDisabled]="true" cdkDrag>
+            <app-input-field [fieldData]="item" *ngIf="item?.field_id == 1 && enableInputs"
+              (deleteFormFieldIndex)="deleteFormField($event)" (editFormFieldIndex)="editFormField($event)"
+              disabled="true"></app-input-field>
+
+            <app-text-area-field [fieldData]="item" *ngIf="item?.field_id == 2 && enableInputs"
+              (deleteFormFieldIndex)="deleteFormField($event)" (editFormFieldIndex)="editFormField($event)"
+              disabled="true"></app-text-area-field>
+
+            <app-radio-button [fieldData]="item" *ngIf="item?.field_id == 3 && enableInputs"
+              (deleteFormFieldIndex)="deleteFormField($event)" (editFormFieldIndex)="editFormField($event)"
+              disabled="true"></app-radio-button>
+
+            <app-checkbox-button [fieldData]="item" *ngIf="item?.field_id == 4 && enableInputs"
+              (deleteFormFieldIndex)="deleteFormField($event)" (editFormFieldIndex)="editFormField($event)"
+              disabled="true"></app-checkbox-button>
+
+            <app-dropdown-field [fieldData]="item" *ngIf="item?.field_id == 5 && enableInputs"
+              (deleteFormFieldIndex)="deleteFormField($event)" (editFormFieldIndex)="editFormField($event)"
+              disabled="true"></app-dropdown-field>
+          </div>
+        </div>
+
+        <div class="flex items-center">
+          <button [disabled]="chosenFields.length == 0" (click)="previewScreen()" type="button"
+            class="bg-gray-200 rounded-lg w-full py-2 px-10 me-3">
+            Preview
+          </button>
+          <button type="button" class="bg-red-600 text-white rounded-lg w-full py-2 px-10"
+            (click)="formType == 'edit' ? updateForm() : submitForm()">
+            {{ formType == 'edit' ? "Update Form" : "Save Form" }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

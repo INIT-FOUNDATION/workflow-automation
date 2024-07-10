@@ -1,92 +1,98 @@
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { findIndex } from 'rxjs';
 import { PropertiesModalComponent } from 'src/app/modules/shared/components/properties-modal/properties-modal.component';
+import { FormBuilderService } from '../../services/form-builder.service';
+import { Router } from '@angular/router';
+import { FormBuilderFormComponent } from '../form-builder-form/form-builder-form.component';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 
+interface fieldObject {
+  field_id: number;
+  options: any[];
+  form_field_assoc_id: number;
+}
 @Component({
   selector: 'app-add-form-builder',
   templateUrl: './add-form-builder.component.html',
   styleUrls: ['./add-form-builder.component.scss'],
 })
-export class AddFormBuilderComponent implements OnInit {
-  chooseFromArray = [
-    { id: 1, acceptOnly: 'string', label: 'Name', img: 'nameIcon' },
-    { id: 2, acceptOnly: 'string', label: 'Address', img: 'addressIcon' },
-    { id: 3, acceptOnly: 'number', label: 'Number', img: 'numberIcon' },
-    { id: 4, acceptOnly: 'number', label: 'Phone', img: 'phoneIcon' },
-    { id: 5, acceptOnly: 'string', label: 'Email', img: 'emailIcon' },
-    { id: 6, acceptOnly: 'date', label: 'Date', img: 'dateIcon' },
-    { id: 7, acceptOnly: 'time', label: 'Time', img: 'timeIcon' },
-    {
-      id: 8,
-      acceptOnly: 'dateTime',
-      label: 'Date - Time',
-      img: 'dateTimeIcon',
-    },
-    {
-      id: 9,
-      acceptOnly: 'string',
-      label: 'Decision Box',
-      img: 'decisionBoxIcon',
-    },
-    { id: 10, acceptOnly: 'dropdown', label: 'Dropdown', img: 'dropdownIcon' },
-    { id: 11, acceptOnly: 'radio', label: 'Radio', img: 'radioButtonIcon' },
-    { id: 12, acceptOnly: 'checkbox', label: 'Checkbox', img: 'checkboxIcon' },
-    { id: 13, acceptOnly: 'url', label: 'Website', img: 'websiteIcon' },
-    {
-      id: 14,
-      acceptOnly: 'fileUpload',
-      label: 'File Upload',
-      img: 'fileUploaderIcon',
-    },
-    {
-      id: 15,
-      acceptOnly: 'imgUpload',
-      label: 'Image Upload',
-      img: 'imageUploadIcon',
-    },
-    { id: 16, acceptOnly: 'section', label: 'Section', img: 'sectionIcon' },
-    { id: 17, acceptOnly: 'break', label: 'Page Break', img: 'breakPageIcon' },
-    { id: 18, acceptOnly: 'rating', label: 'Ratings', img: 'ratingsIcon' },
-    {
-      id: 19,
-      acceptOnly: 'string',
-      label: 'Description',
-      img: 'descriptionIcon',
-    },
-    {
-      id: 20,
-      acceptOnly: 'multiline',
-      label: 'Multi Line',
-      img: 'multilineIcon',
-    },
-  ];
+export class AddFormBuilderComponent implements OnInit, AfterViewInit {
+  selectedFieldsForm: FormGroup;
+  chooseFromArray: any = [];
+  chosenFields: fieldObject[] = [];
+  indexCount: number = 0;
+  enableInputs: boolean = false;
+  fieldDetails: any;
+  @Input() formId: any;
+  formTitle: string = 'Add New Form';
+  constructor(
+    private dialog: MatDialog,
+    private formBuilderService: FormBuilderService,
+    private router: Router
+  ) {}
 
-  chosenFields: any = [];
-
-  constructor(private dialog: MatDialog) {}
-
-  ngOnInit(): void {}
-
-  dropFormField(event: CdkDragDrop<any[]>) {
-    const selectedItem = event.previousContainer.data[event.previousIndex];
-
-    this.chosenFields.some((item) => item.id === selectedItem.id);
-    this.chosenFields.push(selectedItem);
-    this.openPropertyModal(selectedItem, this.chosenFields.length - 1);
+  ngOnInit(): void {
+    this.getFormListData();
+    this.initForm();
+    if (this.formId) {
+      this.formTitle = 'Update Form';
+      const form_id = this.formId.substring(1);
+      this.getFormDetailsById(form_id);
+    }
   }
 
-  deleteFormField(id) {
-    const index = this.chosenFields.findIndex((item) => item.id === id);
-    if (index !== -1) {
-      this.chosenFields.splice(index, 1);
+  ngAfterViewInit(): void {
+    this.fieldDetails = JSON.parse(localStorage.getItem('formDetails'));
+    this.selectedFieldsForm
+      .get('form_name')
+      .setValue(this.fieldDetails.form_name);
+    this.selectedFieldsForm
+      .get('form_description')
+      .setValue(this.fieldDetails.form_description);
+  }
+
+  initForm() {
+    this.selectedFieldsForm = new FormGroup({
+      form_name: new FormControl({ value: null, disabled: true }, [
+        Validators.required,
+      ]),
+      form_description: new FormControl(null),
+      form_fields: new FormControl({}),
+    });
+  }
+
+  dropFormField(event: CdkDragDrop<any[]>) {
+    this.indexCount++;
+    this.enableInputs = false;
+    const selectedItem = event.previousContainer.data[event.previousIndex];
+    this.chosenFields.push({
+      field_id: selectedItem.field_id,
+      options: [],
+      form_field_assoc_id: this.indexCount,
+    });
+    this.openPropertyModal(selectedItem, this.indexCount);
+  }
+
+  deleteFormField(index) {
+    const currentIndex = this.chosenFields.findIndex(
+      (item) => item.form_field_assoc_id === index
+    );
+    if (currentIndex !== -1) {
+      this.chosenFields.splice(currentIndex, 1);
     }
+  }
+
+  editFormField(index) {
+    const selectedItem = this.chosenFields.filter(
+      (item) => item.form_field_assoc_id === index
+    );
+    this.openPropertyModal(selectedItem[0], index);
   }
 
   openPropertyModal(selectedItem, index) {
     const dialogRef = this.dialog.open(PropertiesModalComponent, {
-      width: 'clamp(20rem, 60vw, 35rem)',
+      width: 'clamp(20rem, 60vw, 25rem)',
       panelClass: [
         'animate__animated',
         'animate__slideInRight',
@@ -94,13 +100,71 @@ export class AddFormBuilderComponent implements OnInit {
       ],
       position: { right: '0px', top: '0px', bottom: '0px' },
       disableClose: true,
-      data: { ...selectedItem, index },
+      data: { ...selectedItem, index, form_fields: this.chosenFields },
     });
 
-    dialogRef.afterClosed().subscribe((res) => {
-      this.chosenFields.some((item) => item.index === index);
-      this.chosenFields[index] = res[0];
-      console.log(this.chosenFields);
+    dialogRef.afterClosed().subscribe((res: any) => {
+      this.enableInputs = true;
+      if (res) {
+        this.chosenFields = res;
+        this.chosenFields.some((item) => item.form_field_assoc_id === index);
+      }
+    });
+  }
+
+  getFormListData() {
+    this.formBuilderService.getFormFields().subscribe((res: any) => {
+      this.chooseFromArray = res.data;
+    });
+  }
+
+  getFormDetailsById(form_id: number) {
+    try {
+      this.formBuilderService
+        .getFormDetailsById(form_id)
+        .subscribe((res: any) => {
+          this.enableInputs = true;
+          this.chosenFields = res.data.formFieldsDetails;
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  previewScreen() {
+    const dialogRef = this.dialog.open(FormBuilderFormComponent, {
+      width: 'clamp(20rem, 60vw, 45rem)',
+      panelClass: [
+        'animate__animated',
+        'animate__slideInRight',
+        'properties-container',
+      ],
+      position: { right: '0px', top: '0px', bottom: '0px' },
+      disableClose: true,
+      data: { form_fields: this.chosenFields },
+    });
+  }
+
+  submitForm() {
+    const formData = this.selectedFieldsForm.getRawValue();
+    formData.form_fields = this.chosenFields;
+    this.formBuilderService.createForm(formData).subscribe((res: any) => {
+      if (res) {
+        this.router.navigate(['/form-builder']);
+        localStorage.removeItem('formDetails');
+      }
+    });
+  }
+
+  updateForm() {
+    const formData = this.selectedFieldsForm.getRawValue();
+    formData.form_fields = this.chosenFields;
+    formData.form_id = parseInt(this.formId.substring(1));
+    this.formBuilderService.updateForm(formData).subscribe((res: any) => {
+      if (res) {
+        this.router.navigate(['/form-builder']);
+        localStorage.removeItem('formDetails');
+      }
     });
   }
 }

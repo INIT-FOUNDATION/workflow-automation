@@ -1,6 +1,8 @@
-<ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)"
-             size = "medium"
-             color = "#fff"
-             type = "ball-spin-fade-rotating"
-             [fullScreen] = "true">
+<ngx-spinner type="ball-spin-clockwise-fade" [fullScreen]="true">
+  <div
+    class="flex items-center content-center h-full"
+    *ngIf="spinner"
+  >
+    <span class="loader relative rounded-full"></span>
+  </div>
 </ngx-spinner>
