@@ -345,6 +345,8 @@ export const workflowRepository = {
                 _queryForListOfWorkflows.text += ` AND workflow_name ILIKE '%${searchQuery}%'`;
                 _queryForTotalCountWorkflows.text += ` AND workflow_name ILIKE '%${searchQuery}%'`;
             }
+
+            _queryForListOfWorkflows.text += ` ORDER BY date_updated, date_created, status`;
             
             if (pageSize) {
                 _queryForListOfWorkflows.text += ` LIMIT ${pageSize}`;
@@ -353,6 +355,7 @@ export const workflowRepository = {
             if (currentPage) {
                 _queryForListOfWorkflows.text += ` OFFSET ${currentPage}`;
             }
+
 
             const workflowsListResponse = {
                 workflowList: [],
