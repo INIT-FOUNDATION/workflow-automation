@@ -9,6 +9,7 @@ import { CACHE_TTL } from "../constants/CONST";
 import moment from "moment";
 import * as arrayUtil from "../utility/arrayUtility";
 
+const nodeIds = [1, 2]; // Start Node & End Node
 
 export const workflowService = {
 
@@ -24,7 +25,9 @@ export const workflowService = {
 
             for (const workflowTask of workflowTasks) {
                 workflowTask.workflow_id = workflowId;
-
+                if (nodeIds.includes(workflowTask.node_id)) {
+                    workflowTask.task_id = Math.random() * 10000000;
+                }
                 const taskId = await workflowRepository.createWorkflowTask(workflowTask);
                 taskIdsMapping[workflowTask.task_id] = taskId;
             }
@@ -80,6 +83,9 @@ export const workflowService = {
                 workflowTask.workflow_id = workflowId;
 
                 if (workflowTask.is_new) {
+                    if (nodeIds.includes(workflowTask.node_id)) {
+                        workflowTask.task_id = Math.random() * 10000000;
+                    }
                     const taskId = await workflowRepository.createWorkflowTask(workflowTask);
                     taskIdsMapping[workflowTask.task_id] = taskId;
                 } else {
