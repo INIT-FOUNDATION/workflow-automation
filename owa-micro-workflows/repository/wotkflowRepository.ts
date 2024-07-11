@@ -346,7 +346,7 @@ export const workflowRepository = {
                 _queryForTotalCountWorkflows.text += ` AND workflow_name ILIKE '%${searchQuery}%'`;
             }
 
-            _queryForListOfWorkflows.text += ` ORDER BY date_updated, date_created, status`;
+            _queryForListOfWorkflows.text += ` ORDER BY date_updated DESC, date_created DESC`;
             
             if (pageSize) {
                 _queryForListOfWorkflows.text += ` LIMIT ${pageSize}`;
@@ -371,6 +371,7 @@ export const workflowRepository = {
             if (totalCountRes.length > 0) {
                 workflowsListResponse.total_count = totalCountRes[0].count;
             };
+            logger.debug(`workflowRepository :: listWorkflows :: query :: ${JSON.stringify(_queryForListOfWorkflows)}`);
 
             const workflowResult: IWorkflow[] = await pg.executeQueryPromise(_queryForListOfWorkflows);
             logger.debug(`workflowRepository :: listWorkflows :: db result :: ${JSON.stringify(workflowResult)}`);
