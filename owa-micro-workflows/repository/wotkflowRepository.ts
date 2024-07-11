@@ -49,7 +49,7 @@ export const workflowRepository = {
             logger.info(`workflowRepository :: Inside createWorkflowTask`);
             const _query = {
                 text: WORKFLOW.createWorkflowtask,
-                values: [task.workflow_id, task.node_id, task.task_name, task.task_description, task.form_id, task.created_by, task.updated_by]
+                values: [task.workflow_id, task.node_id, task.task_name, task.task_description, task.form_id, task.x_axis, task.y_axis, task.created_by, task.updated_by]
             }
     
             const result = await pg.executeQueryPromise(_query);
@@ -66,7 +66,8 @@ export const workflowRepository = {
             logger.info(`workflowRepository :: Inside updateWorkflowTask`);
             const _query = {
                 text: WORKFLOW.updateWorkflowTask,
-                values: [task.task_id, task.workflow_id, task.node_id, task.task_name, task.task_description, task.form_id, task.status, task.updated_by]
+                values: [task.task_id, task.workflow_id, task.node_id, task.task_name, task.task_description, task.form_id,
+                     task.status, task.x_axis, task.y_axis, task.updated_by]
             }
     
             const result = await pg.executeQueryPromise(_query);
@@ -87,7 +88,8 @@ export const workflowRepository = {
                     notificationTask.notification_task_description, notificationTask.notification_type, 
                     notificationTask.email_subject, notificationTask.email_body, notificationTask.sms_body, 
                     notificationTask.template_id, notificationTask.placeholders, notificationTask.recipient_emails, 
-                    notificationTask.recipient_mobilenumber, notificationTask.status, notificationTask.updated_by]
+                    notificationTask.recipient_mobilenumber, notificationTask.x_axis, notificationTask.y_axis, 
+                    notificationTask.created_by, notificationTask.updated_by]
             }
     
             const result = await pg.executeQueryPromise(_query);
@@ -109,7 +111,8 @@ export const workflowRepository = {
                      notificationTask.notification_type, notificationTask.email_subject, 
                      notificationTask.email_body, notificationTask.sms_body, notificationTask.template_id, 
                      notificationTask.placeholders, notificationTask.recipient_emails, 
-                     notificationTask.recipient_mobilenumber, notificationTask.status, notificationTask.updated_by]
+                     notificationTask.recipient_mobilenumber, notificationTask.status, 
+                     notificationTask.x_axis, notificationTask.y_axis, notificationTask.updated_by]
             }
     
             const result = await pg.executeQueryPromise(_query);
@@ -126,7 +129,9 @@ export const workflowRepository = {
             logger.info(`workflowRepository :: Inside createWorkflowDecisionTasks`);
             const _query = {
                 text: WORKFLOW.createWorkflowDecisionTasks,
-                values: [decisionTask.workflow_id, decisionTask.node_id, decisionTask.decision_task_name, decisionTask.decision_task_description, decisionTask.created_by, decisionTask.updated_by]
+                values: [decisionTask.workflow_id, decisionTask.node_id, decisionTask.decision_task_name,
+                     decisionTask.decision_task_description, decisionTask.x_axis, decisionTask.y_axis,
+                      decisionTask.created_by, decisionTask.updated_by]
             }
     
             const result = await pg.executeQueryPromise(_query);
@@ -143,7 +148,9 @@ export const workflowRepository = {
             logger.info(`workflowRepository :: Inside updateWorkflowDecisionTasks`);
             const _query = {
                 text: WORKFLOW.updateWorkflowDecisionTasks,
-                values: [decisionTask.decision_task_id, decisionTask.workflow_id, decisionTask.node_id, decisionTask.decision_task_name, decisionTask.decision_task_description, decisionTask.status, decisionTask.updated_by]
+                values: [decisionTask.decision_task_id, decisionTask.workflow_id, decisionTask.node_id,
+                     decisionTask.decision_task_name, decisionTask.decision_task_description, decisionTask.status,
+                     decisionTask.x_axis, decisionTask.y_axis, decisionTask.updated_by]
             }
     
             const result = await pg.executeQueryPromise(_query);
@@ -160,7 +167,8 @@ export const workflowRepository = {
             logger.info(`workflowRepository :: Inside createWorkflowDecisionConditions`);
             const _query = {
                 text: WORKFLOW.createWorkflowDecisionConditions,
-                values: [decisionCondition.decision_task_id, decisionCondition.operand_one, decisionCondition.operator, decisionCondition.operand_two, decisionCondition.created_by, decisionCondition.updated_by]
+                values: [decisionCondition.decision_task_id, decisionCondition.operand_one, decisionCondition.operator,
+                     decisionCondition.operand_two, decisionCondition.created_by, decisionCondition.updated_by]
             }
     
             const result = await pg.executeQueryPromise(_query);

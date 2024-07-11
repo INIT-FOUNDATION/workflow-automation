@@ -16,6 +16,8 @@ export interface IWorkflowTask {
     task_description: string;
     form_id: number;
     status: number;
+    x_axis: string;
+    y_axis: string;
     created_by: number;
     updated_by: number;
 }
@@ -36,6 +38,8 @@ export interface IWorkflowNotificationTask {
     recipient_emails: string;
     recipient_mobilenumber: string;
     status: number;
+    x_axis: string;
+    y_axis: string;
     created_by: number | undefined;
     updated_by: number | undefined;
 }
@@ -49,6 +53,8 @@ export interface IWorkflowDecisionTask {
     decision_task_name: string;
     decision_task_description: string;
     status: number;
+    x_axis: string;
+    y_axis: string;
     created_by: number | undefined;
     updated_by: number | undefined;
 }

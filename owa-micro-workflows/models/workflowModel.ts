@@ -51,6 +51,8 @@ class WorkflowTask implements IWorkflowTask {
     task_description: string;
     form_id: number;
     status: number;
+    x_axis: string;
+    y_axis: string;
     created_by: number;
     updated_by: number;
 
@@ -61,6 +63,8 @@ class WorkflowTask implements IWorkflowTask {
         this.task_name = workflowTask.task_name;
         this.task_description = workflowTask.task_description;
         this.form_id = workflowTask.form_id;
+        this.x_axis = workflowTask.x_axis;
+        this.y_axis = workflowTask.y_axis;
         this.status = workflowTask.status || 1;
         this.created_by = plainToken.user_id;
         this.updated_by = plainToken.user_id;
@@ -79,6 +83,8 @@ class WorkflowTask implements IWorkflowTask {
             ),
             form_id: Joi.number().integer().required(),
             status: Joi.number().integer().default(1),
+            x_axis: Joi.string().required(),
+            y_axis: Joi.string().required(),
             created_by: Joi.number().integer().required(),
             updated_by: Joi.number().integer().required(),
         });
@@ -102,6 +108,8 @@ class WorkflowNotificationTask implements IWorkflowNotificationTask {
     recipient_emails: string;
     recipient_mobilenumber: string;
     status: number;
+    x_axis: string;
+    y_axis: string;
     created_by: number;
     updated_by: number;
 
@@ -120,6 +128,8 @@ class WorkflowNotificationTask implements IWorkflowNotificationTask {
         this.recipient_emails = notificationTask.recipient_emails;
         this.recipient_mobilenumber = notificationTask.recipient_mobilenumber;
         this.status = notificationTask.status !== undefined ? notificationTask.status : 1;
+        this.x_axis = notificationTask.x_axis;
+        this.y_axis = notificationTask.y_axis;
         this.created_by = notificationTask.created_by || plainToken.user_id;
         this.updated_by = notificationTask.updated_by || plainToken.user_id;
     }
@@ -144,6 +154,8 @@ class WorkflowNotificationTask implements IWorkflowNotificationTask {
             recipient_emails: Joi.string().allow(null, ''),
             recipient_mobilenumber: Joi.string().allow(null, ''),
             status: Joi.number().integer().default(1),
+            x_axis: Joi.string().required(),
+            y_axis: Joi.string().required(),
             created_by: Joi.number().integer().required(),
             updated_by: Joi.number().integer().required(),
         });
@@ -160,6 +172,8 @@ class WorkflowDecisionTask implements IWorkflowDecisionTask {
     decision_task_description: string;
     conditions: IWorkflowDecisionCondition[];
     status: number;
+    x_axis: string;
+    y_axis: string;
     created_by: number;
     updated_by: number;
 
@@ -171,6 +185,8 @@ class WorkflowDecisionTask implements IWorkflowDecisionTask {
         this.decision_task_description = decisionTask.decision_task_description;
         this.conditions = decisionTask.conditions;
         this.status = decisionTask.status !== undefined ? decisionTask.status : 1;
+        this.x_axis = decisionTask.x_axis;
+        this.y_axis = decisionTask.y_axis;
         this.created_by = decisionTask.created_by || plainToken.user_id;
         this.updated_by = decisionTask.updated_by || plainToken.user_id;
     }
@@ -188,6 +204,8 @@ class WorkflowDecisionTask implements IWorkflowDecisionTask {
             ),
             conditions: Joi.array().optional(),
             status: Joi.number().integer().default(1),
+            x_axis: Joi.string().required(),
+            y_axis: Joi.string().required(),
             created_by: Joi.number().integer().required(),
             updated_by: Joi.number().integer().required(),
         });
