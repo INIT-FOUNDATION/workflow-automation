@@ -55,6 +55,41 @@ export class AuthService {
     });
   }
 
+  getForgotPasswordOtp(payload){
+    return this.http.post<any>(
+      `${environment.auth_prefix_url}/admin/getForgetPasswordOtp`,
+      payload
+    ); 
+  }
+
+  verifyForgotPasswordOtp(payload){
+    return this.http.post<any>(
+      `${environment.auth_prefix_url}/admin/verifyForgetPasswordOtp`,
+      payload
+    ); 
+  }
+
+  generateOtp(payload){
+    return this.http.post<any>(
+      `${environment.auth_prefix_url}/user/generateOTP`,
+      payload
+    );
+  }
+
+  resetForgotPassword(payload){
+    return this.http.post<any>(
+      `${environment.auth_prefix_url}/admin/resetForgetPassword`,
+      payload
+    ); 
+  }
+
+  validateOtp(payload){
+    return this.http.post<any>(
+      `${environment.auth_prefix_url}/user/validateOTP`,
+      payload
+    ); 
+  }
+
   logout() {
     if (this.appPreferences.getValue('userToken')) {
       this.http

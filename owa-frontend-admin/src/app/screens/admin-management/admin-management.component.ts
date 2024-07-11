@@ -19,6 +19,7 @@ export class AdminManagementComponent {
   usersData: any;
   userSearchText: string = '';
   roleSearchText: string = '';
+  currentTab: string = 'User Management';
 
   constructor(
     private adminService: AdminManagementService,
@@ -47,6 +48,10 @@ export class AdminManagementComponent {
       this.buttonText = 'Add New Role';
       this.buttonRoute = '/admin-management/add-role';
     }
+  }
+
+  onTabChange(tabName: string): void {
+    this.currentTab = tabName;
   }
 
   onSearch(event: any) {

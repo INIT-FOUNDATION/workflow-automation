@@ -5,12 +5,12 @@
 ></app-title>
 
 <div class="flex justify-between border-b-2 pb-8 mb-8">
-  <div class="border border-gray-300 rounded-full px-4 py-2 w-80 relative">
+  <div  [ngClass]="{ 'invisible': currentTab === 'Role Management' }"  class="border border-gray-300 rounded-full px-4 py-2 w-80 relative">
     <input
       type="text"
       class="outline-none border-none w-full pr-3 text-sm"
       [placeholder]="searchText"
-      (keydown.enter)="onSearch($event)"
+      (input)="onSearch($event)"
     />
     <img
       src="assets/images/workflowCards/searchIcon.svg"
