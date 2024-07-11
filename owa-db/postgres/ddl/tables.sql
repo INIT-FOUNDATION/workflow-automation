@@ -200,7 +200,7 @@ CREATE TABLE m_workflow_tasks (
     node_id INT NOT NULL,
     task_name VARCHAR(50) NOT NULL,
     task_description TEXT,
-    form_id INT NOT NULL,
+    form_id INT,
     status SMALLINT DEFAULT 1,
     x_axis VARCHAR(10),
     y_axis VARCHAR(10),
