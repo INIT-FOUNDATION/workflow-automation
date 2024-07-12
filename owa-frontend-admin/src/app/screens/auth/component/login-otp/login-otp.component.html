@@ -1,0 +1,28 @@
+<div class="flex flex-col items-center justify-center h-full p-8">
+    <div class="flex justify-center mb-6">
+        <img src="assets/images/loginPage/ollLogo.svg" alt="OLL Logo" class="h-16">
+    </div>
+   <div class="bg-white p-10 border-2 rounded-3xl shadow-lg w-full max-w-md">
+        <div *ngIf="currentScreen === 'sendOtp'">
+            <div class="text-center mb-6">
+                <h2 class="text-2xl font-semibold">Login using OTP</h2>
+            </div>
+            <form [formGroup]="loginOtpForm" (ngSubmit)="sendOtp()">
+                <input type="text" formControlName="mobileNumber" placeholder="Mobile Number" class="form-control w-full px-4 py-2 mb-4 border rounded-full bg-gray-200">
+                <button type="submit" class="w-full bg-red-600 text-white py-2 rounded-full mt-4">Send OTP</button>
+            </form>
+        </div>
+
+        <div *ngIf="currentScreen === 'enterOtp'">
+            <div class="text-center mb-6">
+                <h2 class="text-2xl font-semibold">Enter OTP</h2>
+            </div>
+            <form [formGroup]="loginOtpForm" (ngSubmit)="verifyOtp()">
+                <input type="text" formControlName="otp" placeholder="OTP" class="form-control w-full px-4 py-2 mb-4 border rounded-full bg-gray-200">
+                <button type="submit" class="w-full bg-red-600 text-white py-2 rounded-full mt-4">Login</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+

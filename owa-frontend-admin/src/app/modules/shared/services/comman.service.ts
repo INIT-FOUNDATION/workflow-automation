@@ -21,6 +21,7 @@ export class CommanService {
   ) {}
 
   async getUserDetails(tokenInfo?: { token: string; redirect: boolean }) {
+    console.log(tokenInfo)
     let role_id;
     let user_id;
     let loggedInUserDetails : any

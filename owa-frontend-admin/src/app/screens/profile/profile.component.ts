@@ -12,6 +12,7 @@ import { CommonImageUploadComponent } from 'src/app/modules/shared/components/co
 import { of } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { DataService } from 'src/app/modules/shared/services/data.service';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
@@ -34,7 +35,8 @@ export class ProfileComponent {
     private appPreference: AppPreferencesService,
     private commonService: CommanService,
     private dialog: MatDialog,
-    public dataService: DataService
+    public dataService: DataService,
+    public router: Router,
   ) {}
 
   profileForm = new FormGroup({
@@ -56,7 +58,7 @@ export class ProfileComponent {
     this.authService.getLoggedInUserInfo().subscribe(
       response => {
         const userInfo = response.data;
-        const dob = moment(response.data?.dob, 'YYYY-MM-DD').toDate();
+        const dob = moment(userInfo.dob, 'DD/MM/YYYY').toDate();
         this.profileForm.patchValue({
           first_name: userInfo.first_name,
           last_name: userInfo.last_name,
@@ -196,7 +198,8 @@ export class ProfileComponent {
       // }
       this.commonService.getUserDetails();
       this.utilService.showSuccessMessage('Profile updated successfully');
-      this.activeScreen = 'view_profile';
+      // this.activeScreen = 'view_profile';
+      this.router.navigate(['/admin-management']);
     });
   }
 

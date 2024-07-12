@@ -30,6 +30,7 @@ export class UserFormComponent {
     { label: 'Active', value: 1 },
     { label: 'InActive', value: 0 },
   ];
+  formSubmitted = false;
 
   constructor(
     public adminManagementService: AdminManagementService,
@@ -39,25 +40,12 @@ export class UserFormComponent {
   ) {}
 
   userForm = new FormGroup({
-    first_name: new FormControl('', [
-      Validators.required,
-      Validators.minLength(3),
-    ]),
-    last_name: new FormControl('', [
-      Validators.required,
-      Validators.minLength(3),
-    ]),
-    email_id: new FormControl('', [
-      Validators.required,
-      this.customEmailValidator(),
-    ]),
+    first_name: new FormControl('', [Validators.required]),
+    last_name: new FormControl('', [Validators.required]),
+    email_id: new FormControl('', [Validators.required]),
     dob: new FormControl('', [Validators.required]),
     gender: new FormControl('', [Validators.required]),
-    mobile_number: new FormControl('', [
-      Validators.required,
-      Validators.pattern('^[0-9]{10}$'),
-      this.customMobileValidator,
-    ]),
+    mobile_number: new FormControl('', [Validators.required, Validators.minLength(10), Validators.pattern(/[6-9]{1}[0-9]{9}/)]),
     role_id: new FormControl('', [Validators.required]),
     department_id: new FormControl('', [Validators.required]),
     reporting_to_users: new FormControl([]),
@@ -91,95 +79,13 @@ export class UserFormComponent {
     return 'Cancel';
   }
 
-  customMobileValidator(control: AbstractControl): ValidationErrors | null {
-    const mobile = control.value;
-    if (
-      mobile &&
-      (mobile.startsWith('09') ||
-        mobile.startsWith('+') ||
-        /^[1-5]/.test(mobile))
-    ) {
-      return { invalidMobileNumber: true };
-    }
-    return null;
-  }
-
-  customEmailValidator(): ValidatorFn {
-    return (control: AbstractControl): { [key: string]: any } | null => {
-      const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-      if (!emailRegex.test(control.value)) {
-        return { email: true, invalidEmail: true };
-      }
-      return null;
-    };
-  }
-
   async submitUserForm() {
-    if (!this.userForm.controls.first_name.valid) {
-      this.utilsService.showErrorMessage(
-        'First Name must be at least 3 characters'
-      );
-      return;
-    }
-    if (!this.userForm.controls.last_name.valid) {
-      this.utilsService.showErrorMessage(
-        'Last Name must be at least 3 characters'
-      );
-      return;
-    }
-    if (!this.userForm.controls.email_id.valid) {
-      this.utilsService.showErrorMessage(this.getEmailErrorMessage());
-      return;
-    }
-    if (!this.userForm.controls.dob.valid) {
-      this.utilsService.showErrorMessage('Please mention your DOB');
-      return;
-    }
-    if (!this.userForm.controls.gender.valid) {
-      this.utilsService.showErrorMessage('Please select gender');
-      return;
-    }
-    if (!this.userForm.controls.mobile_number.valid) {
-      this.utilsService.showErrorMessage(this.getMobileErrorMessage());
-      return;
-    }
-    if (!this.userForm.controls.role_id.valid) {
-      this.utilsService.showErrorMessage('Please select role');
-      return;
-    }
-    if (!this.userForm.controls.department_id.valid) {
-      this.utilsService.showErrorMessage('Please select department');
-      return;
-    }
+    this.formSubmitted = true;
     if (this.formType != 'edit') {
       this.createUser();
-      // this.utilsService.showSuccessMessage('User created successfully');
     } else {
       this.updateUser();
-      // this.utilsService.showSuccessMessage('User updated successfully');
     }
-  }
-
-  getEmailErrorMessage() {
-    const emailControl = this.userForm.controls.email_id;
-    if (emailControl.hasError('required')) {
-      return 'Email ID is not allowed to be empty';
-    } else if (emailControl.hasError('email')) {
-      return 'Invalid Email ID';
-    }
-    return '';
-  }
-
-  getMobileErrorMessage() {
-    const mobileControl = this.userForm.controls.mobile_number;
-    if (mobileControl.hasError('required')) {
-      return 'Mobile number should be valid 10 digits';
-    } else if (mobileControl.hasError('pattern')) {
-      return 'Mobile number should be valid 10 digits';
-    } else if (mobileControl.hasError('invalidMobileNumber')) {
-      return 'Invalid mobile number';
-    }
-    return '';
   }
 
   async createUser() {
