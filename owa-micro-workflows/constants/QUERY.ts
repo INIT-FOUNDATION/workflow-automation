@@ -7,7 +7,7 @@ export const WORKFLOW = {
 ) 
 VALUES ($1, $2, $3, $4) 
 RETURNING workflow_id;`,
-    updateWorkflow: `UPDATE m_work,flows
+    updateWorkflow: `UPDATE m_workflows
 	SET workflow_name=$2, workflow_description=$3, status=$4, date_updated=now(), updated_by=$5
 	WHERE workflow_id = $1`,
     createWorkflowtask: `INSERT INTO m_workflow_tasks (
