@@ -36,6 +36,8 @@ export class EmailTaskComponent implements OnInit {
       node_type: this.node_details.node_type,
       is_new: this.node_details.is_new,
       task_id: this.node_details.task_id,
+      x_axis: this.node_details.x_axis.toString(),
+      y_axis: this.node_details.y_axis.toString(),
       notification_type: 'EMAIL',
     };
 

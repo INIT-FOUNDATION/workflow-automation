@@ -6,6 +6,7 @@ import { WorkflowBuilderService } from '../../services/workflow-builder.service'
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { UtilityService } from 'src/app/modules/shared/services/utility.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { MenuItem } from 'primeng/api';
 
 interface workflowObject {
   workflow: any;
@@ -34,7 +35,10 @@ export class WorkflowFormComponent implements AfterViewInit {
     is_new: boolean;
     task_id: number;
     form_id: number;
+    x_axis: number;
+    y_axis: number;
   };
+  items: MenuItem[];
   @Input() formType: string;
   @Input() nodes: any[];
   @Input() drawingData: string;
@@ -70,10 +74,26 @@ export class WorkflowFormComponent implements AfterViewInit {
   ngOnInit() {
     this.initForm();
     this.getNodeList();
+    this.contextMenu();
     if (this.formType == 'edit') {
       this.workflow_id = this.activatedRoute.snapshot.params['id'].substring(1);
       this.getWorkflowById();
     }
+  }
+
+  contextMenu() {
+    this.items = [
+      {
+        label: 'View',
+        icon: 'pi pi-fw pi-search',
+        // command: () => this.viewProduct(this.selectedProduct),
+      },
+      {
+        label: 'Delete',
+        icon: 'pi pi-fw pi-times',
+        // command: () => this.deleteProduct(this.selectedProduct),
+      },
+    ];
   }
 
   initForm() {
@@ -125,7 +145,7 @@ export class WorkflowFormComponent implements AfterViewInit {
 
       this.editor.start();
 
-      const dataToImport = {
+      let dataToImport = {
         drawflow: {
           Home: {
             data: {},
@@ -135,6 +155,66 @@ export class WorkflowFormComponent implements AfterViewInit {
           },
         },
       };
+
+      this.chosenNodes.tasks.forEach((task) => {
+        this.chosenNodes.transitions.forEach((transition) => {
+          console.log(task);          
+          console.log(transition);
+
+          const taskHtml = `
+        <div>
+          <div class="bg-gray-100 px-3 flex items-center justify-between text-sm py-2">
+            <span><i class="${task.node_icon} text-xl text-red-600 me-2"></i>${task.task_name}</span>
+          </div>
+          <div class="box p-2 flex flex-col items-end">
+            <input type="text" class="border rounded text-sm w-full py-2 ps-2 outline-none mb-2" disabled placeholder="${task.task_name}" />
+            <span class="bg-green-200 text-black ps-3 pe-8 py-1 text-xs rounded-full">Connection task</span>
+          </div>
+        </div>
+        `;
+
+          const decisionHtml = `
+        <div>
+          <div class="bg-gray-100 px-3 flex items-center text-sm py-2">
+            <i class="${task.task_icon} text-xl text-red-600 me-2"></i>  ${task.decision_task_name}
+          </div>
+          <div class="box p-2 flex flex-col items-end">
+            <input type="text" class="border rounded text-sm w-full py-2 ps-2 outline-none mb-2" placeholder=" ${task.decision_task_name}">
+          </div>
+        </div>
+          `;
+
+          const nodeData = {
+            id: task.task_id ? task.task_id : task.decision_task_id,
+            name: task.task_name ? task.task_name : task.decision_task_name,
+            data: {},
+            class: task.task_name ? task.task_name : task.decision_task_name,
+            html: task.task_id ? taskHtml : decisionHtml,
+            typenode: false,
+            inputs: {
+              input_1: {
+                connections: [
+                  { node: transition.from_task_id, input: 'output_1' },
+                ],
+              },
+            },
+            outputs: {
+              output_1: {
+                connections: { node: transition.to_task_id, output: 'input_1' },
+              },
+            },
+            pos_x: parseInt(task.x_axis),
+            pos_y: parseInt(task.y_axis),
+          };
+
+          if (!dataToImport.drawflow.Home.data) {
+            dataToImport.drawflow.Home.data = {};
+          }
+
+          dataToImport.drawflow.Home.data[task.node_id] = nodeData;
+        });
+      });
+
       this.editor.import(dataToImport);
     }
   }
@@ -145,6 +225,31 @@ export class WorkflowFormComponent implements AfterViewInit {
         'Editor Event :>> Node created ' + id,
         this.editor.getNodeFromId(id)
       );
+      const data = this.editor.getNodeFromId(id);
+      this.nodeName.push(data.name);
+
+      if (!'Start Task, End Task'.includes(data.name)) {
+        this.openModal(id, data);
+      } else {
+        if (
+          data.name.includes('Start Task') ||
+          data.name.includes('End Task')
+        ) {
+          let obj: any = {
+            name: data.name,
+            node_id: data.name == 'Start Task' ? 1 : 2,
+            node_type: 'T',
+            is_new: true,
+            task_id: id,
+            task_name: data.name,
+            task_description: data.name,
+            x_axis: data.pos_x.toString(),
+            y_axis: data.pos_y.toString(),
+            form_id: 11,
+          };
+          this.chosenNodes.tasks.push(obj);
+        }
+      }
     });
 
     this.editor.on('nodeRemoved', (id: any) => {
@@ -206,6 +311,7 @@ export class WorkflowFormComponent implements AfterViewInit {
       this.transitionForm
         .get('to_task_id')
         .setValue(parseInt(connection.output_id));
+      this.chosenNodes.transitions.push(this.transitionForm.getRawValue());
     });
 
     this.editor.on('connectionRemoved', (connection: any) => {
@@ -275,15 +381,6 @@ export class WorkflowFormComponent implements AfterViewInit {
   }
 
   drop(ev: any) {
-    this.editor.on('nodeCreated', (id: any) => {
-      const data = this.editor.getNodeFromId(id);
-      console.log(data);
-
-      this.nodeName.push(data.name);
-      if (!'Start Task, End Task'.includes(data.name)) {
-        this.openModal(data.id);
-      }
-    });
     if (ev.type === 'touchend' && this.mobile_last_move) {
       var parentdrawflow = document
         .elementFromPoint(
@@ -310,7 +407,9 @@ export class WorkflowFormComponent implements AfterViewInit {
     let data = JSON.parse(name);
     let form_id: number;
     this.chosenNodes.tasks.forEach((res: any) => {
-      form_id = res?.form_id;
+      if (res.form_id) {
+        form_id = res.form_id;
+      }
     });
 
     this.node_details = {
@@ -320,24 +419,9 @@ export class WorkflowFormComponent implements AfterViewInit {
       is_new: true,
       task_id: null,
       form_id: form_id,
+      x_axis: null,
+      y_axis: null,
     };
-
-    if (
-      data.node_name.includes('Start Task') ||
-      data.node_name.includes('End Task')
-    ) {
-      let obj: any = {
-        name: data.node_name,
-        node_id: data?.node_id,
-        node_type: data?.node_type,
-        is_new: true,
-        task_id: data?.node_id + 1,
-        task_name: data?.node_name,
-        task_description: data?.node_name,
-        form_id: 11,
-      };
-      this.chosenNodes.tasks.push(obj);
-    }
 
     if (this.editor.editor_mode === 'fixed') {
       return false;
@@ -358,14 +442,20 @@ export class WorkflowFormComponent implements AfterViewInit {
         (this.editor.precanvas.clientHeight /
           (this.editor.precanvas.clientHeight * this.editor.zoom));
 
+    const task_name = this.chosenNodes.tasks.forEach((res: any) => {
+      if (res.node_id == data.node_id) {
+        return res.node_name ? res.node_name : '';
+      }
+    });
+
     if (data.node_name !== 'Decision Task') {
       var nodeTemplate = `
         <div>
-          <div class="bg-gray-100 px-3 flex items-center text-sm py-2">
-            <i class="${data.node_icon} text-xl text-red-600 me-2"></i> ${data.node_name}
+          <div class="bg-gray-100 px-3 flex items-center justify-between text-sm py-2">
+            <span><i class="${data.node_icon} text-xl text-red-600 me-2"></i>${data.node_name}</span>
           </div>
           <div class="box p-2 flex flex-col items-end">
-            <input type="text" class="border rounded text-sm w-full py-2 ps-2 outline-none mb-2" placeholder="${data.node_name}">
+            <input type="text" class="border rounded text-sm w-full py-2 ps-2 outline-none mb-2" disabled placeholder="${data.node_name}" />
             <span class="bg-green-200 text-black ps-3 pe-8 py-1 text-xs rounded-full">Connection task</span>
           </div>
         </div>
@@ -380,6 +470,11 @@ export class WorkflowFormComponent implements AfterViewInit {
         {},
         nodeTemplate
       );
+
+      // const modalOpener = document.getElementById(`${data.node_name}`);
+      // if (modalOpener) {
+      //   modalOpener.addEventListener('click', () => this.openModal());
+      // }
     } else {
       var decisionTemplate = `
         <div>
@@ -443,7 +538,7 @@ export class WorkflowFormComponent implements AfterViewInit {
       .getWorkflowById(this.workflow_id)
       .subscribe((res: any) => {
         this.chosenNodes = res.data;
-        console.log(this.chosenNodes);
+        this.initDrawFlow();
 
         this.workflowForm.patchValue({
           workflow_name: this.chosenNodes.workflow.workflow_name,
@@ -452,8 +547,11 @@ export class WorkflowFormComponent implements AfterViewInit {
       });
   }
 
-  openModal(id: number) {
+  openModal(id: number, data: any) {
     this.node_details.task_id = id;
+    this.node_details.x_axis = data.pos_x;
+    this.node_details.y_axis = data.pos_y;
+
     const dialog = this.dialog.open(WorkflowPropertiesModalComponent, {
       width: 'clamp(20rem, 60vw, 35rem)',
       panelClass: ['animate__animated', 'animate__slideInRight'],
@@ -461,14 +559,11 @@ export class WorkflowFormComponent implements AfterViewInit {
       disableClose: true,
       data: { node_details: this.node_details, data: this.chosenNodes },
     });
-
-    dialog.afterClosed().subscribe((res) => console.log(res));
   }
 
   submitForm() {
     this.chosenNodes.workflow = this.workflowForm.getRawValue();
-    this.chosenNodes.transitions.push(this.transitionForm.getRawValue());
-
+    console.log(this.chosenNodes);
     try {
       if (
         this.nodeName.includes('Start Task') &&

@@ -18,6 +18,7 @@ export class AddTaskModalComponent implements OnInit {
   ngOnInit(): void {
     this.initForm();
     this.getFormFieldId();
+    
   }
 
   initForm() {
@@ -50,6 +51,8 @@ export class AddTaskModalComponent implements OnInit {
         node_type: this.node_details.node_type,
         is_new: this.node_details.is_new,
         task_id: this.node_details.task_id,
+        x_axis: this.node_details.x_axis.toString(),
+        y_axis: this.node_details.y_axis.toString(),
       };
 
       this.getNodeDetails.emit(formData);

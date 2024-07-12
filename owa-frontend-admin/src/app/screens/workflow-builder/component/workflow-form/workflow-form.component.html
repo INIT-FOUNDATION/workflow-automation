@@ -5,42 +5,47 @@
 ></app-title>
 
 <div class="flex items-center justify-between">
-  <form class="flex items-center" [formGroup]="workflowForm">
-    <mat-form-field appearance="outline" class="w-72 me-4">
-      <mat-label class="text-sm tracking-wide"
-        >Give your workflow a name</mat-label
-      >
-      <input
-        type="text"
-        matInput
-        class="!text-sm tracking-wider"
-        formControlName="workflow_name"
-      />
-    </mat-form-field>
-    <mat-error
-      *ngIf="
-        workflowForm.get('workflow_name').dirty &&
-        workflowForm.get('workflow_name').invalid
-      "
-      >Please enter workflow name</mat-error
-    >
-
-    <mat-form-field appearance="outline" class="w-96">
-      <mat-label class="text-sm tracking-wide">Description</mat-label>
-      <input
-        type="text"
-        matInput
-        class="!text-sm tracking-wider"
-        formControlName="workflow_description"
-      />
-    </mat-form-field>
-    <mat-error
-      *ngIf="
-        workflowForm.get('workflow_description').dirty &&
-        workflowForm.get('workflow_description').invalid
-      "
-      >Please enter workflow description</mat-error
-    >
+  <form class="flex items-start" [formGroup]="workflowForm">
+    <div class="w-72 me-4 flex flex-col">
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label class="text-sm tracking-wide"
+          >Give your workflow a name</mat-label
+        >
+        <input
+          type="text"
+          matInput
+          class="!text-sm tracking-wider"
+          formControlName="workflow_name"
+        />
+      </mat-form-field>
+      <!-- <mat-error
+        class="text-sm"
+        *ngIf="
+          workflowForm.get('workflow_name').dirty &&
+          workflowForm.get('workflow_name').invalid
+        "
+        >Please enter workflow name</mat-error
+      > -->
+    </div>
+    <div class="w-96 flex flex-col">
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label class="text-sm tracking-wide">Description</mat-label>
+        <input
+          type="text"
+          matInput
+          class="!text-sm tracking-wider"
+          formControlName="workflow_description"
+        />
+      </mat-form-field>
+      <!-- <mat-error
+        class="text-sm"
+        *ngIf="
+          workflowForm.get('workflow_description').dirty &&
+          workflowForm.get('workflow_description').invalid
+        "
+        >Please enter workflow description</mat-error
+      > -->
+    </div>
   </form>
   <button
     (click)="submitForm()"
@@ -50,6 +55,8 @@
     save
   </button>
 </div>
+
+<p-contextMenu #cm [model]="items"></p-contextMenu>
 
 <div class="grid grid-cols-4 gap-4 mt-4 bg-zinc-100 rounded-lg">
   <div

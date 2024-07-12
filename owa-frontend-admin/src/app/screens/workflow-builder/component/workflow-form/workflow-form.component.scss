@@ -17,6 +17,10 @@
   }
 }
 
+::ng-deep .drawflow {
+  width: auto;
+}
+
 ::ng-deep .drawflow .drawflow-node {
   background-color: #fff !important;
   width: 15rem !important;
@@ -59,6 +63,6 @@
   top: unset;
 }
 
-::ng-deep .drawflow .End .bg-green-200{
+::ng-deep .drawflow .End .bg-green-200 {
   display: none;
 }
