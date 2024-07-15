@@ -147,7 +147,7 @@ export const workflowService = {
 
         } catch (error) {
             await workflowRepository.executeTransactionQuery("ROLLBACK");
-            logger.error(`workflowService :: save :: ${error.message} :: ${error}`)
+            logger.error(`workflowService :: update :: ${error.message} :: ${error}`)
             throw new Error(error.message);
         }
     },

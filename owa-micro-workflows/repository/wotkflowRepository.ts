@@ -192,7 +192,7 @@ export const workflowRepository = {
     
             const result = await pg.executeQueryPromise(_query);
             logger.info(`workflowRepository :: updateWorkflowDecisionConditions :: result :: ${JSON.stringify(result)}`);
-            return result[0].condition_id;
+            return;
         } catch (error) {
             logger.error(`workflowRepository :: updateWorkflowDecisionConditions :: ${error.message} :: ${error}`);
             throw new Error(error.message);

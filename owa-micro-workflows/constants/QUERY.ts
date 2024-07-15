@@ -155,14 +155,17 @@ RETURNING workflow_transaction_id;
     listNodes: `SELECT node_id, node_name, node_description, node_icon, node_type, no_of_input_nodes, 
         no_of_output_nodes, status, created_by, updated_by FROM m_nodes WHERE 1=1`,
     getWorkflow: `SELECT workflow_id, workflow_name, workflow_description, status, created_by, updated_by FROM m_workflows WHERE workflow_id = $1`,
-    getWorkflowTasks: `SELECT task_id, workflow_id, node_id, task_name, task_description, form_id, status, x_axis, y_axis
-	FROM m_workflow_tasks WHERE workflow_id = $1`,
+    getWorkflowTasks: `SELECT task_id, workflow_id, n.node_id, n.node_type, task_name, task_description, form_id, wt.status, x_axis, y_axis
+	FROM m_workflow_tasks wt
+	LEFT JOIN m_nodes n on wt.node_id = n.node_id WHERE workflow_id = $1`,
     getWorkflowNotificationTasks: `SELECT notification_task_id, workflow_id, 
-    notification_task_name, notification_task_description, notification_type, node_id, 
-    email_subject, email_body, sms_body, template_id, placeholders, recipient_emails, recipient_mobilenumber, status, x_axis, y_axis
-	FROM m_workflow_notification_tasks WHERE workflow_id = $1`,
-    getWorkflowDecisionTasks: `SELECT decision_task_id, workflow_id, node_id, decision_task_name, decision_task_description, status, x_axis, y_axis
-	FROM m_workflow_decision_tasks WHERE workflow_id = $1`,
+    notification_task_name, notification_task_description, notification_type, n.node_id, n.node_type,
+    email_subject, email_body, sms_body, template_id, placeholders, recipient_emails, recipient_mobilenumber, wnt.status, x_axis, y_axis
+	FROM m_workflow_notification_tasks wnt
+	LEFT JOIN m_nodes n on wnt.node_id = n.node_id WHERE workflow_id = $1`,
+    getWorkflowDecisionTasks: `SELECT decision_task_id, workflow_id, n.node_id, n.node_type, decision_task_name, decision_task_description, wdt.status, x_axis, y_axis
+	FROM m_workflow_decision_tasks wdt
+	LEFT JOIN m_nodes n on wdt.node_id = n.node_id WHERE workflow_id = $1`,
     getWorkflowDecisionCondition: `SELECT condition_id, decision_task_id, operand_one, operator, operand_two, status
 	FROM m_workflow_decision_conditions WHERE decision_task_id = $1`,
     getWorkflowTransitions: `SELECT transition_id, from_task_id, to_task_id, condition_type, status, workflow_id

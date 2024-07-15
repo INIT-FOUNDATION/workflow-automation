@@ -46,6 +46,7 @@ class WorkflowTask implements IWorkflowTask {
     task_id: number;
     workflow_id: number;
     node_id: number;
+    node_type: string;
     is_new: boolean;
     task_name: string;
     task_description: string;
@@ -60,6 +61,8 @@ class WorkflowTask implements IWorkflowTask {
         this.task_id = workflowTask.task_id;
         this.workflow_id = workflowTask.workflow_id;
         this.node_id = workflowTask.node_id;
+        this.node_type = workflowTask.node_type;
+        this.is_new = workflowTask.is_new || false;
         this.task_name = workflowTask.task_name;
         this.task_description = workflowTask.task_description;
         this.form_id = workflowTask.form_id;
@@ -75,6 +78,8 @@ class WorkflowTask implements IWorkflowTask {
             task_id: Joi.number().integer().optional(),
             workflow_id: Joi.number().integer().optional(),
             node_id: Joi.number().integer().required(),
+            node_type: Joi.string().required(),
+            is_new: Joi.boolean().required(),
             task_name: Joi.string().min(3).max(50).required().error(
                 new Error(`${WORKFLOWS.WORKF0001}`)
             ),
@@ -96,6 +101,7 @@ class WorkflowNotificationTask implements IWorkflowNotificationTask {
     notification_task_id: number;
     workflow_id: number;
     node_id: number;
+    node_type: string;
     is_new: boolean;
     notification_task_name: string;
     notification_task_description: string;
@@ -117,6 +123,8 @@ class WorkflowNotificationTask implements IWorkflowNotificationTask {
         this.notification_task_id = notificationTask.notification_task_id
         this.workflow_id = notificationTask.workflow_id;
         this.node_id = notificationTask.node_id;
+        this.node_type = notificationTask.node_type;
+        this.is_new = notificationTask.is_new || false;
         this.notification_task_name = notificationTask.notification_task_name;
         this.notification_task_description = notificationTask.notification_task_description;
         this.notification_type = notificationTask.notification_type;
@@ -139,6 +147,8 @@ class WorkflowNotificationTask implements IWorkflowNotificationTask {
             notification_task_id: Joi.number().integer().optional(),
             workflow_id: Joi.number().integer().optional(),
             node_id: Joi.number().integer().required(),
+            node_type: Joi.string().required(),
+            is_new: Joi.boolean().required(),
             notification_task_name: Joi.string().min(3).max(50).required().error(
                 new Error('NOTIFICATION_TASK00002: Notification task name must be between 3 and 50 characters.')
             ),
@@ -167,6 +177,7 @@ class WorkflowDecisionTask implements IWorkflowDecisionTask {
     decision_task_id: number;
     workflow_id: number;
     node_id: number;
+    node_type: string;
     is_new: boolean;
     decision_task_name: string;
     decision_task_description: string;
@@ -181,6 +192,8 @@ class WorkflowDecisionTask implements IWorkflowDecisionTask {
         this.decision_task_id = decisionTask.decision_task_id
         this.workflow_id = decisionTask.workflow_id;
         this.node_id = decisionTask.node_id;
+        this.node_type = decisionTask.node_type;
+        this.is_new = decisionTask.is_new || false;
         this.decision_task_name = decisionTask.decision_task_name;
         this.decision_task_description = decisionTask.decision_task_description;
         this.conditions = decisionTask.conditions;
@@ -196,6 +209,8 @@ class WorkflowDecisionTask implements IWorkflowDecisionTask {
             decision_task_id: Joi.number().integer().optional(),
             workflow_id: Joi.number().integer().optional(),
             node_id: Joi.number().integer().required(),
+            node_type: Joi.string().required(),
+            is_new: Joi.boolean().required(),
             decision_task_name: Joi.string().min(3).max(50).required().error(
                 new Error('DECISION_TASK00002: Decision task name must be between 3 and 50 characters.')
             ),
@@ -227,6 +242,7 @@ class WorkflowDecisionCondition implements IWorkflowDecisionCondition {
     constructor(decisionCondition: IWorkflowDecisionCondition, plainToken: PlainToken) {
         this.condition_id = decisionCondition.condition_id
         this.decision_task_id = decisionCondition.decision_task_id;
+        this.is_new = decisionCondition.is_new || false;
         this.operand_one = decisionCondition.operand_one;
         this.operator = decisionCondition.operator;
         this.operand_two = decisionCondition.operand_two;
@@ -239,6 +255,7 @@ class WorkflowDecisionCondition implements IWorkflowDecisionCondition {
         const decisionConditionSchema = Joi.object({
             condition_id: Joi.number().integer().optional(),
             decision_task_id: Joi.number().integer().optional(),
+            is_new: Joi.boolean().required(),
             operand_one: Joi.string().required().error(
                 new Error('DECISION_CONDITION00001: Operand one is required.')
             ),
