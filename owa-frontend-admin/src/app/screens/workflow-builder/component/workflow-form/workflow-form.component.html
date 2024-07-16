@@ -48,7 +48,7 @@
     </div>
   </form>
   <button
-    (click)="submitForm()"
+    (click)="formType == 'edit' ? updateForm() : submitForm()"
     type="button"
     class="bg-red-600 text-white rounded-lg px-10 py-2 text-sm"
   >
