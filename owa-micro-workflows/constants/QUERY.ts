@@ -157,17 +157,17 @@ RETURNING workflow_transaction_id;
     getWorkflow: `SELECT workflow_id, workflow_name, workflow_description, status, created_by, updated_by FROM m_workflows WHERE workflow_id = $1`,
     getWorkflowTasks: `SELECT task_id, workflow_id, n.node_id, n.node_type, task_name, task_description, form_id, wt.status, x_axis, y_axis
 	FROM m_workflow_tasks wt
-	LEFT JOIN m_nodes n on wt.node_id = n.node_id WHERE workflow_id = $1`,
+	LEFT JOIN m_nodes n on wt.node_id = n.node_id WHERE workflow_id = $1 and wt.status = 1`,
     getWorkflowNotificationTasks: `SELECT notification_task_id, workflow_id, 
     notification_task_name, notification_task_description, notification_type, n.node_id, n.node_type,
     email_subject, email_body, sms_body, template_id, placeholders, recipient_emails, recipient_mobilenumber, wnt.status, x_axis, y_axis
 	FROM m_workflow_notification_tasks wnt
-	LEFT JOIN m_nodes n on wnt.node_id = n.node_id WHERE workflow_id = $1`,
+	LEFT JOIN m_nodes n on wnt.node_id = n.node_id WHERE workflow_id = $1 and wnt.status = 1`,
     getWorkflowDecisionTasks: `SELECT decision_task_id, workflow_id, n.node_id, n.node_type, decision_task_name, decision_task_description, wdt.status, x_axis, y_axis
 	FROM m_workflow_decision_tasks wdt
-	LEFT JOIN m_nodes n on wdt.node_id = n.node_id WHERE workflow_id = $1`,
+	LEFT JOIN m_nodes n on wdt.node_id = n.node_id WHERE workflow_id = $ and wdt.status = 1`,
     getWorkflowDecisionCondition: `SELECT condition_id, decision_task_id, operand_one, operator, operand_two, status
-	FROM m_workflow_decision_conditions WHERE decision_task_id = $1`,
+	FROM m_workflow_decision_conditions WHERE decision_task_id = $1 and status = 1`,
     getWorkflowTransitions: `SELECT transition_id, from_task_id, to_task_id, condition_type, status, workflow_id
 	FROM m_workflow_transition WHERE workflow_id = $1`,
 }
