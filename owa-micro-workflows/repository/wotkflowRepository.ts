@@ -106,9 +106,9 @@ export const workflowRepository = {
             logger.info(`workflowRepository :: Inside updateWorkflowNotificationTasks`);
             const _query = {
                 text: WORKFLOW.updateWorkflowNotificationTasks,
-                values: [notificationTask.notification_task_id, notificationTask.workflow_id, notificationTask.node_id,
+                values: [notificationTask.notification_task_id, notificationTask.workflow_id,
                      notificationTask.notification_task_name, notificationTask.notification_task_description, 
-                     notificationTask.notification_type, notificationTask.email_subject, 
+                     notificationTask.notification_type, notificationTask.node_id, notificationTask.email_subject, 
                      notificationTask.email_body, notificationTask.sms_body, notificationTask.template_id, 
                      notificationTask.placeholders, notificationTask.recipient_emails, 
                      notificationTask.recipient_mobilenumber, notificationTask.status, 
