@@ -165,7 +165,7 @@ RETURNING workflow_transaction_id;
 	LEFT JOIN m_nodes n on wnt.node_id = n.node_id WHERE workflow_id = $1 and wnt.status = 1`,
     getWorkflowDecisionTasks: `SELECT decision_task_id, workflow_id, n.node_id, n.node_type, decision_task_name, decision_task_description, wdt.status, x_axis, y_axis
 	FROM m_workflow_decision_tasks wdt
-	LEFT JOIN m_nodes n on wdt.node_id = n.node_id WHERE workflow_id = $ and wdt.status = 1`,
+	LEFT JOIN m_nodes n on wdt.node_id = n.node_id WHERE workflow_id = $1 and wdt.status = 1`,
     getWorkflowDecisionCondition: `SELECT condition_id, decision_task_id, operand_one, operator, operand_two, status
 	FROM m_workflow_decision_conditions WHERE decision_task_id = $1 and status = 1`,
     getWorkflowTransitions: `SELECT transition_id, from_task_id, to_task_id, condition_type, status, workflow_id
