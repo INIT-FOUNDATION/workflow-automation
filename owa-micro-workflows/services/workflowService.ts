@@ -207,6 +207,50 @@ export const workflowService = {
         }
     },
 
+    getListOfWorkflows: async (): Promise<{ workflowList: IWorkflow[], total_count: number }> => {
+        try {
+            let workflowListRedisKey = "WORKFLOWS_LIST"
+            let workflowListCountRedisKey = "WORKFLOWS_LIST_COUNT"
+            const searchQuery = null, pageSize = null, currentPage = null;
+            const status = 1;
+            const workflowListResponse = {
+                workflowList: [],
+                total_count: 0
+            }
+
+            const isWorkflowsUpdatedWithin5mins = await workflowRepository.workflowsUpdatedWithinFiveMints();
+            if (!isWorkflowsUpdatedWithin5mins) {
+                const workflowListCached = await redis.GetKeyRedis(workflowListRedisKey);
+                let isCachePresent = false;
+                if (workflowListCached) {
+                    logger.debug(`workflowRepository :: getListOfWorkflows :: cached list :: ${workflowListCached}`)
+                    workflowListResponse.workflowList = JSON.parse(workflowListCached);
+                    isCachePresent = true;
+                }
+
+
+                const workflowListCountCached = await redis.GetKeyRedis(workflowListCountRedisKey);
+                if (workflowListCountCached) {
+                    logger.debug(`workflowRepository :: getListOfWorkflows :: cached count :: ${workflowListCountCached}`)
+                    workflowListResponse.total_count = JSON.parse(workflowListCountCached);
+                    isCachePresent = true;
+                }
+
+                if (isCachePresent) return workflowListResponse;
+            }
+
+
+            const listWorkflowsData = await workflowRepository.listWorkflows(pageSize, currentPage, searchQuery, status);
+            redis.SetRedis(workflowListCountRedisKey, listWorkflowsData.total_count, CACHE_TTL.LONG);
+            redis.SetRedis(workflowListRedisKey, listWorkflowsData.workflowList, CACHE_TTL.LONG);
+
+            return listWorkflowsData;
+        } catch (error) {
+            logger.error(`workflowService :: getListOfWorkflows :: ${error.message} :: ${error}`)
+            throw new Error(error.message);
+        }
+    },
+
     listNodes: async (): Promise<{ nodeList: INode[] }> => {
         try {
             let nodeListRedisKey = "NODES"
@@ -283,5 +327,15 @@ export const workflowService = {
     getWorkflowDecisionCondition: async (decisionTaskId: Number): Promise<IWorkflowDecisionCondition[]> => {
         const workflowDecisionCondition = await workflowRepository.getWorkflowDecisionCondition(decisionTaskId);
         return workflowDecisionCondition;
+    },
+
+    changeStatus: async (workflowId: Number, updatedBy: Number): Promise<void> => {
+    
+        let status = 0;
+        const workflow = await workflowRepository.getWorkflow(workflowId);
+        status = workflow.status == 1 ? status : 1;
+
+        await workflowRepository.changeStatus(workflowId, status, updatedBy);
+        return;
     }
 };

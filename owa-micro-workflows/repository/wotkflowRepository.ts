@@ -339,7 +339,7 @@ export const workflowRepository = {
         }
     },
 
-    listWorkflows: async(pageSize: number, currentPage: number, searchQuery: string) : Promise<{workflowList: IWorkflow[], total_count: number}> => {
+    listWorkflows: async(pageSize: number, currentPage: number, searchQuery: string, status: number = null) : Promise<{workflowList: IWorkflow[], total_count: number}> => {
         try {
             const _queryForListOfWorkflows = {
                 text: WORKFLOW.listWorkflows
@@ -352,6 +352,10 @@ export const workflowRepository = {
             if (searchQuery) {
                 _queryForListOfWorkflows.text += ` AND workflow_name ILIKE '%${searchQuery}%'`;
                 _queryForTotalCountWorkflows.text += ` AND workflow_name ILIKE '%${searchQuery}%'`;
+            }
+
+            if (status) {
+                _queryForListOfWorkflows.text += ` AND status = ${status}`;
             }
 
             _queryForListOfWorkflows.text += ` ORDER BY date_updated DESC, date_created DESC`;
@@ -515,6 +519,23 @@ export const workflowRepository = {
             return workflowTasksResult;
         } catch (error) {
             logger.error(`workflowRepository :: getWorkflowDecisionCondition :: ${error.message} :: ${error}`)
+            throw new Error(error.message);
+        }
+    },
+
+    changeStatus: async(workflowId: Number, status: Number,  updatedBy: Number)=> {
+        try {
+            logger.info(`workflowRepository :: Inside changeStatus`);
+            const _query = {
+                text: WORKFLOW.changeStatus,
+                values: [ workflowId, status, updatedBy]
+            }
+    
+            const result = await pg.executeQueryPromise(_query);
+            logger.info(`workflowRepository :: changeStatus :: result :: ${JSON.stringify(result)}`);
+            return;
+        } catch (error) {
+            logger.error(`workflowRepository :: changeStatus :: ${error.message} :: ${error}`);
             throw new Error(error.message);
         }
     },

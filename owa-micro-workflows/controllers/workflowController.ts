@@ -195,7 +195,7 @@ export const workflowController = {
             } else {
                 const workflowId = await workflowService.save(workflowData, workflowTasks, workflowNotificationTasks, workflowDecisionTasks, workflowTransitions);
 
-                return res.status(STATUS.OK).send({
+                return res.status(STATUS.CREATED).send({
                     data: workflowId,
                     message: "Workflow created Successfully",
                 });
@@ -245,6 +245,34 @@ export const workflowController = {
         }
     },
 
+    getListOfWorkflows: async (req: Request, res: Response): Promise<Response> => {
+        /*  
+                #swagger.tags = ['Workflow']
+                #swagger.summary = 'GET List of workflow'
+                #swagger.description = 'Endpoint to get list workflow'
+                #swagger.parameters['Authorization'] = {
+                    in: 'header',
+                    required: true,
+                    type: 'string',
+                    description: 'Token for authentication'
+                }
+        */
+        try {
+            logger.info(`workflowController :: Inside gelistOfWorkflows`);
+
+            const workflowsGridData = await workflowService.getListOfWorkflows();
+
+            logger.info(`workflowController :: gelistOfWorkflows :: response :: ${JSON.stringify(workflowsGridData)}`);
+            return res.status(STATUS.OK).send({
+                data: workflowsGridData,
+                message: "Listed Workflows Successfully",
+            });
+        } catch (error) {
+            logger.error(`workflowController :: listWorkflows :: ${error.message} :: ${error}`);
+            return res.status(STATUS.INTERNAL_SERVER_ERROR).send(ERRORCODE.ERROR0001);
+        }
+    },
+
     getByworkflowId: async (req: Request, res: Response): Promise<Response> => {
         /*  
                 #swagger.tags = ['Workflow']
@@ -272,6 +300,37 @@ export const workflowController = {
             });
         } catch (error) {
             logger.error(`workflowController :: getByworkflowId :: ${error.message} :: ${error}`);
+            return res.status(STATUS.INTERNAL_SERVER_ERROR).send(ERRORCODE.ERROR0001);
+        }
+    },
+
+    changeStatus: async (req: Request, res: Response): Promise<Response> => {
+        /*  
+                #swagger.tags = ['Workflow']
+                #swagger.summary = 'Change Status of workflow'
+                #swagger.description = 'Endpoint to change status of workflow'
+                #swagger.parameters['Authorization'] = {
+                    in: 'header',
+                    required: true,
+                    type: 'string',
+                    description: 'Token for authentication'
+                }
+        */
+        try {
+            logger.info(`workflowController :: Inside changeStatus`);
+            const plainToken = req.plainToken;
+            const workflowId = req.params.workflowId ? parseInt(req.params.workflowId) : null;
+
+            if (!workflowId) {
+                return res.status(STATUS.BAD_REQUEST).send(WORKFLOWS.WORKF0004);
+            }
+
+            await workflowService.changeStatus(workflowId, plainToken.user_id);
+            return res.status(STATUS.OK).send({
+                message: "Workflow Status Updated",
+            });
+        } catch (error) {
+            logger.error(`workflowController :: changeStatus :: ${error.message} :: ${error}`);
             return res.status(STATUS.INTERNAL_SERVER_ERROR).send(ERRORCODE.ERROR0001);
         }
     },

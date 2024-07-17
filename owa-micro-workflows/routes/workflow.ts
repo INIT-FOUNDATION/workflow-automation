@@ -11,6 +11,10 @@ workflowRouter.post("/update", workflowController.create);
 
 workflowRouter.post("/list", workflowController.listWorkflows);
 
+workflowRouter.get("/list", workflowController.getListOfWorkflows);
+
 workflowRouter.get("/id/:workflowId", workflowController.getByworkflowId);
 
 workflowRouter.get("/nodesList", workflowController.nodesList);
+
+workflowRouter.post("/changeStatus/:workflowId", workflowController.changeStatus);

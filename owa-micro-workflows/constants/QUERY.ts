@@ -24,6 +24,9 @@ RETURNING workflow_id;`,
 VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) 
 RETURNING task_id;
 `,
+    changeStatus: `UPDATE m_workflows
+	SET status=$2, date_updated=now(), updated_by=$3
+	WHERE workflow_id = $1`,
     updateWorkflowTask: `UPDATE m_workflow_tasks
 	SET workflow_id=$2, node_id=$3, task_name=$4, task_description=$5, form_id=$6, status=$7, x_axis=$8, y_axis=$9, date_updated=now(), updated_by=$10
 	WHERE task_id=$1`,
