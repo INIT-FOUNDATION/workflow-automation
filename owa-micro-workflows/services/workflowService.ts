@@ -329,6 +329,11 @@ export const workflowService = {
         return workflowDecisionCondition;
     },
 
+    taskList: async (workflowId: Number): Promise<any> => {
+        const taskList = await workflowRepository.getTaskList(workflowId);
+        return taskList;
+    },
+
     changeStatus: async (workflowId: Number, updatedBy: Number): Promise<void> => {
     
         let status = 0;

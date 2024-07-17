@@ -18,3 +18,5 @@ workflowRouter.get("/id/:workflowId", workflowController.getByworkflowId);
 workflowRouter.get("/nodesList", workflowController.nodesList);
 
 workflowRouter.post("/changeStatus/:workflowId", workflowController.changeStatus);
+
+workflowRouter.get("/taskList/:workflowId", workflowController.taskList);

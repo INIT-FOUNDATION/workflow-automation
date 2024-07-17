@@ -88,7 +88,6 @@ export interface IWorkflowTransition {
 export interface IWorkflowAssignment {
     workflow_assignment_id: number;
     workflow_id: number;
-    workflow_triggered_on: string;
     workflow_triggered_by: number;
     workflow_status: number;
     created_by: number;

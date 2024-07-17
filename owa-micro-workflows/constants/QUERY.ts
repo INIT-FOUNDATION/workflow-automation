@@ -98,48 +98,6 @@ VALUES ($1, $2, $3, $4, $5, $6)
 RETURNING transition_id;
 `,
     deleteWorkflowTransition: `DELETE from m_workflow_transition where workflow_id = $1`,
-    createWorkflowsAssignment: `INSERT INTO tr_workflows_assignment (
-    workflow_id, 
-    workflow_triggered_on, 
-    workflow_triggered_by,
-    created_by, 
-    updated_by
-) 
-VALUES ($1, $2, $3, $4, $5) 
-RETURNING workflow_assignment_id;
-`,
-    createWorkflowTaskAssignment: `INSERT INTO tr_workflows_task_assignment (
-    workflow_assignment_id, 
-    task_id, 
-    assigned_to, 
-    assigned_on, 
-    assigned_by, 
-    created_by, 
-    updated_by
-) 
-VALUES ($1, $2, $3, $4, $5, $6, $7) 
-RETURNING workflow_task_assignment_id;
-`,
-    createwWrkflowsTaskFormSubmission: `INSERT INTO tr_workflows_task_form_submission (
-    workflow_task_assignment_id, 
-    form_id, 
-    form_data, 
-    form_submitted_by, 
-    form_submitted_on,
-    created_by, 
-    updated_by
-) 
-VALUES ($1, $2, $3, $4, $5, $6, $7) 
-RETURNING workflows_task_form_submission_id;
-`,
-    createWorkflowTransaction: `INSERT INTO tr_workflow_transaction (
-    transition_id,
-    created_by, 
-    updated_by
-) 
-VALUES ($1, $2, $3) 
-RETURNING workflow_transaction_id;
-`,
     createNode: `INSERT INTO m_nodes (
         node_name, 
         node_description, 
@@ -173,4 +131,56 @@ RETURNING workflow_transaction_id;
 	FROM m_workflow_decision_conditions WHERE decision_task_id = $1 and status = 1`,
     getWorkflowTransitions: `SELECT transition_id, from_task_id, to_task_id, condition_type, status, workflow_id
 	FROM m_workflow_transition WHERE workflow_id = $1`,
+    getTaskList: `select wt.task_id, wt.task_name, wt.task_description, wt.node_id, 
+    wta.workflow_task_assignment_id, wta.workflow_assignment_id, 
+    wta.assigned_to, u.display_name as assigned_to_name, wta.assigned_on, wta.assigned_by
+    FROM m_workflow_tasks wt
+    LEFT OUTER JOIN tr_workflows_task_assignment wta ON wta.task_id = wt.task_id
+    LEFT OUTER JOIN m_users u ON u.user_id = wta.assigned_to
+    WHERE wt.workflow_id = $1 AND wt.status = 1 AND wt.node_id NOT IN (1,2)`
+}
+
+export const WORKFLOW_ASSIGNMENT = {
+    createWorkflowsAssignment: `INSERT INTO tr_workflows_assignment (
+        workflow_id, 
+        workflow_triggered_on, 
+        workflow_triggered_by,
+        created_by, 
+        updated_by
+    ) 
+    VALUES ($1, now(), $2, $3, $4) 
+    RETURNING workflow_assignment_id;
+    `,
+        createWorkflowTaskAssignment: `INSERT INTO tr_workflows_task_assignment (
+        workflow_assignment_id, 
+        task_id, 
+        assigned_to, 
+        assigned_on, 
+        assigned_by, 
+        created_by, 
+        updated_by
+    ) 
+    VALUES ($1, $2, $3, $4, $5, $6, $7) 
+    RETURNING workflow_task_assignment_id;
+    `,
+        createwWrkflowsTaskFormSubmission: `INSERT INTO tr_workflows_task_form_submission (
+        workflow_task_assignment_id, 
+        form_id, 
+        form_data, 
+        form_submitted_by, 
+        form_submitted_on,
+        created_by, 
+        updated_by
+    ) 
+    VALUES ($1, $2, $3, $4, $5, $6, $7) 
+    RETURNING workflows_task_form_submission_id;
+    `,
+        createWorkflowTransaction: `INSERT INTO tr_workflow_transaction (
+        transition_id,
+        created_by, 
+        updated_by
+    ) 
+    VALUES ($1, $2, $3) 
+    RETURNING workflow_transaction_id;
+    `
 }

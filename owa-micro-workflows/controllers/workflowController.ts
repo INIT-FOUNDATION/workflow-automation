@@ -5,13 +5,11 @@ import { workflowService } from "../services/workflowService";
 import { WORKFLOWS, ERRORCODE } from "../constants/ERRORCODE";
 import {
     Workflow, WorkflowTask, WorkflowNotificationTask,
-    WorkflowDecisionTask, WorkflowDecisionCondition, WorkflowTransition, WorkflowAssignment, WorkflowTaskAssignment,
-    WorkflowTaskFormSubmission, WorkflowTransaction, Node
+    WorkflowDecisionTask, WorkflowDecisionCondition, WorkflowTransition
 } from "../models/workflowModel";
 import {
     IWorkflow, IWorkflowTask, IWorkflowNotificationTask, IWorkflowDecisionTask, IWorkflowDecisionCondition,
-    IWorkflowTransition, IWorkflowAssignment, IWorkflowTaskAssignment, IWorkflowTaskFormSubmission,
-    IWorkflowTransaction, INode
+    IWorkflowTransition
 } from "../types/custom";
 import moment from "moment";
 
@@ -300,6 +298,37 @@ export const workflowController = {
             });
         } catch (error) {
             logger.error(`workflowController :: getByworkflowId :: ${error.message} :: ${error}`);
+            return res.status(STATUS.INTERNAL_SERVER_ERROR).send(ERRORCODE.ERROR0001);
+        }
+    },
+
+    taskList: async (req: Request, res: Response): Promise<Response> => {
+        /*  
+                #swagger.tags = ['Workflow']
+                #swagger.summary = 'Get Task List'
+                #swagger.description = 'Endpoint to get task list'
+                #swagger.parameters['Authorization'] = {
+                    in: 'header',
+                    required: true,
+                    type: 'string',
+                    description: 'Token for authentication'
+                }
+        */
+        try {
+            logger.info(`workflowController :: Inside taskList`);
+            const workflowId = req.params.workflowId ? parseInt(req.params.workflowId) : null;
+
+            if (!workflowId) {
+                return res.status(STATUS.BAD_REQUEST).send(WORKFLOWS.WORKF0004);
+            }
+
+            const result = await workflowService.taskList(workflowId);
+            return res.status(STATUS.OK).send({
+                data: result,
+                message: "Task List Fetched SuccessFully",
+            });
+        } catch (error) {
+            logger.error(`workflowController :: taskList :: ${error.message} :: ${error}`);
             return res.status(STATUS.INTERNAL_SERVER_ERROR).send(ERRORCODE.ERROR0001);
         }
     },
