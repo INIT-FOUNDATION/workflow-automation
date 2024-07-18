@@ -1,0 +1,42 @@
+<form class="px-4 pt-4" [formGroup]="addTaskForm" (ngSubmit)="submitForm()">
+  <mat-form-field class="w-full" appearance="outline">
+    <mat-label class="text-sm">Task Name</mat-label>
+    <input
+      matInput
+      type="text"
+      class="outline-none !text-sm tracking-wider"
+      formControlName="task_name"
+    />
+  </mat-form-field>
+
+  <mat-form-field class="w-full my-4" appearance="outline">
+    <mat-label class="text-sm">Task Description</mat-label>
+    <textarea
+      matInput
+      class="outline-none !text-sm tracking-wider"
+      formControlName="task_description"
+    ></textarea>
+  </mat-form-field>
+
+  <mat-form-field class="w-full" appearance="outline">
+    <mat-label class="text-sm">Select Form*</mat-label>
+    <mat-select
+      class="!text-sm tracking-wider"
+      (selectionChange)="selectedFormId($event.value)"
+    >
+      <mat-option
+        *ngFor="let item of getFormDetails"
+        [value]="item?.form_id"
+        class="!text-sm tracking-wider"
+        >{{ item?.form_name }}</mat-option
+      >
+    </mat-select>
+  </mat-form-field>
+
+  <button
+    type="submit"
+    class="text-sm bg-red-600 text-white rounded-lg w-28 py-2 fixed bottom-4 right-6"
+  >
+    Submit
+  </button>
+</form>

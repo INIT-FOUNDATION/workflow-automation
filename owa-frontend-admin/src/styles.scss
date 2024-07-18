@@ -4,6 +4,8 @@
 @import "aos/dist/aos.css";
 @import "~ngx-toastr/toastr";
 @import "~@angular/material/theming";
+@import 'drawflow/dist/drawflow.min.css';
+
 
 $custom-typography: mat-typography-config(
   $font-family: "Poppins",

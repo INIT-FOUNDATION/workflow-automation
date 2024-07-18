@@ -1,0 +1,39 @@
+<div class="h-lvh">
+  <div class="flex justify-between bg-blue-900 text-white p-4">
+    <span>{{ nodes?.node_details?.name }}</span>
+    <i
+      class="fa-solid fa-xmark text-white text-xl cursor-pointer"
+      (click)="closeModal()"
+    ></i>
+  </div>
+
+  <app-add-task-modal
+    *ngIf="nodes?.node_details?.name == 'Add Task'"
+    [node_details]="nodes?.node_details"
+    (getNodeDetails)="getNodeProperties($event)"
+  ></app-add-task-modal>
+
+  <app-email-task
+    *ngIf="nodes?.node_details?.name == 'Email Task'"
+    [node_details]="nodes?.node_details"
+    (getNodeDetails)="getNodeProperties($event)"
+  ></app-email-task>
+
+  <app-sms-task
+    *ngIf="nodes?.node_details?.name == 'SMS Task'"
+    [node_details]="nodes?.node_details"
+    (getNodeDetails)="getNodeProperties($event)"
+  ></app-sms-task>
+
+  <app-whatsapp-task
+    *ngIf="nodes?.node_details?.name == 'Whatsapp Task'"
+    [node_details]="nodes?.node_details"
+    (getNodeDetails)="getNodeProperties($event)"
+  ></app-whatsapp-task>
+
+  <app-decision-task
+    *ngIf="nodes?.node_details?.name == 'Decision Task'"
+    [node_details]="nodes?.node_details"
+    (getNodeDetails)="getNodeProperties($event)"
+  ></app-decision-task>
+</div>

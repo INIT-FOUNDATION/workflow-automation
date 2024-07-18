@@ -1,0 +1,115 @@
+<app-title
+  [titleName]="formType === 'add' ? 'Add Workflow' : 'Update Workflow'"
+  additionalClass="text-lg font-bold"
+  [canGoBack]="true"
+></app-title>
+
+<div class="flex items-center justify-between">
+  <form class="flex items-start" [formGroup]="workflowForm">
+    <div class="w-72 me-4 flex flex-col">
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label class="text-sm tracking-wide"
+          >Give your workflow a name</mat-label
+        >
+        <input
+          type="text"
+          matInput
+          class="!text-sm tracking-wider"
+          formControlName="workflow_name"
+        />
+      </mat-form-field>
+      <!-- <mat-error
+        class="text-sm"
+        *ngIf="
+          workflowForm.get('workflow_name').dirty &&
+          workflowForm.get('workflow_name').invalid
+        "
+        >Please enter workflow name</mat-error
+      > -->
+    </div>
+    <div class="w-96 flex flex-col">
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label class="text-sm tracking-wide">Description</mat-label>
+        <input
+          type="text"
+          matInput
+          class="!text-sm tracking-wider"
+          formControlName="workflow_description"
+        />
+      </mat-form-field>
+      <!-- <mat-error
+        class="text-sm"
+        *ngIf="
+          workflowForm.get('workflow_description').dirty &&
+          workflowForm.get('workflow_description').invalid
+        "
+        >Please enter workflow description</mat-error
+      > -->
+    </div>
+  </form>
+  <button
+    (click)="formType == 'edit' ? updateForm() : submitForm()"
+    type="button"
+    class="bg-red-600 text-white rounded-lg px-10 py-2 text-sm"
+  >
+    save
+  </button>
+</div>
+
+<p-contextMenu #cm [model]="items"></p-contextMenu>
+
+<div class="grid grid-cols-4 gap-4 mt-4 bg-zinc-100 rounded-lg">
+  <div
+    class="grid grid-cols-2 gap-4 custom-workflow-height overflow-y-auto ps-4 py-4"
+  >
+    <div
+      *ngFor="let item of preTasksArray"
+      class="drag-drawflow bg-white shadow-lg rounded-lg border flex flex-col items-center justify-center cursor-move"
+      draggable="true"
+      (dragstart)="drag($event, item)"
+      [attr.data-node]="item?.node_name"
+    >
+      <i class="{{ item?.node_icon }} text-red-600 text-2xl"></i
+      ><span class="text-sm"> {{ item?.node_name }}</span>
+    </div>
+  </div>
+
+  <div class="col-span-3 bg-white relative">
+    <div
+      id="drawflow"
+      class="w-full h-full"
+      (drop)="drop($event)"
+      (dragover)="allowDrop($event)"
+    >
+      <div
+        class="bg-red-600 text-white px-5 py-2 rounded-lg absolute right-4 text-sm top-3 cursor-pointer z-10"
+        (click)="onClear()"
+      >
+        Clear
+      </div>
+      <!-- <div
+        class="bg-blue-600 text-white px-5 py-2 rounded-lg absolute right-4 text-sm top-3 cursor-pointer z-10"
+        (click)="export()"
+      >
+        Export
+      </div> -->
+
+      <div
+        class="bg-white py-2 px-5 rounded-full absolute bottom-3 right-4 border z-10"
+      >
+        <i
+          class="fa-solid fa-magnifying-glass-plus text-xl cursor-pointer"
+          (click)="onZoomIn()"
+        ></i>
+        <i
+          class="fa-solid fa-magnifying-glass-minus mx-4 text-xl cursor-pointer"
+          (click)="onZoomOut()"
+        ></i>
+        <i
+          class="fa-solid fa-rotate-right text-xl cursor-pointer"
+          (click)="onZoomReset()"
+        ></i>
+      </div>
+    </div>
+  </div>
+</div>
