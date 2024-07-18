@@ -165,11 +165,11 @@ const MyTasks: React.FC = () => {
         </IonRow>
       </IonGrid>
 
-      <div className="">
+      <div>
         <div className="flex justify-center items-center mb-3 mt-3">
           <button
             id="add-task-button"
-            className="rounded w-full add-task create-task-button font-semibold flex justify-center items-center  text-lg"
+            className="rounded w-full add-task create-task-button font-semibold flex justify-center items-center text-lg"
             onClick={() => setShowActionSheet(true)}
           >
             Add Task
