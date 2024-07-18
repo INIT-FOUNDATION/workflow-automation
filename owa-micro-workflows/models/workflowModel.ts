@@ -20,7 +20,7 @@ class Workflow implements IWorkflow {
         this.workflow_id = workflow.workflow_id;
         this.workflow_name = workflow.workflow_name;
         this.workflow_description = workflow.workflow_description;
-        this.status = workflow.status || 1;
+        this.status = workflow.status !== undefined ? workflow.status : 1;
         this.created_by = plainToken.user_id;
         this.updated_by = plainToken.user_id;
     }
@@ -68,7 +68,7 @@ class WorkflowTask implements IWorkflowTask {
         this.form_id = workflowTask.form_id;
         this.x_axis = workflowTask.x_axis;
         this.y_axis = workflowTask.y_axis;
-        this.status = workflowTask.status || 1;
+        this.status = workflowTask.status !== undefined ? workflowTask.status : 1;
         this.created_by = plainToken.user_id;
         this.updated_by = plainToken.user_id;
     }
