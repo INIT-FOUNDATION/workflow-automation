@@ -22,8 +22,6 @@ import { useLocation } from "react-router";
 
 const NotificationTriggerDetails: React.FC = () => {
   const location = useLocation();
-  console.log(location.pathname, "path");
-
   const [selected, setSelected] = useState<string>("email");
   const [audience, setAudience] = useState("Select");
 

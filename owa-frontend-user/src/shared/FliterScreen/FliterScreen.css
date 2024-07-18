@@ -1,6 +1,5 @@
 .clear-all-btn {
   --color: #da2128 !important;
-  font-size: small !important;
   font-weight: 600 !important;
 }
 
@@ -15,7 +14,7 @@
 
 .close-btn {
   color: #c5000f !important;
-  font-weight: 600 !important;
+  font-weight: 700 !important;
 }
 
 .apply-btn {

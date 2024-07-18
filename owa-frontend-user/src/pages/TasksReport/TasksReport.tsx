@@ -14,11 +14,11 @@ const TasksReport: React.FC = () => {
         <div className="flex items-center justify-between my-6 text-lg font-medium text-black">
           <span>Task Report</span>
           <select className="px-3 py-1 text-black bg-white text-sm rounded-full border border-gray-400">
+            <option>All Time</option>
             <option>Week</option>
             <option>Month</option>
             <option>Quarter</option>
             <option>Year</option>
-            <option>All Time</option>
           </select>
         </div>
         <div className="flex items-center mb-6">

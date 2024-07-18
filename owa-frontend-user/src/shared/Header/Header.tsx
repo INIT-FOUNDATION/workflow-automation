@@ -14,6 +14,7 @@ import { AiOutlineLogout } from "react-icons/ai";
 import { SKIP_HEADER_ROUTES } from "../../constants/constant";
 import { useAuth } from "../../contexts/AuthContext";
 import { RouteProps, useLocation } from "react-router";
+import NotificationScreen from "../../pages/Notifications/Notifications";
 
 interface HeaderProps extends RouteProps {
   showSnackbar: (message: string, severity: string) => void;
@@ -28,6 +29,8 @@ const Header: React.FC<HeaderProps> = ({ showSnackbar }) => {
   const skipHeader = SKIP_HEADER_ROUTES.includes(pathname);
 
   const [showPopover, setShowPopover] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+
   const popoverRef = useRef<HTMLIonPopoverElement>(null);
 
   const openPopover = (
@@ -49,6 +52,10 @@ const Header: React.FC<HeaderProps> = ({ showSnackbar }) => {
 
   if (skipHeader) return null;
 
+  const notifications = () => {
+    setIsOpen(!isOpen);
+  };
+
   return (
     <div className="flex items-center justify-between px-2 md:px-20 pt-2 pb-2 fixed z-10 w-full bg-white">
       <div className="flex items-center mt-2">
@@ -59,22 +66,22 @@ const Header: React.FC<HeaderProps> = ({ showSnackbar }) => {
         />
       </div>
       <IonButtons slot="end">
-        <IonButton>
+        <IonButton onClick={notifications}>
           <IonIcon
             icon={notificationsOutline}
-            size="medium"
+            size="large"
             className="text-gray-500"
           />
         </IonButton>
         <IonButton id="click-trigger" onClick={openPopover}>
           <IonIcon
             icon={ellipsisVerticalOutline}
-            size="medium"
+            size="large"
             className="text-gray-500"
           />
         </IonButton>
       </IonButtons>
-
+      {isOpen && <NotificationScreen isOpen={isOpen} setIsOpen={setIsOpen} />}
       <IonPopover
         ref={popoverRef}
         isOpen={showPopover}
