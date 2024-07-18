@@ -147,20 +147,23 @@ export class WorkflowFormComponent implements AfterViewInit {
           (res: any) => res.node_id === task.node_id
         )?.node_icon;
 
-        this.chosenNodes.transitions.forEach((transition) => {
-          const taskHtml = `
+        const taskHtml = `
           <div>
             <div class="bg-gray-100 px-3 flex items-center justify-between text-sm py-2">
-              <span><i class="${node_icon} text-xl text-red-600 me-2"></i>${task.task_name}</span>
+              <span><i class="${node_icon} text-xl text-red-600 me-2"></i>${
+          task.task_name ? task.task_name : task.notification_task_name
+        }</span>
             </div>
             <div class="box p-2 flex flex-col items-end">
-              <input type="text" class="border rounded text-sm w-full py-2 ps-2 outline-none mb-2" disabled placeholder="${task.task_name}" />
+              <input type="text" class="border rounded text-sm w-full py-2 ps-2 outline-none mb-2" disabled placeholder="${
+                task.task_name ? task.task_name : task.notification_task_name
+              }" />
               <span class="bg-green-200 text-black ps-3 pe-8 py-1 text-xs rounded-full">Connection task</span>
             </div>
           </div>
         `;
 
-          const decisionHtml = `
+        const decisionHtml = `
           <div>
             <div class="bg-gray-100 px-3 flex items-center text-sm py-2">
               <i class="${node_icon} text-xl text-red-600 me-2"></i>  ${task.decision_task_name}
@@ -171,43 +174,56 @@ export class WorkflowFormComponent implements AfterViewInit {
           </div>
         `;
 
-          const nodeData = {
-            id: task.task_id ? task.task_id : task.decision_task_id,
-            name: task.task_name ? task.task_name : task.decision_task_name,
-            data: {},
-            class: task.task_name ? task.task_name : task.decision_task_name,
-            html: task.task_id ? taskHtml : decisionHtml,
-            typenode: false,
-            inputs: {
-              input_1: {
-                connections: [
-                  {
-                    node: transition.from_task_id.toString(),
-                    input: 'output_1',
-                  },
-                ],
-              },
-            },
-            outputs: {
-              output_1: {
-                connections: {
-                  node: transition.to_task_id.toString(),
-                  output: 'input_1',
-                },
-              },
-            },
-            pos_x: parseInt(task.x_axis),
-            pos_y: parseInt(task.y_axis),
-          };
+        const nodeData = {
+          id: task.task_id
+            ? task.task_id
+            : task.decision_task_id
+            ? task.decision_task_id
+            : task.notification_task_id,
+          name: task.task_name
+            ? task.task_name
+            : task.decision_task_name
+            ? task.decision_task_name
+            : task.notification_task_name,
+          data: {},
+          class: task.task_name
+            ? task.task_name
+            : task.decision_task_name
+            ? task.decision_task_name
+            : task.notification_task_name,
+          html:
+            task.task_id || task.notification_task_id ? taskHtml : decisionHtml,
+          typenode: false,
+          inputs: {
+            input_1: { connections: [] },
+          },
+          outputs: {
+            output_1: { connections: [] },
+          },
+          pos_x: parseInt(task.x_axis),
+          pos_y: parseInt(task.y_axis),
+        };
 
-          if (!dataToImport.drawflow.Home.data) {
-            dataToImport.drawflow.Home.data = {};
+        this.chosenNodes.transitions.forEach((transition) => {
+          if (transition.to_task_id === nodeData.id) {
+            nodeData.inputs.input_1.connections.push({
+              node: transition.from_task_id.toString(),
+              input: 'output_1',
+            });
+          } else if (transition.from_task_id === nodeData.id) {
+            nodeData.outputs.output_1.connections.push({
+              node: transition.to_task_id.toString(),
+              output: 'input_1',
+            });
           }
-
-          dataToImport.drawflow.Home.data[nodeData.id] = nodeData;
         });
+
+        if (!dataToImport.drawflow.Home.data) {
+          dataToImport.drawflow.Home.data = {};
+        }
+
+        dataToImport.drawflow.Home.data[nodeData.id] = nodeData;
       });
-      console.log(dataToImport);
 
       this.editor.import(dataToImport);
     }
@@ -219,13 +235,7 @@ export class WorkflowFormComponent implements AfterViewInit {
         'Editor Event :>> Node created ' + id,
         this.editor.getNodeFromId(id)
       );
-    });
 
-    this.editor.on('nodeCreated', (id: any) => {
-      console.log(
-        'Editor Event :>> Node created ' + id,
-        this.editor.getNodeFromId(id)
-      );
       const data = this.editor.getNodeFromId(id);
       this.nodeName.push(data.name);
 
@@ -254,6 +264,8 @@ export class WorkflowFormComponent implements AfterViewInit {
     });
 
     this.editor.on('nodeRemoved', (id: any) => {
+      this.removeTask(id);
+
       console.log('Editor Event :>> Node removed ' + id);
     });
 
@@ -262,6 +274,7 @@ export class WorkflowFormComponent implements AfterViewInit {
         'Editor Event :>> Node selected ' + id,
         this.editor.getNodeFromId(id)
       );
+
       this.selectedNode = this.editor.drawflow.drawflow.Home.data[`${id}`];
     });
 
@@ -308,15 +321,20 @@ export class WorkflowFormComponent implements AfterViewInit {
       console.log('Editor Event :>> Connection created ', connection);
       this.transitionForm
         .get('from_task_id')
-        .setValue(parseInt(connection.input_id));
+        .setValue(parseInt(connection.output_id));
       this.transitionForm
         .get('to_task_id')
-        .setValue(parseInt(connection.output_id));
+        .setValue(parseInt(connection.input_id));
       this.chosenNodes.transitions.push(this.transitionForm.getRawValue());
     });
 
     this.editor.on('connectionRemoved', (connection: any) => {
       console.log('Editor Event :>> Connection removed ', connection);
+
+      // this.chosenNodes.transitions = this.chosenNodes.transitions.filter(
+      //   (transition) =>
+      //     transition.from_task_id !== parseInt(connection.input_id)
+      // );
     });
 
     this.editor.on('zoom', (zoom: any) => {
@@ -339,6 +357,18 @@ export class WorkflowFormComponent implements AfterViewInit {
 
     this.editor.on('nodeMoved', (id: any) => {
       console.log('Editor Event :>> Node moved ' + id);
+      const nodeData = this.editor.getNodeFromId(id);
+
+      this.chosenNodes.tasks.forEach((task) => {
+        if (
+          task.task_id == parseInt(id) ||
+          task.notification_task_id === parseInt(id) ||
+          task.decision_task_id === parseInt(id)
+        ) {
+          task.x_axis = nodeData.pos_x.toString();
+          task.y_axis = nodeData.pos_y.toString();
+        }
+      });
     });
 
     this.editor.on('translate', (position: any) => {
@@ -346,6 +376,24 @@ export class WorkflowFormComponent implements AfterViewInit {
         'Editor Event :>> Translate x:' + position.x + ' y:' + position.y
       );
     });
+  }
+
+  removeTask(id: any) {
+    this.chosenNodes.tasks.forEach((task) => {
+      if (
+        task.task_id === parseInt(id) ||
+        task.notification_task_id === parseInt(id) ||
+        task.decision_task_id === parseInt(id)
+      ) {
+        task.status = 0;
+      }
+    });
+
+    this.chosenNodes.transitions = this.chosenNodes.transitions.filter(
+      (transition) =>
+        transition.from_task_id !== parseInt(id) &&
+        transition.to_task_id !== parseInt(id)
+    );
   }
 
   private dragEvent() {
@@ -566,7 +614,6 @@ export class WorkflowFormComponent implements AfterViewInit {
 
   submitForm() {
     this.chosenNodes.workflow = this.workflowForm.getRawValue();
-    console.log(this.chosenNodes);
     try {
       if (
         this.nodeName.includes('Start Task') &&
@@ -595,7 +642,6 @@ export class WorkflowFormComponent implements AfterViewInit {
   updateForm() {
     this.chosenNodes.workflow = this.workflowForm.getRawValue();
     this.chosenNodes.workflow.workflow_id = this.workflow_id;
-    console.log(this.chosenNodes);
     try {
       {
         if (this.workflowForm.valid) {

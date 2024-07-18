@@ -59,11 +59,7 @@
           </button>
           <button
             mat-menu-item
-            (click)="
-              rowData?.status == 1
-                ? openSwalModal(rowData?.workflow_id, 0)
-                : updateCardStatus(rowData?.workflow_id, 1)
-            "
+            (click)="updateCardStatus(rowData?.workflow_id)"
           >
             <span>{{ rowData?.status == 1 ? "Inactive" : "Active" }}</span>
           </button>

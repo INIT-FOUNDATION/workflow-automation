@@ -27,4 +27,11 @@ export class WorkflowBuilderService {
   getWorkflowById(workflowId: any) {
     return this.http.get(`${environment.workflow_prefix_url}/id/${workflowId}`);
   }
+
+  updateStatus(workflow_id: number) {
+    return this.http.post(
+      `${environment.workflow_prefix_url}/changeStatus/${workflow_id}`,
+      {}
+    );
+  }
 }

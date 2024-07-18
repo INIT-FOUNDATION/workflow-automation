@@ -79,22 +79,18 @@ export class WorkflowBuilderComponent implements OnInit {
       cancelButtonText: 'No',
     }).then((result) => {
       if (result.isConfirmed) {
-        this.updateCardStatus(id, status);
+        this.updateCardStatus(id);
       }
     });
   }
 
-  updateCardStatus(id: number, status: number) {
-    // const payload: any = {
-    //   form_id: id,
-    //   status: status,
-    // };
-    // this.workflowBuilderService.updateStatus(payload).subscribe((res: any) => {
-    //   if (res) {
-    //     this.utilityService.showSuccessMessage(res?.message);
-    //     this.getGridDataList();
-    //   }
-    // });
+  updateCardStatus(id: number) {
+    this.workflowBuilderService.updateStatus(id).subscribe((res: any) => {
+      if (res) {
+        this.utilityService.showSuccessMessage(res?.message);
+        this.getGridDataList();
+      }
+    });
   }
 
   redirectTo() {

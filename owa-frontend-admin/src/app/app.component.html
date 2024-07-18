@@ -1,12 +1,12 @@
 <div class="h-100" appTheme>
-  <app-header *ngIf="(authService.currentUser | async); else loading"></app-header>
+  <app-header *ngIf="authService.currentUser | async"></app-header>
   <div class="flex">
-    <app-sidebar-menu *ngIf="(authService.currentUser | async); else loading"></app-sidebar-menu>
+    <app-sidebar-menu
+      *ngIf="authService.currentUser | async"
+    ></app-sidebar-menu>
     <div class="px-2 md:px-6 w-full mt-4">
       <router-outlet></router-outlet>
     </div>
   </div>
-  <ng-template #loading>
-    <app-loader></app-loader>
-  </ng-template>
+  <app-loader></app-loader>
 </div>
