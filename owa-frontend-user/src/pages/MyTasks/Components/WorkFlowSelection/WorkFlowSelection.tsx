@@ -30,7 +30,7 @@ const WorkFlowSelection: React.FC = () => {
     const fetchWorkflowList = async () => {
       try {
         const response = await getWorkflowList();
-        debugger;
+        
         if (response && response.data && response.data.data.workflowList) {
           setWorkflowList(response.data.data.workflowList);
         }
