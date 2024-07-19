@@ -9,7 +9,7 @@ import {
   Select,
   SelectChangeEvent,
 } from "@mui/material";
-import { getWorkflowList, getWorkflowListById } from "../../MyTasks.service";
+import { getWorkflowList } from "../../MyTasks.service";
 import "./WorkFlowSelection.css";
 
 interface Workflow {
@@ -22,8 +22,7 @@ interface Workflow {
 }
 
 const WorkFlowSelection: React.FC = () => {
-  const [workflow, setWorkflow] = useState<string>("");
-  const [workflowId, setWorkflowId] = useState<number | null>(null);
+  const [workflow, setWorkflow] = useState<any>("");
   const [workflowList, setWorkflowList] = useState<Workflow[]>([]);
   const [error, setError] = useState<string>("");
   const router = useIonRouter();
@@ -51,21 +50,12 @@ const WorkFlowSelection: React.FC = () => {
     const selectedWorkflow = workflowList.find(
       (wf) => wf.workflow_name === selectedWorkflowName
     );
-    setWorkflow(selectedWorkflowName);
-    setWorkflowId(selectedWorkflow ? selectedWorkflow.workflow_id : null);
+    setWorkflow(selectedWorkflow);
   };
 
   const handleNextClick = async () => {
-    if (workflowId) {
-      try {
-        const response = await getWorkflowListById(workflowId);
-        if (response) {
-          history.push("/tasks/workflow-started", { workflowName: workflow,taskName: response.data.data[0].task_name });
-        }
-      } catch (error) {
-        console.error("Error fetching workflow details:", error);
-        setError("Failed to fetch workflow details. Please try again later.");
-      }
+    if (workflow) {
+      history.push("/tasks/workflow-started", workflow);
     } else {
       setError("Please select a workflow before proceeding.");
     }
@@ -86,7 +76,7 @@ const WorkFlowSelection: React.FC = () => {
           <InputLabel>Select Workflow</InputLabel>
           <Select
             label="Select Workflow"
-            value={workflow}
+            value={workflow.workflow_name}
             onChange={handleWorkflowChange}
             className="w-full text-black"
           >

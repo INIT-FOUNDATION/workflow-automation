@@ -1,8 +1,8 @@
-import { IonCard, IonCardContent, IonIcon, useIonRouter } from "@ionic/react";
+import { IonCard, IonCardContent, IonDatetime, IonIcon, useIonRouter } from "@ionic/react";
 import { arrowBack } from "ionicons/icons";
 import React, { useState, useEffect } from "react";
-import { getDepartmentList, getUserListbyDepId } from "../../MyTasks.service";
-import { useHistory, useLocation } from "react-router-dom";
+import { getDepartmentList, getUserListbyDepId, getTaskListByWorkflowId, createAssignment } from "../../MyTasks.service";
+import { useLocation } from "react-router-dom";
 import {
   FormControl,
   InputLabel,
@@ -11,37 +11,52 @@ import {
   SelectChangeEvent,
 } from "@mui/material";
 import "./WorkFlowStarted.css";
+import { useForm } from "react-hook-form";
 
 const WorkFlowStarted: React.FC = () => {
-  const [deadline, setDeadline] = useState("");
   const [assignee, setAssignee] = useState("");
   const [department, setDepartment] = useState("");
-  const [departmentList, setDepartmentList] = useState([]);
-  const [assigneeList, setAssigneeList] = useState([]);
-  const history = useHistory();
-  const location = useLocation<{ workflowName: string ;taskName: string}>();
+  const [departmentList, setDepartmentList] = useState<any[]>([]);
+  const [assigneeList, setAssigneeList] = useState<any[]>([]);
+  const [taskList, setTaskList] = useState<any[]>([]);
+  const location = useLocation<any>();
   const router = useIonRouter();
+  const workflow = location.state;
 
-  const handleDeadlineChange = (event: SelectChangeEvent) => {
-    setDeadline(event.target.value as string);
+  const { register, handleSubmit, getValues } = useForm({
+    defaultValues: {
+      workflow_id: workflow.workflow_id,
+      task_assignments: [],
+    },
+  })
+
+  const handleAssigneeChange = (event: SelectChangeEvent<string>) => {
+    setAssignee(event.target.value);
   };
 
-  const handleAssigneeChange = (event: SelectChangeEvent) => {
-    setAssignee(event.target.value as string);
-  };
-
-  const handleDepartmentChange = async (event: SelectChangeEvent) => {
-    const selectedDeptId = event.target.value as string;
+  const handleDepartmentChange = async (event: SelectChangeEvent<string>) => {
+    const selectedDeptId = event.target.value;
     setDepartment(selectedDeptId);
     try {
-      const response = await getUserListbyDepId(selectedDeptId);
+      const response = await getUserListbyDepId(parseInt(selectedDeptId));
       console.log("Department Assignees Response:", response);
       if (response && response.data && response.data.data) {
-       
+        setAssigneeList(response.data.data);
       }
-      setAssigneeList(response.data.data)
     } catch (error) {
       console.error("Error fetching department assignees:", error);
+    }
+  };
+
+  const handleGetTaskListByWorkflowId = async () => {
+    try {
+      const response = await getTaskListByWorkflowId(workflow.workflow_id);
+      console.log("Task List Response:", response);
+      if (response && response.data && response.data.data) {
+        setTaskList(response.data.data);
+      }
+    } catch (error) {
+      console.error("Error fetching task list:", error);
     }
   };
 
@@ -49,7 +64,21 @@ const WorkFlowStarted: React.FC = () => {
     router.push("/tasks/workflow-selection");
   };
 
+  const handleAssignmentCreate = async () => {
+    try {
+      // const response = await createAssignment(getValues());
+      // console.log("API Response:", response);
+      // if (response && response.data && response.data.data) {
+      //   router.push("/tasks");
+      // }
+      router.push("/tasks");
+    } catch (error) {
+      console.error("Error creating assignment:", error);
+    }
+  }
+
   useEffect(() => {
+    handleGetTaskListByWorkflowId();
     const getDepartmentListData = async () => {
       try {
         const response = await getDepartmentList();
@@ -63,10 +92,7 @@ const WorkFlowStarted: React.FC = () => {
     };
 
     getDepartmentListData();
-  }, []);
-
-  const workflowName = location.state?.workflowName || "B2B lead conversion";
-  const taskName = location.state?.taskName || "Contact Lead";
+  }, [workflow.workflow_id]);
 
 
   return (
@@ -74,91 +100,98 @@ const WorkFlowStarted: React.FC = () => {
       <div className="cursor-pointer rounded-md flex items-center pt-28">
         <IonIcon icon={arrowBack} onClick={handleBack} className="pl-2" />
         <span className="search-text text-black-600 pl-2">
-          {workflowName}
+          {workflow.workflow_name}
         </span>
       </div>
-      <IonCard className="custom-cards border rounded-lg mb-2 bg-neutral-100 shadow-md">
-        <IonCardContent>
-          <div className="flex items-center">
-            <img
-              src="Assets/images/MyTasks/task_done.svg"
-              alt=""
-              className="task-done-img w-5 h-5 mr-2"
-            />
-            <span className="form-title">{taskName}</span>
-          </div>
-          <div className="flex items-center mt-2">
-            <img
-              src="Assets/images/AssignTasks/calendar_month.svg"
-              alt=""
-              className="calender-img w-4 h-4 mr-2"
-            />
-            <span className="text-black deadline-label">Deadline</span>
-          </div>
-          <form className="mb-4 pt-2">
-            <FormControl fullWidth>
-              <InputLabel>Select Deadline</InputLabel>
-              <Select
-                label="Select Deadline"
-                value={deadline}
-                onChange={handleDeadlineChange}
-                className="w-full text-black"
-              >
-                <MenuItem value="2024-06-21">2024-06-21</MenuItem>
-                <MenuItem value="2024-06-22">2024-06-22</MenuItem>
-                <MenuItem value="2024-06-23">2024-06-23</MenuItem>
-              </Select>
-            </FormControl>
-            <div className="flex items-center mt-2 pb-2">
-              <img
-                src="Assets/images/AssignTasks/profile_icon.svg"
-                alt=""
-                className="calender-img w-4 h-4 mr-2"
-              />
-              <span className="text-black deadline-label">Department</span>
-            </div>
-            <FormControl fullWidth>
-              <InputLabel>Department</InputLabel>
-              <Select
-                label="Select Department"
-                value={department}
-                onChange={handleDepartmentChange}
-                className="w-full text-black"
-              >
-                {departmentList.map((department: any) => (
-                  <MenuItem key={department.department_id} value={department.department_id}>
-                    {department.department_name}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
+      <form onSubmit={handleSubmit(handleAssignmentCreate)}>
+        {taskList.length > 0 && taskList.map((task) => (
+          <IonCard key={task.task_id} className="custom-cards border rounded-lg mb-2 bg-neutral-100 shadow-md">
+            <IonCardContent>
+              <div className="flex items-center">
+                <img
+                  src="Assets/images/MyTasks/task_done.svg"
+                  alt=""
+                  className="task-done-img w-5 h-5 mr-2"
+                />
+                <span className="form-title">{task.task_name}</span>
+              </div>
+              <div className="flex items-center mt-2">
+                <img
+                  src="Assets/images/AssignTasks/calendar_month.svg"
+                  alt=""
+                  className="calender-img w-4 h-4 mr-2"
+                />
+                <span className="text-black deadline-label">Deadline</span>
+              </div>
+              <form className="mb-4 pt-2">
+                <FormControl fullWidth>
+                  <InputLabel>Select Deadline</InputLabel>
+                  <Select
+                    label="Select Deadline"
+                    className="w-full text-black"
+                  >
+                    <MenuItem value="2024-06-21">2024-06-21</MenuItem>
+                    <MenuItem value="2024-06-22">2024-06-22</MenuItem>
+                    <MenuItem value="2024-06-23">2024-06-23</MenuItem>
+                  </Select>
+                </FormControl>
+                <div className="flex items-center mt-2 pb-2">
+                  <img
+                    src="Assets/images/AssignTasks/profile_icon.svg"
+                    alt=""
+                    className="calender-img w-4 h-4 mr-2"
+                  />
+                  <span className="text-black deadline-label">Department</span>
+                </div>
+                <FormControl fullWidth>
+                  <InputLabel>Department</InputLabel>
+                  <Select
+                    label="Select Department"
+                    value={department}
+                    onChange={handleDepartmentChange}
+                    className="w-full text-black"
+                  >
+                    {departmentList.map((department) => (
+                      <MenuItem key={department.department_id} value={department.department_id}>
+                        {department.department_name}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
 
-            <div className="flex items-center mt-2 pb-2">
-              <img
-                src="Assets/images/AssignTasks/profile_icon.svg"
-                alt=""
-                className="calender-img w-4 h-4 mr-2"
-              />
-              <span className="text-black deadline-label">Assignee</span>
-            </div>
-            <FormControl fullWidth>
-              <InputLabel>Select Assignee</InputLabel>
-              <Select
-                label="Select Assignee"
-                value={assignee}
-                onChange={handleAssigneeChange}
-                className="w-full text-black"
-              >
-                {assigneeList.map((assignee: any) => (
-                  <MenuItem key={assignee.id} value={assignee.name}>
-                    {assignee.name}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          </form>
-        </IonCardContent>
-      </IonCard>
+                <div className="flex items-center mt-2 pb-2">
+                  <img
+                    src="Assets/images/AssignTasks/profile_icon.svg"
+                    alt=""
+                    className="calender-img w-4 h-4 mr-2"
+                  />
+                  <span className="text-black deadline-label">Assignee</span>
+                </div>
+                <FormControl fullWidth>
+                  <InputLabel>Select Assignee</InputLabel>
+                  <Select
+                    label="Select Assignee"
+                    value={assignee}
+                    onChange={handleAssigneeChange}
+                    className="w-full text-black"
+                  >
+                    {assigneeList.map((assignee) => (
+                      <MenuItem key={assignee.user_id} value={assignee.user_id}>
+                        {assignee.display_name}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </form>
+            </IonCardContent>
+          </IonCard>
+        ))}
+        <div className="flex justify-center pb-10">
+          <button type="submit" className="w-full create-task-button">
+            Submit
+          </button>
+        </div>
+      </form>
     </div>
   );
 };
