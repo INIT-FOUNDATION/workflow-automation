@@ -1,7 +1,7 @@
 import { IonCard, IonCardContent, IonIcon, useIonRouter } from "@ionic/react";
 import { arrowBack } from "ionicons/icons";
-import React, { useState } from "react";
-
+import React, { useState, useEffect } from "react";
+import { getDepartmentList, getDepartmentListByDeptId } from "../../MyTasks.service";
 import { useHistory, useLocation } from "react-router-dom";
 import {
   FormControl,
@@ -10,12 +10,14 @@ import {
   Select,
   SelectChangeEvent,
 } from "@mui/material";
-
 import "./WorkFlowStarted.css";
+
 const WorkFlowStarted: React.FC = () => {
   const [deadline, setDeadline] = useState("");
   const [assignee, setAssignee] = useState("");
   const [department, setDepartment] = useState("");
+  const [departmentList, setDepartmentList] = useState([]);
+  const [assigneeList, setAssigneeList] = useState([]);
   const history = useHistory();
   const location = useLocation<{ workflowName: string }>();
   const router = useIonRouter();
@@ -28,20 +30,48 @@ const WorkFlowStarted: React.FC = () => {
     setAssignee(event.target.value as string);
   };
 
-  const handleDepartmentChange = (event: SelectChangeEvent) => {
-    setAssignee(event.target.value as string);
+  const handleDepartmentChange = async (event: SelectChangeEvent) => {
+    const selectedDeptId = event.target.value as string;
+    setDepartment(selectedDeptId);
+    try {
+      const response = await getDepartmentListByDeptId(selectedDeptId);
+      console.log("Department Assignees Response:", response);
+      if (response && response.data && response.data.data) {
+       
+      }
+    } catch (error) {
+      console.error("Error fetching department assignees:", error);
+    }
   };
 
   const handleBack = () => {
     router.push("/tasks/workflow-selection");
   };
+
+  useEffect(() => {
+    const getDepartmentListData = async () => {
+      try {
+        const response = await getDepartmentList();
+        console.log("API Response:", response);
+        if (response && response.data && response.data.data && response.data.data.length > 0) {
+          setDepartmentList(response.data.data);
+        }
+      } catch (error) {
+        console.error("Error fetching department list:", error);
+      }
+    };
+
+    getDepartmentListData();
+  }, []);
+
   const workflowName = location.state?.workflowName || "B2B lead conversion";
+
   return (
     <div>
       <div className="cursor-pointer rounded-md flex items-center pt-28">
         <IonIcon icon={arrowBack} onClick={handleBack} className="pl-2" />
         <span className="search-text text-black-600 pl-2">
-          B2B lead conversion
+          {workflowName}
         </span>
       </div>
       <IonCard className="custom-cards border rounded-lg mb-2 bg-neutral-100 shadow-md">
@@ -92,8 +122,11 @@ const WorkFlowStarted: React.FC = () => {
                 onChange={handleDepartmentChange}
                 className="w-full text-black"
               >
-                <MenuItem value="2024-06-21">1</MenuItem>
-                <MenuItem value="2024-06-22">2</MenuItem>
+                {departmentList.map((department: any) => (
+                  <MenuItem key={department.department_id} value={department.department_id}>
+                    {department.department_name}
+                  </MenuItem>
+                ))}
               </Select>
             </FormControl>
 
@@ -113,8 +146,11 @@ const WorkFlowStarted: React.FC = () => {
                 onChange={handleAssigneeChange}
                 className="w-full text-black"
               >
-                <MenuItem value="2024-06-21">Neha</MenuItem>
-                <MenuItem value="2024-06-22">Sumit</MenuItem>
+                {assigneeList.map((assignee: any) => (
+                  <MenuItem key={assignee.id} value={assignee.name}>
+                    {assignee.name}
+                  </MenuItem>
+                ))}
               </Select>
             </FormControl>
           </form>

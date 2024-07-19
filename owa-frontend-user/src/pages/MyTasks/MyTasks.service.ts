@@ -12,4 +12,15 @@ const getWorkflowListById = async (workflowID:any) => {
 };
 
 
-export { getWorkflowList,getWorkflowListById };
+const getDepartmentList = async() =>{
+  const getDepartmentListData = await get(`/api/v1/admin/departments/list`);
+  return  getDepartmentListData;
+}
+
+const getDepartmentListByDeptId = async(departmentId:any) =>{
+  const getDepartmentListById = await get(`/api/v1/admin/users/list/department/${departmentId}`);
+  return  getDepartmentListById;
+}
+
+
+export { getWorkflowList, getWorkflowListById, getDepartmentList, getDepartmentListByDeptId };
