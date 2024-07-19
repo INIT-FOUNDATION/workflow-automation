@@ -60,7 +60,7 @@ const WorkFlowSelection: React.FC = () => {
       try {
         const response = await getWorkflowListById(workflowId);
         if (response) {
-          history.push("/tasks/workflow-started", { workflowName: workflow });
+          history.push("/tasks/workflow-started", { workflowName: workflow,taskName: response.data.data[0].task_name });
         }
       } catch (error) {
         console.error("Error fetching workflow details:", error);
