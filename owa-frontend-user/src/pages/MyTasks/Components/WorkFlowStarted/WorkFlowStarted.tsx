@@ -13,6 +13,7 @@ import "./WorkFlowStarted.css";
 const WorkFlowStarted: React.FC = () => {
   const [deadline, setDeadline] = useState("");
   const [assignee, setAssignee] = useState("");
+  const [department, setDepartment] = useState("");
   const router = useIonRouter();
 
   const handleDeadlineChange = (event: SelectChangeEvent) => {
@@ -20,6 +21,10 @@ const WorkFlowStarted: React.FC = () => {
   };
 
   const handleAssigneeChange = (event: SelectChangeEvent) => {
+    setAssignee(event.target.value as string);
+  };
+
+  const handleDepartmentChange = (event: SelectChangeEvent) => {
     setAssignee(event.target.value as string);
   };
 
@@ -66,6 +71,27 @@ const WorkFlowStarted: React.FC = () => {
                 <MenuItem value="2024-06-23">2024-06-23</MenuItem>
               </Select>
             </FormControl>
+            <div className="flex items-center mt-2 pb-2">
+              <img
+                src="Assets/images/AssignTasks/profile_icon.svg"
+                alt=""
+                className="calender-img w-4 h-4 mr-2"
+              />
+              <span className="text-black deadline-label">Department</span>
+            </div>
+            <FormControl fullWidth>
+              <InputLabel>Department</InputLabel>
+              <Select
+                label="Select Department"
+                value={department}
+                onChange={handleDepartmentChange}
+                className="w-full text-black"
+              >
+                <MenuItem value="2024-06-21">1</MenuItem>
+                <MenuItem value="2024-06-22">2</MenuItem>
+              </Select>
+            </FormControl>
+
             <div className="flex items-center mt-2 pb-2">
               <img
                 src="Assets/images/AssignTasks/profile_icon.svg"
