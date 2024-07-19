@@ -34,4 +34,14 @@ export const workflowAssignmentService = {
             throw new Error(error.message);
         }
     },
+
+    myTasks: async (assignedTo: Number): Promise<any> => {
+        const workflowNotificationTaskList = await workflowAssignmentRepository.myTasks(assignedTo);
+        return workflowNotificationTaskList;
+    },
+
+    assignedTasks: async (assignedBy: Number): Promise<any> => {
+        const workflowNotificationTaskList = await workflowAssignmentRepository.assignedTasks(assignedBy);
+        return workflowNotificationTaskList;
+    },
 };

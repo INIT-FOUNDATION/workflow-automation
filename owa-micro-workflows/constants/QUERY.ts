@@ -185,5 +185,17 @@ export const WORKFLOW_ASSIGNMENT = {
     `,
     getStartNodeTransisionId: `select transition_id from m_workflow_transition wt
     inner join m_workflow_tasks wtask on wt.from_task_id = wtask.task_id
-    where wt.workflow_id = $1 and wtask.node_id = 1`
+    where wt.workflow_id = $1 and wtask.node_id = 1`,
+    getMyTasks: `select wtask.task_id, wtask.form_id, wta.assigned_by, u.display_name, to_char(wta.deadline_on, 'YYYY-MM-DD') as deadline_on, wta.task_status from tr_workflows_task_assignment wta
+        inner join m_workflow_transition wtrans on wtrans.to_task_id = wta.task_id
+        inner join tr_workflow_transaction t on t.transition_id = wtrans.transition_id
+        inner join m_workflow_tasks wtask on wtask.task_id = wta.task_id
+        left join m_users u on u.user_id = wta.assigned_by
+        where wta.assigned_to = $1;`,
+    getAssignedTasks: `select wtask.task_id, wtask.form_id, wta.assigned_to, u.display_name, to_char(wta.deadline_on, 'YYYY-MM-DD') as deadline_on, wta.task_status from tr_workflows_task_assignment wta
+        inner join m_workflow_transition wtrans on wtrans.to_task_id = wta.task_id
+        inner join tr_workflow_transaction t on t.transition_id = wtrans.transition_id
+        inner join m_workflow_tasks wtask on wtask.task_id = wta.task_id
+        left join m_users u on u.user_id = wta.assigned_to
+        where wta.assigned_by = $1`
 }

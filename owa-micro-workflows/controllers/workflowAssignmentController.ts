@@ -77,5 +77,61 @@ export const workflowAssignmentController = {
             logger.error(`workflowAssignmentController :: createWorflowAssignment :: ${error.message} :: ${error}`);
             return res.status(STATUS.INTERNAL_SERVER_ERROR).send(ERRORCODE.ERROR0001);
         }
-    }
+    },
+
+    myTasks: async (req: Request, res: Response): Promise<Response> => {
+        /*  
+                #swagger.tags = ['Workflow Assignment']
+                #swagger.summary = 'Get By My Tasks'
+                #swagger.description = 'Endpoint to get by my tasks'
+                #swagger.parameters['Authorization'] = {
+                    in: 'header',
+                    required: true,
+                    type: 'string',
+                    description: 'Token for authentication'
+                }
+        */
+        try {
+            logger.info(`workflowAssignmentController :: Inside myTasks`);
+            const plainToken = req.plainToken;
+            const assignedTo = plainToken.user_id;
+
+            const tasks = await workflowAssignmentService.myTasks(assignedTo);
+            return res.status(STATUS.OK).send({
+                data: tasks,
+                message: "Tasks Fetched SuccessFully",
+            });
+        } catch (error) {
+            logger.error(`workflowAssignmentController :: myTasks :: ${error.message} :: ${error}`);
+            return res.status(STATUS.INTERNAL_SERVER_ERROR).send(ERRORCODE.ERROR0001);
+        }
+    },
+
+    assignedTasks: async (req: Request, res: Response): Promise<Response> => {
+        /*  
+                #swagger.tags = ['Workflow Assignment']
+                #swagger.summary = 'Get By Assigned Tasks'
+                #swagger.description = 'Endpoint to get by assigned tasks'
+                #swagger.parameters['Authorization'] = {
+                    in: 'header',
+                    required: true,
+                    type: 'string',
+                    description: 'Token for authentication'
+                }
+        */
+        try {
+            logger.info(`workflowAssignmentController :: Inside assignedTasks`);
+            const plainToken = req.plainToken;
+            const assignedBy = plainToken.user_id;
+
+            const tasks = await workflowAssignmentService.assignedTasks(assignedBy);
+            return res.status(STATUS.OK).send({
+                data: tasks,
+                message: "Tasks Fetched SuccessFully",
+            });
+        } catch (error) {
+            logger.error(`workflowAssignmentController :: assignedTasks :: ${error.message} :: ${error}`);
+            return res.status(STATUS.INTERNAL_SERVER_ERROR).send(ERRORCODE.ERROR0001);
+        }
+    },
 }
