@@ -1,7 +1,7 @@
 import { logger, STATUS, envUtils } from "owa-micro-common";
 import { Response } from "express";
 import { Request } from "../types/express";
-import { GRID_DEFAULT_OPTIONS } from "../constants/CONST";
+import { GRID_DEFAULT_OPTIONS, decryptPayload } from "../constants/CONST";
 import { usersService } from "../services/usersService";
 import { IUser } from "../types/custom";
 import { User, validateCreateUser, validateUpdateUser } from "../models/usersModel";
@@ -72,8 +72,6 @@ export const usersController = {
                     in: 'body',
                     required: true,
                     schema: {
-                        user_name: '8169104556',
-                        display_name: 'Narsima Chilkuri',
                         first_name: 'Narsima',
                         last_name: 'Chilkuri',
                         email_id: 'narsimachilkuri237@gmail.com',
@@ -87,7 +85,8 @@ export const usersController = {
                 }    
             */
             const plainToken = req.plainToken;
-            const user: IUser = new User(req.body)
+            const user: IUser = new User(req.body);
+
             const { error } = validateCreateUser(user);
 
             if (error) {
@@ -135,9 +134,7 @@ export const usersController = {
                     in: 'body',
                     required: true,
                     schema: {
-                        user_id: 2,
-                        user_name: '8169104556',
-                        display_name: 'Narsima Chilkuri',
+                        user_id: 'encryptedHash',
                         first_name: 'Narsima',
                         last_name: 'Chilkuri',
                         email_id: 'narsimachilkuri237@gmail.com',
@@ -151,7 +148,13 @@ export const usersController = {
                 }    
             */
             const plainToken = req.plainToken;
+            if (req.body.user_id) req.body.user_id = parseInt(decryptPayload(req.body.user_id));
+
             const user: IUser = req.body;
+
+            if (user.mobile_number) {
+                user.user_name = user.mobile_number.toString();
+            }
 
             const { error } = validateUpdateUser(user);
 
@@ -311,4 +314,105 @@ export const usersController = {
             return res.status(STATUS.INTERNAL_SERVER_ERROR).send(USERS.USER00000);
         }
     },
+    reportingUsersList: async (req: Request, res: Response): Promise<Response> => {
+        /*  
+                #swagger.tags = ['Users']
+                #swagger.summary = 'Reporting Users List'
+                #swagger.description = 'Get Reporting Users based on Role Id and Type'
+                #swagger.parameters['Authorization'] = {
+                    in: 'header',
+                    required: true,
+                    type: 'string',
+                    description: 'Bearer token for authentication'
+                }
+                #swagger.parameters['roleId'] = {
+                    in: 'path',
+                    required: true,
+                    type: 'number',
+                    description: 'Role Id'
+                }
+                #swagger.parameters['type'] = {
+                    in: 'path',
+                    required: true,
+                    type: 'string',
+                    description: 'Type'
+                }
+        */
+        try {
+            const roleId = req.params.roleId;
+            const type = req.params.type ? req.params.type : "add";
+            const userId = (type === "edit" ? req.plainToken.user_id : null);
+
+            if (!roleId) return res.status(STATUS.BAD_REQUEST).send(USERS.USER00007);
+
+            const roleDetails = await rolesService.getRoleById(parseInt(roleId));
+
+            if(!roleDetails)  return res.status(STATUS.BAD_REQUEST).send(USERS.USER00007);
+
+            const levelDB = roleDetails.level;
+            let levels = [];
+            switch (levelDB) {
+
+                case 'Admin':
+                    levels = ['Admin'];
+                    break;
+    
+                case 'Department':
+                    levels = ['Admin', 'Department'];
+                    break;
+    
+                case 'Employee':
+                    levels = ['Admin', 'Department', 'Employee'];
+                    break;
+            }
+
+            const listOfUsers = await usersService.getReportingUsersList(levels, userId);
+            return res.status(STATUS.OK).send({
+                data: listOfUsers,
+                message: "List of reporting users fetched Successfully",
+            });
+        } catch (error) {
+            logger.error(`usersController :: reportingUsersList :: ${error.message} :: ${error}`);
+            return res.status(STATUS.INTERNAL_SERVER_ERROR).send(USERS.USER00000);
+        }
+    },
+    deleteUser: async (req: Request, res: Response): Promise<Response> => {
+        /*  
+                #swagger.tags = ['Users']
+                #swagger.summary = 'Delete User'
+                #swagger.description = 'Delete User by User Id'
+                #swagger.parameters['Authorization'] = {
+                    in: 'header',
+                    required: true,
+                    type: 'string',
+                    description: 'Bearer token for authentication'
+                }
+                #swagger.parameters['body'] = {
+                    in: 'body',
+                    required: true,
+                    schema: {
+                        user_id: 'encryptedHash'
+                    }
+                }
+        */
+        try {
+            let userId = req.body.user_id;
+
+            if (!userId) return res.status(STATUS.BAD_REQUEST).send(USERS.USER00006);
+            userId = parseInt(decryptPayload(userId));
+
+            const user = await usersService.getUserById(userId);
+            if(!user) return res.status(STATUS.BAD_REQUEST).send(USERS.USER000011);
+
+            await usersService.deleteUser(user);
+
+            return res.status(STATUS.OK).send({
+                data: null,
+                message: "User Deleted Successfully",
+            });
+        } catch (error) {
+            logger.error(`usersController :: deleteUser :: ${error.message} :: ${error}`);
+            return res.status(STATUS.INTERNAL_SERVER_ERROR).send(USERS.USER00000);
+        }
+    }
 }

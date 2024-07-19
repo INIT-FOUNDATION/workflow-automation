@@ -28,7 +28,7 @@ class User implements IUser {
   constructor(user: IUser) {
     this.user_id = user.user_id;
     this.user_name = user.user_name;
-    this.display_name = user.display_name;
+    this.display_name = `${user.first_name ? user.first_name : ""} ${user.last_name ? user.last_name : ""}`;
     this.first_name = user.first_name;
     this.last_name = user.last_name;
     this.mobile_number = user.mobile_number;
@@ -76,7 +76,7 @@ const validateCreateUser = (user: IUser): Joi.ValidationResult => {
     status: Joi.number(),
     profile_pic_url: Joi.string().allow("", null),
     last_logged_in: Joi.string().allow("", null),
-    reporting_to_users: Joi.array().items(Joi.number()),
+    reporting_to_users: Joi.array().items(Joi.number()).optional(),
     date_created: Joi.string().allow("", null),
     date_updated: Joi.string().allow("", null),
     created_by: Joi.number(),
@@ -91,9 +91,7 @@ const validateUpdateUser = (user: IUser): Joi.ValidationResult => {
     user_name: Joi.string().min(3).max(20).required().error(
       new Error(JSON.stringify(USERS.USER00001))
     ),
-    display_name: Joi.string().min(3).max(50).required().error(
-      new Error(JSON.stringify(USERS.USER00002))
-    ),
+    display_name: Joi.string().min(3).max(50),
     first_name: Joi.string().min(3).max(50).required().error(
       new Error(JSON.stringify(USERS.USER00003))
     ),

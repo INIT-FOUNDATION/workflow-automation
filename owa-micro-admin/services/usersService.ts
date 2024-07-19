@@ -8,6 +8,25 @@ import RandExp from "randexp";
 import { UploadedFile } from "express-fileupload";
 
 export const usersService = {
+  usersUpdatedWithinFiveMints: async() : Promise<boolean> => {
+    try {
+        logger.info("usersService :: Inside usersUpdatedWithinFiveMints");
+
+        const _queryToCheckLatestUpdated = {
+            text: USERS.latestUpdatedCheck
+        };
+
+        logger.debug(`usersService :: latestUpdated :: query :: ${JSON.stringify(_queryToCheckLatestUpdated)}`)
+        const latestUpdatedInForm = await pg.executeQueryPromise(_queryToCheckLatestUpdated);
+        const isUserUpdatedWithin5mins = (latestUpdatedInForm[0].count > 0);
+        logger.info(`usersService :: latestUpdated :: result :: ${JSON.stringify(latestUpdatedInForm)} :: isUserUpdatedWithin5mins :: ${isUserUpdatedWithin5mins}`);
+
+        return isUserUpdatedWithin5mins;
+    } catch (error) {
+        logger.error(`usersService :: usersUpdatedWithinFiveMints :: ${error.message} :: ${error}`)
+        throw new Error(error.message);
+    }
+  },
   listUsers: async (userId: number, pageSize: number, currentPage: number, searchQuery: string): Promise<IUser[]> => {
     try {
       let key = `USERS|USER:${userId}`;
@@ -38,10 +57,14 @@ export const usersService = {
         _query.text += ` OFFSET ${currentPage}`;
       }
 
-      const cachedResult = await redis.GetKeyRedis(key);
-      if (cachedResult) {
-        logger.debug(`usersService :: listUsers :: cached result :: ${cachedResult}`)
-        return JSON.parse(cachedResult)
+      const isUserUpdatedWithin5min = await usersService.usersUpdatedWithinFiveMints();
+
+      if (!isUserUpdatedWithin5min) {
+        const cachedResult = await redis.GetKeyRedis(key);
+        if (cachedResult) {
+          logger.debug(`usersService :: listUsers :: cached result :: ${cachedResult}`)
+          return JSON.parse(cachedResult)
+        }
       }
 
       logger.debug(`usersService :: listUsers :: query :: ${JSON.stringify(_query)}`);
@@ -80,10 +103,14 @@ export const usersService = {
         }
       }
 
-      const cachedResult = await redis.GetKeyRedis(key);
-      if (cachedResult) {
-        logger.debug(`usersService :: listUsersCount :: cached result :: ${cachedResult}`)
-        return JSON.parse(cachedResult)
+      const isUserUpdatedWithin5min = await usersService.usersUpdatedWithinFiveMints();
+
+      if (!isUserUpdatedWithin5min) {
+        const cachedResult = await redis.GetKeyRedis(key);
+        if (cachedResult) {
+          logger.debug(`usersService :: listUsersCount :: cached result :: ${cachedResult}`)
+          return JSON.parse(cachedResult)
+        }
       }
 
       logger.debug(`usersService :: listUsersCount :: query :: ${JSON.stringify(_query)}`)
@@ -92,8 +119,9 @@ export const usersService = {
       logger.debug(`usersService :: listUsersCount :: db result :: ${JSON.stringify(result)}`)
 
       if (result.length > 0) {
-        redis.SetRedis(key, result, CACHE_TTL.LONG);
-        return result[0].count
+        const count = parseInt(result[0].count);
+        if (count > 0) redis.SetRedis(key, count, CACHE_TTL.LONG);
+        return count
       };
     } catch (error) {
       logger.error(`usersService :: listUsersCount :: ${error.message} :: ${error}`)
@@ -154,7 +182,7 @@ export const usersService = {
     try {
       const _query = {
         text: USERS.updateUser,
-        values: [user.user_id, user.first_name, user.last_name, user.display_name,
+        values: [user.user_id, user.first_name, user.last_name,
         user.dob, user.gender,
         user.email_id, user.updated_by, user.role_id
         ]
@@ -430,4 +458,48 @@ export const usersService = {
       throw new Error(error.message);
     }
   },
+  getReportingUsersList: async (levels: string[], user_id: number): Promise<{user_id: number, display_name: string}[]> => {
+    try {
+      const placeholders = levels.map((_, i) => `$${i + 1}`).join(', ');
+      let query = `${USERS.getReportingUsersList} IN (${placeholders}) AND VU.role_id <> 1`;
+
+      if (user_id) {
+        query += ` AND VU.user_id <> ${user_id}`
+      }
+
+      const _query = {
+        text: query,
+        values: levels
+      };
+      logger.debug(`usersService :: getReportingUsersList :: query :: ${JSON.stringify(_query)}`);
+
+      const result = await pg.executeQueryPromise(_query);
+      logger.debug(`usersService :: getReportingUsersList :: db result :: ${JSON.stringify(result)}`);
+
+      return result;
+    } catch (error) {
+      logger.error(`usersService :: getReportingUsersList :: ${error.message} :: ${error}`)
+      throw new Error(error.message);
+    }
+  },
+  deleteUser: async (user: IUser) => {
+    try {
+      const _query = {
+        text: USERS.deleteUser,
+        values: [user.user_id]
+      };
+      logger.debug(`usersService :: deleteUser :: query :: ${JSON.stringify(_query)}`)
+
+      const result = await pg.executeQueryPromise(_query);
+      logger.debug(`usersService :: deleteUser :: db result :: ${JSON.stringify(result)}`)
+
+      redis.deleteRedis(`USERS|OFFSET:0|LIMIT:50`);
+      redis.deleteRedis(`USERS_COUNT`);
+      redis.deleteRedis(`USER:${user.user_id}`);
+      redis.deleteRedis(`User|Username:${user.user_name}`);
+    } catch (error) {
+      logger.error(`usersService :: deleteUser :: ${error.message} :: ${error}`)
+      throw new Error(error.message);
+    }
+  }
 }

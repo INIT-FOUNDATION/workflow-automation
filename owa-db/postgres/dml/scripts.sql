@@ -1,5 +1,5 @@
 -- Table: m_users
-INSERT INTO m_users VALUES (1, '1234567890', 'Super Admin', NULL, NULL, 1234567890, null, 1, null, 1, '$2a$10$33gc5zgFfOOKt8Kr5wbPJOYCpq9jWrExEIbw3nw0CuQVf99pdJ0n6', NOW(), 0, 1, null, NOW(), NOW(), NOW(), null, null);
+INSERT INTO m_users VALUES (1, '1234567890', 'Super Admin', NULL, NULL, 1234567890, null, 1, null, 1, '$2a$10$7AMdZXYTCEjhBvW8Q6wHje9tf91SwP7Xwt2zEytSFMB33lA9bXSM2', NOW(), 0, 1, null, NOW(), NOW(), NOW(), null, null);
 
 -- Table: m_roles
 INSERT INTO m_roles VALUES (1, 'Super Admin', 'Role for Super Admin', 'Admin', 1, NOW(), NOW(), null, null);
