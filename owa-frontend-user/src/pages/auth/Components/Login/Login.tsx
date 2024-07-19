@@ -45,7 +45,14 @@ const Login: React.FC<LoginProps> = ({ showSnackbar }) => {
       } else {
         showSnackbar("Login failed. Please try again.", "error");
       }
-    }
+
+      if (loginResponse?.errorMessage.response.data.errorCode === "AUTH00002") {
+        showSnackbar("Logged In with Default Password, Please reset the Password!", "error");
+        setTimeout(() => {
+          router.push("/forgot-password");
+        }, 1000)
+      }
+    } 
   };
 
   return (
