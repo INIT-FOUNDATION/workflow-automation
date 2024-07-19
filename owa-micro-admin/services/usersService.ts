@@ -523,9 +523,27 @@ export const usersService = {
         await usersService.clearGridCache(oldReportingUsers)
       }
 
+      await usersService.deleteUserReportingMapping(userId);
       await usersService.createUserReportingMapping(userId, reportingToUsers);
     } catch (error) {
       logger.error(`usersService :: updateUserDepartmentMapping :: ${error.message} :: ${error}`)
+      throw new Error(error.message);
+    }
+  },
+  
+  deleteUserReportingMapping: async (userId: number) => {
+    try {
+      const _query = {
+        text: USER_REPORTING_MAPPING.deleteUserReportingMapping,
+        values: [userId]
+      };
+      logger.debug(`usersService :: deleteUserReportingMapping :: query :: ${JSON.stringify(_query)}`);
+
+      const result = await pg.executeQueryPromise(_query);
+      logger.debug(`usersService :: deleteUserReportingMapping :: db result :: ${JSON.stringify(result)}`);
+
+    } catch (error) {
+      logger.error(`usersService :: deleteUserReportingMapping :: ${error.message} :: ${error}`)
       throw new Error(error.message);
     }
   },
