@@ -367,6 +367,31 @@ export const usersService = {
       throw new Error(error.message);
     }
   },
+  getUsersByDepartmentId: async (departmentId: number): Promise<IUser[]> => {
+    try {
+      const key = `USERS|DEPARTMENT:${departmentId}`;
+      const cachedResult = await redis.GetKeyRedis(key);
+      if (cachedResult) {
+        logger.debug(`usersService :: getUsersByDepartmentId :: roleId :: ${departmentId} :: cached result :: ${cachedResult}`)
+        return JSON.parse(cachedResult)
+      }
+
+      const _query = {
+        text: USERS.getUsersByDepartmentId,
+        values: [departmentId]
+      };
+      logger.debug(`usersService :: getUsersByDepartmentId :: query :: ${JSON.stringify(_query)}`);
+
+      const result = await pg.executeQueryPromise(_query);
+      logger.debug(`usersService :: getUsersByDepartmentId :: db result :: ${JSON.stringify(result)}`);
+
+      if (result && result.length > 0) redis.SetRedis(key, result, CACHE_TTL.LONG);
+      return result;
+    } catch (error) {
+      logger.error(`usersService :: getUsersByDepartmentId :: ${error.message} :: ${error}`)
+      throw new Error(error.message);
+    }
+  },
   resetPasswordForUserId: async (userId: number) => {
     try {
       const salt = await bcrypt.genSalt(10);

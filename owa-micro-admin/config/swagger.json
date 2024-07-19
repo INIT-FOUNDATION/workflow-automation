@@ -12,7 +12,7 @@
   ],
   "paths": {
     "/api/v1/admin/roles/list": {
-      "get": {
+      "post": {
         "tags": [
           "Roles"
         ],
@@ -27,9 +27,26 @@
             "description": "Bearer token for authentication"
           },
           {
-            "name": "isActive",
-            "in": "query",
-            "type": "string"
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "is_active": {
+                  "type": "boolean",
+                  "example": true
+                },
+                "page_size": {
+                  "type": "number",
+                  "example": 50
+                },
+                "current_page": {
+                  "type": "number",
+                  "example": 1
+                }
+              }
+            }
           }
         ],
         "responses": {
@@ -133,6 +150,10 @@
                 "role_description": {
                   "type": "string",
                   "example": "Head of the Department"
+                },
+                "status": {
+                  "type": "number",
+                  "example": 1
                 },
                 "level": {
                   "type": "string",
@@ -807,6 +828,10 @@
                   "items": {
                     "type": "number"
                   }
+                },
+                "status": {
+                  "type": "number",
+                  "example": 1
                 }
               }
             }
@@ -848,36 +873,6 @@
         }
       }
     },
-    "/api/v1/admin/users/updateProfilePic": {
-      "post": {
-        "tags": [
-          "Users"
-        ],
-        "summary": "Update Profile Pic",
-        "description": "Endpoint to Update Profile Pic",
-        "parameters": [
-          {
-            "name": "Authorization",
-            "in": "header",
-            "required": true,
-            "type": "string",
-            "description": "Bearer token for authentication"
-          },
-          {
-            "name": "file",
-            "in": "formData",
-            "required": true,
-            "type": "file",
-            "description": "Profile picture file to upload"
-          }
-        ],
-        "responses": {
-          "default": {
-            "description": ""
-          }
-        }
-      }
-    },
     "/api/v1/admin/users/list/{roleId}": {
       "get": {
         "tags": [
@@ -888,6 +883,35 @@
         "parameters": [
           {
             "name": "roleId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Bearer token for authentication"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/v1/admin/users/list/{departmentId}": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "List Users By Department Id",
+        "description": "Endpoint to Retrieve Users List By Department Id",
+        "parameters": [
+          {
+            "name": "departmentId",
             "in": "path",
             "required": true,
             "type": "string"
@@ -1018,13 +1042,13 @@
         }
       }
     },
-    "/api/v1/admin/users/deleteUser": {
+    "/api/v1/admin/users/updateStatus": {
       "post": {
         "tags": [
           "Users"
         ],
-        "summary": "Delete User",
-        "description": "Delete User by User Id",
+        "summary": "Update User Status",
+        "description": "Update User Status by User Id and Status",
         "parameters": [
           {
             "name": "Authorization",
@@ -1041,6 +1065,10 @@
               "type": "object",
               "properties": {
                 "user_id": {
+                  "type": "string",
+                  "example": "encryptedHash"
+                },
+                "status": {
                   "type": "number",
                   "example": 1
                 }

@@ -240,6 +240,34 @@ export const usersController = {
             return res.status(STATUS.INTERNAL_SERVER_ERROR).send(USERS.USER00000);
         }
     },
+
+    listUsersByDepartmentId: async (req: Request, res: Response): Promise<Response> => {
+        try {
+            /*  
+                #swagger.tags = ['Users']
+                #swagger.summary = 'List Users By Department Id'
+                #swagger.description = 'Endpoint to Retrieve Users List By Department Id'
+                #swagger.parameters['Authorization'] = {
+                    in: 'header',
+                    required: true,
+                    type: 'string',
+                    description: 'Bearer token for authentication'
+                } 
+            */
+            const departmentId = req.params.departmentId;
+            if (!departmentId) return res.status(STATUS.BAD_REQUEST).send(DEPARTMENTS.DEPARTMENT002);
+
+            const users = await usersService.getUsersByDepartmentId(parseInt(departmentId));
+
+            return res.status(STATUS.OK).send({
+                data: users,
+                message: "Users Fetched Successfully",
+            });
+        } catch (error) {
+            logger.error(`usersController :: listUsersByDepartmentId :: ${error.message} :: ${error}`);
+            return res.status(STATUS.INTERNAL_SERVER_ERROR).send(USERS.USER00000);
+        }
+    },
     resetPasswordForUserId: async (req: Request, res: Response): Promise<Response> => {
         try {
             /*  

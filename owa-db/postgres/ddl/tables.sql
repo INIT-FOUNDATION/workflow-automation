@@ -302,7 +302,7 @@ CREATE TABLE tr_workflows_task_assignment (
     workflow_assignment_id INT NOT NULL,
     task_id INT NOT NULL,
     assigned_to INT,
-    assigned_on TIMESTAMP,
+    deadline_on TIMESTAMP,
     assigned_by INT,
     task_status SMALLINT DEFAULT 1,
     date_created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

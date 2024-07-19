@@ -133,7 +133,7 @@ RETURNING transition_id;
 	FROM m_workflow_transition WHERE workflow_id = $1`,
     getTaskList: `select wt.task_id, wt.task_name, wt.task_description, wt.node_id, 
     wta.workflow_task_assignment_id, wta.workflow_assignment_id, 
-    wta.assigned_to, u.display_name as assigned_to_name, wta.assigned_on, wta.assigned_by
+    wta.assigned_to, u.display_name as assigned_to_name, wta.deadline_on, wta.assigned_by
     FROM m_workflow_tasks wt
     LEFT OUTER JOIN tr_workflows_task_assignment wta ON wta.task_id = wt.task_id
     LEFT OUTER JOIN m_users u ON u.user_id = wta.assigned_to
@@ -155,7 +155,7 @@ export const WORKFLOW_ASSIGNMENT = {
         workflow_assignment_id, 
         task_id, 
         assigned_to, 
-        assigned_on, 
+        deadline_on, 
         assigned_by, 
         created_by, 
         updated_by
@@ -182,5 +182,8 @@ export const WORKFLOW_ASSIGNMENT = {
     ) 
     VALUES ($1, $2, $3) 
     RETURNING workflow_transaction_id;
-    `
+    `,
+    getStartNodeTransisionId: `select transition_id from m_workflow_transition wt
+    inner join m_workflow_tasks wtask on wt.from_task_id = wtask.task_id
+    where wt.workflow_id = $1 and wtask.node_id = 1`
 }

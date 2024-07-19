@@ -52,6 +52,7 @@ export const USERS = {
     updateUser: `UPDATE m_users SET first_name = $2, last_name = $3, dob = $4, gender = $5, email_id = $6, updated_by = $7, role_id = $8, status = $9, display_name = $10, date_updated = NOW() WHERE user_id = $1`,
     getUser: `SELECT * from vw_m_users WHERE user_id = $1 AND status <> 2`,
     getUsersByRoleId: `select user_id, user_name, initcap(display_name) as display_name, mobile_number, initcap(role_name) as role_name  from vw_m_users where role_id = $1 AND status <> 2`,
+    getUsersByDepartmentId: `select user_id, user_name, initcap(display_name) as display_name, mobile_number, initcap(role_name) as role_name  from vw_m_users where department_id = $1 AND status <> 2`,
     resetPasswordForUserId: `UPDATE m_users SET password = $2, password_last_updated = NOW(), date_updated = NOW() WHERE user_id = $1`,
     usersList: `select * from vw_m_users WHERE role_id <> 1 AND status <> 2`,
     latestUpdatedCheck: `SELECT COUNT(*) as count FROM vw_m_users WHERE date_updated >= NOW() - INTERVAL '5 minutes'`,

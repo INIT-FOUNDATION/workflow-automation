@@ -42,7 +42,7 @@ class WorkflowTaskAssignment implements IWorkflowTaskAssignment {
     workflow_assignment_id: number;
     task_id: number;
     assigned_to: number;
-    assigned_on: string;
+    deadline_on: string;
     assigned_by: number;
     task_status: number;
     created_by: number;
@@ -53,7 +53,7 @@ class WorkflowTaskAssignment implements IWorkflowTaskAssignment {
         this.workflow_assignment_id = assignment.workflow_assignment_id;
         this.task_id = assignment.task_id;
         this.assigned_to = assignment.assigned_to;
-        this.assigned_on = assignment.assigned_on;
+        this.deadline_on = assignment.deadline_on;
         this.assigned_by = assignment.assigned_by || plainToken.user_id;
         this.task_status = assignment.task_status !== undefined ? assignment.task_status : 1;
         this.created_by = assignment.created_by || plainToken.user_id;
@@ -66,7 +66,7 @@ class WorkflowTaskAssignment implements IWorkflowTaskAssignment {
             workflow_assignment_id: Joi.number().integer().optional(),
             task_id: Joi.number().integer().required(),
             assigned_to: Joi.number().integer().optional(),
-            assigned_on: Joi.string().required(),
+            deadline_on: Joi.string().required(),
             assigned_by: Joi.number().integer().optional(),
             task_status: Joi.number().integer().default(1),
             created_by: Joi.number().integer().required(),

@@ -4,6 +4,7 @@ import {
     IWorkflowAssignment, IWorkflowTaskAssignment, IWorkflowTaskFormSubmission,
     IWorkflowTransaction, INode
 } from "../types/custom";
+import { PlainToken } from "../types/express";
 import { WORKFLOW_ASSIGNMENT } from "../constants/QUERY";
 import moment from "moment";
 
@@ -32,7 +33,7 @@ export const workflowAssignmentRepository = {
             logger.info(`workflowRepository :: Inside createWorkflowTaskAssignment`);
             const _query = {
                 text: WORKFLOW_ASSIGNMENT.createWorkflowTaskAssignment,
-                values: [taskAssignment.workflow_assignment_id, taskAssignment.task_id, taskAssignment.assigned_to, taskAssignment.assigned_on, taskAssignment.assigned_by, taskAssignment.created_by, taskAssignment.updated_by]
+                values: [taskAssignment.workflow_assignment_id, taskAssignment.task_id, taskAssignment.assigned_to, taskAssignment.deadline_on, taskAssignment.assigned_by, taskAssignment.created_by, taskAssignment.updated_by]
             }
 
             const result = await pg.executeQueryPromise(_query);
@@ -61,12 +62,12 @@ export const workflowAssignmentRepository = {
         }
     },
 
-    createWorkflowTransaction: async (transaction: IWorkflowTransaction): Promise<number> => {
+    createWorkflowTransaction: async (transitionId: Number, plainToken: PlainToken): Promise<number> => {
         try {
             logger.info(`workflowRepository :: Inside createWorkflowTransaction`);
             const _query = {
                 text: WORKFLOW_ASSIGNMENT.createWorkflowTransaction,
-                values: [transaction.transition_id, transaction.created_by, transaction.updated_by]
+                values: [transitionId, plainToken.user_id, plainToken.user_id]
             }
 
             const result = await pg.executeQueryPromise(_query);
@@ -76,5 +77,22 @@ export const workflowAssignmentRepository = {
             logger.error(`workflowRepository :: createWorkflowTransaction :: ${error.message} :: ${error}`);
             throw new Error(error.message);
         }
-    }
+    },
+
+    getStartNodeTransisionId: async (workflowId: number): Promise<number> => {
+        try {
+            logger.info(`workflowRepository :: Inside createWorkflowTaskAssignment`);
+            const _query = {
+                text: WORKFLOW_ASSIGNMENT.getStartNodeTransisionId,
+                values: [workflowId]
+            }
+
+            const result = await pg.executeQueryPromise(_query);
+            logger.info(`workflowRepository :: createWorkflowTaskAssignment :: result :: ${JSON.stringify(result)}`);
+            return result[0].transition_id;
+        } catch (error) {
+            logger.error(`workflowRepository :: createWorkflowTaskAssignment :: ${error.message} :: ${error}`);
+            throw new Error(error.message);
+        }
+    },
 };

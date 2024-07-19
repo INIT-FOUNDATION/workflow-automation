@@ -29,12 +29,12 @@ export const workflowAssignmentController = {
                         {
                             "task_id": 2,
                             "assigned_to": 1,
-                        "assigned_on": "2023-07-17"
+                        "deadline_on": "2023-07-17"
                         },
                         {
                             "task_id": 3,
                             "assigned_to": 1,
-                            "assigned_on": "2023-07-17"
+                            "deadline_on": "2023-07-17"
                         }
                     ]
                 } 
@@ -66,7 +66,7 @@ export const workflowAssignmentController = {
                 workflowTaskAssignments.push(workflowTaskAssignmentData);
             }
 
-            const workflowAssignmentId = await workflowAssignmentService.save(workflowAssignmentData, workflowTaskAssignments);
+            const workflowAssignmentId = await workflowAssignmentService.save(workflowAssignmentData, workflowTaskAssignments, req.plainToken);
 
             return res.status(STATUS.CREATED).send({
                 data: workflowAssignmentId,

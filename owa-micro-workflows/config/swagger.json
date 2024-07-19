@@ -340,12 +340,12 @@
               {
                 "task_id": 2,
                 "assigned_to": 1,
-                "assigned_on": "2023-07-17"
+                "deadline_on": "2023-07-17"
               },
               {
                 "task_id": 3,
                 "assigned_to": 1,
-                "assigned_on": "2023-07-17"
+                "deadline_on": "2023-07-17"
               }
             ],
             "in": "query",

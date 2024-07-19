@@ -3,6 +3,7 @@ import {
     IWorkflowAssignment, IWorkflowTaskAssignment, IWorkflowTaskFormSubmission,
     IWorkflowTransaction
 } from "../types/custom";
+import { PlainToken } from "../types/express";
 import { workflowAssignmentRepository } from "../repository/wotkflowassignmentRepository";
 import { workflowRepository } from "../repository/wotkflowRepository";
 
@@ -10,7 +11,7 @@ import { CACHE_TTL } from "../constants/CONST";
 
 export const workflowAssignmentService = {
 
-    save: async (workflowAssignmentData: IWorkflowAssignment, workflowTaskAssignments: IWorkflowTaskAssignment[]): Promise<Number> => {
+    save: async (workflowAssignmentData: IWorkflowAssignment, workflowTaskAssignments: IWorkflowTaskAssignment[], plainToken: PlainToken): Promise<Number> => {
 
         try {
             await workflowRepository.executeTransactionQuery("BEGIN");
@@ -20,6 +21,9 @@ export const workflowAssignmentService = {
                 assignments.workflow_assignment_id = workflowAssignmentId;
                 await workflowAssignmentRepository.createWorkflowTaskAssignment(assignments);
             }
+            const transitionId = await workflowAssignmentRepository.getStartNodeTransisionId(workflowAssignmentData.workflow_id);
+
+            await workflowAssignmentRepository.createWorkflowTransaction(transitionId, plainToken);
 
             await workflowRepository.executeTransactionQuery("COMMIT");
             return workflowAssignmentId;

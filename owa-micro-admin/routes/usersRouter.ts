@@ -11,6 +11,8 @@ usersRouter.get("/:userId", usersController.getUserById);
 
 usersRouter.get("/list/:roleId", usersController.listUsersByRoleId);
 
+usersRouter.get("/list/department/:departmentId", usersController.listUsersByDepartmentId);
+
 usersRouter.post("/list", usersController.listUsers);
 
 usersRouter.post("/resetPassword/:userId", usersController.resetPasswordForUserId);

@@ -99,7 +99,7 @@ export interface IWorkflowTaskAssignment {
     workflow_assignment_id: number;
     task_id: number;
     assigned_to: number;
-    assigned_on: string;
+    deadline_on: string;
     assigned_by: number;
     task_status: number;
     created_by: number;
