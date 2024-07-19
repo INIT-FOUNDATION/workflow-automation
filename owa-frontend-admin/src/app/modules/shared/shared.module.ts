@@ -54,6 +54,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { ContextMenuModule } from 'primeng/contextmenu';
 
 /*------------------- DIRECTIVES ------------------------*/
 
@@ -118,6 +119,7 @@ const export_material_modules = [
   MatIconModule,
   MatButtonToggleModule,
   ImageCropperModule,
+  ContextMenuModule,
 ];
 
 @NgModule({

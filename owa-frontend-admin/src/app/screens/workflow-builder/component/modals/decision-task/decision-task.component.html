@@ -1,0 +1,87 @@
+<form
+  class="px-4 pt-4"
+  [formGroup]="decisionTaskForm"
+  (ngSubmit)="submitForm()"
+>
+  <mat-form-field class="w-full" appearance="outline">
+    <mat-label class="text-sm">Task Name</mat-label>
+    <input
+      matInput
+      type="text"
+      class="outline-none !text-sm tracking-wider"
+      formControlName="decision_task_name"
+    />
+  </mat-form-field>
+
+  <mat-form-field class="w-full" appearance="outline">
+    <mat-label class="text-sm">Task Description</mat-label>
+    <textarea
+      matInput
+      class="outline-none !text-sm tracking-wider"
+      formControlName="decision_task_description"
+    ></textarea>
+  </mat-form-field>
+
+  <div formArrayName="conditions">
+    <div
+      class="flex items-center"
+      *ngFor="let condition of conditionsArray.controls; let i = index"
+      [formGroupName]="i"
+    >
+      <mat-form-field class="w-36" appearance="outline">
+        <mat-label class="text-sm">Operand One*</mat-label>
+        <mat-select
+          class="!text-sm tracking-wider"
+          (selectionChange)="selectedOperand(i, $event.value)"
+        >
+          <mat-option
+            *ngFor="let item of formDetails"
+            [value]="item?.name"
+            class="!text-sm tracking-wider"
+            >{{ item?.name }}</mat-option
+          >
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field class="w-36 m-4" appearance="outline">
+        <mat-label class="text-sm">Operator*</mat-label>
+        <mat-select
+          class="!text-sm tracking-wider"
+          (selectionChange)="selectedOperator(i, $event.value)"
+        >
+          <mat-option
+            *ngFor="let item of operatorArray"
+            [value]="item?.value"
+            class="!text-sm tracking-wider"
+            >{{ item?.value }}</mat-option
+          >
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field class="w-36 me-4" appearance="outline">
+        <mat-label class="text-sm">Operand Two</mat-label>
+        <input
+          matInput
+          type="text"
+          class="outline-none !text-sm tracking-wider"
+          formControlName="operand_two"
+        />
+      </mat-form-field>
+
+      <div
+        *ngIf="conditionsArray.controls.length - 1 == i"
+        class="bg-red-600 text-white text-sm rounded-lg px-3 py-2 cursor-pointer"
+        (click)="addNewOptions()"
+      >
+        +
+      </div>
+    </div>
+  </div>
+
+  <button
+    type="submit"
+    class="text-sm bg-red-600 text-white rounded-lg w-28 py-2 fixed bottom-4 right-6"
+  >
+    Submit
+  </button>
+</form>
