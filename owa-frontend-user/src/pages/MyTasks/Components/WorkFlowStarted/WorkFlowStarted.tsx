@@ -1,6 +1,8 @@
 import { IonCard, IonCardContent, IonIcon, useIonRouter } from "@ionic/react";
 import { arrowBack } from "ionicons/icons";
 import React, { useState } from "react";
+
+import { useHistory, useLocation } from "react-router-dom";
 import {
   FormControl,
   InputLabel,
@@ -14,6 +16,8 @@ const WorkFlowStarted: React.FC = () => {
   const [deadline, setDeadline] = useState("");
   const [assignee, setAssignee] = useState("");
   const [department, setDepartment] = useState("");
+  const history = useHistory();
+  const location = useLocation<{ workflowName: string }>();
   const router = useIonRouter();
 
   const handleDeadlineChange = (event: SelectChangeEvent) => {
@@ -31,6 +35,7 @@ const WorkFlowStarted: React.FC = () => {
   const handleBack = () => {
     router.push("/tasks/workflow-selection");
   };
+  const workflowName = location.state?.workflowName || "B2B lead conversion";
   return (
     <div>
       <div className="cursor-pointer rounded-md flex items-center pt-28">
@@ -47,7 +52,7 @@ const WorkFlowStarted: React.FC = () => {
               alt=""
               className="task-done-img w-5 h-5 mr-2"
             />
-            <span className="form-title">Contact Lead</span>
+            <span className="form-title">{workflowName}</span>
           </div>
           <div className="flex items-center mt-2">
             <img

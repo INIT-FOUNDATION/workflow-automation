@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { IonIcon, useIonRouter } from "@ionic/react";
 import { arrowBack } from "ionicons/icons";
+import { useHistory } from "react-router-dom";
 import {
   FormControl,
   InputLabel,
@@ -8,7 +9,7 @@ import {
   Select,
   SelectChangeEvent,
 } from "@mui/material";
-import { getWorkflowList } from "../../MyTasks.service";
+import { getWorkflowList, getWorkflowListById } from "../../MyTasks.service";
 import "./WorkFlowSelection.css";
 
 interface Workflow {
@@ -22,15 +23,17 @@ interface Workflow {
 
 const WorkFlowSelection: React.FC = () => {
   const [workflow, setWorkflow] = useState<string>("");
+  const [workflowId, setWorkflowId] = useState<number | null>(null);
   const [workflowList, setWorkflowList] = useState<Workflow[]>([]);
   const [error, setError] = useState<string>("");
   const router = useIonRouter();
+  const history = useHistory();
+
 
   useEffect(() => {
     const fetchWorkflowList = async () => {
       try {
         const response = await getWorkflowList();
-        
         if (response && response.data && response.data.data.workflowList) {
           setWorkflowList(response.data.data.workflowList);
         }
@@ -44,12 +47,25 @@ const WorkFlowSelection: React.FC = () => {
   }, []);
 
   const handleWorkflowChange = (event: SelectChangeEvent<string>) => {
-    setWorkflow(event.target.value);
+    const selectedWorkflowName = event.target.value;
+    const selectedWorkflow = workflowList.find(
+      (wf) => wf.workflow_name === selectedWorkflowName
+    );
+    setWorkflow(selectedWorkflowName);
+    setWorkflowId(selectedWorkflow ? selectedWorkflow.workflow_id : null);
   };
 
-  const handleNextClick = () => {
-    if (workflow) {
-      router.push("/tasks/workflow-started");
+  const handleNextClick = async () => {
+    if (workflowId) {
+      try {
+        const response = await getWorkflowListById(workflowId);
+        if (response) {
+          history.push("/tasks/workflow-started", { workflowName: workflow });
+        }
+      } catch (error) {
+        console.error("Error fetching workflow details:", error);
+        setError("Failed to fetch workflow details. Please try again later.");
+      }
     } else {
       setError("Please select a workflow before proceeding.");
     }
