@@ -19,7 +19,7 @@ const WorkFlowStarted: React.FC = () => {
   const [departmentList, setDepartmentList] = useState([]);
   const [assigneeList, setAssigneeList] = useState([]);
   const history = useHistory();
-  const location = useLocation<{ workflowName: string }>();
+  const location = useLocation<{ workflowName: string ;taskName: string}>();
   const router = useIonRouter();
 
   const handleDeadlineChange = (event: SelectChangeEvent) => {
@@ -66,6 +66,8 @@ const WorkFlowStarted: React.FC = () => {
   }, []);
 
   const workflowName = location.state?.workflowName || "B2B lead conversion";
+  const taskName = location.state?.taskName || "Contact Lead";
+
 
   return (
     <div>
@@ -83,7 +85,7 @@ const WorkFlowStarted: React.FC = () => {
               alt=""
               className="task-done-img w-5 h-5 mr-2"
             />
-            <span className="form-title">{workflowName}</span>
+            <span className="form-title">{taskName}</span>
           </div>
           <div className="flex items-center mt-2">
             <img
