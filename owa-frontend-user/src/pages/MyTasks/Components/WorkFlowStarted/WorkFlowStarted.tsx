@@ -1,7 +1,7 @@
 import { IonCard, IonCardContent, IonIcon, useIonRouter } from "@ionic/react";
 import { arrowBack } from "ionicons/icons";
 import React, { useState, useEffect } from "react";
-import { getDepartmentList, getDepartmentListByDeptId } from "../../MyTasks.service";
+import { getDepartmentList, getUserListbyDepId } from "../../MyTasks.service";
 import { useHistory, useLocation } from "react-router-dom";
 import {
   FormControl,
@@ -34,11 +34,12 @@ const WorkFlowStarted: React.FC = () => {
     const selectedDeptId = event.target.value as string;
     setDepartment(selectedDeptId);
     try {
-      const response = await getDepartmentListByDeptId(selectedDeptId);
+      const response = await getUserListbyDepId(selectedDeptId);
       console.log("Department Assignees Response:", response);
       if (response && response.data && response.data.data) {
        
       }
+      setAssigneeList(response.data.data)
     } catch (error) {
       console.error("Error fetching department assignees:", error);
     }
