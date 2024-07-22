@@ -28,10 +28,16 @@ const createAssignment = async (data: any) => {
   return response;
 };
 
+const getTasksList = async () => {
+  const tasksList = await get(`/api/v1/workflow/assignment/myTasks`);
+  return tasksList;
+};
+
 export {
   getWorkflowList,
   getTaskListByWorkflowId,
   getDepartmentList,
   getUserListbyDepId,
   createAssignment,
+  getTasksList,
 };

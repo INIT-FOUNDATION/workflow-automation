@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   IonButton,
   IonCard,
@@ -15,11 +15,14 @@ import {
 import { searchOutline } from "ionicons/icons";
 import "./MyTasks.css";
 import FliterScreen from "../../shared/FliterScreen/FliterScreen";
+import { getTasksList } from "../MyTasks/MyTasks.service";
 
 const MyTasks: React.FC = () => {
   const [showActionSheet, setShowActionSheet] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-
+  const [tasks, setTasks] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null); 
   const router = useIonRouter();
 
   const handleWorkFlow = () => {
@@ -33,6 +36,24 @@ const MyTasks: React.FC = () => {
   const filterClick = () => {
     setIsOpen(!isOpen);
   };
+
+  const handleTasksList = async () => {
+    try {
+      const response = await getTasksList();
+      if (response && response.data && response.data.data) {
+        setTasks(response.data.data);
+      }
+    } catch (error) {
+      console.error("Error fetching Tasks list:", error);
+      setError("Failed to fetch Tasks list. Please try again later.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    handleTasksList();
+  }, []);
 
   return (
     <IonContent>
@@ -50,14 +71,14 @@ const MyTasks: React.FC = () => {
         </div>
       </div>
       <div className="flex items-center justify-between mx-4 mt-6 text-lg font-medium text-black">
-        <span>My Tasks (4)</span>
+        <span>My Tasks ({tasks.length})</span>
         <div className="flex items-center">
           <select className="px-3 py-1 text-black bg-white text-sm rounded-full border border-gray-400 mr-4">
-            <option> All Tasks </option>
-            <option> In Progress </option>
-            <option> Completed </option>
-            <option> Failed </option>
-            <option> To Do </option>
+            <option>All Tasks</option>
+            <option>In Progress</option>
+            <option>Completed</option>
+            <option>Failed</option>
+            <option>To Do</option>
           </select>
           <img
             src="/Assets/images/MyTasks/filter_alt.svg"
@@ -69,101 +90,48 @@ const MyTasks: React.FC = () => {
         </div>
       </div>
 
-      <IonGrid className="ion-no-padding overflow-y-auto">
-        <IonRow>
-          <IonCol size="12" size-md="6">
-            <IonCard className="custom-card border border-gray-300 rounded-md p-4 mb-2 shadow-md">
-              <IonCardContent className="p-0">
-                <div className="flex items-center">
-                  <span className="form-title">School Feedback Form</span>
-                </div>
-                <div className="flex items-center mt-2 justify-between">
-                  <div className="flex items-center">
-                    <img
-                      src="Assets/images/MyTasks/calendar_icon.svg"
-                      alt=""
-                      className="calendar-img w-5 h-5 mr-2"
-                    />
-                    <span className="ml-1 calendar-date">June 10, 2024</span>
-                  </div>
-                  <button className="ml-2 px-3 py-1 bg-[#D68812] text-white text-sm rounded-full">
-                    In Progress
-                  </button>
-                </div>
-              </IonCardContent>
-            </IonCard>
-          </IonCol>
-          <IonCol size="12" size-md="6">
-            <IonCard className="custom-card border border-gray-300 rounded-md p-4 mb-2 shadow-md">
-              <IonCardContent className="p-0">
-                <div className="flex items-center">
-                  <span className="form-title">Follow up from school</span>
-                </div>
-                <div className="flex items-center mt-2 justify-between">
-                  <div className="flex items-center">
-                    <img
-                      src="Assets/images/MyTasks/calendar_icon.svg"
-                      alt=""
-                      className="calendar-img w-5 h-5 mr-2"
-                    />
-                    <span className="ml-1 calendar-date">June 10, 2024</span>
-                  </div>
-                  <button className="ml-2 px-3 py-1 bg-[#EA2531] text-white text-sm rounded-full">
-                    Failed
-                  </button>
-                </div>
-              </IonCardContent>
-            </IonCard>
-          </IonCol>
-        </IonRow>
-
-        <IonRow>
-          <IonCol size="12" size-md="6">
-            <IonCard className="custom-card border border-gray-300 rounded-md p-4 mb-2 shadow-md">
-              <IonCardContent className="p-0">
-                <div className="flex items-center">
-                  <span className="form-title">B2B lead conversion</span>
-                </div>
-                <div className="flex items-center mt-2 justify-between">
-                  <div className="flex items-center">
-                    <img
-                      src="Assets/images/MyTasks/calendar_icon.svg"
-                      alt=""
-                      className="calendar-img w-5 h-5 mr-2"
-                    />
-                    <span className="ml-1 calendar-date">June 10, 2024</span>
-                  </div>
-                  <button className="ml-2 px-3 py-1 bg-[#08670C] text-white text-sm rounded-full">
-                    Completed
-                  </button>
-                </div>
-              </IonCardContent>
-            </IonCard>
-          </IonCol>
-          <IonCol size="12" size-md="6">
-            <IonCard className="custom-card border border-gray-300 rounded-md p-4 mb-2 shadow-md">
-              <IonCardContent className="p-0">
-                <div className="flex items-center">
-                  <span className="form-title">Contact Lead</span>
-                </div>
-                <div className="flex items-center mt-2 justify-between">
-                  <div className="flex items-center">
-                    <img
-                      src="Assets/images/MyTasks/calendar_icon.svg"
-                      alt=""
-                      className="calendar-img w-5 h-5 mr-2"
-                    />
-                    <span className="ml-1 calendar-date">June 10, 2024</span>
-                  </div>
-                  <button className="ml-2 px-3 py-1 bg-[#284AA9] text-white text-sm rounded-full">
-                    To Do
-                  </button>
-                </div>
-              </IonCardContent>
-            </IonCard>
-          </IonCol>
-        </IonRow>
-      </IonGrid>
+      {loading ? (
+        <div className="flex justify-center items-center mt-4">
+          <p>Loading tasks...</p>
+        </div>
+      ) : error ? (
+        <div className="flex justify-center items-center mt-4">
+          <p>{error}</p>
+        </div>
+      ) : (
+        <IonGrid className="ion-no-padding overflow-y-auto">
+          {tasks.map((task, index) => (
+            <IonRow key={index}>
+              <IonCol size="12" size-md="6">
+                <IonCard className="custom-card border border-gray-300 rounded-md p-4 mb-2 shadow-md">
+                  <IonCardContent className="p-0">
+                    <div className="flex items-center">
+                      <span className="form-title">{task.task_name}</span>
+                    </div>
+                    <div className="flex items-center mt-2 justify-between">
+                      <div className="flex items-center">
+                        <img
+                          src="Assets/images/MyTasks/calendar_icon.svg"
+                          alt=""
+                          className="calendar-img w-5 h-5 mr-2"
+                        />
+                        <span className="ml-1 calendar-date">{task.deadline_on}</span>
+                      </div>
+                      <button
+                className={`ml-2 px-3 py-1 text-sm rounded-full ${
+                  task.task_status === 2 ? 'bg-green-500' : 'bg-[#EA2531]'
+                } text-white`}
+              >
+                {task.task_status === 2 ? 'Completed' : 'pending'}
+              </button>
+                    </div>
+                  </IonCardContent>
+                </IonCard>
+              </IonCol>
+            </IonRow>
+          ))}
+        </IonGrid>
+      )}
 
       <div>
         <div className="flex justify-center items-center mb-3 mt-3">
