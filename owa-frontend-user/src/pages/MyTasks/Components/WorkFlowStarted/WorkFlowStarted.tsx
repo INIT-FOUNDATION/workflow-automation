@@ -174,7 +174,7 @@ const WorkFlowStarted: React.FC = () => {
                     </span>
                   </div>
                   <FormControl fullWidth>
-                    <InputLabel>Department</InputLabel>
+                    <InputLabel>Select Department</InputLabel>
                     <Select
                       label="Select Department"
                       value={department}
