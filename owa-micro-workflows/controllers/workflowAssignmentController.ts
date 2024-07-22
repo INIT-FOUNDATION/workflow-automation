@@ -3,10 +3,10 @@ import { logger, STATUS } from "owa-micro-common";
 import { workflowAssignmentService } from "../services/workflowAssignmentService";
 import { WORKFLOWS, ERRORCODE } from "../constants/ERRORCODE";
 import {
-    WorkflowAssignment, WorkflowTaskAssignment, WorkflowTaskFormSubmission, WorkflowTransaction
+    WorkflowAssignment, WorkflowTaskAssignment, WorkflowTaskFormSubmission
 } from "../models/workflowAssignmentModel";
 import {
-    IWorkflowAssignment, IWorkflowTaskAssignment, IWorkflowTaskFormSubmission, IWorkflowTransaction
+    IWorkflowAssignment, IWorkflowTaskAssignment, IWorkflowTaskFormSubmission
 } from "../types/custom";
 import moment from "moment";
 
@@ -125,6 +125,75 @@ export const workflowAssignmentController = {
             const assignedBy = plainToken.user_id;
 
             const tasks = await workflowAssignmentService.assignedTasks(assignedBy);
+            return res.status(STATUS.OK).send({
+                data: tasks,
+                message: "Tasks Fetched SuccessFully",
+            });
+        } catch (error) {
+            logger.error(`workflowAssignmentController :: assignedTasks :: ${error.message} :: ${error}`);
+            return res.status(STATUS.INTERNAL_SERVER_ERROR).send(ERRORCODE.ERROR0001);
+        }
+    },
+
+    taskFormSubmission: async (req: Request, res: Response): Promise<Response> => {
+        /*  
+                #swagger.tags = ['Workflow Assignment Task Form Submission']
+                #swagger.summary = 'Submission of task form'
+                #swagger.description = 'Endpoint to submit of task form'
+                #swagger.parameters['Authorization'] = {
+                    in: 'header',
+                    required: true,
+                    type: 'string',
+                    description: 'Token for authentication'
+                }
+                #swagger.parameters['body'] = {}
+*/
+        try {
+            logger.info(`workflowAssignmentController :: Inside taskFormSubmission`);
+
+            const taskFormSubmissionData: IWorkflowTaskFormSubmission = new WorkflowTaskFormSubmission(req.body, req.plainToken);
+            const { error } = WorkflowTaskFormSubmission.validateFormSubmission(taskFormSubmissionData);
+            if (error) {
+                logger.error(`workflowAssignmentController :: taskFormSubmission :: Workflow validation failed :: error :: ${JSON.stringify(error)}`);
+                if (error.details != null)
+                    return res.status(STATUS.BAD_REQUEST).send({ errorCode: WORKFLOWS.WORKF0001, errorMessage: error.details[0].message });
+                else return res.status(STATUS.BAD_REQUEST).send({ errorCode: WORKFLOWS.WORKF0001, errorMessage: error.message });
+            }
+
+            const taskFormSubmissionId = await workflowAssignmentService.taskFormSubmission(taskFormSubmissionData);
+
+            return res.status(STATUS.CREATED).send({
+                data: taskFormSubmissionId,
+                message: "Workflow Task Form Submitted Successfully",
+            });
+
+        } catch (error) {
+            logger.error(`workflowAssignmentController :: taskFormSubmission :: ${error.message} :: ${error}`);
+            return res.status(STATUS.INTERNAL_SERVER_ERROR).send(ERRORCODE.ERROR0001);
+        }
+    },
+
+    getSubmittedTaskForm: async (req: Request, res: Response): Promise<Response> => {
+        /*  
+                #swagger.tags = ['Workflow Assignment']
+                #swagger.summary = 'Get Submitted Task Form'
+                #swagger.description = 'Endpoint to get submitted task form'
+                #swagger.parameters['Authorization'] = {
+                    in: 'header',
+                    required: true,
+                    type: 'string',
+                    description: 'Token for authentication'
+                }
+        */
+        try {
+            logger.info(`workflowAssignmentController :: Inside assignedTasks`);
+            const workflowTaskAssignmentId = req.params.workflowTaskAssignmentId ? parseInt(req.params.workflowTaskAssignmentId) : null;
+
+            if (!workflowTaskAssignmentId) {
+                return res.status(STATUS.BAD_REQUEST).send(WORKFLOWS.WORKF0005);
+            }
+
+            const tasks = await workflowAssignmentService.getSubmittedTaskForm(workflowTaskAssignmentId);
             return res.status(STATUS.OK).send({
                 data: tasks,
                 message: "Tasks Fetched SuccessFully",

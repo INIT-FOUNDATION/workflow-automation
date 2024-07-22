@@ -3,6 +3,7 @@ import {
     IWorkflowAssignment, IWorkflowTaskAssignment, IWorkflowTaskFormSubmission,
     IWorkflowTransaction, INode
 } from "../types/custom";
+import { v4 as uuidv4 } from 'uuid'
 import moment from "moment";
 import { PlainToken } from "../types/express";
 
@@ -77,7 +78,7 @@ class WorkflowTaskAssignment implements IWorkflowTaskAssignment {
 }
 
 class WorkflowTaskFormSubmission implements IWorkflowTaskFormSubmission {
-    workflows_task_form_submission_id: number;
+    workflows_task_form_submission_id: string;
     workflow_task_assignment_id: number;
     form_id: number;
     form_data: object;
@@ -86,9 +87,12 @@ class WorkflowTaskFormSubmission implements IWorkflowTaskFormSubmission {
     form_status: number;
     created_by: number;
     updated_by: number;
+    date_created: string;
+    date_updated: string;
 
     constructor(taskFormSubmission: IWorkflowTaskFormSubmission, plainToken: PlainToken) {
-        this.workflows_task_form_submission_id = taskFormSubmission.workflows_task_form_submission_id
+        this.workflows_task_form_submission_id = taskFormSubmission.workflows_task_form_submission_id ?
+            taskFormSubmission.workflows_task_form_submission_id : uuidv4();
         this.workflow_task_assignment_id = taskFormSubmission.workflow_task_assignment_id;
         this.form_id = taskFormSubmission.form_id;
         this.form_data = taskFormSubmission.form_data || {};
@@ -97,11 +101,14 @@ class WorkflowTaskFormSubmission implements IWorkflowTaskFormSubmission {
         this.form_status = taskFormSubmission.form_status !== undefined ? taskFormSubmission.form_status : 1;
         this.created_by = taskFormSubmission.created_by || plainToken.user_id;
         this.updated_by = taskFormSubmission.updated_by || plainToken.user_id;
+        this.date_created = taskFormSubmission.date_created || moment().toISOString();
+        this.date_updated = taskFormSubmission.date_updated || moment().toISOString();
+        
     }
 
     static validateFormSubmission = (taskFormSubmission: IWorkflowTaskFormSubmission): Joi.ValidationResult => {
         const formSubmissionSchema = Joi.object({
-            workflows_task_form_submission_id: Joi.number().integer().optional(),
+            workflows_task_form_submission_id: Joi.string().optional(),
             workflow_task_assignment_id: Joi.number().integer().required(),
             form_id: Joi.number().integer().required(),
             form_data: Joi.object().allow(null).default({}),
@@ -110,6 +117,8 @@ class WorkflowTaskFormSubmission implements IWorkflowTaskFormSubmission {
             form_status: Joi.number().integer().default(1),
             created_by: Joi.number().integer().required(),
             updated_by: Joi.number().integer().required(),
+            date_created: Joi.string().allow("", null),
+            date_updated: Joi.string().allow("", null)
         });
         return formSubmissionSchema.validate(taskFormSubmission);
     }

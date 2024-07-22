@@ -1,5 +1,6 @@
 import { CACHE_TTL } from "../constants/CONST";
-import { redis, logger, pg } from "owa-micro-common";
+import { MONGO_COLLECTIONS } from "../constants/MONGO_COLLECTIONS";
+import { redis, logger, pg, mongoDB, mongoDBRead } from "owa-micro-common";
 import {
     IWorkflowAssignment, IWorkflowTaskAssignment, IWorkflowTaskFormSubmission,
     IWorkflowTransaction, INode
@@ -45,17 +46,26 @@ export const workflowAssignmentRepository = {
         }
     },
 
-    createWorkflowsTaskFormSubmission: async (formSubmission: IWorkflowTaskFormSubmission): Promise<number> => {
+    createWorkflowsTaskFormSubmission: async (formSubmission: IWorkflowTaskFormSubmission): Promise<string> => {
         try {
             logger.info(`workflowAssignmentRepository :: Inside createWorkflowsTaskFormSubmission`);
-            const _query = {
-                text: WORKFLOW_ASSIGNMENT.createwWrkflowsTaskFormSubmission,
-                values: [formSubmission.workflow_task_assignment_id, formSubmission.form_id, formSubmission.form_data, formSubmission.form_submitted_by, formSubmission.form_submitted_on, formSubmission.created_by, formSubmission.updated_by]
-            }
+            await mongoDB.insertOne(MONGO_COLLECTIONS.WORKFLOW_TASK_FORM_SUBMISSION, formSubmission);
 
-            const result = await pg.executeQueryPromise(_query);
-            logger.info(`workflowAssignmentRepository :: createWorkflowsTaskFormSubmission :: result :: ${JSON.stringify(result)}`);
-            return result[0].workflows_task_form_submission_id;
+            return formSubmission.workflows_task_form_submission_id;
+        } catch (error) {
+            logger.error(`workflowAssignmentRepository :: createWorkflowsTaskFormSubmission :: ${error.message} :: ${error}`);
+            throw new Error(error.message);
+        }
+    },
+
+    getWorkflowsTaskFormSubmission: async (workflowTaskAssignmentId: Number): Promise<IWorkflowTaskFormSubmission> => {
+        try {
+            logger.info(`workflowAssignmentRepository :: Inside createWorkflowsTaskFormSubmission`);
+            const result: IWorkflowTaskFormSubmission = await mongoDBRead.findOne(MONGO_COLLECTIONS.WORKFLOW_TASK_FORM_SUBMISSION, {
+                'workflow_task_assignment_id': workflowTaskAssignmentId
+            });
+
+            return result;
         } catch (error) {
             logger.error(`workflowAssignmentRepository :: createWorkflowsTaskFormSubmission :: ${error.message} :: ${error}`);
             throw new Error(error.message);
@@ -126,6 +136,23 @@ export const workflowAssignmentRepository = {
             return result;
         } catch (error) {
             logger.error(`workflowAssignmentRepository :: assignedTasks :: ${error.message} :: ${error}`)
+            throw new Error(error.message);
+        }
+    },
+
+    updateWorkflowTaskAssignmentStatus: async(workflowTaskAssignmentId: Number, updatedBy: Number)=> {
+        try {
+            logger.info(`workflowRepository :: Inside updateWorkflowTaskAssignmentStatus`);
+            const _query = {
+                text: WORKFLOW_ASSIGNMENT.updateWorkflowTaskAssignmentStatus,
+                values: [ workflowTaskAssignmentId, updatedBy]
+            }
+    
+            const result = await pg.executeQueryPromise(_query);
+            logger.info(`workflowRepository :: updateWorkflowTaskAssignmentStatus :: result :: ${JSON.stringify(result)}`);
+            return;
+        } catch (error) {
+            logger.error(`workflowRepository :: updateWorkflowTaskAssignmentStatus :: ${error.message} :: ${error}`);
             throw new Error(error.message);
         }
     },

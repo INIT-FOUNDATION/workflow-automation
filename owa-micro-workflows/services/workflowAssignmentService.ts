@@ -1,7 +1,6 @@
 import { logger, redis } from "owa-micro-common";
 import {
-    IWorkflowAssignment, IWorkflowTaskAssignment, IWorkflowTaskFormSubmission,
-    IWorkflowTransaction
+    IWorkflowAssignment, IWorkflowTaskAssignment, IWorkflowTaskFormSubmission
 } from "../types/custom";
 import { PlainToken } from "../types/express";
 import { workflowAssignmentRepository } from "../repository/wotkflowassignmentRepository";
@@ -43,5 +42,26 @@ export const workflowAssignmentService = {
     assignedTasks: async (assignedBy: Number): Promise<any> => {
         const workflowNotificationTaskList = await workflowAssignmentRepository.assignedTasks(assignedBy);
         return workflowNotificationTaskList;
+    },
+
+    taskFormSubmission: async (taskFormSubmissionData: IWorkflowTaskFormSubmission): Promise<string> => {
+
+        try {
+            await workflowRepository.executeTransactionQuery("BEGIN");
+            const workflowAssignmentId = await workflowAssignmentRepository.createWorkflowsTaskFormSubmission(taskFormSubmissionData);
+            await workflowAssignmentRepository.updateWorkflowTaskAssignmentStatus(taskFormSubmissionData.workflow_task_assignment_id, taskFormSubmissionData.updated_by);
+            await workflowRepository.executeTransactionQuery("COMMIT");
+            return workflowAssignmentId;
+
+        } catch (error) {
+            await workflowRepository.executeTransactionQuery("ROLLBACK");
+            logger.error(`workflowService :: save :: ${error.message} :: ${error}`)
+            throw new Error(error.message);
+        }
+    },
+
+    getSubmittedTaskForm: async (workflowTaskAssignmentId: Number): Promise<IWorkflowTaskFormSubmission> => {
+        const workflow = await workflowAssignmentRepository.getWorkflowsTaskFormSubmission(workflowTaskAssignmentId);
+        return workflow;
     },
 };

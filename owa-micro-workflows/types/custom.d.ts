@@ -107,7 +107,7 @@ export interface IWorkflowTaskAssignment {
 }
 
 export interface IWorkflowTaskFormSubmission {
-    workflows_task_form_submission_id: number;
+    workflows_task_form_submission_id: string;
     workflow_task_assignment_id: number;
     form_id: number;
     form_data: object;
@@ -116,6 +116,8 @@ export interface IWorkflowTaskFormSubmission {
     form_status: number;
     created_by: number;
     updated_by: number;
+    date_created: string;
+    date_updated: string;
 }
 
 export interface IWorkflowTransaction {
