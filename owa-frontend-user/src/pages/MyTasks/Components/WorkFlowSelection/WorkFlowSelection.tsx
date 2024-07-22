@@ -28,7 +28,6 @@ const WorkFlowSelection: React.FC = () => {
   const router = useIonRouter();
   const history = useHistory();
 
-
   useEffect(() => {
     const fetchWorkflowList = async () => {
       try {
@@ -71,7 +70,7 @@ const WorkFlowSelection: React.FC = () => {
         <IonIcon icon={arrowBack} onClick={handleBack} className="pl-2" />
         <span className="search-text text-black-600 pl-2">Choose workflow</span>
       </div>
-      <form className="mb-4 pt-2">
+      <div className="mb-4 pt-2">
         <FormControl fullWidth>
           <InputLabel>Select Workflow</InputLabel>
           <Select
@@ -92,7 +91,7 @@ const WorkFlowSelection: React.FC = () => {
           </Select>
         </FormControl>
         {error && <p className="text-red-500 mt-2">{error}</p>}
-      </form>
+      </div>
       <div className="flex-grow"></div>
       <div className="flex justify-center pb-16">
         <button onClick={handleNextClick} className="w-full create-task-button">
