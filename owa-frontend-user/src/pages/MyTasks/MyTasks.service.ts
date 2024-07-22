@@ -33,6 +33,11 @@ const getTasksList = async () => {
   return tasksList;
 };
 
+const getAssignedTasksList = async () => {
+  const AssignedTasksLists = await get(`/api/v1/workflow/assignment/assignedTasks`);
+  return AssignedTasksLists;
+};
+
 export {
   getWorkflowList,
   getTaskListByWorkflowId,
@@ -40,4 +45,5 @@ export {
   getUserListbyDepId,
   createAssignment,
   getTasksList,
+  getAssignedTasksList,
 };
