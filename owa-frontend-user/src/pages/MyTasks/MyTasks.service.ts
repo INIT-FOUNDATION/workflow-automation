@@ -38,6 +38,11 @@ const getAssignedTasksList = async () => {
   return AssignedTasksLists;
 };
 
+const getTasksListById = async (formId: number) => {
+  const taskListById = await get(`/api/v1/forms/details/${formId}`);
+  return taskListById;
+};
+
 export {
   getWorkflowList,
   getTaskListByWorkflowId,
@@ -46,4 +51,5 @@ export {
   createAssignment,
   getTasksList,
   getAssignedTasksList,
+  getTasksListById,
 };
