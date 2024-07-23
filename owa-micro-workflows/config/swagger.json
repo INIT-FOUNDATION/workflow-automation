@@ -424,6 +424,71 @@
           }
         }
       }
+    },
+    "/api/v1/workflow/assignment/taskFormSubmission": {
+      "post": {
+        "tags": [
+          "Workflow Assignment Task Form Submission"
+        ],
+        "summary": "Submission of task form",
+        "description": "Endpoint to submit of task form",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "description": "Token for authentication",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "body",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/v1/workflow/assignment/getSubmittedTaskForm/{workflowTaskAssignmentId}": {
+      "get": {
+        "tags": [
+          "Workflow Assignment"
+        ],
+        "summary": "Get Submitted Task Form",
+        "description": "Endpoint to get submitted task form",
+        "parameters": [
+          {
+            "name": "workflowTaskAssignmentId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "description": "Token for authentication",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
     }
   },
   "components": {
