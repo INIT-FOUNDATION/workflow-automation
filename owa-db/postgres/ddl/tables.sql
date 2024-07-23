@@ -261,7 +261,6 @@ CREATE TABLE m_workflow_decision_conditions (
     operand_one VARCHAR(50),
     operator VARCHAR(3),
     operand_two VARCHAR(50),
-    condition_type VARCHAR(20) CHECK (condition_type IN ('MATCHED', 'NOT-MATCHED')),
     status SMALLINT DEFAULT 1,
     date_created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     date_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

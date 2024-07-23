@@ -69,4 +69,4 @@ INSERT INTO public.m_nodes(
 			('Email Task', 'Email Task', 'fa-solid fa-envelope', 'N', 1, 1, 1, 1),
 			('SMS Task', 'Start Task', 'fa-solid fa-comment-sms', 'N', 1, 1, 1, 1),
 			('Whatsapp Task', 'Whatsapp Task', 'fa-brands fa-whatsapp', 'N', 1, 1, 1, 1),
-			('Decision Task', 'Decision Task', 'fa-solid fa-arrows-split-up-and-left', 'D', 1, 3, 1, 1);
+			('Decision Task', 'Decision Task', 'fa-solid fa-arrows-split-up-and-left', 'D', 1, 2, 1, 1);

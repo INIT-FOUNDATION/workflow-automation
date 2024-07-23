@@ -86,7 +86,7 @@ class WorkflowTask implements IWorkflowTask {
             task_description: Joi.string().optional().allow(null).error(
                 new Error(`${WORKFLOWS.WORKF0002}`)
             ),
-            form_id: Joi.number().integer().optional(),
+            form_id: Joi.number().integer().allow(null),
             status: Joi.number().integer().default(1),
             x_axis: Joi.string().required(),
             y_axis: Joi.string().required(),
