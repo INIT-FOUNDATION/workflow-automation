@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import {
-  IonButton,
   IonCard,
   IonCardContent,
   IonIcon,
@@ -11,18 +10,12 @@ import {
   IonGrid,
   IonRow,
   IonCol,
-  IonModal,
-  IonHeader,
-  IonToolbar,
-  IonTitle,
-  IonButtons,
-  IonLabel,
-  IonItem,
 } from "@ionic/react";
 import { searchOutline } from "ionicons/icons";
 import "./MyTasks.css";
 import FliterScreen from "../../shared/FliterScreen/FliterScreen";
-import { getTasksList, getTasksListById } from "../MyTasks/MyTasks.service";
+import { getTasksList } from "../MyTasks/MyTasks.service";
+import { useHistory } from "react-router";
 
 const MyTasks: React.FC = () => {
   const [showActionSheet, setShowActionSheet] = useState(false);
@@ -30,16 +23,8 @@ const MyTasks: React.FC = () => {
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [showModal, setShowModal] = useState(false);
-  const [selectedTask, setSelectedTask] = useState<any>(null);
-  const [formId, setFormId] = useState<string | null>(null);
-  const [taskForm, setTaskForm] = useState({
-    task_name: '',
-    task_description: '',
-    deadline_on: '',
-    task_status: 1,
-  });
   const router = useIonRouter();
+  const history = useHistory();
 
   const handleWorkFlow = () => {
     router.push("/tasks/workflow-selection");
@@ -67,42 +52,8 @@ const MyTasks: React.FC = () => {
     }
   };
 
-  const handleTaskListsById = async (formId: string) => {
-    try {
-      const response = await getTasksListById(parseInt(formId));
-      if (response && response.data && response.data.data) {
-        setSelectedTask(response.data.data);
-        setTaskForm({
-          task_name: response.data.data.task_name,
-          task_description: response.data.data.task_description,
-          deadline_on: response.data.data.deadline_on,
-          task_status: response.data.data.task_status,
-        });
-        setShowModal(true);
-      }
-    } catch (error) {
-      console.error("Error fetching tasks by form ID:", error);
-      setError("Failed to fetch tasks. Please try again later.");
-    }
-  };
-
-  const handleInputChange = (e: any) => {
-    const { name, value } = e.target;
-    setTaskForm((prevForm) => ({
-      ...prevForm,
-      [name]: value,
-    }));
-  };
-
-  const openModal = (task: any) => {
-    setSelectedTask(task);
-    setShowModal(true);
-  };
-
-  const handleSubmit = () => {
-    // Add logic to save the task details
-    console.log("Task Details Submitted:", taskForm);
-    setShowModal(false);
+  const handleNavigateToForm = (form: any) => {
+    history.push("/tasks/task-form", form);
   };
 
   useEffect(() => {
@@ -139,12 +90,12 @@ const MyTasks: React.FC = () => {
         </div>
       ) : (
         <IonGrid className="ion-no-padding overflow-y-auto">
-          {tasks.map((task, index) => (
+          {tasks.map((task: any, index) => (
             <IonRow key={index}>
               <IonCol size="12" size-md="6">
                 <IonCard
                   className="custom-card border border-gray-300 rounded-md p-4 mb-2 shadow-md"
-                  onClick={() => handleTaskListsById(task.form_id)} 
+                  onClick={() => handleNavigateToForm(task)}
                 >
                   <IonCardContent className="p-0">
                     <div className="flex items-center">
@@ -156,9 +107,8 @@ const MyTasks: React.FC = () => {
                         <span className="ml-1 calendar-date">{task.deadline_on}</span>
                       </div>
                       <button
-                        className={`ml-2 px-3 py-1 text-sm rounded-full ${
-                          task.task_status === 2 ? 'bg-green-500' : 'bg-[#EA2531]'
-                        } text-white`}
+                        className={`ml-2 px-3 py-1 text-sm rounded-full ${task.task_status === 2 ? 'bg-green-500' : 'bg-[#EA2531]'
+                          } text-white`}
                       >
                         {task.task_status === 2 ? 'Completed' : 'pending'}
                       </button>
@@ -204,58 +154,6 @@ const MyTasks: React.FC = () => {
           ]}
         />
       </div>
-
-      <IonModal isOpen={showModal} onDidDismiss={() => setShowModal(false)}>
-        <IonHeader>
-          <IonToolbar>
-            <IonTitle>Task Details</IonTitle>
-            <IonButtons slot="end">
-              <IonButton onClick={() => setShowModal(false)}>Close</IonButton>
-            </IonButtons>
-          </IonToolbar>
-        </IonHeader>
-        <IonContent className="ion-padding">
-          {selectedTask && (
-            <>
-              <IonItem>
-                <IonLabel position="stacked">Task Name</IonLabel>
-                <IonInput
-                  name="task_name"
-                  value={taskForm.task_name}
-                  onIonChange={handleInputChange}
-                />
-              </IonItem>
-              <IonItem>
-                <IonLabel position="stacked">Task Description</IonLabel>
-                <IonInput
-                  name="task_description"
-                  value={taskForm.task_description}
-                  onIonChange={handleInputChange}
-                />
-              </IonItem>
-              <IonItem>
-                <IonLabel position="stacked">Deadline</IonLabel>
-                <IonInput
-                  name="deadline_on"
-                  value={taskForm.deadline_on}
-                  onIonChange={handleInputChange}
-                />
-              </IonItem>
-              <IonItem>
-                <IonLabel position="stacked">Status</IonLabel>
-                <IonInput
-                  name="task_status"
-                  value={taskForm.task_status}
-                  onIonChange={handleInputChange}
-                />
-              </IonItem>
-              <IonButton expand="block" onClick={handleSubmit} className="mt-4">
-                Submit
-              </IonButton>
-            </>
-          )}
-        </IonContent>
-      </IonModal>
     </IonContent>
   );
 };

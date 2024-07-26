@@ -1,0 +1,15 @@
+sc-ion-input-md {
+    border-radius: 14px;
+  }
+  
+  .css-1yk1gt9-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root {
+    border-radius: 14px !important;
+  }
+  
+  .advanced-trigger-button {
+    padding: 10px;
+    color: #da2128 !important;
+    font-weight: 600;
+    border: 1px solid #da2128;
+  }
+  

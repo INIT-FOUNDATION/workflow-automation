@@ -44,9 +44,19 @@ const getAssignedTasksList = async () => {
   return AssignedTasksLists;
 };
 
-const getTasksListById = async (formId: number) => {
+const getTasksFormById = async (formId: number) => {
   const taskListById = await get(`/api/v1/forms/details/${formId}`);
   return taskListById;
+};
+
+const submitTaskForm = async (data: any) => {
+  const response = await post("/api/v1/workflow/assignment/taskFormSubmission", data);
+  return response;
+};
+
+const getTaskFormDataByTaskAssignmentId = async (workflowTaskAssignmentId: number) => {
+  const response = await get(`/api/v1/workflow/assignment/getSubmittedTaskForm/${workflowTaskAssignmentId}`);
+  return response;
 };
 
 export {
@@ -57,6 +67,8 @@ export {
   createAssignment,
   getTasksList,
   getAssignedTasksList,
-  getTasksListById,
+  getTasksFormById,
   createTasksForm,
+  submitTaskForm,
+  getTaskFormDataByTaskAssignmentId
 };

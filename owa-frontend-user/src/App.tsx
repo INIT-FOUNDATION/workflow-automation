@@ -25,14 +25,15 @@ import "./theme/variables.css";
 
 import { Suspense, lazy, useState } from "react";
 import { useAuth } from "./contexts/AuthContext";
-import ForgotPassword from "./pages/Auth/Components/ForgotPassword/ForgotPassword";
-import LoginOtp from "./pages/Auth/LoginOtp/LoginOtp";
+import ForgotPassword from "./pages/auth/Components/ForgotPassword/ForgotPassword";
+import LoginOtp from "./pages/auth/LoginOtp/LoginOtp";
+import TaskForm from "./pages/MyTasks/Components/TaskForm/TaskForm";
 
 const WorkFlowSelection = lazy(
   () => import("./pages/MyTasks/Components/WorkFlowSelection/WorkFlowSelection")
 );
 const MyTasks = lazy(() => import("./pages/MyTasks/MyTasks"));
-const Login = lazy(() => import("./pages/Auth/Components/Login/Login"));
+const Login = lazy(() => import("./pages/auth/Components/Login/Login"));
 const AssignTasks = lazy(() => import("./pages/AssignTask/AssignTasks"));
 const TasksReport = lazy(() => import("./pages/TasksReport/TasksReport"));
 const WorkFlowStarted = lazy(
@@ -120,6 +121,15 @@ const App: React.FC = () => {
                     render={() => (
                       <Suspense fallback={<div>Loading...</div>}>
                         <CreateTasks />
+                      </Suspense>
+                    )}
+                    exact
+                  />
+                  <Route
+                    path="/tasks/task-form"
+                    render={() => (
+                      <Suspense fallback={<div>Loading...</div>}>
+                        <TaskForm />
                       </Suspense>
                     )}
                     exact
