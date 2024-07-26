@@ -28,6 +28,12 @@ const createAssignment = async (data: any) => {
   return response;
 };
 
+const createTasksForm = async (data: any) => {
+  const response = await post("api/v1/workflow/assignment/taskFormSubmission", data);
+  return response;
+};
+
+
 const getTasksList = async () => {
   const tasksList = await get(`/api/v1/workflow/assignment/myTasks`);
   return tasksList;
@@ -52,4 +58,5 @@ export {
   getTasksList,
   getAssignedTasksList,
   getTasksListById,
+  createTasksForm,
 };

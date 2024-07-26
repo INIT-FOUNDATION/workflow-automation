@@ -16,6 +16,8 @@ import {
   IonToolbar,
   IonTitle,
   IonButtons,
+  IonLabel,
+  IonItem,
 } from "@ionic/react";
 import { searchOutline } from "ionicons/icons";
 import "./MyTasks.css";
@@ -31,6 +33,12 @@ const MyTasks: React.FC = () => {
   const [showModal, setShowModal] = useState(false);
   const [selectedTask, setSelectedTask] = useState<any>(null);
   const [formId, setFormId] = useState<string | null>(null);
+  const [taskForm, setTaskForm] = useState({
+    task_name: '',
+    task_description: '',
+    deadline_on: '',
+    task_status: 1,
+  });
   const router = useIonRouter();
 
   const handleWorkFlow = () => {
@@ -63,19 +71,38 @@ const MyTasks: React.FC = () => {
     try {
       const response = await getTasksListById(parseInt(formId));
       if (response && response.data && response.data.data) {
-        setTasks(response.data.data);
+        setSelectedTask(response.data.data);
+        setTaskForm({
+          task_name: response.data.data.task_name,
+          task_description: response.data.data.task_description,
+          deadline_on: response.data.data.deadline_on,
+          task_status: response.data.data.task_status,
+        });
+        setShowModal(true);
       }
     } catch (error) {
       console.error("Error fetching tasks by form ID:", error);
       setError("Failed to fetch tasks. Please try again later.");
-    } finally {
-      setLoading(false);
     }
+  };
+
+  const handleInputChange = (e: any) => {
+    const { name, value } = e.target;
+    setTaskForm((prevForm) => ({
+      ...prevForm,
+      [name]: value,
+    }));
   };
 
   const openModal = (task: any) => {
     setSelectedTask(task);
     setShowModal(true);
+  };
+
+  const handleSubmit = () => {
+    // Add logic to save the task details
+    console.log("Task Details Submitted:", taskForm);
+    setShowModal(false);
   };
 
   useEffect(() => {
@@ -190,9 +217,41 @@ const MyTasks: React.FC = () => {
         <IonContent className="ion-padding">
           {selectedTask && (
             <>
-              <h2>{selectedTask.task_name}</h2>
-              <p><strong>Deadline:</strong> {selectedTask.deadline_on}</p>
-              <p><strong>Status:</strong> {selectedTask.task_status === 2 ? 'Completed' : 'Pending'}</p>
+              <IonItem>
+                <IonLabel position="stacked">Task Name</IonLabel>
+                <IonInput
+                  name="task_name"
+                  value={taskForm.task_name}
+                  onIonChange={handleInputChange}
+                />
+              </IonItem>
+              <IonItem>
+                <IonLabel position="stacked">Task Description</IonLabel>
+                <IonInput
+                  name="task_description"
+                  value={taskForm.task_description}
+                  onIonChange={handleInputChange}
+                />
+              </IonItem>
+              <IonItem>
+                <IonLabel position="stacked">Deadline</IonLabel>
+                <IonInput
+                  name="deadline_on"
+                  value={taskForm.deadline_on}
+                  onIonChange={handleInputChange}
+                />
+              </IonItem>
+              <IonItem>
+                <IonLabel position="stacked">Status</IonLabel>
+                <IonInput
+                  name="task_status"
+                  value={taskForm.task_status}
+                  onIonChange={handleInputChange}
+                />
+              </IonItem>
+              <IonButton expand="block" onClick={handleSubmit} className="mt-4">
+                Submit
+              </IonButton>
             </>
           )}
         </IonContent>
