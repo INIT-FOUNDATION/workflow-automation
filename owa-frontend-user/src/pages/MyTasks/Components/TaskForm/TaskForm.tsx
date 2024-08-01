@@ -216,11 +216,7 @@ const TaskForm: React.FC = () => {
                       field: { onChange, onBlur, value, name, ref },
                     }) => (
                       <IonItem>
-                        {/* <IonInput
-                          label="Stacked label"
-                          labelPlacement="stacked"
-                          placeholder="Enter text"
-                        ></IonInput> */}
+                        
 
                       
                         {fieldType === "dropdown" ? (
